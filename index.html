@@ -34,6 +34,7 @@
     @media (max-width: 765px) {
       header {
         position: relative;
+        height: 90px;
       }
       header > .order-md-6 {
         position: absolute;
@@ -47,17 +48,10 @@
         position: static;
       }
       .logo-brand {
-        margin-right: 100px;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-75%); /* selalu centering */
       }
-
-      @media (max-width: 765px) {
-        .logo-brand {
-          position: absolute;
-          left: 50%;
-          transform: translateX(-75%); /* selalu centering */
-        }
-      }
-      
     }
   </style>
 </head>
