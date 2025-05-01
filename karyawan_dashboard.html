@@ -46,6 +46,7 @@
         <thead class="table-dark">
           <tr>
             <th>No</th>
+            <th>Foto</th>
             <th>Nama</th>
             <th>Jabatan</th>
             <th>Divisi</th>
@@ -56,6 +57,7 @@
         <tbody id="karyawanBody">
           <tr>
             <td>1</td>
+            <td><img src="URL_FOTO_1" alt="Foto Ahmad Yusuf" width="50" height="50" class="rounded-circle"></td>
             <td>Ahmad Yusuf</td>
             <td>Staf HR</td>
             <td>HR</td>
@@ -67,6 +69,7 @@
           </tr>
           <tr>
             <td>2</td>
+            <td><img src="URL_FOTO_2" alt="Foto Siti Rahma" width="50" height="50" class="rounded-circle"></td>
             <td>Siti Rahma</td>
             <td>Supervisor</td>
             <td>Manajemen</td>
@@ -78,6 +81,7 @@
           </tr>
           <tr>
             <td>3</td>
+            <td><img src="URL_FOTO_3" alt="Foto Budi Santoso" width="50" height="50" class="rounded-circle"></td>
             <td>Budi Santoso</td>
             <td>Operator</td>
             <td>Gudang</td>
@@ -89,6 +93,7 @@
           </tr>
           <tr>
             <td>4</td>
+            <td><img src="URL_FOTO_4" alt="Foto Lina Marlina" width="50" height="50" class="rounded-circle"></td>
             <td>Lina Marlina</td>
             <td>Manager</td>
             <td>Manajemen</td>
@@ -100,6 +105,7 @@
           </tr>
           <tr>
             <td>5</td>
+            <td><img src="URL_FOTO_5" alt="Foto Rudi Hartono" width="50" height="50" class="rounded-circle"></td>
             <td>Rudi Hartono</td>
             <td>Staf Gudang</td>
             <td>Gudang</td>
@@ -110,6 +116,7 @@
             </td>
           </tr>
         </tbody>
+        
       </table>
     </div>
   </main>
@@ -125,6 +132,10 @@
           </div>
           <div class="modal-body">
             <input type="hidden" id="editIndex">
+            <div class="mb-2">
+              <label class="form-label">URL Foto</label>
+              <input type="url" class="form-control" id="foto">
+            </div>
             <div class="mb-2">
               <label class="form-label">Nama</label>
               <input type="text" class="form-control" id="nama" required>
@@ -157,6 +168,7 @@
     function saveKaryawan(event) {
       event.preventDefault();
       const index = document.getElementById('editIndex').value;
+      const foto = document.getElementById('foto').value;
       const nama = document.getElementById('nama').value;
       const jabatan = document.getElementById('jabatan').value;
       const divisi = document.getElementById('divisi').value;
@@ -167,6 +179,7 @@
         const row = tbody.insertRow();
         row.innerHTML = `
           <td></td>
+          <td><img src="${foto}" alt="Foto" width="50" height="50" class="rounded-circle"></td>
           <td>${nama}</td>
           <td>${jabatan}</td>
           <td>${divisi}</td>

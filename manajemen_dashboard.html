@@ -18,7 +18,10 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.05);
       transition: transform 0.2s;
       height: 100%;
+      display: flex;
+      flex-direction: column;
     }
+    
     .manager-card:hover {
       transform: translateY(-5px);
     }
@@ -68,37 +71,41 @@
     <h3 class="mb-4">Divisi Manajemen</h3>
     <div class="row g-3">
 
-      <!-- Card: Sutoyo -->
-      <div class="col-sm-6 col-lg-4">
-        <div class="manager-card d-flex flex-column h-100">
-          <div class="d-flex mb-3">
-            <img src="CJ.jpg" alt="Foto Sutoyo" class="profile-photo me-3">
-            <div>
-              <h5 class="mb-1">Sutoyo</h5>
-              <p class="mb-1"><strong>Jabatan:</strong> Manajer Umum</p>
-              <p class="mb-1"><strong>Email:</strong> sutoyo@nagahtam.co.id</p>
-              <p class="mb-1"><strong>Telepon:</strong> +62 812-1234-5678</p>
-            </div>
-          </div>
-          <p class="mb-0">Bertanggung jawab atas keseluruhan operasional perusahaan dan pengambilan keputusan strategis di semua divisi.</p>
-        </div>
-      </div>
+<div class="row row-cols-1 row-cols-md-2 g-4">
 
-      <!-- Card: Rahmat Iriyanto -->
-      <div class="col-sm-6 col-lg-4">
-        <div class="manager-card d-flex flex-column h-100">
-          <div class="d-flex mb-3">
-            <img src="rahmat.jpg" alt="Foto Rahmat Iriyanto" class="profile-photo me-3">
-            <div>
-              <h5 class="mb-1">Rahmat Iriyanto</h5>
-              <p class="mb-1"><strong>Jabatan:</strong> Manajer HR</p>
-              <p class="mb-1"><strong>Email:</strong> rahmat.iriyanto@nagahtam.co.id</p>
-              <p class="mb-1"><strong>Telepon:</strong> +62 813-5678-9012</p>
-            </div>
-          </div>
-          <p class="mb-0">Bertanggung jawab atas pengelolaan sumber daya manusia termasuk rekrutmen, pelatihan, dan pengembangan kebijakan karyawan.</p>
+  <div class="col">
+    <div class="manager-card d-flex flex-column h-100">
+      <div class="d-flex mb-3">
+        <img src="CJ.jpg" alt="Foto Sutoyo" class="profile-photo me-3">
+        <div>
+          <h5 class="mb-1">Sutoyo</h5>
+          <p class="mb-1"><strong>Jabatan:</strong> Manajer Umum</p>
+          <p class="mb-1"><strong>Email:</strong> sutoyo@nagahtam.co.id</p>
+          <p class="mb-1"><strong>Telepon:</strong> +62 812-1234-5678</p>
         </div>
       </div>
+      <p class="mt-auto mb-0">Bertanggung jawab atas keseluruhan operasional perusahaan dan pengambilan keputusan strategis di semua divisi.</p>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="manager-card d-flex flex-column h-100">
+      <div class="d-flex mb-3">
+        <img src="rahmat.jpg" alt="Foto Rahmat Iriyanto" class="profile-photo me-3">
+        <div>
+          <h5 class="mb-1">Rahmat Iriyanto</h5>
+          <p class="mb-1"><strong>Jabatan:</strong> Manajer HR</p>
+          <p class="mb-1"><strong>Email:</strong> rahmat.iriyanto@nagahtam.co.id</p>
+          <p class="mb-1"><strong>Telepon:</strong> +62 813-5678-9012</p>
+        </div>
+      </div>
+      <p class="mt-auto mb-0">Bertanggung jawab atas pengelolaan sumber daya manusia termasuk rekrutmen, pelatihan, dan pengembangan kebijakan karyawan.</p>
+    </div>
+  </div>
+
+</div>
+
+
 
     </div>
   </div>
