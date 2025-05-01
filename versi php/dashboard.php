@@ -1,54 +1,25 @@
 <?php
-/**
- * SQL untuk membuat database dan tabel:
- *
- * -- Buat database
- * CREATE DATABASE naga_hytam;
- * USE naga_hytam;
- *
- * -- Tabel pengguna
- * CREATE TABLE users (
- *   id INT AUTO_INCREMENT PRIMARY KEY,
- *   name VARCHAR(100) NOT NULL,
- *   role VARCHAR(50) NOT NULL,
- *   photo_url VARCHAR(255) NOT NULL,
- *   username VARCHAR(50) UNIQUE NOT NULL,
- *   password VARCHAR(255) NOT NULL
- * );
- *
- * -- Tabel berita (What's New)
- * CREATE TABLE news (
- *   id INT AUTO_INCREMENT PRIMARY KEY,
- *   title VARCHAR(150) NOT NULL,
- *   date DATE NOT NULL,
- *   image_url VARCHAR(255) NOT NULL,
- *   description TEXT NOT NULL,
- *   link VARCHAR(255) DEFAULT NULL
- * );
- */
+session_start();
+$mysqli = new mysqli('localhost', 'root', '', 'naga_hytam');
+if ($mysqli->connect_error) {
+    die('Database connection error: ' . $mysqli->connect_error);
+}
 
- session_start();
- $mysqli = new mysqli('localhost', 'root', '', 'naga_hytam');
- if ($mysqli->connect_error) {
-     die('Database connection error: ' . $mysqli->connect_error);
- }
- 
- // Cek apakah sudah login
- if (!isset($_SESSION['user_id'])) {
-     header('Location: login.php');
-     exit;
- }
- 
- // Ambil data user berdasarkan session
- $user = null;
- $user_id = $_SESSION['user_id'];
- $stmt = $mysqli->prepare('SELECT name, role, photo_url FROM users WHERE id = ?');
- $stmt->bind_param('i', $user_id);
- $stmt->execute();
- $result = $stmt->get_result();
- $user = $result->fetch_assoc();
- $stmt->close();
- 
+// Cek apakah sudah login
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
+    exit;
+}
+
+// Ambil data user berdasarkan session
+$user = null;
+$user_id = $_SESSION['user_id'];
+$stmt = $mysqli->prepare('SELECT name, role, photo_url FROM users WHERE id = ?');
+$stmt->bind_param('i', $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
+$stmt->close();
 
 // Ambil data berita terbaru
 $newsItems = [];
@@ -84,7 +55,13 @@ $result->free();
         <li><a class="dropdown-item" href="karyawan_dashboard.php"><i class="bi bi-people-fill me-1"></i> Karyawan</a></li>
         <li><hr class="dropdown-divider"></li>
         <li><h6 class="dropdown-header">Menu Lainnya</h6></li>
-        <li><a class="dropdown-item" href="laporan_kerja.php"><i class="bi bi-journal-text me-1"></i> Laporan Kerja</a></li>
+        <!-- Menu Laporan Kerja Dinamis -->
+        <li>
+          <a class="dropdown-item" href="<?= $user['role'] == 'Karyawan' ? 'kirim_laporan_kerja.php' : 'laporan_kerja.php' ?>">
+            <i class="bi bi-journal-text me-1"></i>
+            <?= $user['role'] == 'Karyawan' ? 'Kirim Laporan Kerja' : 'Laporan Kerja' ?>
+          </a>
+        </li>
         <li><a class="dropdown-item" href="feedback_pegawai.php"><i class="bi bi-chat-left-text me-1"></i> Feedback Pegawai</a></li>
         <li><a class="dropdown-item" href="shift_karyawan.php"><i class="bi bi-clock-history me-1"></i> Shift & Jadwal Karyawan</a></li>
       </ul>
@@ -130,7 +107,11 @@ $result->free();
         <a href="karyawan_dashboard.php" class="btn btn-outline-primary nav-button"><i class="bi bi-people-fill me-1"></i> Karyawan</a>
         <hr>
         <h6 class="fw-bold">MENU LAINNYA</h6>
-        <a href="laporan_kerja.php" class="btn btn-outline-dark nav-button"><i class="bi bi-file-earmark-text me-1"></i> Laporan Kerja</a>
+        <!-- Menu Laporan Kerja Dinamis -->
+        <a href="<?= $user['role'] == 'Karyawan' ? 'kirim_laporan_kerja.php' : 'laporan_kerja.php' ?>" class="btn btn-outline-dark nav-button">
+          <i class="bi bi-file-earmark-text me-1"></i>
+          <?= $user['role'] == 'Karyawan' ? 'Kirim Laporan Kerja' : 'Laporan Kerja' ?>
+        </a>
         <a href="feedback_pegawai.php" class="btn btn-outline-dark nav-button"><i class="bi bi-chat-dots me-1"></i> Feedback Pegawai</a>
         <a href="shift_karyawan.php" class="btn btn-outline-dark nav-button"><i class="bi bi-clock-history me-1"></i> Shift & Jadwal Karyawan</a>
       </nav>
@@ -154,9 +135,6 @@ $result->free();
       </main>
     </div>
   </div>
-
-  <!-- Offcanvas (mobile) -->
-  <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebarMobile">...</div>
 
   <script>
   $(document).ready(function(){
