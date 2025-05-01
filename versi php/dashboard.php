@@ -27,26 +27,28 @@
  * );
  */
 
-session_start();
-// koneksi database
-$mysqli = new mysqli('localhost', 'root', '', 'naga_hytam');
-if ($mysqli->connect_error) {
-    die('Database connection error: ' . $mysqli->connect_error);
-}
-
-// Mock login user ID (seharusnya di-set saat login)
-$_SESSION['user_id'] = 1;
-
-// Ambil data user
-$user = null;
-if (isset($_SESSION['user_id'])) {
-    $stmt = $mysqli->prepare('SELECT name, role, photo_url FROM users WHERE id = ?');
-    $stmt->bind_param('i', $_SESSION['user_id']);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $user = $result->fetch_assoc();
-    $stmt->close();
-}
+ session_start();
+ $mysqli = new mysqli('localhost', 'root', '', 'naga_hytam');
+ if ($mysqli->connect_error) {
+     die('Database connection error: ' . $mysqli->connect_error);
+ }
+ 
+ // Cek apakah sudah login
+ if (!isset($_SESSION['user_id'])) {
+     header('Location: login.php');
+     exit;
+ }
+ 
+ // Ambil data user berdasarkan session
+ $user = null;
+ $user_id = $_SESSION['user_id'];
+ $stmt = $mysqli->prepare('SELECT name, role, photo_url FROM users WHERE id = ?');
+ $stmt->bind_param('i', $user_id);
+ $stmt->execute();
+ $result = $stmt->get_result();
+ $user = $result->fetch_assoc();
+ $stmt->close();
+ 
 
 // Ambil data berita terbaru
 $newsItems = [];
@@ -105,7 +107,7 @@ $result->free();
       <a href="tanggal_bergabung.php" class="d-block mb-1 text-decoration-none text-dark"><i class="bi bi-calendar-event me-2"></i>Tanggal Bergabung</a>
       <a href="riwayat_cuti.php" class="d-block mb-1 text-decoration-none text-dark"><i class="bi bi-clock-history me-2"></i>Riwayat Cuti</a>
       <hr>
-      <a href="logout.php" class="d-block text-decoration-none text-danger"><i class="bi bi-box-arrow-right me-2"></i>Logout</a>
+      <a href="login.php" class="d-block text-decoration-none text-danger"><i class="bi bi-box-arrow-right me-2"></i>Logout</a>
     </div>
     <!-- Logo tengah -->
     <div class="mx-auto text-center order-2 logo-brand">
@@ -113,8 +115,9 @@ $result->free();
     </div>
     <!-- Logout desktop -->
     <div class="d-none d-md-block ms-auto order-4">
-      <button class="btn btn-outline-dark"><i class="bi bi-box-arrow-right"></i> Logout</button>
-    </div>
+  <a href="login.php" class="btn btn-outline-dark"><i class="bi bi-box-arrow-right"></i> Logout</a>
+</div>
+
   </header>
 
   <div class="container-fluid">
