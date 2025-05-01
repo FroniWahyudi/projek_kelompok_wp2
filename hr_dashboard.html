@@ -11,28 +11,45 @@
       background-color: #f8f9fa;
     }
     .hr-card {
-      cursor: pointer;
-    }
-    .profile-details {
-      background: #ffffff;
       border: 1px solid #dee2e6;
-      border-top: none;
+      border-radius: 0.5rem;
+      background-color: #ffffff;
       padding: 1rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      transition: transform 0.2s;
+      height: 100%;
+    }
+    .hr-card:hover {
+      transform: translateY(-5px);
     }
     .profile-photo {
-      width: 100px;
-      height: 100px;
+      width: 80px;
+      height: 80px;
       object-fit: cover;
       border-radius: 50%;
     }
+  
+    /* 👇 Breakpoint untuk layar kecil (400-765px) */
+    @media (max-width: 765px) {
+      .hr-card .d-flex {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+  
+      .profile-photo {
+        margin-bottom: 1rem;
+        margin-right: 0 !important;
+      }
+    }
   </style>
+  
 </head>
 <body>
 
   <!-- Header -->
   <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
     <div class="container-fluid">
-      <!-- Home Button -->
       <a href="index.html" class="btn btn-primary me-3">
         <i class="bi bi-house-door-fill me-1"></i> Home
       </a>
@@ -42,64 +59,64 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link active" href="#">HR</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="it_dashboard.html">IT</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="manajemen_dashboard.html">Manajemen</a>
-          </li>
+          <li class="nav-item"><a class="nav-link active" href="#">HR</a></li>
+          <li class="nav-item"><a class="nav-link" href="it_dashboard.html">IT</a></li>
+          <li class="nav-item"><a class="nav-link" href="manajemen_dashboard.html">Manajemen</a></li>
         </ul>
       </div>
     </div>
   </nav>
 
   <!-- Main Content -->
-  <div class="container py-5">
+  <div class="container py-4">
     <h3 class="mb-4">Divisi HR</h3>
-    <div class="accordion" id="hrAccordion">
+    <div class="row g-3">
 
-      <!-- Alice Card -->
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="headingAlice">
-          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAlice" aria-expanded="false" aria-controls="collapseAlice">
-            <i class="bi bi-person-circle me-2"></i> Alice
-          </button>
-        </h2>
-        <div id="collapseAlice" class="accordion-collapse collapse" aria-labelledby="headingAlice" data-bs-parent="#hrAccordion">
-          <div class="accordion-body d-flex align-items-start profile-details">
+      <!-- Card: Alice -->
+      <div class="col-sm-6 col-lg-4">
+        <div class="hr-card d-flex flex-column h-100">
+          <div class="d-flex mb-3">
             <img src="img/nami.jpeg" alt="Foto Alice" class="profile-photo me-3">
             <div>
-              <h5>Alice Putri</h5>
-              <p><strong>Jabatan:</strong> HR Specialist</p>
-              <p><strong>Email:</strong> alice.putri@nagahtam.co.id</p>
-              <p><strong>Telepon:</strong> +62 812-3456-7890</p>
-              <p>Berpengalaman dalam manajemen talenta dan pengembangan SDM, fokus pada kesejahteraan karyawan dan budaya perusahaan.</p>
+              <h5 class="mb-1">Alice Putri</h5>
+              <p class="mb-1"><strong>Jabatan:</strong> HR Specialist</p>
+              <p class="mb-1"><strong>Email:</strong> alice.putri@nagahtam.co.id</p>
+              <p class="mb-1"><strong>Telepon:</strong> +62 812-3456-7890</p>
             </div>
           </div>
+          <p class="mb-0">Berpengalaman dalam manajemen talenta dan pengembangan SDM, fokus pada kesejahteraan karyawan dan budaya perusahaan.</p>
         </div>
       </div>
 
-      <!-- Budi Card -->
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="headingBudi">
-          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBudi" aria-expanded="false" aria-controls="collapseBudi">
-            <i class="bi bi-person-circle me-2"></i> Budi
-          </button>
-        </h2>
-        <div id="collapseBudi" class="accordion-collapse collapse" aria-labelledby="headingBudi" data-bs-parent="#hrAccordion">
-          <div class="accordion-body d-flex align-items-start profile-details">
+      <!-- Card: Budi -->
+      <div class="col-sm-6 col-lg-4">
+        <div class="hr-card d-flex flex-column h-100">
+          <div class="d-flex mb-3">
             <img src="img/zoro.jpeg" alt="Foto Budi" class="profile-photo me-3">
             <div>
-              <h5>Budi Santoso</h5>
-              <p><strong>Jabatan:</strong> HR Manager</p>
-              <p><strong>Email:</strong> budi.santoso@nagahtam.co.id</p>
-              <p><strong>Telepon:</strong> +62 813-9876-5432</p>
-              <p>Memimpin tim HR dengan fokus pada strategi rekrutmen dan retensi karyawan, serta penerapan kebijakan SDM yang efektif.</p>
+              <h5 class="mb-1">Budi Santoso</h5>
+              <p class="mb-1"><strong>Jabatan:</strong> HR Manager</p>
+              <p class="mb-1"><strong>Email:</strong> budi.santoso@nagahtam.co.id</p>
+              <p class="mb-1"><strong>Telepon:</strong> +62 813-9876-5432</p>
             </div>
           </div>
+          <p class="mb-0">Memimpin tim HR dengan fokus pada strategi rekrutmen dan retensi karyawan, serta penerapan kebijakan SDM yang efektif.</p>
+        </div>
+      </div>
+
+      <!-- Card: Sanji -->
+      <div class="col-sm-6 col-lg-4">
+        <div class="hr-card d-flex flex-column h-100">
+          <div class="d-flex mb-3">
+            <img src="img/sanji.jpeg" alt="Foto Sanji" class="profile-photo me-3">
+            <div>
+              <h5 class="mb-1">Sanji</h5>
+              <p class="mb-1"><strong>Jabatan:</strong> HR Manager</p>
+              <p class="mb-1"><strong>Email:</strong> sanji@nagahtam.co.id</p>
+              <p class="mb-1"><strong>Telepon:</strong> +62 813-9876-5432</p>
+            </div>
+          </div>
+          <p class="mb-0">Memimpin tim HR dengan fokus pada strategi rekrutmen dan retensi karyawan, serta penerapan kebijakan SDM yang efektif.</p>
         </div>
       </div>
 
