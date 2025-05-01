@@ -36,9 +36,6 @@ body {
   transform: translateY(-5px);
 }
 
-
-
-
 /* Dropdown Profil */
 #profileDropdown {
   display: none;
@@ -89,12 +86,6 @@ body {
     transform: translateX(-75%);
   }
 }
-
-
-
-
-
-
 @media (max-width: 450px) {
   header {
     position: relative;
@@ -132,17 +123,10 @@ body {
     font-size: small;
   }
 }
-
 @media (min-width: 400px) and (max-width: 765px) {
   .card-news img {
     height: 150px;
   }
-
-
-
-
-
-
   .card-news {
     font-size: 0.95rem;
   }
@@ -176,4 +160,24 @@ body {
     flex: 0 0 25%;
     max-width: 25%;
   }
+
+  .logo-brand-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: -40px; /* bisa disesuaikan */
+  }
+  
+  .logo-img {
+    height: 150px;
+    transition: all 0.3s ease;
+  }
+  
+  @media (max-width: 450px) {
+    .logo-img {
+      height: 100px;
+      margin-top: -20px;
+    }
+  }
+  
 }
