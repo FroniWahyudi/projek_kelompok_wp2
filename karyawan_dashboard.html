@@ -22,7 +22,18 @@
 
     <!-- Tabel Karyawan -->
     <h3>Data Karyawan</h3>
-    <a href="index.html" class="btn btn-secondary mb-3">
+
+    
+      
+
+      <!-- Form Pencarian -->
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <input type="text" id="searchInput" class="form-control" placeholder="Cari nama karyawan..." onkeyup="filterTable()">
+        </div>
+      </div>
+      
+      <a href="index.html" class="btn btn-secondary mb-3">
         <i class="bi bi-arrow-left-circle"></i> Kembali ke Beranda
       </a>
       
@@ -205,6 +216,21 @@
         row.cells[0].innerText = i + 1;
       });
     }
+
+    function filterTable() {
+        const input = document.getElementById("searchInput").value.toLowerCase();
+        const rows = document.querySelectorAll("#karyawanBody tr");
+      
+        rows.forEach(row => {
+          const nama = row.cells[1].innerText.toLowerCase();
+          if (nama.includes(input)) {
+            row.style.display = "";
+          } else {
+            row.style.display = "none";
+          }
+        });
+      }
+      
   </script>
 </body>
 </html>
