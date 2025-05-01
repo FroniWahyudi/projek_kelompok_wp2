@@ -113,7 +113,7 @@ body {
   }
 
   .logo-brand img {
-    width: 200px;
+    width: 100%;
     height: auto;
   }
 
@@ -126,6 +126,10 @@ body {
 @media (min-width: 400px) and (max-width: 765px) {
   .card-news img {
     height: 150px;
+  }
+  .logo-brand img {
+    width: 100%;
+    height: auto;
   }
   .card-news {
     font-size: 0.95rem;
