@@ -183,5 +183,86 @@ body {
       margin-top: -20px;
     }
   }
+
+  @media (max-width: 330px) {
+    body {
+      font-size: 14px;
+      padding: 0 10px;
+    }
+  
+    header {
+      height: 60px;
+      padding: 0.5rem;
+    }
+  
+    .logo-brand {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-90%);
+    }
+  
+    .logo-brand img,
+    .logo-img {
+      max-width: 100px;
+      height: auto;
+    }
+  
+    .menu-drop {
+      font-size: 12px;
+      padding: 4px 8px;
+    }
+    
+    
+      .menu-drop {
+        font-size: 0.8rem; /* kecilkan teks */
+        padding: 0.25rem 0.5rem; /* kecilkan padding */
+        max-width: 100px; /* batasi lebar tombol */
+      }
+    
+      .menu-drop i {
+        font-size: 1rem; /* kecilkan ikon jika perlu */
+      }
+    
+    
+    
+    #profileDropdown {
+      min-width: 160px;
+      right: 10px;
+    }
+  
+    #profileDropdown a {
+      font-size: 13px;
+      padding: 6px 10px;
+    }
+  
+    .card-news img {
+      height: 100px;
+    }
+  
+    .card-news {
+      font-size: 0.85rem;
+    }
+  
+    .card-news h6,
+    .card-news p,
+    .card-news small {
+      padding: 2px 4px;
+    }
+  
+    .nav-button {
+      font-size: 13px;
+      padding: 6px 8px;
+    }
+  
+    .offcanvas-body button {
+      font-size: 13px;
+      padding: 6px 8px;
+    }
+  
+    .sidebar {
+      padding: 1rem 0.5rem;
+    }
+  }
+  
   
 }
