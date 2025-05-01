@@ -1,0 +1,268 @@
+body {
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+body.fade-out {
+  opacity: 0;
+}
+
+body {
+  background-color: #f8f9fa;
+}
+
+.sidebar {
+  min-height: 100vh;
+  border-right: 1px solid #dee2e6;
+}
+
+.nav-button {
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+.card-news img {
+  background: #dee2e6;
+  width: 100%;
+  height: 120px;
+  border-radius: 0.5rem;
+  object-fit: cover;
+}
+
+.card-news {
+  transition: transform 0.2s ease;
+}
+
+.card-news:hover {
+  transform: translateY(-5px);
+}
+
+/* Dropdown Profil */
+#profileDropdown {
+  display: none;
+  right: 0;
+  top: 100%;
+  z-index: 1000;
+  min-width: 180px;
+  background-color: white;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+#profileDropdown a {
+  padding: 0.5rem 1rem;
+  display: block;
+  color: #333;
+  text-decoration: none;
+}
+
+#profileDropdown a:hover {
+  background-color: #f8f9fa;
+}
+
+@media (max-width: 765px) {
+  header {
+    position: relative;
+    height: 90px;
+  }
+
+  header > .order-md-6 {
+    position: absolute;
+    left: 1rem;
+  }
+
+  header > .order-md-1 {
+    position: absolute;
+    right: 1rem;
+  }
+
+  header > .order-5 {
+    position: static;
+  }
+
+  .logo-brand {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-75%);
+  }
+}
+@media (max-width: 450px) {
+  header {
+    position: relative;
+    height: 70px;
+  }
+
+  header > .order-md-6 {
+    position: absolute;
+    left: 1rem;
+  }
+
+  header > .order-md-1 {
+    position: absolute;
+    right: 1rem;
+  }
+
+  header > .order-5 {
+    position: static;
+  }
+
+  .logo-brand {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-85%);
+  }
+
+  .logo-brand img {
+    width: 100%;
+    height: auto;
+  }
+
+  .menu-drop {
+    width: 90px;
+    height: auto;
+    font-size: small;
+  }
+}
+@media (min-width: 400px) and (max-width: 765px) {
+  .card-news img {
+    height: 150px;
+  }
+  .logo-brand img {
+    width: 100%;
+    height: auto;
+  }
+  .card-news {
+    font-size: 0.95rem;
+  }
+
+  .card-news p,
+  .card-news h6,
+  .card-news small {
+    padding-left: 2px;
+    padding-right: 2px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .row.g-2 {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .row.g-2 > div {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .row.g-2 > div:nth-child(3n+1) {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+
+  .row.g-2 > div:nth-child(3n+2),
+  .row.g-2 > div:nth-child(3n+3) {
+    flex: 0 0 25%;
+    max-width: 25%;
+  }
+
+  .logo-brand-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: -40px; /* bisa disesuaikan */
+  }
+  
+  .logo-img {
+    height: 150px;
+    transition: all 0.3s ease;
+  }
+  
+  @media (max-width: 450px) {
+    .logo-img {
+      height: 100px;
+      margin-top: -20px;
+    }
+  }
+
+  @media (max-width: 330px) {
+    body {
+      font-size: 14px;
+      padding: 0 10px;
+    }
+  
+    header {
+      height: 60px;
+      padding: 0.5rem;
+    }
+  
+    .logo-brand {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-90%);
+    }
+  
+    .logo-brand img,
+    .logo-img {
+      max-width: 100px;
+      height: auto;
+    }
+  
+    .menu-drop {
+      font-size: 12px;
+      padding: 4px 8px;
+    }
+    
+    
+      .menu-drop {
+        font-size: 0.8rem; /* kecilkan teks */
+        padding: 0.25rem 0.5rem; /* kecilkan padding */
+        max-width: 100px; /* batasi lebar tombol */
+      }
+    
+      .menu-drop i {
+        font-size: 1rem; /* kecilkan ikon jika perlu */
+      }
+    
+    
+    
+    #profileDropdown {
+      min-width: 160px;
+      right: 10px;
+    }
+  
+    #profileDropdown a {
+      font-size: 13px;
+      padding: 6px 10px;
+    }
+  
+    .card-news img {
+      height: 100px;
+    }
+  
+    .card-news {
+      font-size: 0.85rem;
+    }
+  
+    .card-news h6,
+    .card-news p,
+    .card-news small {
+      padding: 2px 4px;
+    }
+  
+    .nav-button {
+      font-size: 13px;
+      padding: 6px 8px;
+    }
+  
+    .offcanvas-body button {
+      font-size: 13px;
+      padding: 6px 8px;
+    }
+  
+    .sidebar {
+      padding: 1rem 0.5rem;
+    }
+  }
+  
+  
+}

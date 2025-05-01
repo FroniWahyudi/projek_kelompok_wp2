@@ -235,7 +235,7 @@
         const rows = document.querySelectorAll("#karyawanBody tr");
       
         rows.forEach(row => {
-          const nama = row.cells[1].innerText.toLowerCase();
+          const nama = row.cells[2].innerText.toLowerCase();
           if (nama.includes(input)) {
             row.style.display = "";
           } else {
