@@ -56,12 +56,24 @@ $result->free();
         <li><hr class="dropdown-divider"></li>
         <li><h6 class="dropdown-header">Menu Lainnya</h6></li>
         <!-- Menu Laporan Kerja Dinamis -->
-        <li>
-          <a class="dropdown-item" href="<?= $user['role'] == 'Karyawan' ? 'kirim_laporan_kerja.php' : 'laporan_kerja.php' ?>">
-            <i class="bi bi-journal-text me-1"></i>
-            <?= $user['role'] == 'Karyawan' ? 'Kirim Laporan Kerja' : 'Laporan Kerja' ?>
-          </a>
-        </li>
+
+       <!-- Laporan Kerja Dinamis -->
+        <?php if ($user['role'] === 'Manajer Umum' || $user['role'] === 'Manajer HR'): ?>
+          <li>
+            <a class="dropdown-item" href="laporan_kerja.php">
+              <i class="bi bi-journal-text me-1"></i> Laporan Kerja
+            </a>
+          </li>
+        <?php elseif ($user['role'] === 'HR'): ?>
+          <li>
+            <a class="dropdown-item" href="laporan_kerja.php">
+              <i class="bi bi-journal-text me-1"></i> Kirim Laporan Kerja
+            </a>
+          </li>
+        <?php endif; ?>
+
+
+
         <li><a class="dropdown-item" href="feedback_pegawai.php"><i class="bi bi-chat-left-text me-1"></i> Feedback Pegawai</a></li>
         <li><a class="dropdown-item" href="shift_karyawan.php"><i class="bi bi-clock-history me-1"></i> Shift & Jadwal Karyawan</a></li>
       </ul>
@@ -88,7 +100,7 @@ $result->free();
     </div>
     <!-- Logo tengah -->
     <div class="mx-auto text-center order-2 logo-brand">
-      <img src="logo_brand.png" alt="Logo" height="200" style="margin:-60px; margin-left:50%;">
+      <img src="img/logo_brand.png" alt="Logo" height="200" style="margin:-60px; margin-left:50%;">
     </div>
     <!-- Logout desktop -->
     <div class="d-none d-md-block ms-auto order-4">
@@ -107,11 +119,18 @@ $result->free();
         <a href="karyawan_dashboard.php" class="btn btn-outline-primary nav-button"><i class="bi bi-people-fill me-1"></i> Karyawan</a>
         <hr>
         <h6 class="fw-bold">MENU LAINNYA</h6>
-        <!-- Menu Laporan Kerja Dinamis -->
-        <a href="<?= $user['role'] == 'Karyawan' ? 'kirim_laporan_kerja.php' : 'laporan_kerja.php' ?>" class="btn btn-outline-dark nav-button">
-          <i class="bi bi-file-earmark-text me-1"></i>
-          <?= $user['role'] == 'Karyawan' ? 'Kirim Laporan Kerja' : 'Laporan Kerja' ?>
-        </a>
+   <!-- Laporan Kerja Dinamis -->
+<?php if ($user['role'] === 'Manajer Umum' || $user['role'] === 'Manajer HR'): ?>
+    <a href="laporan_kerja.php" class="btn btn-outline-dark nav-button">
+      <i class="bi bi-file-earmark-text me-1"></i> Laporan Kerja
+    </a>
+<?php elseif ($user['role'] === 'HR'): ?>
+    <a href="laporan_kerja.php" class="btn btn-outline-dark nav-button">
+      <i class="bi bi-file-earmark-text me-1"></i> Kirim Laporan Kerja
+    </a>
+<?php endif; ?>
+
+
         <a href="feedback_pegawai.php" class="btn btn-outline-dark nav-button"><i class="bi bi-chat-dots me-1"></i> Feedback Pegawai</a>
         <a href="shift_karyawan.php" class="btn btn-outline-dark nav-button"><i class="bi bi-clock-history me-1"></i> Shift & Jadwal Karyawan</a>
       </nav>
