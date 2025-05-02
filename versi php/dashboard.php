@@ -5,13 +5,11 @@ if ($mysqli->connect_error) {
     die('Database connection error: ' . $mysqli->connect_error);
 }
 
-// Cek apakah sudah login
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit;
 }
 
-// Ambil data user berdasarkan session
 $user = null;
 $user_id = $_SESSION['user_id'];
 $stmt = $mysqli->prepare('SELECT name, role, photo_url FROM users WHERE id = ?');
@@ -21,7 +19,6 @@ $result = $stmt->get_result();
 $user = $result->fetch_assoc();
 $stmt->close();
 
-// Ambil data berita terbaru
 $newsItems = [];
 $result = $mysqli->query('SELECT * FROM news ORDER BY date DESC LIMIT 6');
 while ($row = $result->fetch_assoc()) {
@@ -36,14 +33,104 @@ $result->free();
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard - Naga Hytam Sejahtera Abadi</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 70px;
+      background-color: white;
+      z-index: 1030;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .sidebar {
+      position: fixed;
+      top: 70px;
+      bottom: 0;
+      left: 0;
+      width: 250px;
+      background-color: white;
+      overflow-y: auto;
+      border-right: 1px solid #ddd;
+      padding: 20px;
+      z-index: 1020;
+    }
+    main {
+      margin-top: 80px;
+      margin-left: 270px;
+    }
+
+    @media (max-width: 780px) {
+      header,
+      .sidebar {
+        display: none !important;
+      }
+
+      main {
+        margin: 0 !important;
+      }
+    }
+
+
+    @media (max-width: 340px) {
+      .logo-brand img {
+        width: 93% !important;
+        height: auto !important;
+        margin: -1px 0 0 46% !important;
+      }
+
+      header {
+        flex-wrap: wrap;
+        height: auto;
+        padding: 10px;
+      }
+
+      .dropdown.d-md-none,
+      #profileDropdownToggle {
+        width: 100%;
+        margin-bottom: 5px;
+      }
+
+      #profileDropdownToggle {
+        justify-content: flex-end;
+        display: flex;
+        align-items: center;
+      }
+
+      #profileDropdownToggle img {
+        width: 40px !important;
+        height: 40px !important;
+        margin-right: 8px;
+      }
+
+      .menu-drop {
+        width: 65px;
+        font-size: 10px;
+        padding: 4px;
+      }
+
+      .menu-drop i.bi-list {
+        margin-left: -4px;
+      }
+
+      main {
+        margin: 0 !important;
+        padding: 10px;
+      }
+   }
+
+
+
+  </style>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
   <!-- Header -->
-  <header class="d-flex align-items-center px-3 py-2 border-bottom bg-white shadow-sm">
-    <!-- Mobile dropdown -->
+  <header class="d-flex align-items-center px-3 py-2 border-bottom">
+    <!-- Dropdown mobile & Profil tetap -->
     <div class="dropdown d-md-none order-1">
       <button class="btn btn-outline-secondary dropdown-toggle menu-drop" type="button" id="dropdownMobileMenu" data-bs-toggle="dropdown">
         <i class="bi bi-list"></i> Menu
@@ -55,30 +142,15 @@ $result->free();
         <li><a class="dropdown-item" href="karyawan_dashboard.php"><i class="bi bi-people-fill me-1"></i> Karyawan</a></li>
         <li><hr class="dropdown-divider"></li>
         <li><h6 class="dropdown-header">Menu Lainnya</h6></li>
-        <!-- Menu Laporan Kerja Dinamis -->
-
-       <!-- Laporan Kerja Dinamis -->
         <?php if ($user['role'] === 'Manajer Umum' || $user['role'] === 'Manajer HR'): ?>
-          <li>
-            <a class="dropdown-item" href="laporan_kerja.php">
-              <i class="bi bi-journal-text me-1"></i> Laporan Kerja
-            </a>
-          </li>
+        <li><a class="dropdown-item" href="laporan_kerja.php"><i class="bi bi-journal-text me-1"></i> Laporan Kerja</a></li>
         <?php elseif ($user['role'] === 'HR'): ?>
-          <li>
-            <a class="dropdown-item" href="laporan_kerja.php">
-              <i class="bi bi-journal-text me-1"></i> Kirim Laporan Kerja
-            </a>
-          </li>
+        <li><a class="dropdown-item" href="laporan_kerja.php"><i class="bi bi-journal-text me-1"></i> Kirim Laporan Kerja</a></li>
         <?php endif; ?>
-
-
-
         <li><a class="dropdown-item" href="feedback_pegawai.php"><i class="bi bi-chat-left-text me-1"></i> Feedback Pegawai</a></li>
         <li><a class="dropdown-item" href="shift_karyawan.php"><i class="bi bi-clock-history me-1"></i> Shift & Jadwal Karyawan</a></li>
       </ul>
     </div>
-    <!-- Profil akun -->
     <div id="profileDropdownToggle" class="d-flex align-items-center ms-3 order-3 order-md-1" style="cursor:pointer;">
       <img src="<?= htmlspecialchars($user['photo_url']) ?>" class="rounded-circle me-2" alt="Foto Profil" width="50" height="50">
       <div class="d-none d-md-block">
@@ -86,7 +158,6 @@ $result->free();
         <small class="text-muted"><?= htmlspecialchars($user['role']) ?></small>
       </div>
     </div>
-    <!-- Dropdown profil -->
     <div id="profileDropdown" class="position-absolute bg-white border shadow-sm rounded p-2" style="top:70px; right:20px; width:220px; display:none; z-index:999;">
       <strong class="d-block mb-2">Profil</strong>
       <a href="ubah_data.php" class="d-block mb-1 text-decoration-none text-dark"><i class="bi bi-pencil-square me-2"></i>Ubah Data Diri</a>
@@ -98,62 +169,53 @@ $result->free();
       <hr>
       <a href="login.php" class="d-block text-decoration-none text-danger"><i class="bi bi-box-arrow-right me-2"></i>Logout</a>
     </div>
-    <!-- Logo tengah -->
     <div class="mx-auto text-center order-2 logo-brand">
-      <img src="img/logo_brand.png" alt="Logo" height="200" style="margin:-60px; margin-left:50%;">
+      <img src="img/logo_brand.png" alt="Logo" height="200" style="margin:-60px; margin-left:35%;">
     </div>
-    <!-- Logout desktop -->
     <div class="d-none d-md-block ms-auto order-4">
-  <a href="login.php" class="btn btn-outline-dark"><i class="bi bi-box-arrow-right"></i> Logout</a>
-</div>
-
+      <a href="login.php" class="btn btn-outline-dark"><i class="bi bi-box-arrow-right"></i> Logout</a>
+    </div>
   </header>
 
-  <div class="container-fluid">
-    <div class="row">
-      <!-- Sidebar -->
-      <nav class="col-md-3 col-lg-2 d-none d-md-block bg-white sidebar p-3">
-        <h6 class="text-uppercase fw-bold mb-3">Divisi Karyawan</h6>
-        <a href="hr_dashboard.php" class="btn btn-outline-primary nav-button"><i class="bi bi-person-circle me-1"></i>HR</a>
-        <a href="manajemen_dashboard.php" class="btn btn-outline-primary nav-button"><i class="bi bi-people-fill me-1"></i> Manajemen</a>
-        <a href="karyawan_dashboard.php" class="btn btn-outline-primary nav-button"><i class="bi bi-people-fill me-1"></i> Karyawan</a>
-        <hr>
-        <h6 class="fw-bold">MENU LAINNYA</h6>
-   <!-- Laporan Kerja Dinamis -->
-<?php if ($user['role'] === 'Manajer Umum' || $user['role'] === 'Manajer HR'): ?>
-    <a href="laporan_kerja.php" class="btn btn-outline-dark nav-button">
-      <i class="bi bi-file-earmark-text me-1"></i> Laporan Kerja
-    </a>
-<?php elseif ($user['role'] === 'HR'): ?>
-    <a href="laporan_kerja.php" class="btn btn-outline-dark nav-button">
-      <i class="bi bi-file-earmark-text me-1"></i> Kirim Laporan Kerja
-    </a>
-<?php endif; ?>
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <h6 class="text-uppercase fw-bold mb-3">Divisi Karyawan</h6>
+    <a href="hr_dashboard.php" class="btn btn-outline-primary nav-button"><i class="bi bi-person-circle me-1"></i>HR</a>
+    <a href="manajemen_dashboard.php" class="btn btn-outline-primary nav-button"><i class="bi bi-people-fill me-1"></i> Manajemen</a>
+    <a href="karyawan_dashboard.php" class="btn btn-outline-primary nav-button"><i class="bi bi-people-fill me-1"></i> Karyawan</a>
+    <hr>
+    <h6 class="fw-bold">MENU LAINNYA</h6>
+    <?php if ($user['role'] === 'Manajer Umum' || $user['role'] === 'Manajer HR'): ?>
+      <a href="laporan_kerja.php" class="btn btn-outline-dark nav-button"><i class="bi bi-file-earmark-text me-1"></i> Laporan Kerja</a>
+    <?php elseif ($user['role'] === 'HR'): ?>
+      <a href="laporan_kerja.php" class="btn btn-outline-dark nav-button"><i class="bi bi-file-earmark-text me-1"></i> Kirim Laporan Kerja</a>
+      <?php elseif ($user['role'] === 'Karyawan'): ?>
+        <a href="pengajuan_cuti.php" class="btn btn-outline-dark nav-button"><i class="bi bi-file-earmark-text me-1"></i> Pengajuan Cuti</a>
+        <a href="slip_gaji.php" class="btn btn-outline-dark nav-button"><i class="bi bi-file-earmark-text me-1"></i> Slip Gaji</a>
 
+    <?php endif; ?>
+    <a href="feedback_pegawai.php" class="btn btn-outline-dark nav-button"><i class="bi bi-chat-dots me-1"></i> Feedback Pegawai</a>
+    <a href="shift_karyawan.php" class="btn btn-outline-dark nav-button"><i class="bi bi-clock-history me-1"></i> Shift & Jadwal Karyawan</a>
+  </nav>
 
-        <a href="feedback_pegawai.php" class="btn btn-outline-dark nav-button"><i class="bi bi-chat-dots me-1"></i> Feedback Pegawai</a>
-        <a href="shift_karyawan.php" class="btn btn-outline-dark nav-button"><i class="bi bi-clock-history me-1"></i> Shift & Jadwal Karyawan</a>
-      </nav>
-      <!-- Main content -->
-      <main class="col-md-9 col-lg-10 px-4 py-4">
-        <h3 class="mb-4">What's New</h3>
-        <div class="row g-2">
-          <?php foreach ($newsItems as $item): ?>
-          <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-            <div class="card card-news p-2 shadow-sm h-100">
-              <img src="<?= htmlspecialchars($item['image_url']) ?>" class="card-img-top" alt="<?= htmlspecialchars($item['title']) ?>">
-              <div class="card-body p-2">
-                <h6 class="fw-bold mb-1"><?= htmlspecialchars($item['title']) ?></h6>
-                <small class="text-muted"><?= htmlspecialchars($item['date']) ?></small>
-                <p class="mb-0 small"><?= htmlspecialchars($item['description']) ?></p>
-              </div>
-            </div>
+  <!-- Main -->
+  <main class="px-4 py-4">
+    <h3 class="mb-4">What's New</h3>
+    <div class="row g-2">
+      <?php foreach ($newsItems as $item): ?>
+      <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+        <div class="card card-news p-2 shadow-sm h-100">
+          <img src="<?= htmlspecialchars($item['image_url']) ?>" class="card-img-top" alt="<?= htmlspecialchars($item['title']) ?>">
+          <div class="card-body p-2">
+            <h6 class="fw-bold mb-1"><?= htmlspecialchars($item['title']) ?></h6>
+            <small class="text-muted"><?= htmlspecialchars($item['date']) ?></small>
+            <p class="mb-0 small"><?= htmlspecialchars($item['description']) ?></p>
           </div>
-          <?php endforeach; ?>
         </div>
-      </main>
+      </div>
+      <?php endforeach; ?>
     </div>
-  </div>
+  </main>
 
   <script>
   $(document).ready(function(){
