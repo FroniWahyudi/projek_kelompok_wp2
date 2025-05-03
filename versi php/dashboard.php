@@ -64,7 +64,7 @@ $result->free();
       text-align: center;
     }
     .navbar-custom .logo-brand img {
-      height: 220px;
+      height: 86px;
       object-fit: contain;
     }
     .sidebar {
@@ -122,12 +122,12 @@ $result->free();
       /* Posisi ulang logo-brand */
       .logo-brand {
         position: absolute;
-        top: -58px;
+        top: 0;
         left: 50%;
         transform: translateX(-50%);
       }
       .navbar-custom .logo-brand img {
-         height: 200px;
+         height: 70px;
          object-fit: contain;
       }
 
@@ -154,12 +154,12 @@ $result->free();
       /* Posisi ulang logo-brand */
       .logo-brand {
         position: absolute;
-        top: -47px;
+        top: 6px;
         left: 50%;
         transform: translateX(-47%);
       }
       .navbar-custom .logo-brand img {
-         height: 180px;
+         height: 70px;
          object-fit: contain;
       }
 
