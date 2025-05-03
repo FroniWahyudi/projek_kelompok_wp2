@@ -181,7 +181,7 @@ $result->free();
 
 
     /* responsive layar <790px */
-    @media (max-width: 790px) {
+    @media (min-width: 785px) and (max-width: 790px) {
       .sidebar {
         display: none;
       }
