@@ -35,96 +35,117 @@ $result->free();
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="versi php\bootstrap-5.3.5-dist">
   <style>
-    header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 70px;
-      background-color: white;
-      z-index: 1030;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
+  header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 70px;
+    background-color: white;
+    z-index: 1030;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 70px;
+    bottom: 0;
+    left: 0;
+    width: 250px;
+    background-color: white;
+    overflow-y: auto;
+    border-right: 1px solid #ddd;
+    padding: 20px;
+    z-index: 1020;
+  }
+
+  main {
+    margin-top: 80px;
+    margin-left: 270px;
+  }
+
+  @media (max-width: 780px) {
+    header,
     .sidebar {
-      position: fixed;
-      top: 70px;
-      bottom: 0;
-      left: 0;
-      width: 250px;
-      background-color: white;
-      overflow-y: auto;
-      border-right: 1px solid #ddd;
-      padding: 20px;
-      z-index: 1020;
+      display: none !important;
     }
+
     main {
-      margin-top: 80px;
-      margin-left: 270px;
+      margin: 0 !important;
+    }
+  }
+
+  @media (max-width: 340px) {
+    .logo-brand img {
+      width: 93% !important;
+      height: auto !important;
+      margin: -1px 0 0 46% !important;
     }
 
-    @media (max-width: 780px) {
-      header,
-      .sidebar {
-        display: none !important;
-      }
-
-      main {
-        margin: 0 !important;
-      }
+    header {
+      flex-wrap: wrap;
+      height: auto;
+      padding: 10px;
     }
 
+    .dropdown.d-md-none,
+    #profileDropdownToggle {
+      width: 100%;
+      margin-bottom: 5px;
+    }
 
-    @media (max-width: 340px) {
-      .logo-brand img {
-        width: 93% !important;
-        height: auto !important;
-        margin: -1px 0 0 46% !important;
-      }
+    #profileDropdownToggle {
+      justify-content: flex-end;
+      display: flex;
+      align-items: center;
+    }
 
-      header {
-        flex-wrap: wrap;
-        height: auto;
-        padding: 10px;
-      }
+    #profileDropdownToggle img {
+      width: 40px !important;
+      height: 40px !important;
+      margin-right: 8px;
+    }
 
-      .dropdown.d-md-none,
-      #profileDropdownToggle {
-        width: 100%;
-        margin-bottom: 5px;
-      }
+    .menu-drop {
+      width: 65px;
+      font-size: 10px;
+      padding: 4px;
+    }
 
-      #profileDropdownToggle {
-        justify-content: flex-end;
-        display: flex;
-        align-items: center;
-      }
+    .menu-drop i.bi-list {
+      margin-left: -4px;
+    }
 
-      #profileDropdownToggle img {
-        width: 40px !important;
-        height: 40px !important;
-        margin-right: 8px;
-      }
+    main {
+      margin: 0 !important;
+      padding: 10px;
+    }
+  }
 
-      .menu-drop {
-        width: 65px;
-        font-size: 10px;
-        padding: 4px;
-      }
+  /* Styling kartu berita */
+  .card-news img {
+    height: 160px;
+    object-fit: cover;
+  }
 
-      .menu-drop i.bi-list {
-        margin-left: -4px;
-      }
+  .card-news {
+    display: flex;
+    flex-direction: column;
+  }
 
-      main {
-        margin: 0 !important;
-        padding: 10px;
-      }
-   }
+  .card-news .card-body {
+    flex-grow: 1;
+  }
 
+  /* Tambahan styling opsional jika ingin membedakan dua kartu terakhir */
+  .card-news.wide-card {
+    background-color: #f8f9fa;
+  }
 
+</style>
 
-  </style>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
@@ -170,7 +191,7 @@ $result->free();
       <a href="login.php" class="d-block text-decoration-none text-danger"><i class="bi bi-box-arrow-right me-2"></i>Logout</a>
     </div>
     <div class="mx-auto text-center order-2 logo-brand">
-      <img src="img/logo_brand.png" alt="Logo" height="200" style="margin:-60px; margin-left:35%;">
+      <img src="img/logo_brand.png" alt="Logo" height="400" style="margin:-60px; margin-left:35%;">
     </div>
     <div class="d-none d-md-block ms-auto order-4">
       <a href="login.php" class="btn btn-outline-dark"><i class="bi bi-box-arrow-right"></i> Logout</a>
@@ -199,11 +220,17 @@ $result->free();
   </nav>
 
   <!-- Main -->
-  <main class="px-4 py-4">
+<main class="px-4 py-4">
+  <div class="container">
     <h3 class="mb-4">What's New</h3>
-    <div class="row g-2">
-      <?php foreach ($newsItems as $item): ?>
-      <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+    <div class="row g-3">
+      <?php 
+        $totalItems = count($newsItems);
+        foreach ($newsItems as $index => $item): 
+          $isLastTwo = $index >= $totalItems - 2;
+          $columnClass = $isLastTwo ? 'col-md-6' : 'col-md-3';
+      ?>
+      <div class="col-12 col-sm-6 <?= $columnClass ?>">
         <div class="card card-news p-2 shadow-sm h-100">
           <img src="<?= htmlspecialchars($item['image_url']) ?>" class="card-img-top" alt="<?= htmlspecialchars($item['title']) ?>">
           <div class="card-body p-2">
@@ -215,7 +242,8 @@ $result->free();
       </div>
       <?php endforeach; ?>
     </div>
-  </main>
+  </div>
+</main>
 
   <script>
   $(document).ready(function(){
