@@ -217,6 +217,42 @@ $result->free();
     }
 
 
+
+     /* responsive layar <340px */
+     @media (min-width: 340px) and (max-width: 390px) {
+      .sidebar {
+        display: none;
+      }
+
+      main {
+        margin-left: 0;
+      }
+
+      /* Posisi ulang logo-brand */
+      .logo-brand {
+        position: absolute;
+        top: 6px;
+        left: 50%;
+        transform: translateX(-47%);
+      }
+      .navbar-custom .logo-brand img {
+         height: 55px;
+         object-fit: contain;
+      }
+
+      /* Posisi ulang tombol profileDropdownToggle */
+      #profileDropdownToggle {
+        position: absolute;
+        top: 17px;
+        right: -0.5rem;
+      }
+
+      #mobileMenu {
+        font-size: 12px;
+        padding: 8px 8px;
+        width: 100%;              /* Tombol full width */
+      }
+    }
   </style>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
