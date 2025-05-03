@@ -76,53 +76,48 @@ $result->free();
       margin: 0 !important;
     }
   }
-
-  @media (max-width: 340px) {
-    .logo-brand img {
-      width: 93% !important;
-      height: auto !important;
-      margin: -1px 0 0 46% !important;
-    }
-
-    header {
-      flex-wrap: wrap;
-      height: auto;
-      padding: 10px;
-    }
-
-    .dropdown.d-md-none,
-    #profileDropdownToggle {
-      width: 100%;
-      margin-bottom: 5px;
-    }
-
-    #profileDropdownToggle {
-      justify-content: flex-end;
-      display: flex;
-      align-items: center;
-    }
-
-    #profileDropdownToggle img {
-      width: 40px !important;
-      height: 40px !important;
-      margin-right: 8px;
-    }
-
-    .menu-drop {
-      width: 65px;
-      font-size: 10px;
-      padding: 4px;
-    }
-
-    .menu-drop i.bi-list {
-      margin-left: -4px;
-    }
-
-    main {
-      margin: 0 !important;
-      padding: 10px;
-    }
+  @media (max-width: 700px) {
+  header {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    overflow: hidden;
+    text-align: center;
   }
+
+  .logo-brand {
+    display: block;
+    margin: 0 auto 10px auto;
+  }
+
+  .logo-brand img {
+    width: 100px;
+    height: auto;
+    margin-right: 100px;
+  }
+
+  .dropdown.d-md-none {
+    display: block;
+    text-align: left;
+    margin-bottom: 10px;
+  }
+
+  #profileDropdownToggle {
+    display: inline-block;
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  #profileDropdownToggle img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .d-none.d-md-block.ms-auto.order-4 {
+    display: inline-block;
+    margin-top: 10px;
+  }
+}
+
 
   /* Styling kartu berita */
   .card-news img {
@@ -143,6 +138,14 @@ $result->free();
   .card-news.wide-card {
     background-color: #f8f9fa;
   }
+
+  .logo-brand img {
+  width: 350px;
+  height: 170px;
+  margin: 0 auto;
+  padding: 0;
+  }
+
 
 </style>
 
@@ -191,7 +194,7 @@ $result->free();
       <a href="login.php" class="d-block text-decoration-none text-danger"><i class="bi bi-box-arrow-right me-2"></i>Logout</a>
     </div>
     <div class="mx-auto text-center order-2 logo-brand">
-      <img src="img/logo_brand.png" alt="Logo" height="400" style="margin:-60px; margin-left:35%;">
+      <img src="img/logo_brand.png" alt="Logo">
     </div>
     <div class="d-none d-md-block ms-auto order-4">
       <a href="login.php" class="btn btn-outline-dark"><i class="bi bi-box-arrow-right"></i> Logout</a>
