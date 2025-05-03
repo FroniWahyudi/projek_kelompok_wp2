@@ -42,7 +42,7 @@ $result->free();
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
   <style>
-    /* Manual Navbar Styling */
+    /* === DESKTOP SECTION === */
     .navbar-custom {
       background-color: #ffffff;
       height: 80px;
@@ -84,7 +84,6 @@ $result->free();
       margin-left: 270px;
       padding: 1rem;
     }
-    /* News Cards */
     .card-news img {
       height: 160px;
       object-fit: cover;
@@ -97,29 +96,22 @@ $result->free();
       flex-grow: 1;
     }
 
-
-    /* responsive <1000px */
+    /* === MOBILE & RESPONSIVE SECTION === */
     @media (max-width: 900px) {
-       /* Posisi ulang tombol profileDropdownToggle */
-       #profileDropdownToggle {
+      #profileDropdownToggle {
         position: absolute;
         top: 20px;
         right: 1rem;
       }
     }
 
-
-   /* Sidebar hilang pada layar ≤ 700px */
     @media (max-width: 700px) {
       .sidebar {
         display: none;
       }
-
       main {
         margin-left: 0;
       }
-
-      /* Posisi ulang logo-brand */
       .logo-brand {
         position: absolute;
         top: 0;
@@ -127,11 +119,9 @@ $result->free();
         transform: translateX(-50%);
       }
       .navbar-custom .logo-brand img {
-         height: 70px;
-         object-fit: contain;
+        height: 70px;
+        object-fit: contain;
       }
-
-      /* Posisi ulang tombol profileDropdownToggle */
       #profileDropdownToggle {
         position: absolute;
         top: 20px;
@@ -139,267 +129,164 @@ $result->free();
       }
     }
 
-
-
-    /* responsive layar <500px */
     @media (max-width: 500px) {
-      .sidebar {
-        display: none;
-      }
-
-      main {
-        margin-left: 0;
-      }
-
-      /* Posisi ulang logo-brand */
       .logo-brand {
-        position: absolute;
         top: 6px;
-        left: 50%;
         transform: translateX(-47%);
       }
       .navbar-custom .logo-brand img {
-         height: 70px;
-         object-fit: contain;
+        height: 70px;
       }
-
-      /* Posisi ulang tombol profileDropdownToggle */
       #profileDropdownToggle {
-        position: absolute;
         top: 20px;
         right: 0.1rem;
       }
-
       #mobileMenu {
         font-size: 12px;
         padding: 8px 8px;
-        width: 100%;              /* Tombol full width */
+        width: 100%;
       }
     }
-   
 
-
-
-    /* responsive layar <790px */
     @media (min-width: 785px) and (max-width: 790px) {
       .sidebar {
         display: none;
       }
-
       main {
         margin-left: 0;
       }
-
-      /* Posisi ulang logo-brand */
       .logo-brand {
-        position: absolute;
         top: 6px;
-        left: 50%;
         transform: translateX(-47%);
       }
       .navbar-custom .logo-brand img {
-         height: 70px;
-         object-fit: contain;
+        height: 70px;
       }
-
-      /* Posisi ulang tombol profileDropdownToggle */
       #profileDropdownToggle {
-        position: absolute;
         top: 20px;
         left: 2rem;
       }
-
       #mobileMenu {
         font-size: 12px;
         padding: 8px 8px;
-        width: 100%;              /* Tombol full width */
+        width: 100%;
       }
     }
 
-
-
-     /* responsive layar <340px */
-     @media (min-width: 340px) and (max-width: 390px) {
-      .sidebar {
-        display: none;
-      }
-
-      main {
-        margin-left: 0;
-      }
-
-      /* Posisi ulang logo-brand */
+    @media (min-width: 340px) and (max-width: 390px) {
       .logo-brand {
-        position: absolute;
         top: 6px;
-        left: 50%;
         transform: translateX(-47%);
       }
       .navbar-custom .logo-brand img {
-         height: 55px;
-         object-fit: contain;
+        height: 55px;
       }
-
-      /* Posisi ulang tombol profileDropdownToggle */
       #profileDropdownToggle {
-        position: absolute;
         top: 17px;
         right: -0.5rem;
       }
-
       #mobileMenu {
         font-size: 12px;
         padding: 8px 8px;
-        width: 100%;              /* Tombol full width */
+        width: 100%;
       }
     }
   </style>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
+
+
 <body>
-  <!-- Navbar -->
-<nav class="navbar-custom">
-  <!-- Mobile Menu -->
-  <div class="dropdown d-md-none nav-item">
-    <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="mobileMenu" data-bs-toggle="dropdown">
-      <i class="bi bi-list"></i> Menu
-    </button>
-    <ul class="dropdown-menu" aria-labelledby="mobileMenu">
-      <li><h6 class="dropdown-header">Divisi Karyawan</h6></li>
-      <li>
-        <a class="dropdown-item" href="hr_dashboard.php">
-          <i class="bi bi-person-circle me-1"></i>
-          HR
-        </a>
-      </li>
-      <li>
-        <a class="dropdown-item" href="manajemen_dashboard.php">
-          <i class="bi bi-people-fill me-1"></i>
-          Manajemen
-        </a>
-      </li>
-      <li>
-        <a class="dropdown-item" href="karyawan_dashboard.php">
-          <i class="bi bi-people-fill me-1"></i>
-          Karyawan
-        </a>
-      </li>
-      <li><hr class="dropdown-divider"></li>
-      <li><h6 class="dropdown-header">Menu Lainnya</h6></li>
-      <?php if($user['role']==='Manajer Umum' || $user['role']==='Manajer HR'): ?>
-      <li>
-        <a class="dropdown-item" href="laporan_kerja.php">
-          <i class="bi bi-journal-text me-1"></i>
-          Laporan Kerja
-        </a>
-      </li>
-      <?php elseif($user['role']==='HR'): ?>
-      <li>
-        <a class="dropdown-item" href="laporan_kerja.php">
-          <i class="bi bi-journal-text me-1"></i>
-          Kirim Laporan Kerja
-        </a>
-      </li>
-      <?php endif; ?>
-      <li>
-        <a class="dropdown-item" href="feedback_pegawai.php">
-          <i class="bi bi-chat-dots me-1"></i>
-          Feedback Pegawai
-        </a>
-      </li>
-      <li>
-        <a class="dropdown-item" href="shift_karyawan.php">
-          <i class="bi bi-clock-history me-1"></i>
-          Shift & Jadwal Karyawan
-        </a>
-      </li>
-    </ul>
-  </div>
-
-  <!-- Profile -->
-  <div id="profileDropdownToggle" class="d-flex align-items-center nav-item" style="cursor:pointer;">
-    <img src="<?= htmlspecialchars($user['photo_url'] ?: 'img/default_profile.png') ?>"
-         class="rounded-circle me-2" width="50" height="50" alt="Foto Profil">
-    <div class="d-none d-md-block">
-      <strong><?= htmlspecialchars($user['name']) ?></strong><br>
-      <small class="text-muted"><?= htmlspecialchars($user['role']) ?></small>
+  <!-- ===================== Navbar ===================== -->
+  <nav class="navbar-custom">
+    
+    <!-- === Mobile Menu: Only on small screens === -->
+    <div class="dropdown d-md-none nav-item">
+      <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="mobileMenu" data-bs-toggle="dropdown">
+        <i class="bi bi-list"></i> Menu
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="mobileMenu">
+        <li><h6 class="dropdown-header">Divisi Karyawan</h6></li>
+        <li><a class="dropdown-item" href="hr_dashboard.php"><i class="bi bi-person-circle me-1"></i> HR</a></li>
+        <li><a class="dropdown-item" href="manajemen_dashboard.php"><i class="bi bi-people-fill me-1"></i> Manajemen</a></li>
+        <li><a class="dropdown-item" href="karyawan_dashboard.php"><i class="bi bi-people-fill me-1"></i> Karyawan</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><h6 class="dropdown-header">Menu Lainnya</h6></li>
+        <?php if($user['role']==='Manajer Umum' || $user['role']==='Manajer HR'): ?>
+          <li><a class="dropdown-item" href="laporan_kerja.php"><i class="bi bi-journal-text me-1"></i> Laporan Kerja</a></li>
+        <?php elseif($user['role']==='HR'): ?>
+          <li><a class="dropdown-item" href="laporan_kerja.php"><i class="bi bi-journal-text me-1"></i> Kirim Laporan Kerja</a></li>
+        <?php endif; ?>
+        <li><a class="dropdown-item" href="feedback_pegawai.php"><i class="bi bi-chat-dots me-1"></i> Feedback Pegawai</a></li>
+        <li><a class="dropdown-item" href="shift_karyawan.php"><i class="bi bi-clock-history me-1"></i> Shift & Jadwal Karyawan</a></li>
+      </ul>
     </div>
-  </div>
 
-  <!-- Logo Center -->
-  <div class="logo-brand">
-    <img src="img/logo_brand.png" alt="Logo Brand">
-  </div>
+    <!-- === Profile Section: Always shown, with details on desktop only === -->
+    <div id="profileDropdownToggle" class="d-flex align-items-center nav-item" style="cursor:pointer;">
+      <img src="<?= htmlspecialchars($user['photo_url'] ?: 'img/default_profile.png') ?>"
+           class="rounded-circle me-2" width="50" height="50" alt="Foto Profil">
+      <div class="d-none d-md-block">
+        <strong><?= htmlspecialchars($user['name']) ?></strong><br>
+        <small class="text-muted"><?= htmlspecialchars($user['role']) ?></small>
+      </div>
+    </div>
 
-  <!-- Logout -->
-  <div class="ms-auto nav-item d-none d-md-block">
-    <a href="login.php" class="btn btn-outline-dark">
-      <i class="bi bi-box-arrow-right me-1"></i>
-      Logout
-    </a>
-  </div>
-</nav>
+    <!-- === Logo Center: Always visible === -->
+    <div class="logo-brand">
+      <img src="img/logo_brand.png" alt="Logo Brand">
+    </div>
 
+    <!-- === Logout: Desktop only === -->
+    <div class="ms-auto nav-item d-none d-md-block">
+      <a href="login.php" class="btn btn-outline-dark">
+        <i class="bi bi-box-arrow-right me-1"></i> Logout
+      </a>
+    </div>
+  </nav>
 
-  <!-- Sidebar -->
+  <!-- ===================== Sidebar (Desktop only) ===================== -->
   <nav class="sidebar">
-  <h6 class="fw-bold text-uppercase">Divisi Karyawan</h6>
+    <h6 class="fw-bold text-uppercase">Divisi Karyawan</h6>
+    <a href="hr_dashboard.php" class="btn btn-outline-primary w-100 mb-2"><i class="bi bi-person-circle me-1"></i> HR</a>
+    <a href="manajemen_dashboard.php" class="btn btn-outline-primary w-100 mb-2"><i class="bi bi-people-fill me-1"></i> Manajemen</a>
+    <a href="karyawan_dashboard.php" class="btn btn-outline-primary w-100 mb-2"><i class="bi bi-people-fill me-1"></i> Karyawan</a>
 
-  <a href="hr_dashboard.php" class="btn btn-outline-primary w-100 mb-2">
-    <i class="bi bi-person-circle me-1"></i>
-    HR
-  </a>
-  <a href="manajemen_dashboard.php" class="btn btn-outline-primary w-100 mb-2">
-    <i class="bi bi-people-fill me-1"></i>
-    Manajemen
-  </a>
-  <a href="karyawan_dashboard.php" class="btn btn-outline-primary w-100 mb-2">
-    <i class="bi bi-people-fill me-1"></i>
-    Karyawan
-  </a>
+    <hr>
+    <h6 class="fw-bold">Menu Lainnya</h6>
 
-  <hr>
+    <?php if ($user['role'] === 'Manajer Umum' || $user['role'] === 'Manajer HR'): ?>
+      <a href="laporan_kerja.php" class="btn btn-outline-dark w-100 mb-2">
+        <i class="bi bi-journal-text me-1"></i> Laporan Kerja
+      </a>
+    <?php elseif ($user['role'] === 'HR'): ?>
+      <a href="laporan_kerja.php" class="btn btn-outline-dark w-100 mb-2">
+        <i class="bi bi-journal-text me-1"></i> Kirim Laporan Kerja
+      </a>
+    <?php elseif ($user['role'] === 'Karyawan'): ?>
+      <a href="pengajuan_cuti.php" class="btn btn-outline-dark w-100 mb-2">
+        <i class="bi bi-file-earmark-text me-1"></i> Pengajuan Cuti
+      </a>
+      <a href="slip_gaji.php" class="btn btn-outline-dark w-100 mb-2">
+        <i class="bi bi-receipt me-1"></i> Slip Gaji
+      </a>
+    <?php endif; ?>
 
-  <h6 class="fw-bold">Menu Lainnya</h6>
-  <?php if ($user['role'] === 'Manajer Umum' || $user['role'] === 'Manajer HR'): ?>
-    <a href="laporan_kerja.php" class="btn btn-outline-dark w-100 mb-2">
-      <i class="bi bi-journal-text me-1"></i>
-      Laporan Kerja
+    <a href="feedback_pegawai.php" class="btn btn-outline-dark w-100 mb-2">
+      <i class="bi bi-chat-dots me-1"></i> Feedback Pegawai
     </a>
-  <?php elseif ($user['role'] === 'HR'): ?>
-    <a href="laporan_kerja.php" class="btn btn-outline-dark w-100 mb-2">
-      <i class="bi bi-journal-text me-1"></i>
-      Kirim Laporan Kerja
+    <a href="shift_karyawan.php" class="btn btn-outline-dark w-100">
+      <i class="bi bi-clock-history me-1"></i> Shift & Jadwal
     </a>
-  <?php elseif ($user['role'] === 'Karyawan'): ?>
-    <a href="pengajuan_cuti.php" class="btn btn-outline-dark w-100 mb-2">
-      <i class="bi bi-file-earmark-text me-1"></i>
-      Pengajuan Cuti
-    </a>
-    <a href="slip_gaji.php" class="btn btn-outline-dark w-100 mb-2">
-      <i class="bi bi-receipt me-1"></i>
-      Slip Gaji
-    </a>
-  <?php endif; ?>
+  </nav>
 
-  <a href="feedback_pegawai.php" class="btn btn-outline-dark w-100 mb-2">
-    <i class="bi bi-chat-dots me-1"></i>
-    Feedback Pegawai
-  </a>
-  <a href="shift_karyawan.php" class="btn btn-outline-dark w-100">
-    <i class="bi bi-clock-history me-1"></i>
-    Shift & Jadwal
-  </a>
-</nav>
-
-
-  <!-- Main Content -->
+  <!-- ===================== Main Content ===================== -->
   <main>
     <h3 class="mb-4">What's New</h3>
     <div class="row g-3">
       <?php foreach($newsItems as $idx => $item):
         $total = count($newsItems);
-        $col = ($idx >= $total-2)? 'col-md-6':'col-md-3';
+        $col = ($idx >= $total-2) ? 'col-md-6' : 'col-md-3';
       ?>
       <div class="col-12 col-sm-6 <?= $col ?>">
         <div class="card card-news shadow-sm h-100">
@@ -415,18 +302,36 @@ $result->free();
     </div>
   </main>
 
+  <!-- ===================== Scripts & Responsive Behavior ===================== -->
   <script>
     $(document).ready(function(){
       $('#profileDropdownToggle').click(function(e){
         e.stopPropagation();
         var w = $(window).width();
-        if(w>=400 && w<=765) $('#profileDropdown').slideToggle(150);
-        else if(w>765){ e.preventDefault(); $('body').addClass('fade-out'); setTimeout(function(){ window.location.href='dashboard_profil.php'; },600); }
+        if(w >= 400 && w <= 765) {
+          $('#profileDropdown').slideToggle(150);
+        } else if(w > 765) {
+          e.preventDefault();
+          $('body').addClass('fade-out');
+          setTimeout(function(){ window.location.href='dashboard_profil.php'; }, 600);
+        }
       });
-      $(document).click(function(e){ if(!$(e.target).closest('#profileDropdown, #profileDropdownToggle').length) $('#profileDropdown').slideUp(150); });
-      $(window).resize(function(){ var w=$(window).width(); if(w<400||w>765) $('#profileDropdown').hide(); });
+
+      $(document).click(function(e){
+        if(!$(e.target).closest('#profileDropdown, #profileDropdownToggle').length){
+          $('#profileDropdown').slideUp(150);
+        }
+      });
+
+      $(window).resize(function(){
+        var w = $(window).width();
+        if(w < 400 || w > 765){
+          $('#profileDropdown').hide();
+        }
+      });
     });
   </script>
   <script src="bootstrap-5.3.5-dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
