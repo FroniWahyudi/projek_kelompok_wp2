@@ -465,8 +465,8 @@ $result->free();
 
       var w = $(window).width();
 
-      // Jika ukuran mobile (400 - 765 px), tampilkan dropdown
-      if (w >= 400 && w <= 765) {
+      // Jika ukuran mobile (300 - 765 px), tampilkan dropdown
+      if (w >= 300 && w <= 765) {
         $('#profileDropdown').slideToggle(150);
       } 
       // Jika desktop, redirect ke halaman profil
