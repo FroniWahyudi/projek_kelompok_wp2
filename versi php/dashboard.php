@@ -107,6 +107,14 @@ $result->free();
     flex-grow: 1;
   }
 
+  @media (min-width: 1310px) and (max-width: 1330px) {
+    /* Posisi ulang tombol profil */
+    #profileDropdownToggle {
+      position: absolute;
+      top: 20px;
+      left: 2rem;
+    }
+  }
   /* === RESPONSIVE: LAYAR ≤ 900px === */
   @media (max-width: 900px) {
     /* Posisi ulang tombol profil */
