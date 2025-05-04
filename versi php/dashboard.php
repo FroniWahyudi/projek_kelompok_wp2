@@ -420,8 +420,17 @@ $result->free();
       <i class="bi bi-journal-text me-1"></i>
       Kirim Laporan Kerja
     </a>
+  
+    <?php if ($user['role'] === 'HR'): ?>
+  <a href="cuti.php" class="btn btn-outline-dark w-100 mb-2">
+    <i class="bi bi-check-square me-1"></i>
+    Daftar Pengajuan Cuti
+  </a>
+<?php endif; ?>
+
+
   <?php elseif ($user['role'] === 'Karyawan'): ?>
-    <a href="pengajuan_cuti.php" class="btn btn-outline-dark w-100 mb-2">
+    <a href="cuti.php" class="btn btn-outline-dark w-100 mb-2">
       <i class="bi bi-file-earmark-text me-1"></i>
       Pengajuan Cuti
     </a>
