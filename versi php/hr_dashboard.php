@@ -5,8 +5,8 @@ if ($mysqli->connect_errno) {
     die("Gagal koneksi ke database: " . $mysqli->connect_error);
 }
 
-// Ambil data semua user dengan role HR
-$result = $mysqli->query("SELECT name, role, email, phone, photo_url, bio FROM users WHERE role LIKE 'HR%'");
+// Ambil data semua user dengan role HR atau Leader
+$result = $mysqli->query("SELECT name, role, email, phone, photo_url, bio FROM users WHERE role LIKE 'HR%' OR role LIKE 'Leader%'");
 ?>
 
 <!DOCTYPE html>
@@ -14,7 +14,7 @@ $result = $mysqli->query("SELECT name, role, email, phone, photo_url, bio FROM u
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HR Dashboard - Naga Hytam Sejahtera Abadi</title>
+  <title>HR & Leader Dashboard - Naga Hytam Sejahtera Abadi</title>
   <link rel="stylesheet" href="bootstrap-5.3.5-dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
   <style>
@@ -60,15 +60,15 @@ $result = $mysqli->query("SELECT name, role, email, phone, photo_url, bio FROM u
     <a href="dashboard.php" class="btn btn-primary me-3">
       <i class="bi bi-house-door-fill me-1"></i> Home
     </a>
-    <a class="navbar-brand" href="#">HR Dashboard</a>
+    <a class="navbar-brand" href="#">HR & Leader Dashboard</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
         <li class="nav-item"><a class="nav-link active" href="#">HR</a></li>
-        <li class="nav-item"><a class="nav-link" href="manajemen_dashboard.html">Manajemen</a></li>
-        <li class="nav-item"><a class="nav-link" href="karyawan_dashboard.html">Karyawan</a></li>
+        <li class="nav-item"><a class="nav-link" href="manajemen_dashboard.php">Manajemen</a></li>
+        <li class="nav-item"><a class="nav-link" href="karyawan_dashboard.php">Karyawan</a></li>
       </ul>
     </div>
   </div>
@@ -76,7 +76,7 @@ $result = $mysqli->query("SELECT name, role, email, phone, photo_url, bio FROM u
 
 <!-- Main Content -->
 <div class="container py-4">
-  <h3 class="mb-4">Divisi HR</h3>
+  <h3 class="mb-4">Divisi HR & Leader</h3>
   <div class="row g-3">
 
     <?php while ($row = $result->fetch_assoc()): ?>
@@ -102,3 +102,4 @@ $result = $mysqli->query("SELECT name, role, email, phone, photo_url, bio FROM u
 <script src="bootstrap-5.3.5-dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+<?php $mysqli->close(); ?>
