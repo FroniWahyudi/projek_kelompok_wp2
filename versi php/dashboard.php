@@ -440,10 +440,14 @@ $result->free();
     </a>
   <?php endif; ?>
 
-  <a href="feedback_pegawai.php" class="btn btn-outline-dark w-100 mb-2">
-    <i class="bi bi-chat-dots me-1"></i>
-    Feedback Pegawai
-  </a>
+  <?php
+  $feedbackLabel = ($user['role'] === 'Karyawan') ? 'Evaluasi Kinerja' : 'Feedback Pegawai';
+?>
+<a href="feedback_pegawai.php" class="btn btn-outline-dark w-100 mb-2">
+  <i class="bi bi-chat-dots me-1"></i>
+  <?= $feedbackLabel ?>
+</a>
+
   <a href="shift_karyawan.php" class="btn btn-outline-dark w-100">
     <i class="bi bi-clock-history me-1"></i>
     Shift & Jadwal

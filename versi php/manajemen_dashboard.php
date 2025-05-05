@@ -1,5 +1,13 @@
 <?php
-// manajemen_dashboard.php
+// Koneksi ke database
+$conn = new mysqli("localhost", "root", "", "naga_hytam");
+if ($conn->connect_error) {
+  die("Koneksi gagal: " . $conn->connect_error);
+}
+
+// Ambil data manajemen
+$sql = "SELECT * FROM users WHERE role = 'Manajer Umum' OR role = 'Manajer HR'";
+$result = $conn->query($sql);
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -24,7 +32,6 @@
       display: flex;
       flex-direction: column;
     }
-    
     .manager-card:hover {
       transform: translateY(-5px);
     }
@@ -49,66 +56,54 @@
 </head>
 <body>
 
-  <!-- Header -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
-    <div class="container-fluid">
-      <a href="dashboard.php" class="btn btn-primary me-3">
-        <i class="bi bi-house-door-fill me-1"></i> Home
-      </a>
-      <a class="navbar-brand" href="#">Manajemen Dashboard</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="karyawan_dashboard.html">Karyawan</a></li>
-          <li class="nav-item"><a class="nav-link active" href="#">Manajemen</a></li>
-          <li class="nav-item"><a class="nav-link" href="hr_dashboard.html">HR</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-
-  <!-- Main Content -->
-  <div class="container py-4">
-    <h3 class="mb-4">Divisi Manajemen</h3>
-    <div class="row g-3">
-      <div class="row row-cols-1 row-cols-md-2 g-4">
-
-        <div class="col">
-          <div class="manager-card d-flex flex-column h-100">
-            <div class="d-flex mb-3">
-              <img src="img/sutoyo.jpg" alt="Foto Sutoyo" class="profile-photo me-3">
-              <div>
-                <h5 class="mb-1">Sutoyo</h5>
-                <p class="mb-1"><strong>Jabatan:</strong> Manajer Umum</p>
-                <p class="mb-1"><strong>Email:</strong> sutoyo@nagahtam.co.id</p>
-                <p class="mb-1"><strong>Telepon:</strong> +62 812-1234-5678</p>
-              </div>
-            </div>
-            <p class="mt-auto mb-0">Bertanggung jawab atas keseluruhan operasional perusahaan dan pengambilan keputusan strategis di semua divisi.</p>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="manager-card d-flex flex-column h-100">
-            <div class="d-flex mb-3">
-              <img src="img/rahmat.jpg" alt="Foto Rahmat Iriyanto" class="profile-photo me-3">
-              <div>
-                <h5 class="mb-1">Rahmat Iriyanto</h5>
-                <p class="mb-1"><strong>Jabatan:</strong> Manajer HR</p>
-                <p class="mb-1"><strong>Email:</strong> rahmat.iriyanto@nagahtam.co.id</p>
-                <p class="mb-1"><strong>Telepon:</strong> +62 813-5678-9012</p>
-              </div>
-            </div>
-            <p class="mt-auto mb-0">Bertanggung jawab atas pengelolaan sumber daya manusia termasuk rekrutmen, pelatihan, dan pengembangan kebijakan karyawan.</p>
-          </div>
-        </div>
-
-      </div>
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
+  <div class="container-fluid">
+    <a href="dashboard.php" class="btn btn-primary me-3">
+      <i class="bi bi-house-door-fill me-1"></i> Home
+    </a>
+    <a class="navbar-brand" href="#">Manajemen Dashboard</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="karyawan_dashboard.php">Karyawan</a></li>
+        <li class="nav-item"><a class="nav-link active" href="#">Manajemen</a></li>
+        <li class="nav-item"><a class="nav-link" href="hr_dashboard.php">HR</a></li>
+      </ul>
     </div>
   </div>
+</nav>
 
-  <script src="bootstrap-5.3.5-dist/js/bootstrap.bundle.min.js"></script>
+<div class="container py-4">
+  <h3 class="mb-4">Divisi Manajemen</h3>
+  <div class="row row-cols-1 row-cols-md-2 g-4">
+    <?php if ($result->num_rows > 0): ?>
+      <?php while($row = $result->fetch_assoc()): ?>
+        <div class="col">
+          <div class="manager-card d-flex flex-column h-100">
+            <div class="d-flex mb-3">
+              <img src="<?= htmlspecialchars($row['photo_url']) ?>" alt="Foto <?= htmlspecialchars($row['name']) ?>" class="profile-photo me-3">
+              <div>
+                <h5 class="mb-1"><?= htmlspecialchars($row['name']) ?></h5>
+                <p class="mb-1"><strong>Jabatan:</strong> <?= htmlspecialchars($row['role']) ?></p>
+                <p class="mb-1"><strong>Email:</strong> <?= htmlspecialchars($row['email']) ?></p>
+                <p class="mb-1"><strong>Telepon:</strong> <?= htmlspecialchars($row['phone']) ?></p>
+              </div>
+            </div>
+            <p class="mt-auto mb-0"><?= htmlspecialchars($row['bio']) ?></p>
+          </div>
+        </div>
+      <?php endwhile; ?>
+    <?php else: ?>
+      <div class="col">
+        <p class="text-muted">Tidak ada data manajemen tersedia.</p>
+      </div>
+    <?php endif; ?>
+  </div>
+</div>
+
+<script src="bootstrap-5.3.5-dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+<?php $conn->close(); ?>
