@@ -58,14 +58,9 @@ $user   = $result->fetch_assoc();
     <aside class="sidebar">
       <h2>Profil</h2>
       <nav class="nav flex-column">
-        <a class="nav-link" href="dashboard.php">
-  <i class="fas fa-home"></i> Home
-</a>
+        <a class="nav-link" href="dashboard.php"> <i class="fas fa-home"></i> Home</a>
         <a class="nav-link active" href="dashboard_profil.php"><i class="fas fa-user"></i>Profil Saya</a>
         <a class="nav-link" href="ganti_password.php"><i class="fas fa-key"></i>Ganti Password</a>
-      
-
-
       </nav>
     </aside>
 

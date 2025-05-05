@@ -6,7 +6,7 @@ if ($conn->connect_error) {
 }
 
 // Ambil data manajemen
-$sql = "SELECT * FROM users WHERE role = 'Manajer Umum' OR role = 'Manajer HR'";
+$sql = "SELECT * FROM users WHERE role = 'Manajer'";
 $result = $conn->query($sql);
 ?>
 <!DOCTYPE html>
