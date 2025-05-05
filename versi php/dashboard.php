@@ -300,14 +300,14 @@ $result->free();
       </li>
       <li><hr class="dropdown-divider"></li>
       <li><h6 class="dropdown-header">Menu Lainnya</h6></li>
-      <?php if($user['role']==='Manajer Umum' || $user['role']==='Manajer HR'): ?>
+      <?php if($user['role']==='Manajer'): ?>
       <li>
         <a class="dropdown-item" href="laporan_kerja.php">
           <i class="bi bi-journal-text me-1"></i>
           Laporan Kerja
         </a>
       </li>
-      <?php elseif($user['role']==='HR'): ?>
+      <?php elseif($user['role']==='Leader'): ?>
       <li>
         <a class="dropdown-item" href="laporan_kerja.php">
           <i class="bi bi-journal-text me-1"></i>
@@ -329,7 +329,6 @@ $result->free();
       </li>
     </ul>
   </div>
-
 
 <!-- Profile -->
 <div id="profileDropdownToggle" class="d-flex align-items-center nav-item" style="cursor:pointer;">
@@ -368,13 +367,6 @@ $result->free();
   </a>
 </div>
 
-
-
-
-
-
-
-
   <!-- Logo Center -->
   <div class="logo-brand">
     <img src="img/logo_brand.png" alt="Logo Brand">
@@ -389,71 +381,59 @@ $result->free();
   </div>
 </nav>
 
-
-  <!-- Sidebar -->
-  <nav class="sidebar">
+ <!-- Sidebar -->
+<nav class="sidebar">
   <h6 class="fw-bold text-uppercase">Divisi Karyawan</h6>
 
   <a href="hr_dashboard.php" class="btn btn-outline-primary w-100 mb-2">
-    <i class="bi bi-person-circle me-1"></i>
-    HR
+    <i class="bi bi-person-circle me-1"></i> HR & Leader
   </a>
   <a href="manajemen_dashboard.php" class="btn btn-outline-primary w-100 mb-2">
-    <i class="bi bi-people-fill me-1"></i>
-    Manajemen
+    <i class="bi bi-people-fill me-1"></i> Manajemen
   </a>
   <a href="karyawan_dashboard.php" class="btn btn-outline-primary w-100 mb-2">
-    <i class="bi bi-people-fill me-1"></i>
-    Karyawan
+    <i class="bi bi-people-fill me-1"></i> Karyawan
   </a>
 
   <hr>
 
   <h6 class="fw-bold">Menu Lainnya</h6>
-  <?php if ($user['role'] === 'Manajer Umum' || $user['role'] === 'Manajer HR'): ?>
+
+  <?php if ($user['role'] === 'Manajer' || $user['role'] === 'HR' ): ?>
     <a href="laporan_kerja.php" class="btn btn-outline-dark w-100 mb-2">
-      <i class="bi bi-journal-text me-1"></i>
-      Laporan Kerja
+      <i class="bi bi-journal-text me-1"></i> Laporan Kerja
     </a>
-  <?php elseif ($user['role'] === 'HR'): ?>
-    <a href="laporan_kerja.php" class="btn btn-outline-dark w-100 mb-2">
-      <i class="bi bi-journal-text me-1"></i>
-      Kirim Laporan Kerja
-    </a>
+  <?php endif;  ?>
   
-    <?php if ($user['role'] === 'HR'): ?>
-  <a href="cuti.php" class="btn btn-outline-dark w-100 mb-2">
-    <i class="bi bi-check-square me-1"></i>
-    Daftar Pengajuan Cuti
-  </a>
-<?php endif; ?>
-
-
+  <?php if ($user['role'] === 'Leader' || $user['role'] === 'HR' ): ?>
+    <?php if ($user['role'] === 'Leader'): ?>
+      <a href="laporan_kerja.php" class="btn btn-outline-dark w-100 mb-2">
+        <i class="bi bi-journal-text me-1"></i> Kirim Laporan Kerja
+      </a>
+    <?php endif; ?>
+    <a href="cuti.php" class="btn btn-outline-dark w-100 mb-2">
+      <i class="bi bi-check-square me-1"></i> Daftar Pengajuan Cuti
+    </a>
   <?php elseif ($user['role'] === 'Karyawan'): ?>
     <a href="cuti.php" class="btn btn-outline-dark w-100 mb-2">
-      <i class="bi bi-file-earmark-text me-1"></i>
-      Pengajuan Cuti
+      <i class="bi bi-file-earmark-text me-1"></i> Pengajuan Cuti
     </a>
     <a href="slip_gaji.php" class="btn btn-outline-dark w-100 mb-2">
-      <i class="bi bi-receipt me-1"></i>
-      Slip Gaji
+      <i class="bi bi-receipt me-1"></i> Slip Gaji
     </a>
   <?php endif; ?>
 
   <?php
-  $feedbackLabel = ($user['role'] === 'Karyawan') ? 'Evaluasi Kinerja' : 'Feedback Pegawai';
-?>
-<a href="feedback_pegawai.php" class="btn btn-outline-dark w-100 mb-2">
-  <i class="bi bi-chat-dots me-1"></i>
-  <?= $feedbackLabel ?>
-</a>
+    $feedbackLabel = ($user['role'] === 'Karyawan') ? 'Evaluasi Kinerja' : 'Feedback Pegawai';
+  ?>
+  <a href="feedback_pegawai.php" class="btn btn-outline-dark w-100 mb-2">
+    <i class="bi bi-chat-dots me-1"></i> <?= $feedbackLabel ?>
+  </a>
 
   <a href="shift_karyawan.php" class="btn btn-outline-dark w-100">
-    <i class="bi bi-clock-history me-1"></i>
-    Shift & Jadwal
+    <i class="bi bi-clock-history me-1"></i> Shift & Jadwal
   </a>
 </nav>
-
 
   <!-- Main Content -->
   <main>

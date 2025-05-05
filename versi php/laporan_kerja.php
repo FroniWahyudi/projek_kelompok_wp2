@@ -76,7 +76,7 @@ $result = $conn->query($sql);
             <td>
               <a href="detail_laporan.php?id=<?= $row['id'] ?>" class="btn btn-sm btn-info"><i class="bi bi-eye"></i></a>
 
-              <?php if ($role !== 'Manajer Umum' && $role !== 'Manajer HR'): ?>
+              <?php if ($role === 'Leader'): ?>
                 <a href="edit_laporan.php?id=<?= $row['id'] ?>" class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></a>
                 <a href="hapus_laporan.php?id=<?= $row['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus laporan ini?')"><i class="bi bi-trash"></i></a>
               <?php endif; ?>
