@@ -31,6 +31,18 @@ while ($row = $result->fetch_assoc()) {
     $newsItems[] = $row;
 }
 $result->free();
+
+function excerpt(string $text, int $maxLen = 100): string {
+  if (mb_strlen($text) <= $maxLen) {
+      return htmlspecialchars($text);
+  }
+  $truncated = mb_substr($text, 0, $maxLen);
+  $lastSpace = mb_strrpos($truncated, ' ');
+  if ($lastSpace !== false) {
+      $truncated = mb_substr($truncated, 0, $lastSpace);
+  }
+  return htmlspecialchars($truncated) . '...';
+}
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -107,6 +119,21 @@ $result->free();
     flex-grow: 1;
   }
 
+
+  /* Hover effect untuk kartu berita */
+  .card-news {
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card-news:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    }
+    .card-news a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    
   @media (min-width: 1310px) and (max-width: 1330px) {
     /* Posisi ulang tombol profil */
     #profileDropdownToggle {
@@ -435,27 +462,34 @@ $result->free();
   </a>
 </nav>
 
-  <!-- Main Content -->
-  <main>
-    <h3 class="mb-4">What's New</h3>
-    <div class="row g-3">
-      <?php foreach($newsItems as $idx => $item):
-        $total = count($newsItems);
-        $col = ($idx >= $total-2)? 'col-md-6':'col-md-3';
-      ?>
-      <div class="col-12 col-sm-6 <?= $col ?>">
+ <!-- Main Content -->
+<main>
+  <h3 class="mb-4">What's New</h3>
+  <div class="row g-3">
+    <?php foreach($newsItems as $idx => $item):
+      $total = count($newsItems);
+      $col = ($idx >= $total-2)? 'col-md-6':'col-md-3';
+    ?>
+    <div class="col-12 col-sm-6 <?= $col ?>">
+      <!-- Link ke whats_new.php?id=... -->
+      <a href="whats_new.php?id=<?= htmlspecialchars($item['id']) ?>" 
+         class="text-decoration-none text-reset">
         <div class="card card-news shadow-sm h-100">
-          <img src="<?= htmlspecialchars($item['image_url']) ?>" class="card-img-top" alt="<?= htmlspecialchars($item['title']) ?>">
+          <img src="<?= htmlspecialchars($item['image_url']) ?>" 
+               class="card-img-top" 
+               alt="<?= htmlspecialchars($item['title']) ?>">
           <div class="card-body">
             <h6 class="fw-bold"><?= htmlspecialchars($item['title']) ?></h6>
             <small class="text-muted"><?= htmlspecialchars($item['date']) ?></small>
-            <p class="small"><?= htmlspecialchars($item['description']) ?></p>
+            <p class="small"><?= excerpt($item['description'], 100) ?></p>
           </div>
         </div>
-      </div>
-      <?php endforeach; ?>
+      </a>
     </div>
-  </main>
+    <?php endforeach; ?>
+  </div>
+</main>
+
 
 <!-- jQuery Script -->
 <script>
