@@ -6,6 +6,7 @@
   <title>Shift & Jadwal Karyawan</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="bootstrap-5.3.5-dist/css/bootstrap.min.css">
   <style>
     body { background-color: #f8f9fa; }
     .nav-button { margin-bottom: 1rem; }
