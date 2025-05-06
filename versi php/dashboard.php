@@ -359,8 +359,8 @@ function excerpt(string $text, int $maxLen = 100): string {
 
 <!-- Profile -->
 <div id="profileDropdownToggle" class="d-flex align-items-center nav-item" style="cursor:pointer;">
-  <img src="<?= htmlspecialchars($user['photo_url'] ?: 'img/default_profile.png') ?>"
-       class="rounded-circle me-2" width="50" height="50" alt="Foto Profil">
+  <a href="dashboard_profil.php"><img src="<?= htmlspecialchars($user['photo_url'] ?: 'img/default_profile.png') ?>"
+       class="rounded-circle me-2" width="50" height="50" alt="Foto Profil"> </a>
   <div class="d-none d-md-block">
     <strong><?= htmlspecialchars($user['name']) ?></strong><br>
     <small class="text-muted"><?= htmlspecialchars($user['role']) ?></small>

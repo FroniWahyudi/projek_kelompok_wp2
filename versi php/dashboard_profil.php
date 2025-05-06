@@ -37,6 +37,7 @@ $user   = $result->fetch_assoc();
   <title>Dashboard Profil</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="bootstrap-5.3.5-dist/css/bootstrap.min.css">
   <style>
     body { opacity: 0; transition: opacity 0.5s ease; }
     body.fade-in { opacity: 1; }
