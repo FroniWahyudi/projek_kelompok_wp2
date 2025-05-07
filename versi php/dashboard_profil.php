@@ -1,7 +1,5 @@
 <?php
 session_start();
-
-// Redirect jika belum login
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
@@ -35,23 +33,26 @@ $user   = $result->fetch_assoc();
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard Profil</title>
+  <!-- Bootstrap & Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="bootstrap-5.3.5-dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="package/font/bootstrap-icons.css">
   <style>
-    body { opacity: 0; transition: opacity 0.5s ease; }
+    body { opacity: 0; transition: opacity 0.5s ease; background-color: #f1f3f5; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     body.fade-in { opacity: 1; }
-    :root { --sidebar-width: 260px; --primary-color: #0d6efd; --hover-bg: #f8f9fa; }
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f1f3f5; margin: 0; padding: 0; }
+    :root { --sidebar-width: 260px; --primary-color: #0d6efd; }
     .wrapper { display: flex; min-height: 100vh; }
-    .sidebar { width: var(--sidebar-width); background-color: #fff; box-shadow: 2px 0 10px rgba(0,0,0,0.05); padding: 2rem 1rem; }
-    .sidebar h2 { font-size: 1.5rem; color: var(--primary-color); margin-bottom: 1.5rem; }
-    .sidebar .nav-link { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 0.375rem; color: #495057; text-decoration: none; }
-    .sidebar .nav-link:hover, .sidebar .nav-link.active { background-color: var(--hover-bg); color: var(--primary-color); }
+    .sidebar { width: var(--sidebar-width); background: #fff; box-shadow: 2px 0 10px rgba(0,0,0,0.05); padding: 2rem 1rem; }
+    .sidebar h2 { color: var(--primary-color); font-size: 1.5rem; margin-bottom: 1.5rem; }
+    .sidebar .nav-link { display: flex; align-items: center; gap: .75rem; padding: .75rem 1rem; border-radius: .375rem; color: #495057; }
+    .sidebar .nav-link:hover, .sidebar .nav-link.active { background: #f8f9fa; color: var(--primary-color); }
     .content { flex: 1; padding: 2rem; }
-    .content-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-    .content-header h1 { font-size: 1.75rem; margin: 0; }
+    /* Profile card full width */
+    .profile-card { width: 100%; background: #fff; border-radius: .5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding: 2rem; }
+    .profile-card img { width: 120px; height: 120px; object-fit: cover; border-radius: 50%; margin-bottom: 1rem; }
+    .profile-info { margin-top: 1.5rem; }
+    .profile-info .info-block { display: flex; align-items: center; margin-bottom: 1rem; }
+    .profile-info .info-block i { font-size: 1.2rem; width: 30px; text-align: center; color: var(--primary-color); }
+    .profile-info .info-block span { margin-left: .75rem; }
   </style>
 </head>
 <body>
@@ -60,35 +61,54 @@ $user   = $result->fetch_assoc();
     <aside class="sidebar">
       <h2>Profil</h2>
       <nav class="nav flex-column">
-        <a class="nav-link" href="dashboard.php"> <i class="fas fa-home"></i> Home</a>
-        <a class="nav-link active" href="dashboard_profil.php"><i class="fas fa-user"></i>Profil Saya</a>
-        <a class="nav-link" href="ganti_password.php"><i class="fas fa-key"></i>Ganti Password</a>
+        <a class="nav-link" href="dashboard.php"><i class="fas fa-home"></i> Home</a>
+        <a class="nav-link active" href="dashboard_profil.php"><i class="fas fa-user"></i> Profil Saya</a>
+        <a class="nav-link" href="ganti_password.php"><i class="fas fa-key"></i> Ganti Password</a>
       </nav>
     </aside>
-
+    
     <!-- Main Content -->
     <main class="content">
-      <div class="content-header">
+      <div class="text-center mb-4">
         <h1>Profil Saya</h1>
       </div>
-      <section>
-  <div class="bg-white p-4 rounded shadow-sm text-center">
-    <img src="<?= htmlspecialchars($user['photo_url']) ?>" alt="Foto Profil" style="width:120px; height:120px; object-fit:cover; border-radius:50%; margin-bottom:1rem;">
-    <h3><?= htmlspecialchars($user['name']) ?></h3>
-    <hr>
-    <div class="text-start">
-      <p><strong>Email:</strong> <?= htmlspecialchars($user['email']) ?></p>
-      <p><strong>Telepon:</strong> <?= htmlspecialchars($user['phone']) ?></p>
-      <p><strong>Jabatan:</strong> <?= htmlspecialchars($user['role']) ?></p>
-      <p><strong>Bio:</strong> <?= htmlspecialchars($user['bio']) ?></p>
-    </div>
-    <div class="text-end mt-3">
-      <a href="edit_profil.php?id=<?= $user_id ?>" class="btn btn-primary">
-        <i class="fas fa-pen"></i> Edit Profil
-      </a>
-    </div>
-  </div>
-</section>
+      
+      <!-- Profile Card -->
+      <div class="profile-card text-center">
+        <img src="<?= htmlspecialchars($user['photo_url']) ?>" alt="Foto Profil">
+        <h3><?= htmlspecialchars($user['name']) ?></h3>
+        <hr>
+        <div class="profile-info text-start">
+          <div class="info-block">
+            <i class="fas fa-envelope"></i>
+            <span><?= htmlspecialchars($user['email']) ?></span>
+          </div>
+          <div class="info-block">
+            <i class="fas fa-phone"></i>
+            <span><?= htmlspecialchars($user['phone']) ?></span>
+          </div>
+
+          <div class="info-block">
+            <i class="fas fa-map-marker-alt"></i>
+            <span><?= htmlspecialchars($user['alamat']) ?></span>
+          </div>
+
+          <div class="info-block">
+            <i class="fas fa-briefcase"></i>
+            <span><?= htmlspecialchars($user['role']) ?></span>
+          </div>
+          <div class="info-block">
+            <i class="fas fa-info-circle"></i>
+            <span><?= htmlspecialchars($user['bio']) ?></span>
+          </div>
+        </div>
+        <div class="mt-3 text-end">
+          <a href="edit_profil.php?id=<?= $user_id ?>" class="btn btn-primary">
+            <i class="fas fa-pen"></i> Edit Profil
+          </a>
+        </div>
+      </div>
+      
     </main>
   </div>
 
