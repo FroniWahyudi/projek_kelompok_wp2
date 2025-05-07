@@ -1,29 +1,3 @@
-<?php
-session_start();
-$mysqli = new mysqli('localhost', 'root', '', 'naga_hytam');
-
-$error = '';
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = trim($_POST['email']);
-    $password = $_POST['password'];
-
-    $stmt = $mysqli->prepare('SELECT id, name, role, photo_url, password FROM users WHERE email = ?');
-    $stmt->bind_param('s', $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $user = $result->fetch_assoc();
-
-    if ($user && $password === $user['password']) { // Ganti dengan password_verify jika pakai hash
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['role'] = $user['role'];
-        header('Location: /');
-        exit;
-    } else {
-        $error = 'Email atau password salah!';
-    }
-}
-?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -47,13 +21,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <div class="login-box">
   <h4 class="mb-4 text-center">Login Naga Hytam</h4>
-  <?php if ($error): ?>
-    <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
-  <?php endif; ?>
-  <form method="POST">
+    @if ($errors->any())
+        <div style="color:red;">
+            @foreach ($errors->all() as $error)
+                <p>{{ $error }}</p>
+            @endforeach
+        </div>
+    @endif
+  <form method="POST" action="{{ url('/login') }}">
+    @csrf
     <div class="mb-3">
       <label for="email" class="form-label">Email</label>
-      <input type="text" name="email" id="email" class="form-control" required autofocus>
+      <input type="email" name="email" id="email" class="form-control" required autofocus>
     </div>
     <div class="mb-3">
       <label for="password" class="form-label">Password</label>

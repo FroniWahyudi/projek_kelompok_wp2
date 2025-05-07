@@ -1,5 +1,5 @@
 <?php
-session_start();
+/*session_start();
 $mysqli = new mysqli('localhost', 'root', '', 'naga_hytam');
 if ($mysqli->connect_error) {
     die('Database connection error: ' . $mysqli->connect_error);
@@ -42,7 +42,7 @@ function excerpt(string $text, int $maxLen = 100): string {
       $truncated = mb_substr($truncated, 0, $lastSpace);
   }
   return htmlspecialchars($truncated) . '...';
-}
+}*/
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -50,11 +50,11 @@ function excerpt(string $text, int $maxLen = 100): string {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Dashboard - Naga Hytam Sejahtera Abadi</title>
-  @vite ([
-    'resource/js/app.js',
-    'resource/sass/app.scss',
-    'resource/css/app.css'
-  ])
+  @vite([
+      'resources/js/app.js',
+      'resources/sass/app.scss',
+      'resources/css/app.css'
+      ])
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
   <style>
   /* === GAYA NAVBAR UTAMA === */
