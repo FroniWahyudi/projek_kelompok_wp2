@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
+use App\Models\News;
 
 use Illuminate\Http\Request;
 
@@ -12,7 +13,9 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
         $role = $user->role;
+        $newsItems = News::all();
 
-        return view('dashboard', compact('user', 'role'));
+        return view('index.dashboard', compact('user', 'role', 'newsItems'));
     }
+
 }

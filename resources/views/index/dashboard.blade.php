@@ -449,6 +449,7 @@ function excerpt(string $text, int $maxLen = 100): string {
     <a href="cuti.php" class="btn btn-outline-dark w-100 mb-2">
       <i class="bi bi-check-square me-1"></i> Daftar Pengajuan Cuti
     </a>
+  @endif
   <?php //elseif ($user['role'] === 'Karyawan'): ?>
   @if($role == 'Karyawan')
     <a href="cuti.php" class="btn btn-outline-dark w-100 mb-2">
@@ -460,10 +461,10 @@ function excerpt(string $text, int $maxLen = 100): string {
   @endif
 
   
-  {{ $feedbackLabel = ($user['role'] === 'Karyawan') ? 'Evaluasi Kinerja' : 'Feedback Pegawai' }}
+
   
   <a href="feedback_pegawai.php" class="btn btn-outline-dark w-100 mb-2">
-    <i class="bi bi-chat-dots me-1"></i> {{ $feedbackLabel }}
+    <i class="bi bi-chat-dots me-1"></i>
   </a>
 
   <a href="shift_karyawan.php" class="btn btn-outline-dark w-100">
@@ -472,32 +473,34 @@ function excerpt(string $text, int $maxLen = 100): string {
 </nav>
 
  <!-- Main Content -->
+ 
 <main>
   <h3 class="mb-4">What's New</h3>
   <div class="row g-3">
-    <?php foreach($newsItems as $idx => $item):
-      $total = count($newsItems);
-      $col = ($idx >= $total-2)? 'col-md-6':'col-md-3';
-    ?>
-    <div class="col-12 col-sm-6 <?= $col ?>">
-      <!-- Link ke whats_new.php?id=... -->
-      <a href="whats_new.php?id=<?= htmlspecialchars($item['id']) ?>" 
-         class="text-decoration-none text-reset">
-        <div class="card card-news shadow-sm h-100">
-          <img src="<?= htmlspecialchars($item['image_url']) ?>" 
-               class="card-img-top" 
-               alt="<?= htmlspecialchars($item['title']) ?>">
-          <div class="card-body">
-            <h6 class="fw-bold"><?= htmlspecialchars($item['title']) ?></h6>
-            <small class="text-muted"><?= htmlspecialchars($item['date']) ?></small>
-            <p class="small"><?= excerpt($item['description'], 100) ?></p>
+    @foreach($newsItems as $idx => $item)
+      @php
+        $total = count($newsItems);
+        $col = ($idx >= $total - 2) ? 'col-md-6' : 'col-md-3';
+      @endphp
+      <div class="col-12 col-sm-6 {{ $col }}">
+        <a href="{{ route('whats_new', ['id' => $item['id']]) }}"
+           class="text-decoration-none text-reset">
+          <div class="card card-news shadow-sm h-100">
+            <img src="{{ htmlspecialchars($item['image_url']) }}"
+                 class="card-img-top"
+                 alt="{{ htmlspecialchars($item['title']) }}">
+            <div class="card-body">
+              <h6 class="fw-bold">{{ htmlspecialchars($item['title']) }}</h6>
+              <small class="text-muted">{{ htmlspecialchars($item['date']) }}</small>
+              <p class="small">{{ excerpt($item['description'], 100) }}</p>
+            </div>
           </div>
-        </div>
-      </a>
-    </div>
-    <?php endforeach; ?>
+        </a>
+      </div>
+    @endforeach
   </div>
 </main>
+
 
 
 <!-- jQuery Script -->
