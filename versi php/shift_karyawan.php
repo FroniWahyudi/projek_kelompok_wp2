@@ -1,205 +1,209 @@
+<?php
+// shift_karyawan.php
+session_start(); // Mulai session untuk cek role user
+
+// Cek apakah user sudah login dan role tersedia
+if (!isset($_SESSION['role'])) {
+    // Jika belum login, redirect ke login page
+    header('Location: login.php');
+    exit;
+}
+
+// Koneksi ke database (ganti credentials sesuai)
+$host = 'localhost';
+$db   = 'naga_hytam';
+$user = 'root';
+$pass = '';
+$charset = 'utf8mb4';
+
+$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+$options = [
+    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+];
+try {
+    $pdo = new PDO($dsn, $user, $pass, $options);
+} catch (PDOException $e) {
+    die("Database connection failed: " . $e->getMessage());
+}
+
+// Tangani form add/edit/delete
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['action'])) {
+    // Hanya selain Karyawan yang boleh CRUD
+    if ($_SESSION['role'] !== 'Karyawan') {
+        if ($_POST['action'] === 'save') {
+            $id      = !empty($_POST['shift_id']) ? (int)$_POST['shift_id'] : null;
+            $user_id = (int)$_POST['modalNama'];
+            $tanggal = $_POST['modalTanggal'];
+            $shift   = $_POST['modalShift'];
+            if ($id) {
+                $stmt = $pdo->prepare('UPDATE shift_karyawan SET user_id=?, tanggal=?, shift=? WHERE id=?');
+                $stmt->execute([$user_id, $tanggal, $shift, $id]);
+            } else {
+                $stmt = $pdo->prepare('INSERT INTO shift_karyawan (user_id, tanggal, shift) VALUES (?, ?, ?)');
+                $stmt->execute([$user_id, $tanggal, $shift]);
+            }
+        }
+        if ($_POST['action'] === 'delete' && !empty($_POST['del_id'])) {
+            $stmt = $pdo->prepare('DELETE FROM shift_karyawan WHERE id=?');
+            $stmt->execute([(int)$_POST['del_id']]);
+        }
+    }
+    header('Location: shift_karyawan.php');
+    exit;
+}
+
+// Ambil data users untuk dropdown (hanya untuk non-Karyawan)
+$users = [];
+if ($_SESSION['role'] !== 'Karyawan') {
+    $stmt = $pdo->query('SELECT id, name, role, photo_url FROM users ORDER BY name');
+    $users = $stmt->fetchAll();
+}
+
+// Ambil data shift_karyawan dengan join ke users
+$sql = "SELECT sk.id, sk.tanggal, sk.shift,
+               u.id AS user_id, u.name, u.role, u.photo_url
+        FROM shift_karyawan sk
+        JOIN users u ON sk.user_id = u.id
+        ORDER BY sk.tanggal DESC, FIELD(sk.shift,'Pagi','Sore')";
+$stmt = $pdo->query($sql);
+$shifts = $stmt->fetchAll();
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Shift & Jadwal Karyawan</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-  <link rel="stylesheet" href="bootstrap-5.3.5-dist/css/bootstrap.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <style>
-    body { background-color: #f8f9fa; }
-    .nav-button { margin-bottom: 1rem; }
-    .filter-group .btn { margin-right: 0.5rem; }
-    .card { border: none; border-radius: 0.5rem; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    body { background: #f8f9fa; }
     .badge-shift { min-width: 60px; }
-    @media (max-width: 700px) {
-      .d-flex.justify-content-between { flex-direction: column; align-items: stretch; }
-      .filter-group { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-      .filter-group .btn { flex: 1 1 auto; }
-      .table-responsive { font-size: 0.9rem; }
-      .badge-shift { min-width: 50px; font-size: 0.8rem; }
-    }
-    @media (max-width: 400px) {
-      .filter-group { flex-direction: column; }
-      .filter-group .btn { width: 100%; }
-      #shiftTable th:nth-child(4), #shiftTable td:nth-child(4) { display: none; }
-      #shiftTable th:nth-child(1), #shiftTable td:nth-child(1) { display: none; }
-      .table-responsive { overflow-x: auto; }
-      .modal-dialog { max-width: 90%; margin: 1.5rem auto; }
-      .btn-sm { padding: 0.25rem 0.4rem; font-size: 0.75rem; }
-    }
-    @media (max-width: 300px) {
-      h2 { font-size: 1.25rem; }
-      .badge-shift { min-width: 40px; font-size: 0.7rem; padding: 0.3rem; }
-      .btn { font-size: 0.75rem; padding: 0.4rem; }
-      .filter-group .btn { font-size: 0.75rem; padding: 0.3rem; }
-    }
   </style>
 </head>
 <body>
-  <div class="container py-4">
-    <a href="dashboard.php" class="btn btn-outline-dark nav-button">
-      <i class="bi bi-house-door me-1"></i> Home
-    </a>
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h2 class="mb-0">Shift & Jadwal Karyawan</h2>
-      <button class="btn btn-success mt-2 mt-md-0" data-bs-toggle="modal" data-bs-target="#editModal">
-        <i class="bi bi-plus-circle me-1"></i> Jadwal Baru
-      </button>
-    </div>
-    <div class="filter-group mb-3">
-      <button class="btn btn-outline-primary" onclick="filterShift('All')">Semua</button>
-      <button class="btn btn-outline-info" onclick="filterShift('Pagi')">Pagi</button>
-      <button class="btn btn-outline-warning" onclick="filterShift('Sore')">Sore</button>
-      <button class="btn btn-outline-dark" onclick="filterShift('Malam')">Malam</button>
-    </div>
+<div class="container py-4">
+  <a href="dashboard.php" class="btn btn-outline-dark mb-3"><i class="bi bi-house-door"></i> Home</a>
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Shift & Jadwal Karyawan</h2>
+    <?php if ($_SESSION['role'] !== 'Karyawan'): ?>
+    <button class="btn btn-success" onclick="openAddModal()"><i class="bi bi-plus-circle"></i> Jadwal Baru</button>
+    <?php endif; ?>
+  </div>
 
-    <div class="card">
-      <div class="card-body p-0">
-        <div class="table-responsive">
-          <table class="table table-striped align-middle mb-0" id="shiftTable">
-            <thead class="table-dark">
-              <tr>
-                <th>#</th>
-                <th>Foto</th>
-                <th>Nama</th>
-                <th>Departemen</th>
-                <th>Tanggal</th>
-                <th>Shift</th>
-                <th>Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr data-shift="Pagi">
-                <td>1</td>
-                <td><img src="https://ui-avatars.com/api/?name=Ahmad+Yusuf" width="40" height="40" class="rounded-circle" alt="Ahmad Yusuf"></td>
-                <td>Ahmad Yusuf</td>
-                <td>HR</td>
-                <td>2025-05-01</td>
-                <td><span class="badge bg-info text-dark badge-shift">Pagi</span></td>
-                <td>
-                  <button class="btn btn-sm btn-outline-warning" onclick="openEditModal(this)"><i class="bi bi-pencil"></i></button>
-                  <button class="btn btn-sm btn-outline-danger" onclick="deleteShift(this)"><i class="bi bi-trash"></i></button>
-                </td>
-              </tr>
-              <tr data-shift="Sore">
-                <td>2</td>
-                <td><img src="https://ui-avatars.com/api/?name=Siti+Rahma" width="40" height="40" class="rounded-circle" alt="Siti Rahma"></td>
-                <td>Siti Rahma</td>
-                <td>Manajemen</td>
-                <td>2025-05-01</td>
-                <td><span class="badge bg-warning text-dark badge-shift">Sore</span></td>
-                <td>
-                  <button class="btn btn-sm btn-outline-warning" onclick="openEditModal(this)"><i class="bi bi-pencil"></i></button>
-                  <button class="btn btn-sm btn-outline-danger" onclick="deleteShift(this)"><i class="bi bi-trash"></i></button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
+  <div class="filter-group mb-3">
+    <button class="btn btn-outline-primary" onclick="filterShift('All')">Semua</button>
+    <button class="btn btn-outline-info" onclick="filterShift('Pagi')">Pagi</button>
+    <button class="btn btn-outline-warning" onclick="filterShift('Sore')">Sore</button>
+  </div>
 
-    <!-- Modal Edit/Tambah -->
-    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+  <div class="card">
+    <div class="table-responsive">
+      <table class="table table-striped align-middle" id="shiftTable">
+        <thead class="table-dark">
+          <tr>
+            <th>#</th><th>Foto</th><th>Nama</th><th>Departemen</th><th>Tanggal</th><th>Shift</th><th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($shifts as $i => $s): ?>
+          <tr data-id="<?= $s['id'] ?>" data-user="<?= $s['user_id'] ?>" data-shift="<?= $s['shift'] ?>">
+            <td><?= $i+1 ?></td>
+            <td><img src="<?= htmlspecialchars($s['photo_url']) ?>" width="40" height="40" class="rounded-circle"></td>
+            <td><?= htmlspecialchars($s['name']) ?></td>
+            <td><?= htmlspecialchars($s['role']) ?></td>
+            <td><?= htmlspecialchars($s['tanggal']) ?></td>
+            <td><span class="badge bg-<?= $s['shift']=='Pagi'?'info':'warning' ?> text-dark badge-shift"><?= htmlspecialchars($s['shift']) ?></span></td>
+            <td>
+              <?php if ($_SESSION['role'] !== 'Karyawan'): ?>
+              <button class="btn btn-sm btn-outline-warning" onclick="openEditModal(this)"><i class="bi bi-pencil"></i></button>
+              <button class="btn btn-sm btn-outline-danger" onclick="deleteShift(<?= $s['id'] ?>)"><i class="bi bi-trash"></i></button>
+              <?php endif; ?>
+            </td>
+          </tr>
+        <?php endforeach; ?>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Modal Form -->
+  <?php if ($_SESSION['role'] !== 'Karyawan'): ?>
+  <div class="modal fade" id="editModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <form method="post" action="shift_karyawan.php">
           <div class="modal-header">
-            <h5 class="modal-title" id="editModalLabel">Jadwal Shift</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <h5 class="modal-title">Jadwal Shift</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
           </div>
           <div class="modal-body">
-            <form id="modalForm">
-              <input type="hidden" id="rowIndex">
-              <div class="mb-3">
-                <label for="modalNama" class="form-label">Nama Karyawan</label>
-                <select id="modalNama" class="form-select" required>
-                  <option value="" disabled selected>Pilih karyawan...</option>
-                  <option>Ahmad Yusuf</option>
-                  <option>Siti Rahma</option>
-                  <option>Budi Santoso</option>
-                  <option>Lina Marlina</option>
-                  <option>Rudi Hartono</option>
-                </select>
-              </div>
-              <div class="mb-3">
-                <label for="modalTanggal" class="form-label">Tanggal</label>
-                <input type="date" id="modalTanggal" class="form-control" required>
-              </div>
-              <div class="mb-3">
-                <label for="modalShift" class="form-label">Shift</label>
-                <select id="modalShift" class="form-select" required>
-                  <option value="" disabled selected>Pilih shift...</option>
-                  <option>Pagi</option>
-                  <option>Sore</option>
-                  <option>Malam</option>
-                </select>
-              </div>
-            </form>
+            <input type="hidden" name="action" id="formAction" value="save">
+            <input type="hidden" name="shift_id" id="shiftId">
+
+            <div class="mb-3">
+              <label class="form-label">Nama Karyawan</label>
+              <select name="modalNama" id="modalNama" class="form-select" required>
+                <option value="" disabled selected>Pilih karyawan...</option>
+                <?php foreach ($users as $u): ?>
+                <option value="<?= $u['id'] ?>"><?= htmlspecialchars($u['name']) ?></option>
+                <?php endforeach; ?>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Tanggal</label>
+              <input type="date" name="modalTanggal" id="modalTanggal" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Shift</label>
+              <select name="modalShift" id="modalShift" class="form-select" required>
+                <option value="" disabled selected>Pilih shift...</option>
+                <option>Pagi</option>
+                <option>Sore</option>
+              </select>
+            </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-            <button type="button" class="btn btn-primary" onclick="saveShift()">Simpan</button>
+            <button type="submit" class="btn btn-primary">Simpan</button>
           </div>
-        </div>
+        </form>
       </div>
     </div>
-
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    function filterShift(type) {
-      document.querySelectorAll('#shiftTable tbody tr').forEach(row => {
-        row.style.display = (type === 'All' || row.dataset.shift === type) ? '' : 'none';
-      });
-    }
-    function openEditModal(btn) {
-      const row = btn.closest('tr');
-      const idx = Array.from(row.parentNode.children).indexOf(row);
-      const [ , , nameCell, , dateCell, shiftCell ] = row.children;
-      document.getElementById('rowIndex').value = idx;
-      document.getElementById('modalNama').value = nameCell.textContent;
-      document.getElementById('modalTanggal').value = dateCell.textContent;
-      document.getElementById('modalShift').value = shiftCell.textContent.trim();
-      new bootstrap.Modal(document.getElementById('editModal')).show();
-    }
-    function saveShift() {
-      const idx = document.getElementById('rowIndex').value;
-      const name = document.getElementById('modalNama').value;
-      const date = document.getElementById('modalTanggal').value;
-      const shift = document.getElementById('modalShift').value;
-      const table = document.getElementById('shiftTable').querySelector('tbody');
-      if (idx) {
-        const row = table.children[idx];
-        row.children[2].textContent = name;
-        row.children[4].textContent = date;
-        const badge = row.children[5].querySelector('span');
-        badge.textContent = shift;
-        badge.className = `badge badge-shift bg-${shift==='Pagi'?'info':shift==='Sore'?'warning':'dark'} text-dark`;
-        row.dataset.shift = shift;
-      } else {
-        const newRow = table.insertRow();
-        newRow.dataset.shift = shift;
-        newRow.innerHTML = `
-          <td>${table.children.length}</td>
-          <td><img src="https://ui-avatars.com/api/?name=${encodeURIComponent(name)}" width="40" height="40" class="rounded-circle"></td>
-          <td>${name}</td>
-          <td>--</td>
-          <td>${date}</td>
-          <td><span class="badge badge-shift bg-${shift==='Pagi'?'info':shift==='Sore'?'warning':'dark'} text-dark">${shift}</span></td>
-          <td>
-            <button class="btn btn-sm btn-outline-warning" onclick="openEditModal(this)"><i class="bi bi-pencil"></i></button>
-            <button class="btn btn-sm btn-outline-danger" onclick="deleteShift(this)"><i class="bi bi-trash"></i></button>
-          </td>`;
-      }
-      document.getElementById('modalForm').reset();
-      document.getElementById('rowIndex').value = '';
-      bootstrap.Modal.getInstance(document.getElementById('editModal')).hide();
-    }
-    function deleteShift(btn) {
-      if (confirm('Hapus jadwal shift ini?')) btn.closest('tr').remove();
-    }
-  </script>
+  <?php endif; ?>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function filterShift(type) {
+  document.querySelectorAll('#shiftTable tbody tr').forEach(r => r.style.display = (type==='All' || r.dataset.shift===type)? '' :'none');
+}
+function openAddModal() {
+  document.getElementById('formAction').value = 'save';
+  document.getElementById('shiftId').value = '';
+  document.getElementById('modalNama').value = '';
+  document.getElementById('modalTanggal').value = '';
+  document.getElementById('modalShift').value = '';
+  new bootstrap.Modal(document.getElementById('editModal')).show();
+}
+function openEditModal(btn) {
+  const tr = btn.closest('tr');
+  document.getElementById('formAction').value = 'save';
+  document.getElementById('shiftId').value = tr.dataset.id;
+  document.getElementById('modalNama').value = tr.dataset.user;
+  document.getElementById('modalTanggal').value = tr.children[4].textContent;
+  document.getElementById('modalShift').value = tr.dataset.shift;
+  new bootstrap.Modal(document.getElementById('editModal')).show();
+}
+function deleteShift(id) {
+  if (confirm('Hapus jadwal shift ini?')) {
+    const f = document.createElement('form'); f.method='post'; f.action='shift_karyawan.php';
+    f.innerHTML = `<input type="hidden" name="action" value="delete"><input type="hidden" name="del_id" value="${id}">`;
+    document.body.append(f); f.submit();
+  }
+}
+</script>
 </body>
 </html>
