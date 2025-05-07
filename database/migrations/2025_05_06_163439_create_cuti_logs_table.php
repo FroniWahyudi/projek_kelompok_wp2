@@ -11,17 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('cuti_logs', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('role');
-            $table->string('email')->unique();
-            $table->timestamp('phone')->nullable();
-            $table->string('password');
-            $table->string('photo_url');
-            $table->text('bio');
-            $table->rememberToken();
             $table->timestamps();
+            $table->unsignedBigInteger('cuti_request_id');
+            $table->string('aksi');
+            $table->unsignedBigInteger('oleh_user_id');
+            $table->text('keterangan');
+            $table->foreign('cuti_request_id')->references('id')->on('cuti_requests');
         });
     }
 
@@ -30,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('cuti_logs');
     }
 };

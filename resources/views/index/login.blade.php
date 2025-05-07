@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($user && $password === $user['password']) { // Ganti dengan password_verify jika pakai hash
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['role'] = $user['role'];
-        header('Location: dashboard.php');
+        header('Location: /');
         exit;
     } else {
         $error = 'Email atau password salah!';
