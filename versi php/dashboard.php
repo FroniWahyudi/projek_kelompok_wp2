@@ -80,8 +80,9 @@ function excerpt(string $text, int $maxLen = 100): string {
   }
 
   .navbar-custom .logo-brand img {
-    height: 86px;
+    height: 76px;
     object-fit: contain;
+    margin-top: -2px;
   }
 
   /* === GAYA SIDEBAR === */
