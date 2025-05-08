@@ -363,7 +363,7 @@
 
   <!-- Logout -->
   <div class="ms-auto nav-item d-none d-md-block">
-    <a href="/login/" class="btn btn-outline-dark">
+    <a href="/logout" class="btn btn-outline-dark">
       <i class="bi bi-box-arrow-right me-1"></i>
       Logout
     </a>
