@@ -44,6 +44,9 @@ function excerpt(string $text, int $maxLen = 100): string {
   return htmlspecialchars($truncated) . '...';
 }*/
 ?>
+@php use Illuminate\Support\Str; @endphp
+
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -464,7 +467,12 @@ function excerpt(string $text, int $maxLen = 100): string {
 
   
   <a href="feedback_pegawai.php" class="btn btn-outline-dark w-100 mb-2">
-    <i class="bi bi-chat-dots me-1"></i>
+    <i class="bi bi-chat-dots me-1"></i> 
+    @if($role == "Karyawan")
+    Evaluasi Kinerja
+    @else
+    Feedback Pegawai
+    @endif
   </a>
 
   <a href="shift_karyawan.php" class="btn btn-outline-dark w-100">
@@ -492,7 +500,7 @@ function excerpt(string $text, int $maxLen = 100): string {
             <div class="card-body">
               <h6 class="fw-bold">{{ htmlspecialchars($item['title']) }}</h6>
               <small class="text-muted">{{ htmlspecialchars($item['date']) }}</small>
-              <p class="small">{{ excerpt($item['description'], 100) }}</p>
+              <p class="small">{{ Str::limit($item['description'], 100) }}</p>
             </div>
           </div>
         </a>

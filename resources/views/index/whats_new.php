@@ -1,6 +1,6 @@
 <?php
 // whats_new.php
-
+/*
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'naga_hytam');
 define('DB_USER', 'root');
@@ -38,7 +38,7 @@ if (strlen($rawDesc) > $previewLimit) {
 } else {
     $shortDesc = $fullDesc;
     $isLong = false;
-}
+}*/
 ?>
 <!DOCTYPE html>
 <html lang="id">
