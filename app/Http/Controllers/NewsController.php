@@ -9,10 +9,13 @@ class NewsController extends Controller
 {
     public function show($id)
     {
-        // Example: Fetch the news item from the database
-        $newsItem = News::findOrFail($id);
+        $item = News::where('id', $id)->first();
 
-        // Return a view and pass the news item to it
-        return view('news.show', ['item' => $newsItem]);
+        // Example: assume description is long text
+        $fullDesc = $item->description;
+        $shortDesc = mb_strimwidth($fullDesc, 0, 200); // get first 200 chars
+        $isLong = mb_strlen($fullDesc) > 200;
+
+        return view('index.whats_new', compact( 'item', 'shortDesc', 'fullDesc', 'isLong'));
     }
 }

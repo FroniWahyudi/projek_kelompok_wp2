@@ -44,7 +44,7 @@ if (strlen($rawDesc) > $previewLimit) {
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title><?= htmlspecialchars($item['title']) ?> – What's New</title>
+  <title>{{ $item['title'] }} – What's New</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
@@ -64,52 +64,50 @@ if (strlen($rawDesc) > $previewLimit) {
 </head>
 <body>
   <div class="container-fluid">
-    <a href="dashboard.php" class="btn btn-secondary back-btn">&larr; Kembali ke daftar</a>
+    <a href="/dashboard" class="btn btn-secondary back-btn">&larr; Kembali ke daftar</a>
     <div class="card">
-      <img src="<?= htmlspecialchars($item['image_url']) ?>" class="card-img-top" alt="<?= htmlspecialchars($item['title']) ?>">
+      <img src="{{ asset($item['image_url']) }}" class="card-img-top" alt="{{ $item['title'] }}">
       <div class="card-body">
-        <h2 class="card-title"><?= htmlspecialchars($item['title']) ?></h2>
-        <p class="text-muted"><?= htmlspecialchars($item['date']) ?></p>
+        <h2 class="card-title">{{ $item['title'] }}</h2>
+        <p class="text-muted">{{ $item['date'] }}</p>
         <p class="card-text">
-          <span id="short-text"><?= $shortDesc ?><?= $isLong ? '...' : '' ?></span>
-          <?php if ($isLong): ?>
-            <span id="full-text" style="display:none;"><?= $fullDesc ?></span>
-          <?php endif; ?>
+          <span id="short-text">{!! $shortDesc !!}{{ $isLong ? '...' : '' }}</span>
+          @if ($isLong)
+            <span id="full-text" style="display:none;">{!! $fullDesc !!}</span>
+          @endif
         </p>
-        <?php if ($isLong): ?>
+        @if ($isLong)
           <button id="read-more" class="btn btn-primary">Baca selengkapnya</button>
-        <?php elseif (!empty($item['link'])): ?>
-          <a href="<?= htmlspecialchars($item['link']) ?>" class="btn btn-primary">Baca selengkapnya</a>
-        <?php endif; ?>
+        @elseif (!empty($item['link']))
+          <a href="{{ $item['link'] }}" class="btn btn-primary">Baca selengkapnya</a>
+        @endif
       </div>
     </div>
     
-      <!-- Tombol Home di bawah konten -->
-  <div class="text-center mt-4">
-    <a href="dashboard.php" class="btn btn-secondary">
-      <i class="bi bi-house-door-fill"></i> Home
-    </a>
+    <!-- Tombol Home di bawah konten -->
+    <div class="text-center mt-4">
+      <a href="/dashboard" class="btn btn-secondary">
+        <i class="bi bi-house-door-fill"></i> Home
+      </a>
+    </div>
   </div>
 
-
-  </div>
-  <?php if ($isLong): ?>
+  @if ($isLong)
   <script>
-    const btn = document.getElementById('read-more');
-    const shortText = document.getElementById('short-text');
-    const fullText = document.getElementById('full-text');
-    btn.addEventListener('click', function() {
+    document.getElementById('read-more').addEventListener('click', function() {
+      const shortText = document.getElementById('short-text');
+      const fullText = document.getElementById('full-text');
       if (fullText.style.display === 'none') {
         shortText.style.display = 'none';
         fullText.style.display = 'block';
-        btn.textContent = 'Lihat lebih sedikit';
+        this.textContent = 'Lihat lebih sedikit';
       } else {
         shortText.style.display = 'inline';
         fullText.style.display = 'none';
-        btn.textContent = 'Baca selengkapnya';
+        this.textContent = 'Baca selengkapnya';
       }
     });
   </script>
-  <?php endif; ?>
+  @endif
 </body>
 </html>
