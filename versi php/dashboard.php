@@ -80,8 +80,9 @@ function excerpt(string $text, int $maxLen = 100): string {
   }
 
   .navbar-custom .logo-brand img {
-    height: 86px;
+    height: 76px;
     object-fit: contain;
+    margin-top: -2px;
   }
 
   /* === GAYA SIDEBAR === */
@@ -434,22 +435,27 @@ function excerpt(string $text, int $maxLen = 100): string {
   <?php endif;  ?>
   
   <?php if ($user['role'] === 'Leader' || $user['role'] === 'HR' ): ?>
-    <?php if ($user['role'] === 'Leader'): ?>
-      <a href="laporan_kerja.php" class="btn btn-outline-dark w-100 mb-2">
-        <i class="bi bi-journal-text me-1"></i> Kirim Laporan Kerja
-      </a>
-    <?php endif; ?>
-    <a href="cuti.php" class="btn btn-outline-dark w-100 mb-2">
-      <i class="bi bi-check-square me-1"></i> Daftar Pengajuan Cuti
-    </a>
-  <?php elseif ($user['role'] === 'Karyawan'): ?>
-    <a href="cuti.php" class="btn btn-outline-dark w-100 mb-2">
-      <i class="bi bi-file-earmark-text me-1"></i> Pengajuan Cuti
-    </a>
-    <a href="slip_gaji.php" class="btn btn-outline-dark w-100 mb-2">
-      <i class="bi bi-receipt me-1"></i> Slip Gaji
+  <?php if ($user['role'] === 'Leader'): ?>
+    <a href="laporan_kerja.php" class="btn btn-outline-dark w-100 mb-2">
+      <i class="bi bi-journal-text me-1"></i> Kirim Laporan Kerja
     </a>
   <?php endif; ?>
+  <a href="cuti.php" class="btn btn-outline-dark w-100 mb-2">
+    <i class="bi bi-check-square me-1"></i> Daftar Pengajuan Cuti
+  </a>
+<?php elseif ($user['role'] === 'Karyawan'): ?>
+  <a href="cuti.php" class="btn btn-outline-dark w-100 mb-2">
+    <i class="bi bi-file-earmark-text me-1"></i> Pengajuan Cuti
+  </a>
+<?php endif; ?>
+
+<?php if ($user['role'] === 'HR' || $user['role'] === 'Karyawan'): ?>
+  <a href="slip_gaji.php" class="btn btn-outline-dark w-100 mb-2">
+    <i class="bi bi-receipt me-1"></i> Slip Gaji
+  </a>
+<?php endif; ?>
+
+  
 
   <?php
     $feedbackLabel = ($user['role'] === 'Karyawan') ? 'Evaluasi Kinerja' : 'Feedback Pegawai';
