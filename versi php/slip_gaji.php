@@ -230,7 +230,7 @@ $slips->data_seek(0);
 
     <!-- FAB -->
     <?php if ($role === 'HR'): ?>
-      <a href="slip_gaji.php?periode_month=<?= urlencode($periode) ?>" class="fab">
+      <a href="buat_slip.php?periode_month=<?= urlencode($periode) ?>" class="fab">
         <i class="fas fa-plus"></i>
       </a>
     <?php endif; ?>
