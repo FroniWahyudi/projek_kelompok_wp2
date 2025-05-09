@@ -8,7 +8,6 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// koneksi database
 $mysqli = new mysqli('localhost', 'root', '', 'naga_hytam');
 if ($mysqli->connect_error) {
     die('Koneksi gagal: ' . $mysqli->connect_error);
@@ -17,7 +16,7 @@ if ($mysqli->connect_error) {
 $userId = $_SESSION['user_id'];
 $role   = $_SESSION['role'] ?? '';
 
-// FILTER BULAN (input month saja)
+// FILTER BULAN
 $periode = $_GET['periode_month'] ?? date('Y-m');
 
 // HANDLE DELETE
@@ -31,11 +30,43 @@ if ($role === 'HR' && isset($_GET['delete_id'])) {
     exit();
 }
 
-// ambil slip gaji sesuai filter bulan
+// HANDLE UPDATE
+if ($role === 'HR' && isset($_GET['update_id'], $_GET['gaji_pokok'], $_GET['tunjangan'], $_GET['potongan'])) {
+    $updId      = (int) $_GET['update_id'];
+    $gp         = (float) $_GET['gaji_pokok'];
+    $tj         = (float) $_GET['tunjangan'];
+    $pt         = (float) $_GET['potongan'];
+    $total      = $gp + $tj - $pt;
+    $newPeriode = date('Y-m');
+    $uStmt = $mysqli->prepare('
+        UPDATE payrolls 
+        SET gaji_pokok = ?, tunjangan = ?, potongan = ?, total_gaji = ?, periode = ?
+        WHERE id = ?
+    ');
+    $uStmt->bind_param('dddssi', $gp, $tj, $pt, $total, $newPeriode, $updId);
+    $uStmt->execute();
+    $uStmt->close();
+    header('Location: slip_gaji.php?periode_month=' . urlencode($periode));
+    exit();
+}
+
+// AMBIL DATA UNTUK FORM EDIT
+$editRow = null;
+if ($role === 'HR' && isset($_GET['id'])) {
+    $eid = (int) $_GET['id'];
+    $eStmt = $mysqli->prepare('SELECT id, gaji_pokok, tunjangan, potongan FROM payrolls WHERE id = ?');
+    $eStmt->bind_param('i', $eid);
+    $eStmt->execute();
+    $res = $eStmt->get_result();
+    $editRow = $res->fetch_assoc() ?: null;
+    $eStmt->close();
+}
+
+// AMBIL SLIP SESUAI FILTER
 if ($role === 'HR') {
     $sql = '
-      SELECT p.id, p.user_id, u.name, p.periode, p.gaji_pokok, p.tunjangan,
-             p.potongan, p.total_gaji, p.created_at
+      SELECT p.id, p.user_id, u.name, p.periode,
+             p.gaji_pokok, p.tunjangan, p.potongan, p.total_gaji, p.created_at
       FROM payrolls p
       JOIN users u ON p.user_id = u.id
       WHERE p.periode = ?
@@ -45,8 +76,8 @@ if ($role === 'HR') {
     $stmt->bind_param('s', $periode);
 } else {
     $sql = '
-      SELECT p.id, p.user_id, u.name, p.periode, p.gaji_pokok, p.tunjangan,
-             p.potongan, p.total_gaji, p.created_at
+      SELECT p.id, p.user_id, u.name, p.periode,
+             p.gaji_pokok, p.tunjangan, p.potongan, p.total_gaji, p.created_at
       FROM payrolls p
       JOIN users u ON p.user_id = u.id
       WHERE p.user_id = ? AND p.periode = ?
@@ -58,10 +89,10 @@ if ($role === 'HR') {
 $stmt->execute();
 $slips = $stmt->get_result();
 
-// hitung total gaji untuk ringkasan
+// HITUNG TOTAL UNTUK RINGKASAN
 $totalSummary = 0;
-while ($row = $slips->fetch_assoc()) {
-    $totalSummary += (float)$row['total_gaji'];
+while ($r = $slips->fetch_assoc()) {
+    $totalSummary += (float)$r['total_gaji'];
 }
 $slips->data_seek(0);
 ?>
@@ -95,6 +126,39 @@ $slips->data_seek(0);
       </a>
     </div>
 
+    <!-- FORM EDIT (jika HR & ada id) -->
+    <?php if ($editRow): ?>
+      <div class="card mb-4">
+        <div class="card-body bg-white">
+          <h5 class="card-title">Edit Slip ID <?= $editRow['id'] ?></h5>
+          <form method="get" class="row g-3">
+            <input type="hidden" name="periode_month" value="<?= htmlspecialchars($periode) ?>">
+            <input type="hidden" name="update_id" value="<?= $editRow['id'] ?>">
+            <div class="col-md-4">
+              <label class="form-label">Gaji Pokok</label>
+              <input type="number" step="0.01" name="gaji_pokok" class="form-control"
+                     value="<?= $editRow['gaji_pokok'] ?>" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Tunjangan</label>
+              <input type="number" step="0.01" name="tunjangan" class="form-control"
+                     value="<?= $editRow['tunjangan'] ?>" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Potongan</label>
+              <input type="number" step="0.01" name="potongan" class="form-control"
+                     value="<?= $editRow['potongan'] ?>" required>
+            </div>
+            <div class="col-12 text-end">
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save me-1"></i> Simpan Perubahan
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    <?php endif; ?>
+
     <!-- FILTER BULAN -->
     <form class="mb-4" method="get">
       <label class="form-label">Pilih Bulan:</label>
@@ -120,21 +184,23 @@ $slips->data_seek(0);
           Belum ada slip gaji untuk periode <strong><?= htmlspecialchars($periode) ?></strong>.
         </div>
       <?php else: ?>
-        <?php while ($row = $slips->fetch_assoc()): ?>
+        <?php while ($r = $slips->fetch_assoc()): ?>
           <div class="col-md-6 col-lg-4">
             <div class="card card-payroll p-3 bg-white">
               <div class="d-flex justify-content-between align-items-center mb-2">
                 <div class="d-flex align-items-center">
                   <i class="fas fa-user-circle fa-2x text-secondary me-2"></i>
-                  <h6 class="mb-0"><?= htmlspecialchars($row['name']) ?></h6>
+                  <h6 class="mb-0"><?= htmlspecialchars($r['name']) ?></h6>
                 </div>
                 <?php if ($role === 'HR'): ?>
                   <div>
-                    <a href="buat_slip.php?periode_month=<?= urlencode($periode) ?>&user_id=<?= $row['user_id'] ?>&id=<?= $row['id'] ?>"
-                       class="text-warning me-2"><i class="fas fa-edit"></i></a>
-                    <a href="slip_gaji.php?periode_month=<?= urlencode($periode) ?>&delete_id=<?= $row['id'] ?>"
+                    <a href="slip_gaji.php?periode_month=<?= urlencode($periode) ?>&id=<?= $r['id'] ?>"
+                       class="text-warning me-2">
+                      <i class="fas fa-edit"></i>
+                    </a>
+                    <a href="slip_gaji.php?periode_month=<?= urlencode($periode) ?>&delete_id=<?= $r['id'] ?>"
                        class="text-danger"
-                       onclick="return confirm('Hapus slip ID <?= $row['id'] ?>?')">
+                       onclick="return confirm('Hapus slip ID <?= $r['id'] ?>?')">
                       <i class="fas fa-trash"></i>
                     </a>
                   </div>
@@ -149,11 +215,11 @@ $slips->data_seek(0);
                   <p class="mb-0"><i class="fas fa-clock text-primary me-1"></i> Dibuat</p>
                 </div>
                 <div class="col-6 text-end">
-                  <p class="mb-1">Rp <?= number_format((float)$row['gaji_pokok'], 2, ',', '.') ?></p>
-                  <p class="mb-1">Rp <?= number_format((float)$row['tunjangan'], 2, ',', '.') ?></p>
-                  <p class="mb-1">Rp <?= number_format((float)$row['potongan'], 2, ',', '.') ?></p>
-                  <p class="mb-1">Rp <?= number_format((float)$row['total_gaji'], 2, ',', '.') ?></p>
-                  <p class="mb-0"><?= date('d/m/Y H:i', strtotime($row['created_at'])) ?></p>
+                  <p class="mb-1">Rp <?= number_format((float)$r['gaji_pokok'], 2, ',', '.') ?></p>
+                  <p class="mb-1">Rp <?= number_format((float)$r['tunjangan'], 2, ',', '.') ?></p>
+                  <p class="mb-1">Rp <?= number_format((float)$r['potongan'], 2, ',', '.') ?></p>
+                  <p class="mb-1">Rp <?= number_format((float)$r['total_gaji'], 2, ',', '.') ?></p>
+                  <p class="mb-0"><?= date('d/m/Y H:i', strtotime($r['created_at'])) ?></p>
                 </div>
               </div>
             </div>
@@ -162,9 +228,9 @@ $slips->data_seek(0);
       <?php endif; ?>
     </div>
 
-    <!-- FLOATING ACTION BUTTON -->
+    <!-- FAB -->
     <?php if ($role === 'HR'): ?>
-      <a href="buat_slip.php?periode_month=<?= urlencode($periode) ?>" class="fab">
+      <a href="slip_gaji.php?periode_month=<?= urlencode($periode) ?>" class="fab">
         <i class="fas fa-plus"></i>
       </a>
     <?php endif; ?>
