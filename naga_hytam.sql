@@ -7,7 +7,7 @@ SET NAMES utf8mb4;
 SET time_zone = "+00:00";
 
 -- --------------------------------------------------------
--- 1) Tabel `users`
+-- 1) Tabel `users` (dengan kolom `alamat`)
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `users` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -18,20 +18,50 @@ CREATE TABLE IF NOT EXISTS `users` (
   `phone` VARCHAR(20) DEFAULT NULL,
   `photo_url` VARCHAR(255) DEFAULT NULL,
   `bio` TEXT DEFAULT NULL,
+  `alamat` VARCHAR(255) DEFAULT NULL,
   `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO `users` (`id`, `name`, `role`, `password`, `email`, `phone`, `photo_url`, `bio`, `created_at`) VALUES
-(1, 'Alice Putri', 'HR', '12345', 'alice.putri@nagahtam.co.id', '+62 812-3456-7890', 'img/nami.jpeg', 'Mengelola administrasi karyawan.', '2025-05-01 12:15:16'),
-(2, 'Budi Santoso', 'Leader', '12345', 'budi.santoso@nagahtam.co.id', '+62 813-9876-5432', 'img/zoro.jpeg', 'Memantau operator lapangan.', '2025-05-01 12:15:16'),
-(3, 'Sanji', 'Leader', '12345', 'sanji@nagahtam.co.id', '+62 813-9876-5432', 'img/sanji.jpeg', 'Memantau operator lapangan.', '2025-05-01 12:15:16'),
-(4, 'Sutoyo dono', 'Manajer', 'sutoyo123', 'sutoyo@nagahtam.co.id', '+62 812-1234-5678', 'img/sutoyo.jpg', 'Pengambilan keputusan strategis.', '2025-05-01 22:41:16'),
-(6, 'Ahmad Yusuf', 'Karyawan', 'karyawan123', 'ahmad.yusuf@nagahtam.co.id', '+62 812-3456-7890', 'img/ahmad_yusuf.jpg', 'Administrasi karyawan.', '2025-05-01 23:20:02'),
-(7, 'Wanda', 'Karyawan', 'karyawan123', 'wanda@nagahtam.co.id', '+62 813-9876-5432', 'img/wanda.jpg', 'Supervisor operasional.', '2025-05-01 23:20:02'),
-(8, 'Agus', 'Karyawan', 'karyawan123', 'agus@nagahtam.co.id', '+62 813-9876-5432', 'img/budi.jpg', 'Operator produksi.', '2025-05-01 23:20:02'),
-(9, 'Lina Marlina', 'Karyawan', 'karyawan123', 'lina.marlina@nagahtam.co.id', '+62 812-1234-5678', 'img/lina.jpg', 'Manager divisi.', '2025-05-01 23:20:02'),
-(10, 'Rudi Hartanto', 'Karyawan', 'karyawan123', 'rudi.hartono@nagahtam.co.id', '+62 813-5678-9012', 'img/rudi.jpg', 'Staf gudang.', '2025-05-01 23:20:02');
+INSERT INTO `users`
+  (`id`, `name`, `role`, `password`, `email`, `phone`, `photo_url`, `bio`, `alamat`, `created_at`)
+VALUES
+  (1, 'Alice Putri',   'HR',       '12345', 'alice.putri@nagahtam.co.id', '+62 812-3456-7890', 'img/nami.jpeg',
+    'Mengelola administrasi karyawan.',
+    'Jl. Merdeka No. 10, Jakarta Pusat',
+    '2025-05-01 12:15:16'),
+  (2, 'Budi Santoso',   'Leader',   '12345', 'budi.santoso@nagahtam.co.id', '+62 813-9876-5432', 'img/zoro.jpeg',
+    'Memantau operator lapangan.',
+    'Jl. Sudirman Kav. 12, Jakarta Selatan',
+    '2025-05-01 12:15:16'),
+  (3, 'Sanji',          'Leader',   '12345', 'sanji@nagahtam.co.id',        '+62 813-9876-5432', 'img/sanji.jpeg',
+    'Memantau operator lapangan.',
+    'Jl. Pahlawan No. 3, Surabaya',
+    '2025-05-01 12:15:16'),
+  (4, 'Sutoyo dono',    'Manajer',  'sutoyo123', 'sutoyo@nagahtam.co.id',    '+62 812-1234-5678', 'img/sutoyo.jpg',
+    'Pengambilan keputusan strategis.',
+    'Jl. Diponegoro No. 20, Semarang',
+    '2025-05-01 22:41:16'),
+  (6, 'Ahmad Yusuf',    'Karyawan', 'karyawan123', 'ahmad.yusuf@nagahtam.co.id', '+62 812-3456-7890', 'img/ahmad_yusuf.jpg',
+    'Administrasi karyawan.',
+    'Jl. Gajah Mada No. 15, Yogyakarta',
+    '2025-05-01 23:20:02'),
+  (7, 'Wanda',          'Karyawan', 'karyawan123', 'wanda@nagahtam.co.id',    '+62 813-9876-5432', 'img/wanda.jpg',
+    'Supervisor operasional.',
+    'Jl. Pemuda No. 7, Bekasi',
+    '2025-05-01 23:20:02'),
+  (8, 'Agus',           'Karyawan', 'karyawan123', 'agus@nagahtam.co.id',      '+62 813-9876-5432', 'img/budi.jpg',
+    'Operator produksi.',
+    'Jl. Raya Bogor No. 45, Depok',
+    '2025-05-01 23:20:02'),
+  (9, 'Lina Marlina',   'Karyawan', 'karyawan123', 'lina.marlina@nagahtam.co.id', '+62 812-1234-5678', 'img/lina.jpg',
+    'Manager divisi.',
+    'Jl. Sultan Iskandar Muda No. 8, Medan',
+    '2025-05-01 23:20:02'),
+  (10,'Rudi Hartanto',  'Karyawan', 'karyawan123', 'rudi.hartono@nagahtam.co.id', '+62 813-5678-9012', 'img/rudi.jpg',
+    'Staf gudang.',
+    'Jl. Bumi Raya No. 9, Palembang',
+    '2025-05-01 23:20:02');
 
 -- --------------------------------------------------------
 -- 2) Tabel `sisa_cuti`
