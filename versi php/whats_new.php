@@ -64,7 +64,8 @@ $shortDesc=nl2br(htmlspecialchars(substr($item['description'],0,$limit)));
         <?php if($isLong):?>
           <button id="read-more" class="btn btn-link p-0">Baca selengkapnya</button>
         <?php elseif(!empty($item['link'])):?>
-          <a href="<?=htmlspecialchars($item['link'])?>" class="btn btn-primary">Baca selengkapnya</a>
+    <a href="<?=htmlspecialchars($item['link'])?>" class="btn btn-link p-0">Baca selengkapnya</a>
+
         <?php endif;?>
         <!-- Tombol kembali tepat setelah teks -->
         <div>
