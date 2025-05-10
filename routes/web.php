@@ -25,10 +25,6 @@ route::get('/', function() {
     }
 });
 
-Route::get('/dashboard', function () {
-    return view('index.dashboard');
-});
-
 Route::get('/dashboard', [DashboardController::class, 'index']);
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);

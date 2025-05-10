@@ -1,45 +1,3 @@
-<?php
-// whats_new.php
-/*
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'naga_hytam');
-define('DB_USER', 'root');
-define('DB_PASS', '');
-
-$mysqli = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-if ($mysqli->connect_error) {
-    die("Connection failed: " . $mysqli->connect_error);
-}
-
-$id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-if ($id <= 0) {
-    die("Invalid ID.");
-}
-
-$stmt = $mysqli->prepare("SELECT id, title, date, image_url, description, link FROM news WHERE id = ?");
-$stmt->bind_param('i', $id);
-$stmt->execute();
-$result = $stmt->get_result();
-if ($result->num_rows !== 1) {
-    die("News item not found.");
-}
-$item = $result->fetch_assoc();
-
-$stmt->close();
-$mysqli->close();
-
-// Prepare description preview
-$fullDesc = nl2br(htmlspecialchars($item['description']));
-$previewLimit = 200;
-$rawDesc = htmlspecialchars($item['description']);
-if (strlen($rawDesc) > $previewLimit) {
-    $shortDesc = nl2br(htmlspecialchars(substr($item['description'], 0, $previewLimit)));
-    $isLong = true;
-} else {
-    $shortDesc = $fullDesc;
-    $isLong = false;
-}*/
-?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -86,9 +44,7 @@ if (strlen($rawDesc) > $previewLimit) {
     
     <!-- Tombol Home di bawah konten -->
     <div class="text-center mt-4">
-      <a href="/dashboard" class="btn btn-secondary">
-        <i class="bi bi-house-door-fill"></i> Home
-      </a>
+      <a href="/dashboard" class="back-text">&larr; Kembali ke Dashboard</a>
     </div>
   </div>
 

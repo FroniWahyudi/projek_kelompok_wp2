@@ -351,7 +351,7 @@
     <i class="bi bi-clock-history me-2"></i>Riwayat Cuti
   </a>
   <hr>
-  <a href="logout.php" class="d-block text-decoration-none text-danger">
+  <a href="/logout" class="d-block text-decoration-none text-danger">
     <i class="bi bi-box-arrow-right me-2"></i>Logout
   </a>
 </div>
@@ -374,7 +374,7 @@
 <nav class="sidebar">
   <h6 class="fw-bold text-uppercase">Divisi Karyawan</h6>
 
-  <a href="hr_dashboard.php" class="btn btn-outline-primary w-100 mb-2">
+  <a href="/hr_dashboard" class="btn btn-outline-primary w-100 mb-2">
     <i class="bi bi-person-circle me-1"></i> HR & Leader
   </a>
   <a href="manajemen_dashboard.php" class="btn btn-outline-primary w-100 mb-2">
