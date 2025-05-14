@@ -90,12 +90,13 @@
       padding: 0.5rem;
       border-radius: 0.5rem;
     }
-    .menu-item.news i {
-      background: #dcfce7;
-      color: #059669;
-      padding: 0.5rem;
-      border-radius: 0.5rem;
-    }
+  .menu-item.cuti i {
+  background: #dcfce7;   /* pastel green */
+  color: #059669;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+}
+
     .menu-item small {
       display: block;
       font-weight: 600;
@@ -173,31 +174,34 @@
     <div class="d-flex align-items-center">
       <img src="logo_brand.png" class="logo" alt="Logo Brand">
     </div>
-    <i class="bi bi-bell-fill icon-btn"></i>
+    <a href="dashboard_profil.php" class="d-block">
+    <img src="CJ.jpg" alt="Foto Profil" class="rounded-circle" style="width:32px; height:32px; object-fit:cover;">
+  </a>
   </div>
 
   <div class="main-content">
     <!-- Welcome -->
     <div class="welcome-section">
       <h6>Selamat datang,</h6>
-      <h5>Budi Santoso</h5>
+      <h5>Sutoyo dono</h5>
     </div>
 
     <!-- Menu -->
     <div class="menu-grid">
-      <div class="menu-item shift">
-        <i class="bi bi-clock-history"></i>
-        <small>Shift</small>
-      </div>
-      <div class="menu-item karyawan">
-        <i class="bi bi-person-circle"></i>
-        <small>Karyawan</small>
-      </div>
-      <div class="menu-item news">
-        <i class="bi bi-newspaper"></i>
-        <small>What's New</small>
-      </div>
-    </div>
+  <div class="menu-item shift">
+    <i class="bi bi-clock-history"></i>
+    <small>Shift</small>
+  </div>
+  <div class="menu-item karyawan">
+    <i class="bi bi-person-circle"></i>
+    <small>Karyawan</small>
+  </div>
+  <div class="menu-item cuti">
+    <i class="bi bi-calendar-check"></i>
+    <small>Daftar Pengajuan Cuti</small>
+  </div>
+</div>
+
 
     <!-- What's New -->
     <div class="section-news">
