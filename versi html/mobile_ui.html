@@ -2,203 +2,225 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>Dashboard Mobile</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Dashboard Mobile - Naga Hytam</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+        rel="stylesheet">
   <style>
     :root {
-      --menu-spacing: 1rem;
+      --menu-item-width: 100px;
+      --icon-size: 64px;
+      --news-card-width: 80%;
+      --news-card-height: 120px;
+      --bg-shift: #dbeafe;
+      --bg-karyawan: #fee2e2;
+      --bg-news: #dcfce7;
     }
-    body { background-color: #f8f9fa; color: #212529; padding-bottom: 70px; }
+    * { box-sizing: border-box; margin:0; padding:0; }
+    body {
+      font-family: sans-serif;
+      background: #f8f9fa;
+      color: #212529;
+      padding-bottom: 70px;
+    }
     .app-header {
-      background: #fff;
-      /* Tetapkan tinggi fixed agar logo tidak membuat header melebar */
-      height: 4.5rem;
-      /* Hapus padding vertikal, gunakan padding horizontal saja */
-      padding: 0 1rem;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-      /* Menyembunyikan bagian logo yang meluber jika lebih tinggi */
-      overflow: hidden;
+      position: fixed; top:0; left:0; right:0;
+      height:72px; background:#fff;
+      box-shadow:0 1px 3px rgba(0,0,0,0.1);
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0 1rem; z-index:1000;
     }
-    .app-header .logo {
-      /* Batasi logo mengikuti tinggi header */
-      height: 180px;
-      width: auto;
+    .app-header .logo { height:56px; }
+    .app-header .profile {
+      width:46px; height:46px;
+      border-radius:50%; object-fit:cover;
     }
-    .app-header .profile { height: 46px; width: 46px; border-radius: 50%; object-fit: cover; }
-    .menu-section { margin-top: calc(var(--menu-spacing) + 4rem); }
-    .menu-header { margin-top: var(--menu-spacing); margin-bottom: 0.25rem; padding: 0 0.5rem; }
-    .list-group { padding: 0 0.5rem; }
-    .menu-icon {
-      width: 48px;
-      height: 48px;
-      background: #0d6efd;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 0.5rem;
-      font-size: 1.2rem;
+    .menu-section { padding-top:72px; }
+    .menu-header {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0 1rem; margin-bottom:1rem;
     }
-    .card-news { display: flex; flex-direction: column; height: 100%; }
-    .card-news .card-img-top { aspect-ratio: 1 / 1; object-fit: cover; width: 100%; }
-    .card-news .card-body { padding: 0.5rem; flex-grow: 0; }
-    .card-news .card-body h6,
-    .card-news .card-body small { display: block; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
-    .card-news .card-body p {
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      margin: 0;
+    .menu-header h6 { font-size:1rem; }
+    .menu-header i { font-size:1.5rem; }
+    .menu-grid {
+      display:flex; justify-content:space-around;
+      padding:0 1rem;
+    }
+    .menu-grid a {
+      width:var(--menu-item-width);
+      text-decoration:none;
+      color:inherit;
+    }
+:root {
+  --icon-size: 100px;    /* ukuran kotak ikon */
+  --icon-padding: 1rem; /* padding seragam */
+}
+
+   .menu-icon {
+  width: var(--icon-size);
+  /* total tinggi = icon-size + 2 * padding */
+  height: calc(var(--icon-size) + (1 * var(--icon-padding)));
+  padding: var(--icon-padding);
+  margin: 0 auto;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+    /* Ikon berwarna sesuai role */
+    .menu-shift .menu-icon   { background: var(--bg-shift);   color: #0d6efd; }
+    .menu-karyawan .menu-icon { background: var(--bg-karyawan); color: #d90516; }
+    .menu-news .menu-icon     { background: var(--bg-news);     color: #059669; }
+
+    /* Ukuran ikon */
+    .menu-icon i {
+      font-size: calc(var(--icon-size) * 0.5);
+    }
+    /* Teks kecil bawah ikon */
+    .menu-icon small {
+      margin-top: 0.25em;
+      font-size: 0.85rem;
+      color: #000;          /* hitam */
+      font-style: normal;   /* non-italic */
+      line-height: 1;
+    }
+
+    .section-news {
+      margin-top: 2rem; padding:0 1rem;
+    }
+    .section-news h3 {
+      font-size:1.2rem; margin-bottom:1rem;
+    }
+    .news-scroll {
+      display:flex; gap:1rem;
+      overflow-x:auto; padding-bottom:1rem;
+    }
+    .news-card {
+      flex:0 0 var(--news-card-width);
+      height:200px;
+      background:#fff; border-radius:1rem;
+      box-shadow:0 2px 6px rgba(0,0,0,0.1);
+      display:flex; align-items:center; gap:1rem;
+      padding: 4rem;
+    }
+    .news-card img {
+      width:200px;
+      height:auto;
+      object-fit:cover; border-radius:0.5rem;
+      flex-shrink:0;
+    }
+    .news-card .content {
+      flex:1; display:flex; flex-direction:column;
+    }
+    .news-card h6 {
+      margin:0; font-size:1rem;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .news-card small {
+      color:#6c757d; font-size:0.8rem;
+    }
+    .news-card p {
+      margin:0; font-size:0.9rem; line-height:1.2;
+      display:-webkit-box; -webkit-line-clamp:2;
+      -webkit-box-orient:vertical; overflow:hidden;
+    }
+    .news-card .more {
+      margin-top:auto; text-align:right;
+      font-size:1.2rem; color:#6c757d;
     }
     .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: #fff;
-      border-top: 1px solid #dee2e6;
-      display: flex;
-      justify-content: space-around;
-      padding: 0.5rem 0;
-      z-index: 1000;
+      position:fixed; bottom:0; left:0; right:0;
+      background:#fff; border-top:1px solid #dee2e6;
+      display:flex; justify-content:space-around;
+      padding:0.5rem 0; z-index:1000;
     }
     .bottom-nav .nav-item {
-      text-align: center;
-      font-size: 0.75rem;
-      color: #495057;
+      text-align:center; font-size:0.75rem; color:#495057;
     }
     .bottom-nav .nav-item.active i,
     .bottom-nav .nav-item.active div {
-      color: #0d6efd;
-      font-weight: bold;
+      color:#0d6efd; font-weight:bold;
     }
   </style>
 </head>
 <body>
+
   <header class="app-header">
-    <img src="logo_brand.png" alt="Logo Brand" class="logo">
+    <img src="logo_brand.png" alt="Logo" class="logo">
     <img src="CJ.jpg" alt="Profile" class="profile">
   </header>
 
-  <main class="container-fluid menu-section">
-    <section class="menu-header d-flex align-items-center justify-content-between">
-      <h6 class="mb-0">Menu</h6>
+  <main class="menu-section">
+
+    <div class="menu-header">
+      <h6>Menu</h6>
       <i class="bi bi-list"></i>
-    </section>
-    <div class="list-group list-group-horizontal overflow-auto">
-      <a href="#" class="list-group-item list-group-item-action text-center">
-        <div class="menu-icon mx-auto mb-1"><i class="bi bi-journal-text"></i></div>
-        <small>Laporan Kerja</small>
+    </div>
+    <div class="menu-grid">
+      <a href="shift_karyawan.php" class="menu-shift">
+        <div class="menu-icon">
+          <i class="bi bi-clock-history"></i>
+          <small>Shift</small>
+        </div>
       </a>
-      <a href="#" class="list-group-item list-group-item-action text-center">
-        <div class="menu-icon mx-auto mb-1"><i class="bi bi-chat-dots"></i></div>
-        <small>Feedback</small>
+      <a href="karyawan_dashboard.php" class="menu-karyawan">
+        <div class="menu-icon">
+          <i class="bi bi-people-fill"></i>
+          <small>Karyawan</small>
+        </div>
       </a>
-      <a href="#" class="list-group-item list-group-item-action text-center">
-        <div class="menu-icon mx-auto mb-1"><i class="bi bi-clock-history"></i></div>
-        <small>Shift</small>
-      </a>
-      <a href="#" class="list-group-item list-group-item-action text-center">
-        <div class="menu-icon mx-auto mb-1"><i class="bi bi-people-fill"></i></div>
-        <small>Karyawan</small>
+      <a href="news.php" class="menu-news">
+        <div class="menu-icon">
+          <i class="bi bi-megaphone-fill"></i>
+          <small>What's New</small>
+        </div>
       </a>
     </div>
 
-    <section class="px-2 py-4">
-      <h3 class="mb-4">What's New</h3>
-      <div class="row g-2">
-        <div class="col-4">
-          <div class="card card-news shadow-sm">
-            <img src="karyawan_inovasi.png" class="card-img-top" alt="Inovasi">
-            <div class="card-body">
-              <h6 class="fw-bold small mb-1">Lorem Ipsum</h6>
-              <small class="text-muted">29 Juni 2025</small>
-              <p class="mb-0">Pengembangan produk inovatif yang sangat detail dan panjang abis, tapi akan terpotong.</p>
-            </div>
+    <section class="section-news">
+      <h3>What's New</h3>
+      <div class="news-scroll">
+        <div class="news-card">
+          <img src="karyawan_inovasi.png" alt="Inovasi">
+          <div class="content">
+            <h6>Lorem Ipsum</h6>
+            <small>29 Juni 2025</small>
+            <p>Pengembangan produk terbaru dan inovatif yang sangat detail.</p>
+            <div class="more"><i class="bi bi-chevron-right"></i></div>
           </div>
         </div>
-        <div class="col-4">
-          <div class="card card-news shadow-sm">
-            <img src="naik_jabatan.png" class="card-img-top" alt="Promosi">
-            <div class="card-body">
-              <h6 class="fw-bold small mb-1">Lorem Ipsum</h6>
-              <small class="text-muted">29 Juni 2025</small>
-              <p class="mb-0">Promosi jabatan untuk meningkatkan kinerja perusahaan dan manfaat lainnya yang banyak.</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-4">
-          <div class="card card-news shadow-sm">
-            <img src="rapat_kenaikan_harga.png" class="card-img-top" alt="Rapat">
-            <div class="card-body">
-              <h6 class="fw-bold small mb-1">Lorem Ipsum</h6>
-              <small class="text-muted">29 Juni 2025</small>
-              <p class="mb-0">Rapat Strategi Bisnis yang menganalisis kenaikan grafik penjualan bulan ini.</p>
-            </div>
-          </div>
-        </div>
-
-
-        <div class="col-4">
-          <div class="card card-news shadow-sm">
-            <img src="karyawan_inovasi.png" class="card-img-top" alt="Inovasi">
-            <div class="card-body">
-              <h6 class="fw-bold small mb-1">Lorem Ipsum</h6>
-              <small class="text-muted">29 Juni 2025</small>
-              <p class="mb-0">Pengembangan produk inovatif yang sangat detail dan panjang abis, tapi akan terpotong.</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-4">
-          <div class="card card-news shadow-sm">
-            <img src="naik_jabatan.png" class="card-img-top" alt="Promosi">
-            <div class="card-body">
-              <h6 class="fw-bold small mb-1">Lorem Ipsum</h6>
-              <small class="text-muted">29 Juni 2025</small>
-              <p class="mb-0">Promosi jabatan untuk meningkatkan kinerja perusahaan dan manfaat lainnya yang banyak.</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-4">
-          <div class="card card-news shadow-sm">
-            <img src="rapat_kenaikan_harga.png" class="card-img-top" alt="Rapat">
-            <div class="card-body">
-              <h6 class="fw-bold small mb-1">Lorem Ipsum</h6>
-              <small class="text-muted">29 Juni 2025</small>
-              <p class="mb-0">Rapat Strategi Bisnis yang menganalisis kenaikan grafik penjualan bulan ini.</p>
-            </div>
-          </div>
-        </div>
+        <!-- Duplikasi .news-card sesuai data -->
       </div>
     </section>
+
   </main>
 
   <nav class="bottom-nav">
-    <div class="nav-item active"><i class="bi bi-house-fill fs-4"></i><div>Home</div></div>
-    <div class="nav-item" data-bs-toggle="modal" data-bs-target="#searchModal"><i class="bi bi-search fs-4"></i><div>Explore</div></div>
-    <div class="nav-item"><i class="bi bi-person-fill fs-4"></i><div>Profile</div></div>
+    <div class="nav-item active">
+      <i class="bi bi-house-fill fs-4"></i><div>Home</div>
+    </div>
+    <div class="nav-item" data-bs-toggle="modal" data-bs-target="#searchModal">
+      <i class="bi bi-search fs-4"></i><div>Explore</div>
+    </div>
+    <div class="nav-item">
+      <i class="bi bi-person-fill fs-4"></i><div>Profile</div>
+    </div>
   </nav>
 
-  <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+  <div class="modal fade" id="searchModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="searchModalLabel">Search</h5>
+          <h5 class="modal-title">Explore</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
-          <input type="text" class="form-control" placeholder="Cari...">
+          <input type="text" class="form-control" placeholder="Cari…">
         </div>
       </div>
     </div>
