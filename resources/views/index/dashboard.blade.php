@@ -268,19 +268,19 @@
     <ul class="dropdown-menu" aria-labelledby="mobileMenu">
       <li><h6 class="dropdown-header">Divisi Karyawan</h6></li>
       <li>
-        <a class="dropdown-item" href="hr_dashboard.php">
+        <a class="dropdown-item" href="hr">
           <i class="bi bi-person-circle me-1"></i>
           HR
         </a>
       </li>
       <li>
-        <a class="dropdown-item" href="manajemen_dashboard.php">
+        <a class="dropdown-item" href="manajemen">
           <i class="bi bi-people-fill me-1"></i>
           Manajemen
         </a>
       </li>
       <li>
-        <a class="dropdown-item" href="karyawan_dashboard.php">
+        <a class="dropdown-item" href="karyawan">
           <i class="bi bi-people-fill me-1"></i>
           Karyawan
         </a>
@@ -374,13 +374,13 @@
 <nav class="sidebar">
   <h6 class="fw-bold text-uppercase">Divisi Karyawan</h6>
 
-  <a href="/hr_dashboard" class="btn btn-outline-primary w-100 mb-2">
+  <a href="hr" class="btn btn-outline-primary w-100 mb-2">
     <i class="bi bi-person-circle me-1"></i> HR & Leader
   </a>
-  <a href="manajemen_dashboard.php" class="btn btn-outline-primary w-100 mb-2">
+  <a href="manajemen" class="btn btn-outline-primary w-100 mb-2">
     <i class="bi bi-people-fill me-1"></i> Manajemen
   </a>
-  <a href="karyawan_dashboard.php" class="btn btn-outline-primary w-100 mb-2">
+  <a href="karyawan" class="btn btn-outline-primary w-100 mb-2">
     <i class="bi bi-people-fill me-1"></i> Karyawan
   </a>
 
@@ -480,7 +480,7 @@
       } 
       // Jika desktop, redirect ke halaman profil
       else if (w > 765) {
-        window.location.href = 'dashboard_profil.php';
+        window.location.href = 'dashboard_profil';
       }
     });
 

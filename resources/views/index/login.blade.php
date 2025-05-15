@@ -94,9 +94,9 @@
         </div>
 
         @if ($errors->any())
-            <div style="color:red;">
+            <div class="alert alert-danger">
                 @foreach ($errors->all() as $error)
-                    <p>{{ $error }}</p>
+                    {{ $error }}
                 @endforeach
             </div>
         @endif

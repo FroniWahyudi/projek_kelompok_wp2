@@ -1,34 +1,3 @@
-<?php
-session_start();
-
-// Redirect jika belum login
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
-    exit();
-}
-
-// Koneksi ke database
-$host = 'localhost';
-$user = 'root';
-$pass = '';
-$db   = 'naga_hytam';
-
-$conn = new mysqli($host, $user, $pass, $db);
-if ($conn->connect_error) {
-    die("Koneksi gagal: " . $conn->connect_error);
-}
-
-$user_id = $_SESSION['user_id'];
-
-// Ambil data user
-$query = "SELECT * FROM users WHERE id = ?";
-$stmt  = $conn->prepare($query);
-$stmt->bind_param("i", $user_id);
-$stmt->execute();
-$result = $stmt->get_result();
-$user   = $result->fetch_assoc();
-?>
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -58,9 +27,9 @@ $user   = $result->fetch_assoc();
     <aside class="sidebar">
       <h2>Profil</h2>
       <nav class="nav flex-column">
-        <a class="nav-link" href="dashboard.php"> <i class="fas fa-home"></i> Home</a>
-        <a class="nav-link active" href="dashboard_profil.php"><i class="fas fa-user"></i>Profil Saya</a>
-        <a class="nav-link" href="ganti_password.php"><i class="fas fa-key"></i>Ganti Password</a>
+        <a class="nav-link" href="{{ url('dashboard') }}"> <i class="fas fa-home"></i> Home</a>
+        <a class="nav-link active" href="{{ url('dashboard_profil') }}"><i class="fas fa-user"></i>Profil Saya</a>
+        <a class="nav-link" href="{{ url('ganti_password') }}"><i class="fas fa-key"></i>Ganti Password</a>
       </nav>
     </aside>
 
@@ -70,23 +39,23 @@ $user   = $result->fetch_assoc();
         <h1>Profil Saya</h1>
       </div>
       <section>
-  <div class="bg-white p-4 rounded shadow-sm text-center">
-    <img src="<?= htmlspecialchars($user['photo_url']) ?>" alt="Foto Profil" style="width:120px; height:120px; object-fit:cover; border-radius:50%; margin-bottom:1rem;">
-    <h3><?= htmlspecialchars($user['name']) ?></h3>
-    <hr>
-    <div class="text-start">
-      <p><strong>Email:</strong> <?= htmlspecialchars($user['email']) ?></p>
-      <p><strong>Telepon:</strong> <?= htmlspecialchars($user['phone']) ?></p>
-      <p><strong>Jabatan:</strong> <?= htmlspecialchars($user['role']) ?></p>
-      <p><strong>Bio:</strong> <?= htmlspecialchars($user['bio']) ?></p>
-    </div>
-    <div class="text-end mt-3">
-      <a href="edit_profil.php?id=<?= $user_id ?>" class="btn btn-primary">
-        <i class="fas fa-pen"></i> Edit Profil
-      </a>
-    </div>
-  </div>
-</section>
+        <div class="bg-white p-4 rounded shadow-sm text-center">
+          <img src="{{ asset($user->photo_url) }}" alt="Foto Profil" style="width:120px; height:120px; object-fit:cover; border-radius:50%; margin-bottom:1rem;">
+          <h3>{{ $user->name }}</h3>
+          <hr>
+          <div class="text-start">
+            <p><strong>Email:</strong> {{ $user->email }}</p>
+            <p><strong>Telepon:</strong> {{ $user->phone }}</p>
+            <p><strong>Jabatan:</strong> {{ $user->role }}</p>
+            <p><strong>Bio:</strong> {{ $user->bio }}</p>
+          </div>
+          <div class="text-end mt-3">
+            <a href="{{ url('edit_profil/' . $user->id) }}" class="btn btn-primary">
+              <i class="fas fa-pen"></i> Edit Profil
+            </a>
+          </div>
+        </div>
+      </section>
     </main>
   </div>
 

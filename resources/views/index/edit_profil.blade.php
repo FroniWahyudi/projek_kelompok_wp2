@@ -1,55 +1,3 @@
-<?php
-session_start();
-
-// Redirect jika belum login
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
-    exit();
-}
-
-// Koneksi ke database
-$host = 'localhost';
-$user = 'root';
-$pass = '';
-$db   = 'naga_hytam';
-
-$conn = new mysqli($host, $user, $pass, $db);
-if ($conn->connect_error) {
-    die("Koneksi gagal: " . $conn->connect_error);
-}
-
-$user_id = $_SESSION['user_id'];
-
-// Proses jika form disubmit
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name       = $_POST['name'];
-    $email      = $_POST['email'];
-    $phone      = $_POST['phone'];
-    $role       = $_POST['role'];
-    $bio        = $_POST['bio'];
-    $photo_url  = $_POST['photo_url'];
-
-    $query = "UPDATE users SET name=?, email=?, phone=?, role=?, bio=?, photo_url=? WHERE id=?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("ssssssi", $name, $email, $phone, $role, $bio, $photo_url, $user_id);
-
-    if ($stmt->execute()) {
-        header("Location: dashboard_profil.php");
-        exit();
-    } else {
-        echo "Gagal memperbarui profil: " . $stmt->error;
-    }
-}
-
-// Ambil data user
-$query = "SELECT * FROM users WHERE id = ?";
-$stmt  = $conn->prepare($query);
-$stmt->bind_param("i", $user_id);
-$stmt->execute();
-$result = $stmt->get_result();
-$user   = $result->fetch_assoc();
-?>
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -79,10 +27,10 @@ $user   = $result->fetch_assoc();
     <aside class="sidebar">
       <h2>Profil</h2>
       <nav class="nav flex-column">
-        <a class="nav-link" href="dashboard_profil.php"><i class="fas fa-user"></i>Profil Saya</a>
-        <a class="nav-link active" href="#"><i class="fas fa-pen"></i>Edit Profil</a>
-        <a class="nav-link" href="ganti_password.php"><i class="fas fa-key"></i>Ganti Password</a>
-        <a class="nav-link" href="dashboard.php"><i class="fas fa-right-from-bracket"></i>Keluar</a>
+        <a class="nav-link" href="{{ url('dashboard_profil') }}"><i class="fas fa-user"></i> Profil Saya</a>
+        <a class="nav-link active" href="#"><i class="fas fa-pen"></i> Edit Profil</a>
+        <a class="nav-link" href="{{ url('ganti_password') }}"><i class="fas fa-key"></i> Ganti Password</a>
+        <a class="nav-link" href="{{ url('dashboard') }}"><i class="fas fa-right-from-bracket"></i> Keluar</a>
       </nav>
     </aside>
 
@@ -93,51 +41,62 @@ $user   = $result->fetch_assoc();
       </div>
       <section>
         <div class="bg-white p-4 rounded shadow-sm">
-          <form method="post" autocomplete="off">
+          <form method="POST" action="{{ route('profil.update', $user->id) }}" autocomplete="off">
+            @csrf
+            @method('PUT')
+
             <div class="text-center mb-4">
-              <img src="<?= htmlspecialchars($user['photo_url']) ?>" alt="Foto Profil" style="width:120px; height:120px; object-fit:cover; border-radius:50%;">
+              <img src="{{ asset($user->photo_url) }}" alt="Foto Profil" style="width:120px; height:120px; object-fit:cover; border-radius:50%;">
             </div>
 
             <div class="row mb-3">
               <label class="col-sm-2 col-form-label">Nama</label>
               <div class="col-sm-10">
-                <input type="text" name="name" class="form-control" value="<?= htmlspecialchars($user['name']) ?>" required>
+                <input type="text" name="name" class="form-control" value="{{ old('name', $user->name) }}" required>
               </div>
             </div>
             <div class="row mb-3">
               <label class="col-sm-2 col-form-label">Email</label>
               <div class="col-sm-10">
-                <input type="email" name="email" class="form-control" value="<?= htmlspecialchars($user['email']) ?>" required>
+                <input type="email" name="email" class="form-control" value="{{ old('email', $user->email) }}" required>
               </div>
             </div>
+            <!--
+            <div class="row mb-3">
+              <label class="col-sm-2 col-form-label">Password</label>
+              <div class="col-sm-10">
+                <input type="password" name="password" class="form-control" value="{{ old('password', $user->password) }}" required>
+              </div>
+            </div>
+            -->
             <div class="row mb-3">
               <label class="col-sm-2 col-form-label">Telepon</label>
               <div class="col-sm-10">
-                <input type="text" name="phone" class="form-control" value="<?= htmlspecialchars($user['phone']) ?>" required>
+                <input type="text" name="phone" class="form-control" value="{{ old('phone', $user->phone) }}" required>
               </div>
             </div>
             <div class="row mb-3">
               <label class="col-sm-2 col-form-label">Jabatan</label>
               <div class="col-sm-10">
-                <input type="text" name="role" class="form-control" value="<?= htmlspecialchars($user['role']) ?>" required>
+                <input type="text" name="role" class="form-control" value="{{ old('role', $user->role) }}" required>
               </div>
             </div>
             <div class="row mb-3">
               <label class="col-sm-2 col-form-label">Bio</label>
               <div class="col-sm-10">
-                <textarea name="bio" class="form-control" rows="4" required><?= htmlspecialchars($user['bio']) ?></textarea>
+                <textarea name="bio" class="form-control" rows="4" required>{{ old('bio', $user->bio) }}</textarea>
               </div>
             </div>
             <div class="row mb-4">
               <label class="col-sm-2 col-form-label">URL Foto</label>
               <div class="col-sm-10">
-                <input type="text" name="photo_url" class="form-control" value="<?= htmlspecialchars($user['photo_url']) ?>">
+                <input type="text" name="photo_url" class="form-control" value="{{ old('photo_url', $user->photo_url) }}">
                 <small class="text-muted">Masukkan path gambar (contoh: img/user.jpg)</small>
               </div>
             </div>
             <div class="text-end">
               <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Simpan Perubahan</button>
-              <a href="dashboard_profil.php" class="btn btn-secondary ms-2"><i class="fas fa-arrow-left"></i> Batal</a>
+              <a href="{{ url('dashboard_profil') }}" class="btn btn-secondary ms-2"><i class="fas fa-arrow-left"></i> Batal</a>
             </div>
           </form>
         </div>

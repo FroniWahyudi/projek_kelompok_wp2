@@ -1,21 +1,14 @@
-<?php
-// Koneksi ke database
-$mysqli = new mysqli("localhost", "root", "", "naga_hytam");
-if ($mysqli->connect_errno) {
-    die("Gagal koneksi ke database: " . $mysqli->connect_error);
-}
-
-// Ambil data semua user dengan role HR atau Leader
-$result = $mysqli->query("SELECT name, role, email, phone, photo_url, bio FROM users WHERE role LIKE 'HR%' OR role LIKE 'Leader%'");
-?>
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>HR & Leader Dashboard - Naga Hytam Sejahtera Abadi</title>
-  <link rel="stylesheet" href="bootstrap-5.3.5-dist/css/bootstrap.min.css">
+  @vite([
+      'resources/js/app.js',
+      'resources/sass/app.scss',
+      'resources/css/app.css'
+      ])
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
   <style>
     body {
@@ -57,7 +50,7 @@ $result = $mysqli->query("SELECT name, role, email, phone, photo_url, bio FROM u
 <!-- Header -->
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
   <div class="container-fluid">
-    <a href="dashboard.php" class="btn btn-primary me-3">
+    <a href="{{ url('dashboard') }}" class="btn btn-primary me-3">
       <i class="bi bi-house-door-fill me-1"></i> Home
     </a>
     <a class="navbar-brand" href="#">HR & Leader Dashboard</a>
@@ -67,8 +60,8 @@ $result = $mysqli->query("SELECT name, role, email, phone, photo_url, bio FROM u
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
         <li class="nav-item"><a class="nav-link active" href="#">HR</a></li>
-        <li class="nav-item"><a class="nav-link" href="manajemen_dashboard.php">Manajemen</a></li>
-        <li class="nav-item"><a class="nav-link" href="karyawan_dashboard.php">Karyawan</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url('manajemen') }}">Manajemen</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url('karyawan') }}">Karyawan</a></li>
       </ul>
     </div>
   </div>
@@ -79,27 +72,26 @@ $result = $mysqli->query("SELECT name, role, email, phone, photo_url, bio FROM u
   <h3 class="mb-4">Divisi HR & Leader</h3>
   <div class="row g-3">
 
-    <?php while ($row = $result->fetch_assoc()): ?>
+    @foreach ($users as $user)
       <div class="col-sm-6 col-lg-4">
         <div class="hr-card d-flex flex-column h-100">
           <div class="d-flex mb-3">
-            <img src="<?= htmlspecialchars($row['photo_url']) ?>" alt="Foto <?= htmlspecialchars($row['name']) ?>" class="profile-photo me-3">
+            <img src="{{ asset($user->photo_url) }}" alt="Foto {{ $user->name }}" class="profile-photo me-3">
             <div>
-              <h5 class="mb-1"><?= htmlspecialchars($row['name']) ?></h5>
-              <p class="mb-1"><strong>Jabatan:</strong> <?= htmlspecialchars($row['role']) ?></p>
-              <p class="mb-1"><strong>Email:</strong> <?= htmlspecialchars($row['email']) ?></p>
-              <p class="mb-1"><strong>Telepon:</strong> <?= htmlspecialchars($row['phone']) ?></p>
+              <h5 class="mb-1">{{ $user->name }}</h5>
+              <p class="mb-1"><strong>Jabatan:</strong> {{ $user->role }}</p>
+              <p class="mb-1"><strong>Email:</strong> {{ $user->email }}</p>
+              <p class="mb-1"><strong>Telepon:</strong> {{ $user->phone }}</p>
             </div>
           </div>
-          <p class="mb-0"><?= htmlspecialchars($row['bio']) ?></p>
+          <p class="mb-0">{{ $user->bio }}</p>
         </div>
       </div>
-    <?php endwhile; ?>
+    @endforeach
 
   </div>
 </div>
 
-<script src="bootstrap-5.3.5-dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ asset('bootstrap-5.3.5-dist/js/bootstrap.bundle.min.js') }}"></script>
 </body>
 </html>
-<?php $mysqli->close(); ?>
