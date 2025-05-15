@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What’s New - Pembaruan Sistem Tracking Barang</title>
+  <link rel="stylesheet" href="bootstrap-5.3.5-dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <style>
+    @media (max-width: 765px) {
+      h2 {
+        font-size: 1.5rem;
+      }
+
+      .card-title {
+        font-size: 1.1rem;
+      }
+
+      .card-body ul,
+      .card-body ol {
+        padding-left: 1.2rem;
+      }
+
+      .text-muted {
+        font-size: 0.9rem;
+      }
+
+      img.responsive-img {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+      }
+
+      .btn {
+        width: 100%;
+        margin-bottom: 1rem;
+      }
+
+      .navbar-brand {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">What’s New</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">
+              <i class="bi bi-house-door-fill me-1"></i> Home
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="whats_new.html">What’s New</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="hr_dashboard.html">HR Dashboard</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  
+
+  <!-- Main Content -->
+  <div class="container py-4">
+    <h2 class="mb-3">Pembaruan Sistem Tracking Barang</h2>
+    <p class="text-muted">Tanggal Rilis: 29 Juni 2025</p>
+    <div class="card shadow-sm">
+      <div class="text-center mt-3 px-2">
+        <img src="pembaruan_sistem_tracking.png" class="img-fluid rounded responsive-img" alt="Ilustrasi sistem tracking barang terbaru">
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">Fitur Baru dan Perbaikan</h5>
+        <ul>
+          <li><strong>Peningkatan Akurasi Lokasi:</strong> Kini hingga radius 10 meter, berkat integrasi GIS.</li>
+          <li><strong>Notifikasi Real-time:</strong> Melalui email dan SMS saat status berubah.</li>
+          <li><strong>Dashboard Visual:</strong> Grafik heatmap untuk pantauan rute per wilayah.</li>
+          <li><strong>Optimasi API:</strong> Lebih cepat 50% lewat caching dan load balancing.</li>
+          <li><strong>UI/UX Improved:</strong> Peta interaktif dan tampilan mobile friendly.</li>
+        </ul>
+
+        <h5 class="card-title mt-4">Cara Menggunakan</h5>
+        <ol>
+          <li>Buka menu <em>Tracking</em> di sidebar dashboard.</li>
+          <li>Pilih nomor resi atau scan QR code.</li>
+          <li>Lihat detail rute di peta atau daftar status.</li>
+          <li>Aktifkan notifikasi:
+            <ul>
+              <li>Masuk ke <em>Settings > Notifikasi</em>.</li>
+              <li>Pilih Email/SMS, lalu simpan.</li>
+            </ul>
+          </li>
+        </ol>
+
+        <h5 class="card-title mt-4">Feedback & Dukungan</h5>
+        <p>Untuk bug atau saran fitur, hubungi <a href="mailto:it.support@nagahtam.co.id">it.support@nagahtam.co.id</a> atau buka <a href="support.html">Portal Dukungan</a>.</p>
+
+        <a href="index.html" class="btn btn-secondary mt-3"><i class="bi bi-arrow-left me-1"></i>Kembali ke Home</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="bootstrap-5.3.5-dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
