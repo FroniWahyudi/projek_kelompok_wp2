@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profil - Sutoyo Dono</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Helvetica Neue', sans-serif;
+    }
+    .sidebar {
+      width: 250px;
+      background: #f0f3f5;
+      height: 100vh;
+      padding: 30px 20px;
+      position: fixed;
+    }
+    .sidebar img {
+      width: 100px;
+      border-radius: 50%;
+    }
+    .sidebar h4 {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    .sidebar a {
+      text-decoration: none;
+      color: black;
+      display: block;
+      padding: 8px 0;
+      font-size: 14px;
+    }
+    .sidebar a.active, .sidebar a:hover {
+      color: #007bff;
+      font-weight: bold;
+    }
+    .main-content {
+      margin-left: 270px;
+      padding: 100px 50px;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+    }
+    .main-content h1 {
+      font-size: 3rem;
+      font-weight: 700;
+    }
+    .main-content p {
+      font-size: 1rem;
+      color: #555;
+    }
+    .main-content img {
+      max-height: 500px;
+      width: auto;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar text-center">
+    <img src="img/sutoyo.jpg" alt="Sutoyo Dono">
+    <h4>Sutoyo Dono</h4>
+    <p><a href="#" class="text-primary">Manajer</a></p>
+    <nav>
+      <a href="#" class="active">HOME</a>
+      <a href="#">TENTANG</a>
+      <a href="#">LAYANAN</a>
+      <a href="#">KONTAK</a>
+    </nav>
+    <footer class="mt-5">
+      <small>
+        Email: sutoyo@nagahtam.co.id<br>
+        Telepon: +62 812-1234-5678<br>
+        Alamat: Jl. Diponegoro No. 20, Semarang<br>
+        Diperbarui: 2025-05-02 05:41:16
+      </small>
+    </footer>
+  </div>
+  <div class="main-content d-flex justify-content-between">
+    <div>
+      <h1>Saya<br><span class="fw-bold">Sutoyo Dono</span></h1>
+      <p>Pengambilan keputusan strategis.<br>Email: <a href="mailto:sutoyo@nagahtam.co.id" class="text-primary">sutoyo@nagahtam.co.id</a></p>
+      <a href="#" class="btn btn-outline-dark mt-3">LIHAT PORTOFOLIO</a>
+    </div>
+    <div>
+      <img src="img/sutoyo.jpg" alt="Sutoyo Dono">
+    </div>
+  </div>
+</body>
+</html>
