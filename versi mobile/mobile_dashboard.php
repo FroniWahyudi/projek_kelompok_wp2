@@ -189,7 +189,7 @@
 
    <!-- Menu -->
 <div class="menu-grid">
-  <a href="mobile_shift.html" class="menu-item shift text-decoration-none text-center">
+  <a href="mobile_shift.php" class="menu-item shift text-decoration-none text-center">
     <i class="bi bi-clock-history fs-2"></i>
     <small class="d-block mt-1">Shift</small>
   </a>
