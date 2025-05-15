@@ -197,7 +197,7 @@
     <i class="bi bi-person-circle fs-2"></i>
     <small class="d-block mt-1">Karyawan</small>
   </a>
-  <a href="cuti.php" class="menu-item cuti text-decoration-none text-center">
+  <a href="mobile_cuti.php" class="menu-item cuti text-decoration-none text-center">
     <i class="bi bi-calendar-check fs-2"></i>
     <small class="d-block mt-1">Daftar Cuti</small>
   </a>
@@ -266,7 +266,7 @@
 
   <!-- Bottom Navigation -->
 <nav class="bottom-nav">
-  <a href="mobile_dashboard.html" class="nav-item active text-decoration-none">
+  <a href="mobile_dashboard.php" class="nav-item active text-decoration-none">
     <i class="bi bi-house-fill"></i>
     Home
   </a>
