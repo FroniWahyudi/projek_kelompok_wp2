@@ -1,91 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Profil - Sutoyo Dono</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dalya Baron</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
   <style>
-    body {
-      font-family: 'Helvetica Neue', sans-serif;
+    .profile-img {
+      width: 370px;
+      height: 370px;
+      object-fit: cover;
     }
-    .sidebar {
-      width: 250px;
-      background: #f0f3f5;
-      height: 100vh;
-      padding: 30px 20px;
-      position: fixed;
-    }
-    .sidebar img {
-      width: 100px;
+
+    .circle-btn {
+      width: 80px;
+      height: 80px;
       border-radius: 50%;
-    }
-    .sidebar h4 {
-      margin-top: 15px;
-      font-weight: bold;
-    }
-    .sidebar a {
-      text-decoration: none;
-      color: black;
-      display: block;
-      padding: 8px 0;
-      font-size: 14px;
-    }
-    .sidebar a.active, .sidebar a:hover {
-      color: #007bff;
-      font-weight: bold;
-    }
-    .main-content {
-      margin-left: 270px;
-      padding: 100px 50px;
-      min-height: 100vh;
       display: flex;
       align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-weight: bold;
     }
-    .main-content h1 {
-      font-size: 3rem;
-      font-weight: 700;
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      background-color: #00c8c8;
+      border-radius: 50%;
     }
-    .main-content p {
-      font-size: 1rem;
-      color: #555;
+
+    /* custom footer spacing */
+    .footer .info-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 5.5rem; /* jarak antar item */
     }
-    .main-content img {
-      max-height: 500px;
-      width: auto;
-      border-radius: 10px;
-    }
+
+    #my-footer {
+  /* hilangkan dulu border-top bawaan Bootstrap */
+  border-top: none;
+  /* pasang garis baru: 2px solid abu-abu */
+  border-top: 2px solid #dee2e6;
+  /* atur panjang garis: misal 60% dari lebar kontainer */
+  width: 100%;
+  /* center-kan */
+  margin: 0 auto;
+  /* padding atas dan bawah tetap */
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.nama h1{
+  font-weight: bolder;
+}
   </style>
 </head>
-<body>
-  <div class="sidebar text-center">
-    <img src="img/sutoyo.jpg" alt="Sutoyo Dono">
-    <h4>Sutoyo Dono</h4>
-    <p><a href="#" class="text-primary">Manajer</a></p>
-    <nav>
-      <a href="#" class="active">HOME</a>
-      <a href="#">TENTANG</a>
-      <a href="#">LAYANAN</a>
-      <a href="#">KONTAK</a>
-    </nav>
-    <footer class="mt-5">
-      <small>
-        Email: sutoyo@nagahtam.co.id<br>
-        Telepon: +62 812-1234-5678<br>
-        Alamat: Jl. Diponegoro No. 20, Semarang<br>
-        Diperbarui: 2025-05-02 05:41:16
-      </small>
+<body class="bg-light">
+
+  <nav class="navbar navbar-light bg-white px-4 py-3 border-bottom">
+    <span class="navbar-brand mb-0 h5 d-flex align-items-center">
+      <div class="dot me-2 nama"></div> Sutoyo dono
+    </span>
+    <span class="text-muted">Manajer</span>
+    <div class="ms-auto">
+      <a href="#" class="mx-2 text-decoration-none text-dark">Manajer</a>
+      <a href="#" class="mx-2 text-decoration-none text-dark">Admin</a>
+      <a href="#" class="mx-2 text-decoration-none text-dark">Leader</a>
+      <a href="#" class="mx-2 text-decoration-none text-dark">Operator</a>
+    </div>
+  </nav>
+
+ <div class="container mt-5">
+  <div class="row align-items-center">
+    <!-- Foto Profil Besar -->
+    <div class="col-md-5 text-center mb-4 mb-md-0">
+      <img
+        src="CJ.jpg"
+        class="rounded-circle profile-img"
+        alt="Dalya Baron"
+      >
+    </div>
+    <!-- Teks di Samping Foto -->
+    <div class="col-md-7 nama">
+      <h1>Sutoyo Dono</h1>
+      <h5 class="text-muted">Tentang Saya</h5>
+      <p>
+        Saya adalah Kepala Gudang di PT Nagahtam Sejahtera Abadi, bertugas memastikan penerimaan, penyimpanan,<br>
+        dan pengeluaran barang berjalan akurat dan tepat waktu;<br>
+        Saya juga mengelola sistem inventaris, melakukan stock-take berkala,<br>
+        serta berkoordinasi dengan divisi logistik dan pembelian untuk efisiensi rantai pasok.
+      </p>
+    </div>
+  </div>
+</div>
+
+
+    <footer class="footer mt-5 pt-4" id="my-footer">
+      <div class="container">
+        <!-- Baris info horizontal dengan gap kustom -->
+        <div class="info-list mb-2">
+          <div>
+            <strong>Nama<br></strong>
+            Sutoyo Dono
+          </div>
+          <div>
+            <strong>Jabatan<br></strong>
+            Manajer
+          </div>
+          <div>
+            <strong>Email<br></strong>
+            sutoyo@nagahtam.co.id
+          </div>
+          <div>
+            <strong>Telepon<br></strong>
+            +62 812-1234-5678
+          </div>
+          <div>
+            <strong>Alamat<br></strong>
+            Jl. Diponegoro No. 20, Semarang
+          </div>
+        </div>
+        <!-- Copyright -->
+        <div class="text-center text-muted small mt-3">
+          © 2025 by Naga Hytam Sejahtera Abadi
+        </div>
+      </div>
     </footer>
+
   </div>
-  <div class="main-content d-flex justify-content-between">
-    <div>
-      <h1>Saya<br><span class="fw-bold">Sutoyo Dono</span></h1>
-      <p>Pengambilan keputusan strategis.<br>Email: <a href="mailto:sutoyo@nagahtam.co.id" class="text-primary">sutoyo@nagahtam.co.id</a></p>
-      <a href="#" class="btn btn-outline-dark mt-3">LIHAT PORTOFOLIO</a>
-    </div>
-    <div>
-      <img src="img/sutoyo.jpg" alt="Sutoyo Dono">
-    </div>
-  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
