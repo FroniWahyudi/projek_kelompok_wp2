@@ -173,10 +173,10 @@
   <!-- Header -->
   <div class="app-header">
     <div class="d-flex align-items-center">
-      <img src="logo_brand.png" class="logo" alt="Logo Brand">
+      <img src="img/logo_brand.png" class="logo" alt="Logo Brand">
     </div>
     <a href="dashboard_profil.php" class="d-block">
-    <img src="CJ.jpg" alt="Foto Profil" class="rounded-circle" style="width:32px; height:32px; object-fit:cover;">
+    <img src="img/CJ.jpg" alt="Foto Profil" class="rounded-circle" style="width:32px; height:32px; object-fit:cover;">
   </a>
   </div>
 
@@ -214,7 +214,7 @@
 
   <!-- News Card 1 -->
 <div class="card-news">
-  <img src="karyawan_inovasi.png" alt="Series X"
+  <img src="img/karyawan_inovasi.png" alt="Series X"
        style="width:100%; height:180px; object-fit:cover; border-radius: 1rem 1rem 0 0;">
   <div class="card-body">
     <div class="d-flex align-items-center mb-2">
@@ -230,7 +230,7 @@
 
 <!-- News Card 2 -->
 <div class="card-news">
-  <img src="peningkatan_gudang.png" alt="Kantor Baru"
+  <img src="img/peningkatan_gudang.png" alt="Kantor Baru"
        style="width:100%; height:180px; object-fit:cover; border-radius: 1rem 1rem 0 0;">
   <div class="card-body">
     <div class="d-flex align-items-center mb-2">
@@ -246,7 +246,7 @@
 
 <!-- News Card 3 -->
 <div class="card-news">
-  <img src="rapat_kenaikan_harga.png" alt="Workflow Tips"
+  <img src="img/rapat_kenaikan_harga.png" alt="Workflow Tips"
        style="width:100%; height:180px; object-fit:cover; border-radius: 1rem 1rem 0 0;">
   <div class="card-body">
     <div class="d-flex align-items-center mb-2">
