@@ -193,7 +193,7 @@
     <i class="bi bi-clock-history fs-2"></i>
     <small class="d-block mt-1">Shift</small>
   </a>
-  <a href="karyawan.php" class="menu-item karyawan text-decoration-none text-center">
+  <a href="mobile_karyawan.php" class="menu-item karyawan text-decoration-none text-center">
     <i class="bi bi-person-circle fs-2"></i>
     <small class="d-block mt-1">Karyawan</small>
   </a>
