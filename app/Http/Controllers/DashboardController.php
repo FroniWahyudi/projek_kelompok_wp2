@@ -6,6 +6,7 @@ use App\Models\News;
 use App\Models\User;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class DashboardController extends Controller
 {
@@ -49,12 +50,20 @@ class DashboardController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'phone' => 'required|string|max:20',
+            'password' => 'nullable|min:4|confirmed',
             'role' => 'required|string|max:100',
             'bio' => 'required|string',
             'photo_url' => 'nullable|string|max:255'
         ]);
 
-        $user->update($validated);
+        if ($request->filled('password')) {
+            $validated['password'] = Hash::make($request->password);
+        } else {
+            unset($validated['password']);
+        }
+
+        $user->fill($validated);
+        $user->save();
 
         return redirect()->route('profil.edit', $user->id)->with('success', 'Profil berhasil diperbarui.');
     }

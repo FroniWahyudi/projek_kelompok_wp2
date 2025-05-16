@@ -2,8 +2,14 @@
 namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use App\Models\SisaCuti;
 use App\Models\User;
 use App\Models\News;
+use App\Models\CutiRequest;
+use App\Models\CutiLogs;
+
+use function Symfony\Component\String\s;
 
 class DatabaseSeeder extends Seeder
 {
@@ -149,5 +155,101 @@ class DatabaseSeeder extends Seeder
             'description' => 'Aplikasi mobile terbaru telah diluncurkan dengan fitur lengkap: pelaporan harian lokasi kerja dilengkapi foto dan tanda tangan elektronik, notifikasi push untuk tugas mendesak, serta dashboard ringkas yang menampilkan KPI harian dan progres target. Mode offline memungkinkan pengguna bekerja di area tanpa sinyal, dengan data tersinkronisasi otomatis begitu koneksi kembali terhubung. Integrasi API real-time ke sistem ERP perusahaan memastikan bahwa setiap laporan lapangan tercatat dalam modul keuangan dan logistik tanpa delay. Uji coba internal menunjukkan peningkatan efisiensi pelaporan hingga 50% dan tingkat adopsi karyawan mencapai 90% dalam minggu pertama penggunaan.',
             'link' => 'Null',
         ]);
+
+        CutiRequest::create([
+            'user_id' => 7,
+            'tanggal_pengajuan' => '2025-05-04',
+            'tanggal_mulai' => '2025-05-05',
+            'tanggal_selesai' => '2025-05-10',
+            'lama_cuti' => 5,
+            'alasan' => "kakek sakit\r\n",
+            'status' => 'Disetujui',
+            'tanggal_disetujui' => '2025-05-04',
+            'catatan_hr' => null,
+            'created_at' => '2025-05-04 22:49:44',
+            'updated_at' => '2025-05-04 22:50:06',
+        ]);
+
+        CutiRequest::create([
+            'user_id' => 9,
+            'tanggal_pengajuan' => '2025-05-05',
+            'tanggal_mulai' => '2025-05-06',
+            'tanggal_selesai' => '2025-05-10',
+            'lama_cuti' => 4,
+            'alasan' => "keluarga sakit\r\n",
+            'status' => 'Disetujui',
+            'tanggal_disetujui' => '2025-05-05',
+            'catatan_hr' => null,
+            'created_at' => '2025-05-05 02:15:06',
+            'updated_at' => '2025-05-05 04:22:41',
+        ]);
+
+        CutiLogs::create([
+            'cuti_request_id' => 1,
+            'aksi' => 'Dibuat',
+            'oleh_user_id' => 7,
+            'keterangan' => 'Pengajuan dibuat',
+        ]);
+
+        CutiLogs::create([
+            'cuti_request_id' => 2,
+            'aksi' => 'Disetujui',
+            'oleh_user_id' => 9,
+            'keterangan' => 'Diterima oleh HR',
+        ]);
+
+        SisaCuti::create([
+            'user_id' => 5,
+            'tahun' => 2025,
+            'total_cuti' => 12,
+            'cuti_terpakai' => 5,
+            'cuti_sisa' => 7,
+        ]);
+
+        SisaCuti::create([
+            'user_id' => 6,
+            'tahun' => 2025,
+            'total_cuti' => 12,
+            'cuti_terpakai' => 4,
+            'cuti_sisa' => 8,
+        ]);
+
+        SisaCuti::create([
+            'user_id' => 7,
+            'tahun' => 2025,
+            'total_cuti' => 12,
+            'cuti_terpakai' => 5,
+            'cuti_sisa' => 7,
+        ]);
+
+        sisaCuti::create([
+            'user_id' => 8,
+            'tahun' => 2025,
+            'total_cuti' => 12,
+            'cuti_terpakai' => 4,
+            'cuti_sisa' => 8,
+        ]);
+        
+        SisaCuti::create([
+            'user_id' => 9,
+            'tahun' => 2025,
+            'total_cuti' => 12,
+            'cuti_terpakai' => 4,
+            'cuti_sisa' => 8,
+        ]);
+        // cuti_logs Table
+        /*DB::table('cuti_logs')->insert([
+            ['cuti_request_id' => 2, 'aksi' => 'Dibuat', 'oleh_user_id' => 7, 'waktu' => '2025-05-04 22:49:44', 'keterangan' => 'Pengajuan dibuat'],
+            ['cuti_request_id' => 2, 'aksi' => 'Disetujui', 'oleh_user_id' => 1, 'waktu' => '2025-05-04 22:50:06', 'keterangan' => 'Diterima oleh HR'],
+            ['cuti_request_id' => 3, 'aksi' => 'Dibuat', 'oleh_user_id' => 10, 'waktu' => '2025-05-05 02:15:06', 'keterangan' => 'Pengajuan dibuat'],
+            ['cuti_request_id' => 3, 'aksi' => 'Disetujui', 'oleh_user_id' => 1, 'waktu' => '2025-05-05 04:22:41', 'keterangan' => 'Diterima oleh HR'],
+        ]);
+
+        // laporan_kerja Table
+        DB::table('laporan_kerja')->insert([
+            ['tanggal' => '2025-05-21', 'nama' => 'Froni ', 'divisi' => 'HR specialist', 'deskripsi' => 'target sudah tercapai ,gudang sudah mengeluarkan barang sebanyak 250 unit', 'created_at' => '2025-05-02 12:12:42'],
+            ['tanggal' => '2025-05-05', 'nama' => 'Froni Wahyudi', 'divisi' => 'Operator Gudang', 'deskripsi' => "barang sudah keluar 300 unit\r\n", 'created_at' => '2025-05-05 09:14:38'],
+        ]);*/
+
     }
 }

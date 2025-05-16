@@ -34,6 +34,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/whats-new/{id}', [NewsController::class, 'show'])->name('whats_new');
     Route::get('/hr', [HrDashboardController::class, 'hr_index']);
     Route::get('/manajemen', [HrDashboardController::class, 'manajemen_index']);
+    Route::get('/karyawan', [HrDashboardController::class, 'karyawan_index']);
+    Route::post('/karyawan/update_sisa_cuti', [HrDashboardController::class, 'updateSisaCuti'])->name('karyawan.update_sisa_cuti');
     Route::get('/edit_profil/{id}', [DashboardController::class, 'edit'])->name('profil.edit');
     Route::put('/edit_profil/{id}', [DashboardController::class, 'update'])->name('profil.update');
 

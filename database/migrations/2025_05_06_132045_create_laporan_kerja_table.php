@@ -31,12 +31,13 @@ return new class extends Migration
             $table->text('alasan');
             $table->enum('status',['Menunggu','Disetujui','Ditolak']);
             $table->date('tanggal_disetujui');
-            $table->text('catatan_hr');
+            $table->text('catatan_hr')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
         });
 
         Schema::create('sisa_cuti', function (Blueprint $table) {
             $table->id();
+            $table->timestamps();
             $table->unsignedBigInteger('user_id');
             $table->year('tahun');
             $table->integer('total_cuti');

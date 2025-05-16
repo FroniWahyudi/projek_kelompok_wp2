@@ -60,15 +60,13 @@
               <div class="col-sm-10">
                 <input type="email" name="email" class="form-control" value="{{ old('email', $user->email) }}" required>
               </div>
-            </div>
-            <!--
+            </div>           
             <div class="row mb-3">
               <label class="col-sm-2 col-form-label">Password</label>
               <div class="col-sm-10">
-                <input type="password" name="password" class="form-control" value="{{ old('password', $user->password) }}" required>
+                <input type="password" name="password" class="form-control" placeholder="Password">
               </div>
             </div>
-            -->
             <div class="row mb-3">
               <label class="col-sm-2 col-form-label">Telepon</label>
               <div class="col-sm-10">
