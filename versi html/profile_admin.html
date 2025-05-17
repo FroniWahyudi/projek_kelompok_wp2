@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Profil Divisi Administrasi</title>
+  <!-- Bootstrap & Poppins -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    body { font-family: 'Poppins', sans-serif; font-size: .9rem; color: #6c757d; background: #f8f9fa; }
+    .navbar-custom { background: #fff; border-bottom:1px solid #dee2e6; padding:.75rem 1.5rem; }
+    .navbar-custom .navbar-brand { display:flex; align-items:center; gap:.5rem; font-weight:600; font-size:1rem; color:#495057; text-decoration:none; }
+    .navbar-custom .dot { width:10px; height:10px; background:#00c8c8; border-radius:50%; }
+    .navbar-custom .role { font-weight:400; color:#868e96; font-size:.9rem; margin-left:.5rem; }
+    .nav-links a { color:#6c757d; margin-left:1rem; text-decoration:none; font-weight:500; }
+    .nav-links a:hover { color:#495057; }
+    .nav-links a.active { color:#0d6efd; }
+    .profile-card { background:#fff; border-radius:.5rem; box-shadow:0 .25rem .5rem rgba(0,0,0,.1); padding:1.5rem; display:flex; flex-direction:column; justify-content:space-between; }
+    .avatar { width:80px; height:80px; border-radius:50%; object-fit:cover; border:2px solid #dee2e6; }
+    .profile-header { display:flex; align-items:center; margin-bottom:1rem; }
+    .profile-header h5 { margin:0; font-weight:600; color:#495057; }
+    .profile-header .role { font-size:.85rem; color:#00c8c8; font-weight:500; }
+    .badge-role { background:#e0f7f7; color:#0d6efd; font-size:.65rem; padding:.25em .5em; margin-left:.5em; }
+    .profile-card p { flex-grow:1; line-height:1.6; }
+    /* Button minimalis */
+    .btn-detail { font-size:.85rem; padding:.25rem .5rem; width:100px; }
+    footer#my-footer { border-top:1px solid #dee2e6; padding:1rem 2rem; font-size:.8rem; color:#868e96; text-align:center; }
+    .info-list { display:flex; flex-wrap:wrap; gap:3rem; justify-content:center; }
+    .info-list div strong { color:#495057; font-weight:600; }
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-custom">
+  <a href="profile_manajer.html" class="navbar-brand">
+    <span class="dot"></span><span>Divisi Administrasi</span>
+  </a>
+  <div class="ms-auto nav-links">
+    <a href="#" class="active">Home</a>
+    <a href="profile_manajer.html">Manajer</a>
+    <a href="#">Admin</a>
+    <a href="profile_leader.html">Leader</a>
+    <a href="#">Operator</a>
+  </div>
+</nav>
+
+<div class="container py-5">
+  <div class="row gx-4">
+    <div class="col-md-6 d-flex">
+      <div class="profile-card w-100">
+        <div class="profile-header">
+          <img src="https://via.placeholder.com/80" class="avatar me-3" alt="Dewi Sartika">
+          <div>
+            <h5>Dewi Sartika</h5>
+            <div class="role">Admin Keuangan<span class="badge-role">Senior</span></div>
+          </div>
+        </div>
+        <p>Bertanggung jawab untuk mengelola seluruh transaksi keuangan perusahaan, termasuk pembayaran, penagihan, dan pelaporan keuangan.</p>
+        <p class="mb-3"><i class="bi bi-envelope me-1"></i> dewi.sartika@example.com</p>
+        <button class="btn btn-primary btn-sm btn-detail" data-bs-toggle="modal" data-bs-target="#detailModal">Lihat Detail</button>
+      </div>
+    </div>
+    <div class="col-md-6 d-flex">
+      <div class="profile-card w-100">
+        <div class="profile-header">
+          <img src="https://via.placeholder.com/80" class="avatar me-3" alt="Budi Santoso">
+          <div>
+            <h5>Budi Santoso</h5>
+            <div class="role">Admin Personalia<span class="badge-role">Senior</span></div>
+          </div>
+        </div>
+        <p>Mengelola administrasi kepegawaian, termasuk rekrutmen, penggajian, absensi, dan pengembangan karyawan.</p>
+        <p class="mb-3"><i class="bi bi-envelope me-1"></i> budi.santoso@example.com</p>
+        <button class="btn btn-primary btn-sm btn-detail" data-bs-toggle="modal" data-bs-target="#detailModal">Lihat Detail</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Detail Profil -->
+<div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="detailModalLabel">Detail Profil</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Header ringkas -->
+        <div class="d-flex align-items-center mb-4">
+          <img src="https://via.placeholder.com/40" class="avatar me-3" alt="">
+          <div>
+            <h6 class="mb-0">Dewi Sartika</h6>
+            <small class="text-primary">Admin Keuangan</small>
+            <span class="badge bg-info text-dark ms-2">Senior</span><br>
+            <small class="text-muted"><i class="bi bi-envelope me-1"></i> dewi.sartika@example.com</small>
+            <small class="text-muted ms-3"><i class="bi bi-telephone me-1"></i>+62 812 9876 5432</small>
+          </div>
+        </div>
+        <!-- Informasi Pribadi -->
+        <h6>Informasi Pribadi</h6>
+        <div class="row mb-3">
+          <div class="col-sm-6"><strong>Tanggal Bergabung:</strong><br>15 Januari 2018</div>
+          <div class="col-sm-6"><strong>Pendidikan:</strong><br>SI Akuntansi, Universitas Indonesia</div>
+        </div>
+        <div class="row mb-4">
+          <div class="col-sm-6"><strong>Alamat:</strong><br>Jl. Sudirman No. 45, Jakarta Pusat</div>
+          <div class="col-sm-6"><strong>Departemen:</strong><br>Keuangan</div>
+        </div>
+        <!-- Deskripsi Pekerjaan -->
+        <h6>Deskripsi Pekerjaan</h6>
+        <ul>
+          <li>Menerbitkan laporan keuangan bulanan dan tahunan</li>
+          <li>Memproses pembayaran vendor dan supplier</li>
+          <li>Mengelola penagihan dan piutang pelanggan</li>
+          <li>Berkoordinasi dengan auditor eksternal</li>
+        </ul>
+        <!-- Keahlian -->
+        <h6>Keahlian</h6>
+        <div class="mb-3">
+          <span class="badge bg-secondary me-1">Akuntansi</span>
+          <span class="badge bg-secondary me-1">SAP</span>
+          <span class="badge bg-secondary me-1">Microsoft Excel</span>
+          <span class="badge bg-secondary me-1">Pelaporan Keuangan</span>
+          <span class="badge bg-secondary me-1">Analisis Anggaran</span>
+          <span class="badge bg-secondary me-1">Audit Internal</span>
+        </div>
+        <!-- Pencapaian -->
+        <h6>Pencapaian</h6>
+        <ul>
+          <li>Mengimplementasikan sistem akuntansi baru yang meningkatkan efisiensi 30%</li>
+          <li>Mengurangi kesalahan pembayaran sebesar 25% dalam 1 tahun</li>
+          <li>Menerima penghargaan Karyawan Teladan 2021</li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Tutup</button>
+        <button type="button" class="btn btn-primary btn-sm">Cetak Profil</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer id="my-footer">
+  <div class="info-list">
+    <div>© 2023 Divisi Administrasi. Hak Cipta Dilindungi.</div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Toggle Active Link (filter only '#')
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    if (link.getAttribute('href') === '#') {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+        link.classList.add('active');
+      });
+    }
+  });
+</script>
+</body>
+</html>

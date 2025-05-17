@@ -1,106 +1,202 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Login - Naga Hytam</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Profil Divisi Administrasi</title>
+  <!-- Bootstrap & Icons & Poppins -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet"/>
   <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f0f4f8;
-    }
-    .login-container {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .login-card {
-      border: none;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
-      max-width: 1000px;
-      width: 100%;
-    }
-    .login-left {
-      background: linear-gradient(to right, #e3f2fd, #e1f5fe);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      text-align: center;
-      padding: 40px;
-    }
-    .login-left img {
-      max-width: 100%;
-      height: auto;
-      margin-bottom: 30px;
-    }
-    .login-left h4 {
-      font-weight: bold;
-      color: #003366;
-    }
-    .login-left p {
-      color: #4a4a4a;
-      font-size: 0.95rem;
-    }
-    .form-label {
-      font-weight: 500;
-    }
-    .logo-text {
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: #003366;
-    }
-    .logo-sub {
-      font-size: 0.95rem;
-      color: #555;
-    }
-    .form-control:focus {
-      border-color: #007bff;
-      box-shadow: none;
-    }
+    /* Template kedua: dasar & navbar */
+    body { font-family: 'Poppins', sans-serif; background:#f8f9fa; color:#6c757d; font-size:.9rem; }
+    .navbar { background:#fff; border-bottom:1px solid #dee2e6; padding:.75rem 2rem; font-size:.95rem; }
+    .navbar-brand { font-weight:600; font-size:1rem; color:#495057; }
+    .dot { width:10px; height:10px; background:#00c8c8; border-radius:50%; display:inline-block; margin-right:.5rem; }
+    .nav-filter a { color:#6c757d; margin-left:1rem; text-decoration:none; font-weight:500; }
+    .nav-filter a.active { color:#0d6efd; }
+
+    /* Kartu Umum (template kedua) */
+    .profile-card { background:#fff; border-radius:.5rem; box-shadow:0 .25rem .5rem rgba(0,0,0,0.1); padding:1.5rem; margin-bottom:1.5rem; }
+    .avatar { width:80px; height:80px; border-radius:50%; object-fit:cover; border:2px solid #dee2e6; }
+    .profile-header { display:flex; align-items:center; margin-bottom:1rem; }
+    .profile-header h5 { margin:0; font-weight:600; color:#495057; font-size:1.1rem; }
+    .role { font-size:.85rem; color:#00c8c8; font-weight:500; }
+    .badge-role { background:#e0f7f7; color:#0d6efd; font-size:.65rem; padding:.25em .5em; margin-left:.5rem; }
+    .profile-card p { line-height:1.6; font-size:.9rem; color:#6c757d; }
+    .btn-detail { font-size:.85rem; padding:.4rem 1rem; }
+
+    /* Manager layout dari template kedua */
+    .manager-layout .profile-img { width: 322px; object-fit: cover; border-radius:50%; }
+    .manager-layout .nama h1 { font-size: 2.5rem; font-weight: 600; color: #495057; margin-bottom: .5rem; }
+    .manager-layout .nama h5 { font-size: .95rem; font-weight: bold; color: #495057 !important; margin-bottom: 1rem; }
+    .manager-layout .nama p { font-size: .85rem; line-height: 1.6; color: #6c757d; }
+
+    #no-data { display:none; color:#868e96; font-style:italic; margin-top:2rem; }
+    /* Footer template kedua */
+    footer { text-align:center; padding:1rem 0; font-size:.8rem; color:#868e96; border-top:1px solid #dee2e6; }
+
+    /* Tambahan style dari template pertama (kecuali navbar) */
+    body { font-size: 0.85rem; }
+    .circle-btn { width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; font-weight: bold; }
+    .footer .info-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 7.7rem; font-size: 0.8rem; color: #868e96; }
+    #my-footer { border-top: 2px solid #dee2e6; width: 100%; margin: 0 auto; padding-top: 1rem; }
+    .nama h1 { font-size: 2.5rem; font-weight: 600; color: #495057; margin-bottom: 0.5rem; }
+    .nama h5 { font-size: 0.95rem; font-weight: bold; color: #495057 !important; margin-bottom: 1rem; }
+    .nama p { font-size: 0.85rem; line-height: 1.6; color: #6c757d; }
+    .footer .info-list div strong { color: #212529; font-weight: 600; }
   </style>
 </head>
 <body>
-  <div class="container login-container">
-    <div class="row login-card shadow bg-white">
-      <div class="col-md-6 login-left">
-        <img src="ilustrasi_gudang.png" alt="Ilustrasi Gudang">
-        <h4>Sistem Manajemen Perusahaan</h4>
-        <p>Tingkatkan efisiensi dan produktivitas bisnis Anda</p>
-      </div>
-      <div class="col-md-6 p-5">
-        <div class="mb-4 text-center">
-          <img src="logo_naga_aja.png" alt="Logo" style="height: 60px;">
-          <div class="logo-text mt-2">Naga Hytam</div>
-          <div class="logo-sub">Sejahtera Abadi</div>
+
+  <!-- Navbar (template kedua) -->
+  <nav class="navbar d-flex align-items-center">
+    <span class="navbar-brand mb-0">
+      <span class="dot"></span><span id="brand-text">Divisi Administrasi</span>
+    </span>
+    <div class="ms-auto nav-filter">
+      <a href="index.html">Home</a>
+      <a href="#" data-filter="Manajer">Manajer</a>
+      <a href="#" data-filter="Admin">Admin</a>
+      <a href="#" data-filter="Leader">Leader</a>
+      <a href="#" data-filter="Operator">Operator</a>
+    </div>
+  </nav>
+
+  <!-- Konten Utama -->
+  <div class="container py-5">
+    <div id="cards-row">
+
+      <!-- Data Manajer (layout khusus) -->
+      <div class="row manager-layout gx-4 mb-5" data-role="Manajer">
+        <div class="col-lg-4 col-md-6 text-center mb-4 mb-md-0">
+          <img src="CJ.jpg" class="profile-img" alt="Sutoyo Dono">
         </div>
-        <form>
-          <div class="mb-3">
-            <label for="username" class="form-label">Username</label>
-            <input type="text" class="form-control" id="username" placeholder="Masukkan username" required>
+        <div class="col-lg-4 col-md-6 nama">
+          <h1 class="fw-bold">Sutoyo Dono</h1>
+          <h5 class="text-muted">Tentang Saya</h5>
+          <p class="text-start">
+            Saya adalah Kepala Gudang di PT Naga Hytam Sejahtera Abadi, memastikan penerimaan, penyimpanan,<br>
+            dan pengeluaran barang berjalan akurat; serta mengelola inventaris dan stock-take berkala.
+          </p>
+          <!-- No modal button for Manager -->
+        </div>
+      </div>
+
+      <!-- Data Admin -->
+      <div class="profile-card" data-role="Admin" style="display:none;">
+        <div class="profile-header">
+          <img src="https://via.placeholder.com/80" class="avatar me-3" alt="">
+          <div>
+            <h5>Dewi Sartika</h5>
+            <div class="role">Admin Keuangan<span class="badge-role">Senior</span></div>
           </div>
-          <div class="mb-3 d-flex justify-content-between align-items-center">
-            <label for="password" class="form-label">Password</label>
-            <a href="#" class="text-decoration-none small">Lupa password?</a>
+        </div>
+        <p>Bertanggung jawab untuk mengelola seluruh transaksi keuangan perusahaan...</p>
+        <button class="btn btn-primary btn-sm btn-detail" data-bs-toggle="modal" data-bs-target="#detailModal">
+          Lihat Detail
+        </button>
+      </div>
+
+      <!-- Data Leader -->
+      <div class="profile-card" data-role="Leader" style="display:none;">
+        <div class="profile-header">
+          <img src="https://via.placeholder.com/80" class="avatar me-3" alt="">
+          <div>
+            <h5>Budi Santoso</h5>
+            <div class="role">Leader<span class="badge-role">Senior</span></div>
           </div>
-          <input type="password" class="form-control mb-3" id="password" placeholder="Masukkan password" required>
-          <div class="form-check mb-3">
-            <input class="form-check-input" type="checkbox" value="" id="remember">
-            <label class="form-check-label" for="remember">Tampilkan password</label>
+        </div>
+        <p>Mengelola tim administrasi dan menyusun strategi operasional...</p>
+        <button class="btn btn-primary btn-sm btn-detail" data-bs-toggle="modal" data-bs-target="#detailModal">
+          Lihat Detail
+        </button>
+      </div>
+
+      <!-- Data Operator -->
+      <div class="profile-card" data-role="Operator" style="display:none;">
+        <div class="profile-header">
+          <img src="https://via.placeholder.com/80" class="avatar me-3" alt="">
+          <div>
+            <h5>Ani Susanti</h5>
+            <div class="role">Operator<span class="badge-role">Junior</span></div>
           </div>
-          <button type="submit" class="btn btn-primary w-100">Masuk</button>
-        </form>
-        <p class="text-center text-muted mt-4 mb-0" style="font-size: 0.85rem;">
-          © 2023 Naga Hytam Sejahtera Abadi. All rights reserved.
-        </p>
+        </div>
+        <p>Bertugas mengoperasikan sistem pergudangan...</p>
+        <button class="btn btn-primary btn-sm btn-detail" data-bs-toggle="modal" data-bs-target="#detailModal">
+          Lihat Detail
+        </button>
+      </div>
+
+    </div>
+
+    <p id="no-data" class="text-center">Tidak ada data untuk kategori ini.</p>
+  </div>
+
+  <!-- Modal Detail (template kedua) -->
+  <div class="modal fade" id="detailModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Detail Profil</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <p>Detail profil akan ditampilkan di sini.</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Tutup</button>
+          <button class="btn btn-primary btn-sm">Cetak Profil</button>
+        </div>
       </div>
     </div>
   </div>
 
+  <!-- Footer (template pertama) -->
+  <footer class="footer mt-5 pt-4" id="my-footer">
+    <div class="container">
+      <div class="info-list mb-2">
+        <div><strong>Nama<br></strong>Sutoyo Dono</div>
+        <div><strong>Jabatan<br></strong>Manajer</div>
+        <div><strong>Email<br></strong>sutoyo@nagahtam.co.id</div>
+        <div><strong>Telepon<br></strong>+62 812-1234-5678</div>
+        <div><strong>Alamat<br></strong>Jl. Diponegoro No. 20, Semarang</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS & Filter Script (template kedua) -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const roles      = ['Manajer','Admin','Leader','Operator'];
+    const brandText  = document.getElementById('brand-text');
+    const filterLinks = document.querySelectorAll('.nav-filter a[data-filter]');
+    const cardsRow   = document.getElementById('cards-row');
+
+    function showRole(role){
+      brandText.textContent = role;
+      document.querySelector('.manager-layout').style.display = role==='Manajer'?'flex':'none';
+      roles.filter(r=>r!=='Manajer').forEach(r=>{
+        const el = document.querySelector(`[data-role="${r}"]`);
+        el && (el.style.display = (r===role?'block':'none'));
+      });
+      document.getElementById('no-data').style.display = (role==='Manajer' || roles.includes(role)) ? 'none':'block';
+    }
+
+    filterLinks.forEach(link=>{
+      link.addEventListener('click',e=>{
+        e.preventDefault();
+        filterLinks.forEach(a=>a.classList.remove('active'));
+        link.classList.add('active');
+        showRole(link.getAttribute('data-filter'));
+      });
+    });
+
+    window.addEventListener('DOMContentLoaded',()=>{
+      document.querySelector('.nav-filter a[data-filter="Manajer"]').classList.add('active');
+      showRole('Manajer');
+    });
+  </script>
 </body>
 </html>
