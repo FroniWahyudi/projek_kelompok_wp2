@@ -310,7 +310,7 @@ function excerpt(string $text, int $maxLen = 100): string {
     <ul class="dropdown-menu" aria-labelledby="mobileMenu">
       <li><h6 class="dropdown-header">Divisi Karyawan</h6></li>
       <li>
-        <a class="dropdown-item" href="hr_dashboard.php">
+        <a class="dropdown-item" href="admin_dashboard.php">
           <i class="bi bi-person-circle me-1"></i>
           HR
         </a>
@@ -414,14 +414,17 @@ function excerpt(string $text, int $maxLen = 100): string {
 <nav class="sidebar">
   <h6 class="fw-bold text-uppercase">Divisi Karyawan</h6>
 
-  <a href="hr_dashboard.php" class="btn btn-outline-primary w-100 mb-2">
-    <i class="bi bi-person-circle me-1"></i> HR & Leader
-  </a>
   <a href="manajemen_dashboard.php" class="btn btn-outline-primary w-100 mb-2">
     <i class="bi bi-people-fill me-1"></i> Manajemen
   </a>
+  <a href="admin_dashboard.php" class="btn btn-outline-primary w-100 mb-2">
+    <i class="bi bi-person-circle me-1"></i> Admin Officer
+  </a>
+  <a href="leader_dashboard.php" class="btn btn-outline-primary w-100 mb-2">
+    <i class="bi bi-person-circle me-1"></i> Leader
+  </a>
   <a href="karyawan_dashboard.php" class="btn btn-outline-primary w-100 mb-2">
-    <i class="bi bi-people-fill me-1"></i> Karyawan
+    <i class="bi bi-people-fill me-1"></i> Operator Gudang
   </a>
 
   <hr>

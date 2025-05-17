@@ -7,61 +7,131 @@ SET NAMES utf8mb4;
 SET time_zone = "+00:00";
 
 -- --------------------------------------------------------
--- 1) Tabel `users` (dengan kolom `alamat`)
+-- Tabel `users` dengan job_descriptions, skills, achievements bertipe TEXT
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `users` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(100) NOT NULL,
-  `role` VARCHAR(50) NOT NULL,
-  `password` VARCHAR(255) NOT NULL,
-  `email` VARCHAR(100) DEFAULT NULL,
-  `phone` VARCHAR(20) DEFAULT NULL,
-  `photo_url` VARCHAR(255) DEFAULT NULL,
-  `bio` TEXT DEFAULT NULL,
-  `alamat` VARCHAR(255) DEFAULT NULL,
-  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `id` INT(11)               NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(100)        NOT NULL,
+  `role` VARCHAR(50)         NOT NULL,
+  `password` VARCHAR(255)    NOT NULL,
+  `email` VARCHAR(100)       DEFAULT NULL,
+  `phone` VARCHAR(20)        DEFAULT NULL,
+  `photo_url` VARCHAR(255)   DEFAULT NULL,
+  `bio` TEXT                 DEFAULT NULL,
+  `alamat` VARCHAR(255)      DEFAULT NULL,
+  `joined_at` DATE           DEFAULT NULL,
+  `education` VARCHAR(255)   DEFAULT NULL,
+  `department` VARCHAR(100)  DEFAULT NULL,
+  `level` VARCHAR(50)        DEFAULT NULL,
+  `job_descriptions` TEXT    DEFAULT NULL,
+  `skills` TEXT              DEFAULT NULL,
+  `achievements` TEXT        DEFAULT NULL,
+  `created_at` TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- --------------------------------------------------------
+-- Data awal tanpa JSON_ARRAY—gunakan string teks terpisah koma
+-- --------------------------------------------------------
 INSERT INTO `users`
-  (`id`, `name`, `role`, `password`, `email`, `phone`, `photo_url`, `bio`, `alamat`, `created_at`)
+  (`id`,`name`,`role`,`password`,`email`,`phone`,`photo_url`,`bio`,`alamat`,
+   `joined_at`,`education`,`department`,`level`,
+   `job_descriptions`,`skills`,`achievements`,`created_at`)
 VALUES
-  (1, 'Alice Putri',   'HR',       '12345', 'alice.putri@nagahtam.co.id', '+62 812-3456-7890', 'img/nami.jpeg',
-    'Mengelola administrasi karyawan.',
-    'Jl. Merdeka No. 10, Jakarta Pusat',
-    '2025-05-01 12:15:16'),
-  (2, 'Budi Santoso',   'Leader',   '12345', 'budi.santoso@nagahtam.co.id', '+62 813-9876-5432', 'img/zoro.jpeg',
-    'Memantau operator lapangan.',
-    'Jl. Sudirman Kav. 12, Jakarta Selatan',
-    '2025-05-01 12:15:16'),
-  (3, 'Sanji',          'Leader',   '12345', 'sanji@nagahtam.co.id',        '+62 813-9876-5432', 'img/sanji.jpeg',
-    'Memantau operator lapangan.',
-    'Jl. Pahlawan No. 3, Surabaya',
-    '2025-05-01 12:15:16'),
-  (4, 'Sutoyo dono',    'Manajer',  'sutoyo123', 'sutoyo@nagahtam.co.id',    '+62 812-1234-5678', 'img/sutoyo.jpg',
-    'Pengambilan keputusan strategis.',
-    'Jl. Diponegoro No. 20, Semarang',
-    '2025-05-01 22:41:16'),
-  (6, 'Ahmad Yusuf',    'Karyawan', 'karyawan123', 'ahmad.yusuf@nagahtam.co.id', '+62 812-3456-7890', 'img/ahmad_yusuf.jpg',
-    'Administrasi karyawan.',
-    'Jl. Gajah Mada No. 15, Yogyakarta',
-    '2025-05-01 23:20:02'),
-  (7, 'Wanda',          'Karyawan', 'karyawan123', 'wanda@nagahtam.co.id',    '+62 813-9876-5432', 'img/wanda.jpg',
-    'Supervisor operasional.',
-    'Jl. Pemuda No. 7, Bekasi',
-    '2025-05-01 23:20:02'),
-  (8, 'Agus',           'Karyawan', 'karyawan123', 'agus@nagahtam.co.id',      '+62 813-9876-5432', 'img/budi.jpg',
-    'Operator produksi.',
-    'Jl. Raya Bogor No. 45, Depok',
-    '2025-05-01 23:20:02'),
-  (9, 'Lina Marlina',   'Karyawan', 'karyawan123', 'lina.marlina@nagahtam.co.id', '+62 812-1234-5678', 'img/lina.jpg',
-    'Manager divisi.',
-    'Jl. Sultan Iskandar Muda No. 8, Medan',
-    '2025-05-01 23:20:02'),
-  (10,'Rudi Hartanto',  'Karyawan', 'karyawan123', 'rudi.hartono@nagahtam.co.id', '+62 813-5678-9012', 'img/rudi.jpg',
-    'Staf gudang.',
-    'Jl. Bumi Raya No. 9, Palembang',
-    '2025-05-01 23:20:02');
+  (1, 'Alice Putri', 'Admin', '12345', 'alice.putri@nagahtam.co.id', '+62 812-3456-7890', 'img/nami.jpeg',
+   'Mengelola administrasi karyawan.',
+   'Jl. Merdeka No. 10, Jakarta Pusat',
+   '2018-01-15','SI Manajemen, Universitas Indonesia','HR','Senior',
+   'Rekrutmen dan seleksi karyawan, Pengelolaan data karyawan, Pelatihan dan onboarding',
+   'Komunikasi, Microsoft Excel, Manajemen SDM',
+   'Employee of the Year 2020, Penyusunan SOP HR',
+   '2025-05-01 12:15:16'
+  ),
+  (11, 'Putri Tanjung', 'Admin', 'putri123', 'putri.tanjung@nagahtam.co.id', '+62 813-4567-8901', 'img/putri_tanjung.jpg',
+   'Mengelola administrasi dan koordinasi tim.',
+   'Jl. Melati No. 12, Bandung',
+   '2019-05-20','Administrasi Bisnis, Universitas Padjadjaran','Administrasi','Senior',
+   'Membuat laporan bulanan, Koordinasi dengan manajemen',
+   'Microsoft Office, Komunikasi, Manajemen Proyek',
+   'Employee of the Month 2022',
+   '2025-05-06 10:00:00'
+  ),
+  (2, 'Budi Santoso','Leader','12345','budi.santoso@nagahtam.co.id','+62 813-9876-5432','img/zoro.jpeg',
+   'Memantau operator lapangan.',
+   'Jl. Sudirman Kav. 12, Jakarta Selatan',
+   '2019-03-10','Teknik Industri, Institut Teknologi Bandung','Operasional','Mid-level',
+   'Koordinasi tim lapangan, Laporan harian produksi',
+   'Leadership, Problem Solving, Safety Management',
+   'Tim terbaik Q4 2021',
+   '2025-05-01 12:15:16'
+  ),
+  (3, 'Sanji','Leader','12345','sanji@nagahtam.co.id','+62 813-9876-5432','img/sanji.jpeg',
+   'Memantau operator lapangan.',
+   'Jl. Pahlawan No. 3, Surabaya',
+   '2020-07-22','Teknik Mesin, Universitas Negeri Surabaya','Operasional','Mid-level',
+   'Jadwal shift operator, Optimasi workflow produksi',
+   'Time Management, Maintenance Planning',
+   'Pengurangan downtime 15%',
+   '2025-05-01 12:15:16'
+  ),
+  (4, 'Sutoyo Dono','Manajer','sutoyo123','sutoyo@nagahtam.co.id','+62 812-1234-5678','img/sutoyo.jpg',
+   'Pengambilan keputusan strategis.',
+   'Jl. Diponegoro No. 20, Semarang',
+   '2015-11-05','Magister Manajemen, Universitas Gadjah Mada','Manajemen','Senior',
+   'Perencanaan strategi perusahaan, Koordinasi antar-departemen',
+   'Strategic Planning, Negotiation',
+   'Penghargaan Leader of the Year 2019',
+   '2025-05-01 22:41:16'
+  ),
+  (6, 'Ahmad Yusuf','Karyawan','karyawan123','ahmad.yusuf@nagahtam.co.id','+62 812-3456-7890','img/ahmad_yusuf.jpg',
+   'Administrasi karyawan.',
+   'Jl. Gajah Mada No. 15, Yogyakarta',
+   '2021-02-18','Administrasi Bisnis, Universitas Diponegoro','HR','Junior',
+   'Input data karyawan, Pembuatan laporan absensi',
+   'Data Entry, Microsoft Office',
+   'Best Intern 2021',
+   '2025-05-01 23:20:02'
+  ),
+  (7, 'Wanda','Karyawan','karyawan123','wanda@nagahtam.co.id','+62 813-9876-5432','img/wanda.jpg',
+   'Supervisor operasional.',
+   'Jl. Pemuda No. 7, Bekasi',
+   '2017-08-30','Manajemen Operasional, Universitas Padjadjaran','Operasional','Senior',
+   'Supervisi jalannya produksi, Penyusunan jadwal kerja',
+   'Supervisory Skills, Lean Manufacturing',
+   'Penghargaan Safety 2020',
+   '2025-05-01 23:20:02'
+  ),
+  (8, 'Agus','Karyawan','karyawan123','agus@nagahtam.co.id','+62 813-9876-5432','img/budi.jpg',
+   'Operator produksi.',
+   'Jl. Raya Bogor No. 45, Depok',
+   '2022-04-12','Teknik Kimia, Institut Sains & Teknologi','Produksi','Junior',
+   'Pengoperasian mesin produksi, Quality control sederhana',
+   'Machine Operation, QC Basics',
+   'Zero Defect Month April 2023',
+   '2025-05-01 23:20:02'
+  ),
+  (9, 'Lina Marlina','Karyawan','karyawan123','lina.marlina@nagahtam.co.id','+62 812-1234-5678','img/lina.jpg',
+   'Manager divisi.',
+   'Jl. Sultan Iskandar Muda No. 8, Medan',
+   '2016-06-21','S2 Manajemen, Universitas Sumatera Utara','Manajemen','Senior',
+   'Pengawasan kinerja divisi, Penyusunan anggaran tahunan',
+   'Budget Planning, Team Leadership',
+   'Divisi terbaik 2022',
+   '2025-05-01 23:20:02'
+  ),
+  (10,'Rudi Hartanto','Karyawan','karyawan123','rudi.hartono@nagahtam.co.id','+62 813-5678-9012','img/rudi.jpg',
+   'Staf gudang.',
+   'Jl. Bumi Raya No. 9, Palembang',
+   '2019-09-14','Logistik & Supply Chain, Universitas Sriwijaya','Logistik','Mid-level',
+   'Penerimaan barang, Pengiriman ke cabang',
+   'Inventory Management, Forklift Operation',
+   'On-Time Delivery 2021',
+   '2025-05-01 23:20:02'
+  );
+
+
+
 
 -- --------------------------------------------------------
 -- 2) Tabel `sisa_cuti`
