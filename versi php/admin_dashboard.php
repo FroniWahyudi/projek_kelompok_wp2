@@ -103,7 +103,7 @@ if (!$result) {
           <li class="nav-item"><a class="nav-link" href="manajemen_dashboard.php">Manajer</a></li>
           <li class="nav-item"><a class="nav-link active" href="#">Admin</a></li>
           <li class="nav-item"><a class="nav-link" href="leader_dashboard.php">Leader</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">Operator</a></li>
+          <li class="nav-item"><a class="nav-link" href="operator_dashboard.php">Operator</a></li>
         </ul>
       </div>
     </div>
