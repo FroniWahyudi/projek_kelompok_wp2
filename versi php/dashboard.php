@@ -431,13 +431,13 @@ function excerpt(string $text, int $maxLen = 100): string {
 
   <h6 class="fw-bold">Menu Lainnya</h6>
 
-  <?php if ($user['role'] === 'Manajer' || $user['role'] === 'HR' ): ?>
+  <?php if ($user['role'] === 'Manajer' || $user['role'] === 'Admin' ): ?>
     <a href="laporan_kerja.php" class="btn btn-outline-dark w-100 mb-2">
       <i class="bi bi-journal-text me-1"></i> Laporan Kerja
     </a>
   <?php endif;  ?>
   
-  <?php if ($user['role'] === 'Leader' || $user['role'] === 'HR' ): ?>
+  <?php if ($user['role'] === 'Leader' || $user['role'] === 'Admin' ): ?>
   <?php if ($user['role'] === 'Leader'): ?>
     <a href="laporan_kerja.php" class="btn btn-outline-dark w-100 mb-2">
       <i class="bi bi-journal-text me-1"></i> Kirim Laporan Kerja
@@ -446,13 +446,13 @@ function excerpt(string $text, int $maxLen = 100): string {
   <a href="cuti.php" class="btn btn-outline-dark w-100 mb-2">
     <i class="bi bi-check-square me-1"></i> Daftar Pengajuan Cuti
   </a>
-<?php elseif ($user['role'] === 'Karyawan'): ?>
+<?php elseif ($user['role'] === 'Operator'): ?>
   <a href="cuti.php" class="btn btn-outline-dark w-100 mb-2">
     <i class="bi bi-file-earmark-text me-1"></i> Pengajuan Cuti
   </a>
 <?php endif; ?>
 
-<?php if ($user['role'] === 'HR' || $user['role'] === 'Karyawan'): ?>
+<?php if ($user['role'] === 'Admin' || $user['role'] === 'Karyawan'): ?>
   <a href="slip_gaji.php" class="btn btn-outline-dark w-100 mb-2">
     <i class="bi bi-receipt me-1"></i> Slip Gaji
   </a>
@@ -461,7 +461,7 @@ function excerpt(string $text, int $maxLen = 100): string {
   
 
   <?php
-    $feedbackLabel = ($user['role'] === 'Karyawan') ? 'Evaluasi Kinerja' : 'Feedback Pegawai';
+    $feedbackLabel = ($user['role'] === 'Operator') ? 'Evaluasi Kinerja' : 'Feedback Pegawai';
   ?>
   <a href="feedback_pegawai.php" class="btn btn-outline-dark w-100 mb-2">
     <i class="bi bi-chat-dots me-1"></i> <?= $feedbackLabel ?>
