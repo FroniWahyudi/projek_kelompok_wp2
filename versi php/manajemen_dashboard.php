@@ -48,10 +48,11 @@ $achs   = explode(', ', $mgr['achievements'] ?: '');
       color: #6c757d;
       background-color: #f8f9fa;
     }
-    .profile-img {
-      width: 322px;
-      object-fit: cover;
-    }
+   .profile-img {
+    width: 322px;
+    height: 322px;
+    object-fit: cover;
+}
     .dot {
       width: 10px;
       height: 10px;
@@ -87,7 +88,7 @@ $achs   = explode(', ', $mgr['achievements'] ?: '');
     }
     .nav-link:hover,
     .nav-link.active {
-      color: #000;
+       color: #0d6efd !important;
     }
 
     .footer .info-list {
@@ -141,8 +142,8 @@ $achs   = explode(', ', $mgr['achievements'] ?: '');
       </button>
       <div class="collapse navbar-collapse justify-content-end" id="mainNav">
         <ul class="navbar-nav">
-          <li class="nav-item"><a class="nav-link active" href="dashboard.php">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="#"><?= htmlspecialchars($mgr['role']) ?></a></li>
+          <li class="nav-item"><a class="nav-link" href="dashboard.php">Home</a></li>
+          <li class="nav-item"><a class="nav-link active" href="#"><?= htmlspecialchars($mgr['role']) ?></a></li>
           <li class="nav-item"><a class="nav-link" href="admin_dashboard.php">Admin</a></li>
           <li class="nav-item"><a class="nav-link" href="leader_dashboard.php">Leader</a></li>
           <li class="nav-item"><a class="nav-link" href="operator_dashboard.php">Operator</a></li>

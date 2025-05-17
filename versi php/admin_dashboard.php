@@ -69,7 +69,7 @@ if (!$result) {
     }
     .navbar-nav .nav-link:hover,
     .navbar-nav .nav-link.active {
-      color: #000;
+      color: #0d6efd !important;
     }
 
     .profile-card { background:#fff; border-radius:.5rem; box-shadow:0 .25rem .5rem rgba(0,0,0,.1); padding:1.5rem; flex:1; display:flex; flex-direction:column; justify-content:space-between; }
@@ -99,9 +99,9 @@ if (!$result) {
       </button>
       <div class="collapse navbar-collapse justify-content-end" id="mainNav">
         <ul class="navbar-nav">
-          <li class="nav-item"><a class="nav-link active" href="dashboard.php">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="dashboard.php">Home</a></li>
           <li class="nav-item"><a class="nav-link" href="manajemen_dashboard.php">Manajer</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">Admin</a></li>
+          <li class="nav-item"><a class="nav-link active" href="#">Admin</a></li>
           <li class="nav-item"><a class="nav-link" href="leader_dashboard.php">Leader</a></li>
           <li class="nav-item"><a class="nav-link" href="#">Operator</a></li>
         </ul>
@@ -208,9 +208,14 @@ if (!$result) {
     </div>
   </div>
 
-  <footer id="my-footer">
-    © <?= date('Y') ?> Divisi Administrasi. Hak Cipta Dilindungi.
-  </footer>
+ <footer id="my-footer" class="bg-white border-top py-3">
+  <div class="container text-center">
+    <small class="text-muted">
+      © <?= date('Y') ?> PT Naga Hytam Sejahtera Abadi. All Rights Reserved.
+    </small>
+  </div>
+</footer>
+
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="bootstrap-5.3.5-dist\js\bootstrap.bundle.min.js"></script>

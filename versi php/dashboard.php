@@ -423,7 +423,7 @@ function excerpt(string $text, int $maxLen = 100): string {
   <a href="leader_dashboard.php" class="btn btn-outline-primary w-100 mb-2">
     <i class="bi bi-person-circle me-1"></i> Leader
   </a>
-  <a href="karyawan_dashboard.php" class="btn btn-outline-primary w-100 mb-2">
+  <a href="operator_dashboard.php" class="btn btn-outline-primary w-100 mb-2">
     <i class="bi bi-people-fill me-1"></i> Operator Gudang
   </a>
 
