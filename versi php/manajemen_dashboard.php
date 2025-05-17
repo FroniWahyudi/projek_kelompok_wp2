@@ -40,6 +40,7 @@ $achs   = explode(', ', $mgr['achievements'] ?: '');
   <!-- Bootstrap & Poppins -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="bootstrap-5.3.5-dist\css\bootstrap.min.css">
   <style>
     body {
       font-size: .85rem;
@@ -93,7 +94,7 @@ $achs   = explode(', ', $mgr['achievements'] ?: '');
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 7.7rem;
+      gap: 6.7rem;
       font-size: .8rem;
       color: #495057;
     }

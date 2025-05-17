@@ -36,6 +36,7 @@ $shortDesc=nl2br(htmlspecialchars(substr($item['description'],0,$limit)));
   <title><?=htmlspecialchars($item['title'])?> – What's New</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="bootstrap-5.3.5-dist\css\bootstrap.min.css">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <style>
     .container-fluid{max-width:900px;margin:2rem auto;padding:0;}
