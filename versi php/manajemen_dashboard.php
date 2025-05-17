@@ -162,7 +162,7 @@ $achs   = explode(', ', $mgr['achievements'] ?: '');
       </div>
       <div class="col-lg-4 col-md-6 nama">
         <h1 class="fw-bold"><?= htmlspecialchars($mgr['name']) ?></h1>
-        <h5 class="text-muted">Tentang Saya</h5>
+        <h5 style="color: #00c8c8 !important;">Tentang Saya</h5>
         <p class="text-start"><?= nl2br(htmlspecialchars($mgr['bio'])) ?></p>
         <?php if ($jobs[0] !== ''): ?>
           <h6>Deskripsi Pekerjaan:</h6>
