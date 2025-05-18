@@ -38,7 +38,7 @@
 </head>
 <body>
   <div class="container py-4">
-    <a href="dashboard.php" class="btn btn-outline-dark nav-button">
+    <a href="dashboard" class="btn btn-outline-dark nav-button">
       <i class="bi bi-house-door me-1"></i> Home
     </a>
     <div class="d-flex justify-content-between align-items-center mb-3">

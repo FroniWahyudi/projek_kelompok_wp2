@@ -38,6 +38,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/karyawan/update_sisa_cuti', [HrDashboardController::class, 'updateSisaCuti'])->name('karyawan.update_sisa_cuti');
     Route::get('/edit_profil/{id}', [DashboardController::class, 'edit'])->name('profil.edit');
     Route::put('/edit_profil/{id}', [DashboardController::class, 'update'])->name('profil.update');
+    route::get('/shift_karyawan', function() {
+        return view('index.shift_karyawan');
+    });
 
     // Add other protected routes here
 });

@@ -88,6 +88,7 @@
                     <tr>
                         <th>No</th>
                         <th>Foto</th>
+                        <th>ID</th>
                         <th>Nama</th>
                         <th>Email</th>
                         <th>No. Telepon</th>
@@ -103,6 +104,7 @@
                     <tr>
                         <td>{{ $index + 1 }}</td>
                         <td><img src="{{ $k->photo_url }}" width="40" height="40" class="rounded-circle"></td>
+                        <td>{{ $k->id }}</td>
                         <td>{{ $k->name }}</td>
                         <td>{{ $k->email }}</td>
                         <td>{{ $k->phone }}</td>
@@ -111,8 +113,8 @@
                         @if($role == 'HR')
                             <td>
                                 <input type="number" name="sisa_cuti[{{ $k->id }}]" 
-                                       value="{{ $k->total_cuti ?? 12 }}" 
-                                       class="form-control form-control-sm" min="0">
+                                  value="{{ $sisa_cuti[$k->id] ?? 0 }}" 
+                                  class="form-control form-control-sm" min="0">
                             </td>
                         @endif
                     </tr>

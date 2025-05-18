@@ -24,12 +24,13 @@ class HrDashboardController extends Controller
     public function karyawan_index(){
         $tahun = Carbon::now()->year;
         $user = Auth::user();
+        $sisa_cuti = SisaCuti::pluck('cuti_sisa', 'user_id');
         $role = $user->role;
         $karyawan = User::where('role', 'Karyawan')
             ->orderBy('name')
             ->get();
 
-        return view('index.karyawan', compact('karyawan', 'tahun','role'));
+        return view('index.karyawan', compact('karyawan', 'tahun','role','sisa_cuti'));
     }
     
     public function updateSisaCuti(Request $request)
@@ -39,7 +40,7 @@ class HrDashboardController extends Controller
         foreach($request->sisa_cuti as $userId => $sisaCuti) {
             SisaCuti::updateOrCreate(
                 ['user_id' => $userId, 'tahun' => $tahun],
-                ['total_cuti' => $sisaCuti, 'cuti_terpakai' => 0]
+                ['cuti_sisa' => $sisaCuti]
             );
         }
 

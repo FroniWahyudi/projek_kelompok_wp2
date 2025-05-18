@@ -311,7 +311,7 @@
         </a>
       </li>
       <li>
-        <a class="dropdown-item" href="shift_karyawan.php">
+        <a class="dropdown-item" href="shift_karyawan">
           <i class="bi bi-clock-history me-1"></i>
           Shift & Jadwal Karyawan
         </a>
@@ -429,7 +429,7 @@
     @endif
   </a>
 
-  <a href="shift_karyawan.php" class="btn btn-outline-dark w-100">
+  <a href="shift_karyawan" class="btn btn-outline-dark w-100">
     <i class="bi bi-clock-history me-1"></i> Shift & Jadwal
   </a>
 </nav>
