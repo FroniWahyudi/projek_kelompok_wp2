@@ -38,9 +38,10 @@ class HrDashboardController extends Controller
         $tahun = Carbon::now()->year;
 
         foreach($request->sisa_cuti as $userId => $sisaCuti) {
+            $totalCuti = SisaCuti::where('user_id', $userId)->value('total_cuti');
             SisaCuti::updateOrCreate(
                 ['user_id' => $userId, 'tahun' => $tahun],
-                ['cuti_sisa' => $sisaCuti]
+                ['cuti_sisa' => $sisaCuti, 'cuti_terpakai' => $totalCuti-$sisaCuti]
             );
         }
 

@@ -49,6 +49,10 @@
               <img src="{{ asset($user->photo_url) }}" alt="Foto Profil" style="width:120px; height:120px; object-fit:cover; border-radius:50%;">
             </div>
 
+            @if(session('success'))
+              <div class="alert alert-success">{{ session('success') }}</div>
+            @endif
+
             <div class="row mb-3">
               <label class="col-sm-2 col-form-label">Nama</label>
               <div class="col-sm-10">
