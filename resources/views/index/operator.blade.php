@@ -92,7 +92,7 @@
             <div class="manager-info">
               <h5>{{ $op->name }}</h5>
               <div class="role">{{ $op->role }} <span class="badge bg-info text-dark ms-2">{{ $op->level }}</span></div>
-              <p>{{ $op->email }} | {{ $op->phone }}</p>
+              <p>{{ $op->email }}</p>
               <p>{{ Str::limit($op->bio, 100) }}</p>
               <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal{{ $op->id }}">Detail</button>
             </div>
