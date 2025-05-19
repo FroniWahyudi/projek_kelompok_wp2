@@ -31,7 +31,7 @@
     .footer { background:#fff; border-top:1px solid #dee2e6; padding:1rem 0; text-align:center; }
     .form-control {
       display: block;
-      width: 407px;
+      width: 100%;
       margin-left: 37px;
     }
     .main-container {

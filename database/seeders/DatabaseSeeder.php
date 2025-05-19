@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\News;
 use App\Models\CutiRequest;
 use App\Models\CutiLogs;
+use App\Models\LaporanKerja;
 
 use function Symfony\Component\String\s;
 
@@ -95,7 +96,7 @@ class DatabaseSeeder extends Seeder
             'role' => 'Operator',
             'email' => 'ahmad.yusuf@nagahtam.co.id',
             'phone' => '08123456783',
-            'password' => 'Operator',
+            'password' => '12345',
             'photo_url'=> 'img/ahmad_yusuf.jpg',
             'bio' => 'Staf HR yang berfokus pada administrasi dan pengelolaan Operator.',
             'alamat' => 'Jl. HRD No. 8, Tangerang',
@@ -131,7 +132,7 @@ class DatabaseSeeder extends Seeder
             'role' => 'Operator',
             'email' => 'agus@nagahtam.co.id',
             'phone' => '08123456785',
-            'password' => 'Operator',
+            'password' => 'karyawan123',
             'photo_url'=> 'img/budi.jpg',
             'bio' => 'Operator yang mengawasi proses produksi dan memastikan kualitas barang yang dihasilkan.',
             'alamat' => 'Jl. Produksi No. 3, Karawang',
@@ -179,11 +180,28 @@ class DatabaseSeeder extends Seeder
             'skills' => 'Stok Opname, Pengemasan, Ketelitian',
             'achievements' => 'Staf Gudang Teladan 2023'
         ]);
+        User::create([
+            'name' => 'Fahri',
+            'role' => 'Admin',
+            'email' => 'fahri@nagahtam.co.id',
+            'phone' => '08123456772',
+            'password' => '12345',
+            'photo_url'=> 'img/fahri.jpg',
+            'bio' => 'Bertugas mengelola seluruh administrasi Operator termasuk persetujuan cuti, pemberian hak cuti, serta membaca dan menindaklanjuti laporaOperator.',
+            'alamat' => 'Jl. Raya No. 1, Jakarta',
+            'joined_at' => '2025-01-01',
+            'education' => 'S1 Manajemen Sumber Daya Manusia',
+            'department' => 'HR',
+            'level' => 'Senior',
+            'job_descriptions' => 'Rekrutmen dan seleksi Operator, Pengelolaan data Operator, Pelatihan dan onboarding.',
+            'skills' => 'Komunikasi, Microsoft Excel, Manajemen SDM',
+            'achievements' => 'Penghargaan Operator Terbaik 2024, Sertifikasi Manajemen SDM',
+        ]);
 
         News::create([
             'date' => '2025-06-29',
             'title' => 'Pengembangan Produk Inovatif',
-            'image_url' => 'img/Operator_inovasi.png',
+            'image_url' => 'img/karyawan_inovasi.png',
             'description' => 'Tim R&D kami telah menyelesaikan serangkaian pengujian ekstensif terhadap prototipe produk inovatif yang menggabungkan material komposit ramah lingkungan dan teknologi penghematan energi terkini. Hasil uji laboratorium menunjukkan peningkatan performa hingga 30% serta pengurangan konsumsi energi hampir 20%, sekaligus menjaga stabilitas suhu operasional di bawah ambang batas keamanan. Fase uji lapangan kini melibatkan mitra strategis dan pelanggan pilot, dengan target validasi kualitas dan skalabilitas produksi massal dalam dua bulan ke depan. Rencana peluncuran komersial dijadwalkan pada kuartal berikutnya, lengkap dengan dukungan layanan purna jual dan pelatihan teknis untuk memastikan adopsi optimal di berbagai sektor industri.',
             'link' => 'Null',
         ]);
@@ -308,6 +326,19 @@ class DatabaseSeeder extends Seeder
             'total_cuti' => 12,
             'cuti_terpakai' => 4,
             'cuti_sisa' => 8,
+        ]);
+
+        LaporanKerja::create([
+            'tanggal' => '2025-05-21',
+            'nama' => 'Froni ',
+            'divisi' => 'HR specialist',
+            'deskripsi' => 'target sudah tercapai ,gudang sudah mengeluarkan barang sebanyak 250 unit',
+        ]);
+        LaporanKerja::create([
+            'tanggal' => '2025-05-05',
+            'nama' => 'Froni Wahyudi',
+            'divisi' => 'Operator Gudang',
+            'deskripsi' => "barang sudah keluar 300 unit\r\n",
         ]);
         // cuti_logs Table
         /*DB::table('cuti_logs')->insert([

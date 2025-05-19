@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HrDashboardController;
+use App\Http\Controllers\LaporanKerjaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,6 +43,7 @@ Route::middleware(['auth'])->group(function () {
     route::get('/shift_karyawan', function() {
         return view('index.shift_karyawan');
     });
+    Route::get('/laporan_kerja', [LaporanKerjaController::class, 'index'])->name('laporan.index');
 
     // Add other protected routes here
 });

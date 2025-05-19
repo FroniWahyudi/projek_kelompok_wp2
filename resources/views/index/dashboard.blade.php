@@ -392,14 +392,14 @@
   <h6 class="fw-bold">Menu Lainnya</h6>
 
   <?php //if ($user['role'] === 'Manajer' || $user['role'] === 'HR' ): ?>
-  @if($role == 'Manajer' || $role == 'HR')
-    <a href="laporan_kerja.php" class="btn btn-outline-dark w-100 mb-2">
+  @if($role == 'Manajer' || $role == 'Admin')
+    <a href="laporan_kerja" class="btn btn-outline-dark w-100 mb-2">
       <i class="bi bi-journal-text me-1"></i> Laporan Kerja
     </a>
   @endif
   
   <?php //if ($user['role'] === 'Leader' || $user['role'] === 'HR' ): ?>
-  @if($role == "Leader" || $role == "HR")
+  @if($role == "Leader" || $role == "Admin")
     @if($role == "Leader")
     <?php// if ($user['role'] === 'Leader'): ?>
       <a href="laporan_kerja.php" class="btn btn-outline-dark w-100 mb-2">
@@ -411,7 +411,7 @@
     </a>
   @endif
   <?php //elseif ($user['role'] === 'Karyawan'): ?>
-  @if($role == 'Karyawan')
+  @if($role == 'Operator')
     <a href="cuti.php" class="btn btn-outline-dark w-100 mb-2">
       <i class="bi bi-file-earmark-text me-1"></i> Pengajuan Cuti
     </a>
@@ -425,7 +425,7 @@
   
   <a href="feedback_pegawai.php" class="btn btn-outline-dark w-100 mb-2">
     <i class="bi bi-chat-dots me-1"></i> 
-    @if($role == "Karyawan")
+    @if($role == "Operator")
     Evaluasi Kinerja
     @else
     Feedback Pegawai
