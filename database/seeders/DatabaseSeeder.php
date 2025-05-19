@@ -19,166 +19,639 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-          User::create([
-            'name' => 'Alice Putri',
-            'role' => 'Admin',
-            'email' => 'alice.putri@nagahtam.co.id',
-            'phone' => '08123456789',
-            'password' => '12345',
-            'photo_url'=> 'img/nami.jpeg',
-            'bio' => 'Bertugas mengelola seluruh administrasi Operator termasuk persetujuan cuti, pemberian hak cuti, serta membaca dan menindaklanjuti laporaOperator.',
-            'alamat' => 'Jl. Raya No. 1, Jakarta',
-            'joined_at' => '2025-01-01',
-            'education' => 'S1 Manajemen Sumber Daya Manusia',
-            'department' => 'HR',
-            'level' => 'Senior',
-            'job_descriptions' => 'Rekrutmen dan seleksi Operator, Pengelolaan data Operator, Pelatihan dan onboarding.',
-            'skills' => 'Komunikasi, Microsoft Excel, Manajemen SDM',
-            'achievements' => 'Penghargaan Operator Terbaik 2024, Sertifikasi Manajemen SDM'
+           User::create([
+            'name'             => 'Alice Putri',
+            'role'             => 'Admin',
+            'email'            => 'alice.putri@nagahytam.co.id',
+            'phone'            => '+62 812-3456-7890',
+            'password'         => '12345',
+            'photo_url'        => 'img/nami.jpeg',
+            'bio'              => 'Mengelola administrasi karyawan.',
+            'alamat'           => 'Jl. Merdeka No. 10, Jakarta Pusat',
+            'joined_at'        => '2018-01-15',
+            'education'        => 'SI Manajemen, Universitas Indonesia',
+            'department'       => 'HR',
+            'level'            => 'Senior',
+            'job_descriptions' => 'Rekrutmen dan seleksi karyawan, Pengelolaan data karyawan, Pelatihan dan onboarding',
+            'skills'           => 'Komunikasi, Microsoft Excel, Manajemen SDM',
+            'achievements'     => 'Employee of the Year 2020, Penyusunan SOP HR'
         ]);
 
         User::create([
-            'name' => 'Budi Santoso',
-            'role' => 'Leader',
-            'email' => 'budi.santoso@nagahtam.co.id',
-            'phone' => '08123456780',
-            'password' => '12345',
-            'photo_url'=> 'img/zoro.jpeg',
-            'bio' => 'Bertugas memberikan laporan pekerjaan per satu shift, serta memantau dan mengarahkan operator di lapangan agar pekerjaan berjalan sesuai target.',
-            'alamat' => 'Jl. Industri No. 2, Bekasi',
-            'joined_at' => '2024-08-15',
-            'education' => 'S1 Teknik Industri',
-            'department' => 'Produksi',
-            'level' => 'Menengah',
-            'job_descriptions' => 'Koordinasi tim shift, Monitoring target produksi, Pelaporan harian.',
-            'skills' => 'Kepemimpinan, Analisis Data, Komunikasi',
-            'achievements' => 'Ketua Tim Produksi Terbaik 2023'
+            'name'             => 'Budi Santoso',
+            'role'             => 'Leader',
+            'email'            => 'budi.santoso@nagahytam.co.id',
+            'phone'            => '+62 813-9876-5432',
+            'password'         => '12345',
+            'photo_url'        => 'img/zoro.jpeg',
+            'bio'              => 'Memantau operator lapangan.',
+            'alamat'           => 'Jl. Sudirman Kav. 12, Jakarta Selatan',
+            'joined_at'        => '2019-03-10',
+            'education'        => 'Teknik Industri, Institut Teknologi Bandung',
+            'department'       => 'Operasional',
+            'level'            => 'Mid-level',
+            'job_descriptions' => 'Koordinasi tim lapangan, Laporan harian produksi',
+            'skills'           => 'Leadership, Problem Solving, Safety Management',
+            'achievements'     => 'Tim terbaik Q4 2021'
         ]);
 
         User::create([
-            'name' => 'Sanji',
-            'role' => 'Leader',
-            'email' => 'sanji@nagahtam.co.id',
-            'phone' => '08123456781',
-            'password' => '12345',
-            'photo_url'=> 'img/sanji.jpeg',
-            'bio' => 'Bertugas memberikan laporan pekerjaan per satu shift, serta memantau dan mengarahkan operator di lapangan agar pekerjaan berjalan sesuai target.',
-            'alamat' => 'Jl. Pelabuhan No. 5, Surabaya',
-            'joined_at' => '2024-07-01',
-            'education' => 'D3 Manufaktur',
-            'department' => 'Produksi',
-            'level' => 'Menengah',
-            'job_descriptions' => 'Pengawasan mesin produksi, Koordinasi teknisi, Pelaporan kualitas harian.',
-            'skills' => 'Manajemen Waktu, Problem Solving, Mesin Industri',
-            'achievements' => 'Peningkatan Efisiensi Produksi 15%'
+            'name'             => 'Sanji',
+            'role'             => 'Leader',
+            'email'            => 'sanji@nagahytam.co.id',
+            'phone'            => '+62 813-9876-5432',
+            'password'         => '12345',
+            'photo_url'        => 'img/sanji.jpeg',
+            'bio'              => 'Memantau operator lapangan.',
+            'alamat'           => 'Jl. Pahlawan No. 3, Surabaya',
+            'joined_at'        => '2020-07-22',
+            'education'        => 'Teknik Mesin, Universitas Negeri Surabaya',
+            'department'       => 'Operasional',
+            'level'            => 'Mid-level',
+            'job_descriptions' => 'Jadwal shift operator, Optimasi workflow produksi',
+            'skills'           => 'Time Management, Maintenance Planning',
+            'achievements'     => 'Pengurangan downtime 15%'
         ]);
 
         User::create([
-            'name' => 'Sutoyo Dono',
-            'role' => 'Manajer',
-            'email' => 'sutoyo@nagahtam.co.id',
-            'phone' => '08123456782',
-            'password' => 'sutoyo123',
-            'photo_url'=> 'img/sutoyo.jpeg',
-            'bio' => 'Bertanggung jawab atas keseluruhan operasional perusahaan dan pengambilan keputusan strategis di semua divisi.',
-            'alamat' => 'Jl. Merdeka No. 10, Jakarta',
-            'joined_at' => '2020-01-10',
-            'education' => 'S2 Administrasi Bisnis',
-            'department' => 'Manajemen',
-            'level' => 'Eksekutif',
-            'job_descriptions' => 'Pengambilan keputusan, Evaluasi kinerja divisi, Penyusunan strategi perusahaan.',
-            'skills' => 'Analisis Strategis, Manajemen Risiko, Kepemimpinan',
-            'achievements' => 'Peningkatan ROI Tahunan, Pemimpin Inspiratif 2022'
+            'name'             => 'Sutoyo Sama',
+            'role'             => 'Manajer',
+            'email'            => 'sutoyo@nagahytam.co.id',
+            'phone'            => '+62 812-1234-5678',
+            'password'         => 'sutoyo123',
+            'photo_url'        => 'img/sutoyo.jpg',
+            'bio'              => 'Memimpin pengambilan keputusan strategis perusahaan dan memastikan keberlanjutan operasional jangka panjang. Bertanggung jawab atas koordinasi lintas departemen untuk mencapai tujuan bisnis secara efektif.',
+            'alamat'           => 'Jl. Diponegoro No. 20, Semarang',
+            'joined_at'        => '2015-11-05',
+            'education'        => 'Magister Manajemen, Universitas Gadjah Mada',
+            'department'       => 'Manajemen',
+            'level'            => 'Senior',
+            'job_descriptions' => 'Perencanaan strategi perusahaan, Koordinasi antar-departemen',
+            'skills'           => 'Strategic Planning, Negotiation',
+            'achievements'     => 'Penghargaan Leader of the Year 2019'
         ]);
 
         User::create([
-            'name' => 'Ahmad Yusuf',
-            'role' => 'Operator',
-            'email' => 'ahmad.yusuf@nagahtam.co.id',
-            'phone' => '08123456783',
-            'password' => '12345',
-            'photo_url'=> 'img/ahmad_yusuf.jpg',
-            'bio' => 'Staf HR yang berfokus pada administrasi dan pengelolaan Operator.',
-            'alamat' => 'Jl. HRD No. 8, Tangerang',
-            'joined_at' => '2023-05-20',
-            'education' => 'S1 Psikologi',
-            'department' => 'HR',
-            'level' => 'Junior',
-            'job_descriptions' => 'Input data Operator, Administrasi cuti, Arsip dokumen SDM.',
-            'skills' => 'Filing, Administrasi, Komunikasi',
-            'achievements' => 'Operator Teladan Bulan Februari 2024'
+
+            'name'             => 'Putri Tanjung',
+            'role'             => 'Admin',
+            'email'            => 'putri.tanjung@nagahytam.co.id',
+            'phone'            => '+62 813-4567-8901',
+            'password'         => 'putri123',
+            'photo_url'        => 'img/putri_tanjung.jpg',
+            'bio'              => 'Mengelola administrasi dan koordinasi tim.',
+            'alamat'           => 'Jl. Melati No. 12, Bandung',
+            'joined_at'        => '2019-05-20',
+            'education'        => 'Administrasi Bisnis, Universitas Padjadjaran',
+            'department'       => 'Administrasi',
+            'level'            => 'Senior',
+            'job_descriptions' => 'Membuat laporan bulanan, Koordinasi dengan manajemen',
+            'skills'           => 'Microsoft Office, Komunikasi, Manajemen Proyek',
+            'achievements'     => 'Employee of the Month 2022'
+        ]);
+
+        // Operator 6–35
+        User::create([
+            'name'             => 'Ahmad Yusuf',
+            'role'             => 'Operator',
+            'email'            => 'ahmad.yusuf@nagahytam.co.id',
+            'phone'            => '+62 812-3456-7890',
+            'password'         => 'karyawan123',
+            'photo_url'        => 'img/profil_operator.jpg',
+            'bio'              => 'Bertanggung jawab proses sortir dan packing barang.',
+            'alamat'           => 'Jl. Gajah Mada No. 15, Yogyakarta',
+            'joined_at'        => '2021-02-18',
+            'education'        => 'Administrasi Bisnis, UNDIP',
+            'department'       => 'Gudang',
+            'level'            => 'Junior',
+            'job_descriptions' => 'Sortir barang, Packing pesanan, Cek inventory',
+            'skills'           => 'Ketelitian, Kecepatan, Barcode scanning',
+            'achievements'     => 'Zero Error Packing 2022'
+
         ]);
 
         User::create([
-            'name' => 'Wanda',
-            'role' => 'Operator',
-            'email' => 'wanda@nagahtam.co.id',
-            'phone' => '08123456784',
-            'password' => 'Operator',
-            'photo_url'=> 'img/wanda.jpg',
-            'bio' => 'Supervisor yang memimpin tim dengan orientasi hasil dan efisiensi operasional.',
-            'alamat' => 'Jl. Mekar No. 12, Bandung',
-            'joined_at' => '2022-11-01',
-            'education' => 'S1 Teknik Mesin',
-            'department' => 'Operasional',
-            'level' => 'Senior',
-            'job_descriptions' => 'Koordinasi tim operasional, Monitoring peralatan, Laporan hasil kerja.',
-            'skills' => 'Supervisi, Teknik Produksi, Microsoft Excel',
-            'achievements' => 'Peningkatan Output Bulanan 2023'
+            'name'             => 'Wandi Kurnia',
+            'role'             => 'Operator',
+            'email'            => 'wandi.kurnia@nagahytam.co.id',
+            'phone'            => '+62 813-9876-5432',
+            'password'         => 'karyawan123',
+            'photo_url'        => 'img/profil_operator.jpg',
+            'bio'              => 'Menerima, sortir kualitas, dan packing kiriman.',
+            'alamat'           => 'Jl. Pemuda No. 7, Bekasi',
+            'joined_at'        => '2017-08-30',
+            'education'        => 'Manaj. Operasional, UNPAD',
+            'department'       => 'Gudang',
+            'level'            => 'Senior',
+            'job_descriptions' => 'Penerimaan barang, Sortir kualitas, Packing & labeling',
+            'skills'           => 'QC, Supervisi, Komunikasi',
+            'achievements'     => 'Akurasi 99% 2021'
         ]);
 
         User::create([
-            'name' => 'Agus',
-            'role' => 'Operator',
-            'email' => 'agus@nagahtam.co.id',
-            'phone' => '08123456785',
-            'password' => 'karyawan123',
-            'photo_url'=> 'img/budi.jpg',
-            'bio' => 'Operator yang mengawasi proses produksi dan memastikan kualitas barang yang dihasilkan.',
-            'alamat' => 'Jl. Produksi No. 3, Karawang',
-            'joined_at' => '2023-02-17',
-            'education' => 'SMK Otomasi Industri',
-            'department' => 'Produksi',
-            'level' => 'Junior',
-            'job_descriptions' => 'Pengoperasian mesin, Pemeriksaan kualitas, Pemeliharaan alat.',
-            'skills' => 'Operator Mesin, QC, Maintenance',
-            'achievements' => 'Zero Defect Award 2024'
+
+            'name'             => 'Agus Santoso',
+            'role'             => 'Operator',
+            'email'            => 'agus.santoso@nagahytam.co.id',
+            'phone'            => '+62 813-9876-5432',
+            'password'         => 'karyawan123',
+            'photo_url'        => 'img/profil_operator.jpg',
+            'bio'              => 'Operator gudang: sortir, packing, tata rak.',
+            'alamat'           => 'Jl. Raya Bogor No. 45, Depok',
+            'joined_at'        => '2022-04-12',
+            'education'        => 'Teknik Kimia, IST',
+            'department'       => 'Gudang',
+            'level'            => 'Junior',
+            'job_descriptions' => 'Packing barang, Tata rak, Pengecekan batch',
+            'skills'           => 'Organisasi, Machine Op',
+            'achievements'     => 'Zero Defect April 2023'
+
         ]);
 
         User::create([
-            'name' => 'Lina Marlina',
-            'role' => 'Operator',
-            'email' => 'lina.marlina@nagahtam.co.id',
-            'phone' => '08123456786',
-            'password' => 'Operator',
-            'photo_url'=> 'img/lina.jpg',
-            'bio' => 'Manager yang memimpin divisi dengan fokus pada strategi dan pengembangan tim.',
-            'alamat' => 'Jl. Sentosa No. 4, Depok',
-            'joined_at' => '2021-03-30',
-            'education' => 'S1 Administrasi Publik',
-            'department' => 'Manajemen',
-            'level' => 'Senior',
-            'job_descriptions' => 'Perencanaan strategi divisi, Evaluasi performa tim, Pengembangan sumber daya.',
-            'skills' => 'Perencanaan, Manajemen Tim, Coaching',
-            'achievements' => 'Manager Inspiratif 2023'
+            'name'             => 'Rian Marlino',
+            'role'             => 'Operator',
+            'email'            => 'rian.marlino@nagahytam.co.id',
+            'phone'            => '+62 812-1234-5678',
+            'password'         => 'karyawan123',
+            'photo_url'        => 'img/profil_operator.jpg',
+            'bio'              => 'Menjalankan sortir otomatis & manual.',
+            'alamat'           => 'Jl. Sultan Iskandar No. 8, Medan',
+            'joined_at'        => '2016-06-21',
+            'education'        => 'S2 Manajemen, USU',
+            'department'       => 'Gudang',
+            'level'            => 'Senior',
+            'job_descriptions' => 'Sortir otomatis, Maintenance, Packing ekspor',
+            'skills'           => 'Monitoring, Maintenance',
+            'achievements'     => 'Divisi Terbaik 2022'
         ]);
 
         User::create([
-            'name' => 'Rudi Hartono',
-            'role' => 'Operator',
-            'email' => 'rudi.hartono@nagahtam.co.id',
-            'phone' => '08123456771',
-            'password' => 'Operator',
-            'photo_url'=> 'img/rudi.jpg',
-            'bio' => 'Staf gudang yang bertanggung jawab atas pengelolaan stok dan pengiriman barang.',
-            'alamat' => 'Jl. Gudang No. 9, Bogor',
-            'joined_at' => '2022-01-05',
-            'education' => 'SMA',
-            'department' => 'Gudang',
-            'level' => 'Junior',
-            'job_descriptions' => 'Stok barang, Pengiriman, Pelaporan gudang.',
-            'skills' => 'Stok Opname, Pengemasan, Ketelitian',
-            'achievements' => 'Staf Gudang Teladan 2023'
+            'name'             => 'Rudi Hartanto',
+            'role'             => 'Operator',
+            'email'            => 'rudi.hartanto@nagahytam.co.id',
+            'phone'            => '+62 813-5678-9012',
+            'password'         => 'karyawan123',
+            'photo_url'        => 'img/profil_operator.jpg',
+            'bio'              => 'Cek inventori, packing, koordinasi kiriman.',
+            'alamat'           => 'Jl. Bumi Raya No. 9, Palembang',
+            'joined_at'        => '2019-09-14',
+            'education'        => 'Logistik, UNSRI',
+            'department'       => 'Gudang',
+            'level'            => 'Mid-level',
+            'job_descriptions' => 'Audit inventory, Packing, Koordinasi ekspedisi',
+            'skills'           => 'Inventory Mgmt, Forklift',
+            'achievements'     => 'On-Time Delivery 2021'
+        ]);
+
+        User::create([
+            'name'             => 'Andi Prasetyo',
+            'role'             => 'Operator',
+            'email'            => 'andi.prasetyo@nagahytam.co.id',
+            'phone'            => '+62 811-0000-0001',
+            'password'         => 'karyawan123',
+            'photo_url'        => 'img/profil_operator.jpg',
+            'bio'              => 'Sorting barang masuk dan penataan rak.',
+            'alamat'           => 'Jl. Merpati No. 11, Bandung',
+            'joined_at'        => '2020-01-05',
+            'education'        => 'Manajemen, UNPAD',
+            'department'       => 'Gudang',
+            'level'            => 'Junior',
+            'job_descriptions' => 'Sortir, Penataan rak, Packing',
+            'skills'           => 'Ketelitian, Kecepatan',
+            'achievements'     => 'Best Sorter 2020'
+        ]);
+
+        User::create([
+            'name'             => 'Budi Hartono',
+            'role'             => 'Operator',
+            'email'            => 'budi.hartono@nagahytam.co.id',
+            'phone'            => '+62 811-0000-0002',
+            'password'         => 'karyawan123',
+            'photo_url'        => 'img/profil_operator.jpg',
+            'bio'              => 'Memproses packing dan labeling pesanan.',
+            'alamat'           => 'Jl. Kenari No. 12, Jakarta Utara',
+            'joined_at'        => '2018-03-10',
+            'education'        => 'Logistik, UI',
+            'department'       => 'Gudang',
+            'level'            => 'Junior',
+            'job_descriptions' => 'Packing, Labeling, QC',
+            'skills'           => 'Label Accuracy, Packing Speed',
+            'achievements'     => 'Employee of Month Mar 2022'
+        ]);
+
+        User::create([
+            'name'             => 'Candra Wijaya',
+            'role'             => 'Operator',
+            'email'            => 'candra.wijaya@nagahytam.co.id',
+            'phone'            => '+62 811-0000-0003',
+            'password'         => 'karyawan123',
+            'photo_url'        => 'img/profil_operator.jpg',
+            'bio'              => 'Bertugas terima barang dan sortir kualitas.',
+            'alamat'           => 'Jl. Kenanga No. 13, Surabaya',
+            'joined_at'        => '2019-05-21',
+            'education'        => 'Teknik Industri, ITS',
+            'department'       => 'Gudang',
+            'level'            => 'Junior',
+            'job_descriptions' => 'Penerimaan barang, Sortir QC',
+            'skills'           => 'QC, Data Entry',
+            'achievements'     => 'Zero Defect Jun 2023'
+        ]);
+
+        User::create([
+            'name'             => 'Dedi Saputra',
+            'role'             => 'Operator',
+            'email'            => 'dedi.saputra@nagahytam.co.id',
+            'phone'            => '+62 811-0000-0004',
+            'password'         => 'karyawan123',
+            'photo_url'        => 'img/profil_operator.jpg',
+            'bio'              => 'Melakukan packing & persiapan kirim.',
+            'alamat'           => 'Jl. Pelita No. 14, Medan',
+            'joined_at'        => '2020-07-15',
+            'education'        => 'Logistik, USU',
+            'department'       => 'Gudang',
+            'level'            => 'Mid-level',
+            'job_descriptions' => 'Packing, Koordinasi kirim',
+            'skills'           => 'Logistik, Forklift',
+            'achievements'     => 'Best Packer 2021'
+        ]);
+
+        User::create([
+            'name'             => 'Eko Prabowo',
+            'role'             => 'Operator',
+            'email'            => 'eko.prabowo@nagahytam.co.id',
+            'phone'            => '+62 811-0000-0005',
+            'password'         => 'karyawan123',
+            'photo_url'        => 'img/profil_operator.jpg',
+            'bio'              => 'Menata ulang rak dan inventory check.',
+            'alamat'           => 'Jl. Mangga No. 15, Semarang',
+            'joined_at'        => '2021-11-30',
+            'education'        => 'Manajemen, UGM',
+            'department'       => 'Gudang',
+            'level'            => 'Junior',
+            'job_descriptions' => 'Rak organization, Inventory check',
+            'skills'           => 'Detail-oriented',
+            'achievements'     => 'Inventory Hero 2023'
+        ]);
+
+        User::create([
+            'name'             => 'Fajar Nugroho',
+            'role'             => 'Operator',
+            'email'            => 'fajar.nugroho@nagahytam.co.id',
+            'phone'            => '+62 811-0000-0006',
+            'password'         => 'karyawan123',
+            'photo_url'        => 'img/profil_operator.jpg',
+            'bio'              => 'Supervisor packing shift malam.',
+            'alamat'           => 'Jl. Anggrek No. 16, Bekasi',
+            'joined_at'        => '2017-02-18',
+            'education'        => 'Manajemen, UNPAD',
+            'department'       => 'Gudang',
+            'level'            => 'Senior',
+            'job_descriptions' => 'Supervisi packing, QC',
+            'skills'           => 'Leadership',
+            'achievements'     => 'Night Shift Star'
+        ]);
+
+        User::create([
+            'name'             => 'Galih Santoso',
+            'role'             => 'Operator',
+            'email'            => 'galih.santoso@nagahytam.co.id',
+            'phone'            => '+62 811-0000-0007',
+            'password'         => 'karyawan123',
+            'photo_url'        => 'img/profil_operator.jpg',
+            'bio'              => 'Mengelola sortir manual dan mesin.',
+            'alamat'           => 'Jl. Melur No. 17, Bandung',
+            'joined_at'        => '2018-10-10',
+            'education'        => 'Teknik Mesin, ITB',
+            'department'       => 'Gudang',
+            'level'            => 'Mid-level',
+            'job_descriptions' => 'Sortir manual & mesin',
+            'skills'           => 'Machine Ops',
+            'achievements'     => 'Sort Master 2022'
+        ]);
+
+        User::create([
+            'name'             => 'Hadi Wijaya',
+            'role'             => 'Operator',
+            'email'            => 'hadi.wijaya@nagahytam.co.id',
+            'phone'            => '+62 811-0000-0008',
+            'password'         => 'karyawan123',
+            'photo_url'        => 'img/profil_operator.jpg',
+            'bio'              => 'Menangani return barang & QC ulang.',
+            'alamat'           => 'Jl. Dahlia No. 18, Surabaya',
+            'joined_at'        => '2019-12-01',
+            'education'        => 'Teknik Industri, ITS',
+            'department'       => 'Gudang',
+            'level'            => 'Junior',
+            'job_descriptions' => 'Return processing, Re-QC',
+            'skills'           => 'QC',
+            'achievements'     => 'Return King 2022'
+        ]);
+
+        User::create([
+            'name'             => 'Iwan Setiawan',
+            'role'             => 'Operator',
+            'email'            => 'iwan.setiawan@nagahytam.co.id',
+            'phone'            => '+62 811-0000-0009',
+            'password'         => 'karyawan123',
+            'photo_url'        => 'img/profil_operator.jpg',
+            'bio'              => 'Koordinasi forklift & stoking rak.',
+            'alamat'           => 'Jl. Flamboyan No. 19, Jakarta Timur',
+            'joined_at'        => '2020-04-22',
+            'education'        => 'Logistik, UI',
+            'department'       => 'Gudang',
+            'level'            => 'Junior',
+            'job_descriptions' => 'Forklift operation, Stoking',
+            'skills'           => 'Forklift',
+            'achievements'     => 'Forklift Ace 2023'
+        ]);
+
+        User::create([
+            'name'             => 'Joko Susilo',
+            'role'             => 'Operator',
+            'email'            => 'joko.susilo@nagahytam.co.id',
+            'phone'            => '+62 811-0000-0010',
+            'password'         => 'karyawan123',
+            'photo_url'        => 'img/profil_operator.jpg',
+            'bio'              => 'Mengemas barang besar & berat.',
+            'alamat'           => 'Jl. Kenari No. 20, Palembang',
+            'joined_at'        => '2021-08-05',
+            'education'        => 'Teknik Mesin, UNSRI',
+            'department'       => 'Gudang',
+            'level'            => 'Mid-level',
+            'job_descriptions' => 'Heavy item packing',
+            'skills'           => 'Strength, Teamwork',
+            'achievements'     => 'Heavy Lifter Award'
+        ]);
+
+        User::create([
+            'name'             => 'Krisna Aditya',
+            'role'             => 'Operator',
+            'email'            => 'krisna.aditya@nagahytam.co.id',
+            'phone'            => '+62 811-0000-0011',
+            'password'         => 'karyawan123',
+            'photo_url'        => 'img/profil_operator.jpg',
+            'bio'              => 'Packing kilat & drop-shipping.',
+            'alamat'           => 'Jl. Bambu No. 21, Depok',
+            'joined_at'        => '2022-02-14',
+            'education'        => 'Manajemen, UNDIP',
+            'department'       => 'Gudang',
+            'level'            => 'Junior',
+            'job_descriptions' => 'Express packing',
+            'skills'           => 'Speed Packing',
+            'achievements'     => 'Flash Packer'
+        ]);
+
+        User::create([
+            'name'             => 'Lukman Hakim',
+            'role'             => 'Operator',
+            'email'            => 'lukman.hakim@nagahytam.co.id',
+            'phone'            => '+62 811-0000-0012',
+            'password'         => 'karyawan123',
+            'photo_url'        => 'img/profil_operator.jpg',
+            'bio'              => 'QC akhir sebelum kirim.',
+            'alamat'           => 'Jl. Cemara No. 22, Medan',
+            'joined_at'        => '2018-06-18',
+            'education'        => 'Manajemen, USU',
+            'department'       => 'Gudang',
+            'level'            => 'Senior',
+            'job_descriptions' => 'Final QC',
+            'skills'           => 'QC, Detail',
+            'achievements'     => 'QC Champion'
+        ]);
+
+        User::create([
+            'name'             => 'Miko Pratama',
+            'role'             => 'Operator',
+            'email'            => 'miko.pratama@nagahytam.co.id',
+            'phone'            => '+62 811-0000-0013',
+            'password'         => 'karyawan123',
+            'photo_url'        => 'img/profil_operator.jpg',
+            'bio'              => 'Input data inventory & sortir.',
+            'alamat'           => 'Jl. Anggrek No. 23, Yogyakarta',
+            'joined_at'        => '2019-09-30',
+            'education'        => 'Administrasi, UGM',
+            'department'       => 'Gudang',
+            'level'            => 'Junior',
+            'job_descriptions' => 'Data entry inventory, Sortir',
+            'skills'           => 'MS Excel',
+            'achievements'     => 'Data Star'
+        ]);
+
+        User::create([
+            'name'             => 'Novan Ryan',
+            'role'             => 'Operator',
+            'email'            => 'novan.ryan@nagahytam.co.id',
+            'phone'            => '+62 811-0000-0014',
+            'password'         => 'karyawan123',
+            'photo_url'        => 'img/profil_operator.jpg',
+            'bio'              => 'Menangani packing pesanan e-commerce.',
+            'alamat'           => 'Jl. Melati No. 24, Bandung',
+            'joined_at'        => '2020-11-11',
+            'education'        => 'Logistik, UNPAD',
+            'department'       => 'Gudang',
+            'level'            => 'Mid-level',
+            'job_descriptions' => 'E-commerce packing',
+            'skills'           => 'Speed & Care',
+            'achievements'     => 'E-commerce Hero'
+        ]);
+
+        User::create([
+            'name'             => 'Oki Subandi',
+            'role'             => 'Operator',
+            'email'            => 'oki.subandi@nagahytam.co.id',
+            'phone'            => '+62 811-0000-0015',
+            'password'         => 'karyawan123',
+            'photo_url'        => 'img/profil_operator.jpg',
+            'bio'              => 'Sortir barang elektronik.',
+            'alamat'           => 'Jl. Kenanga No. 25, Bekasi',
+            'joined_at'        => '2021-03-03',
+            'education'        => 'Teknik Elektro, UI',
+            'department'       => 'Gudang',
+            'level'            => 'Junior',
+            'job_descriptions' => 'Sortir elektronik',
+            'skills'           => 'Delicate handling',
+            'achievements'     => 'Electronics Ace'
+        ]);
+
+        User::create([
+            'name'             => 'Prio Nugroho',
+            'role'             => 'Operator',
+            'email'            => 'prio.nugroho@nagahytam.co.id',
+            'phone'            => '+62 811-0000-0016',
+            'password'         => 'karyawan123',
+            'photo_url'        => 'img/profil_operator.jpg',
+            'bio'              => 'Koordinasi tim packing shift pagi.',
+            'alamat'           => 'Jl. Anggrek No. 26, Jakarta Barat',
+            'joined_at'        => '2018-12-12',
+            'education'        => 'Manajemen, UI',
+            'department'       => 'Gudang',
+            'level'            => 'Senior',
+            'job_descriptions' => 'Team coordination',
+            'skills'           => 'Leadership',
+            'achievements'     => 'Morning Lead'
+        ]);
+
+        User::create([
+            'name'             => 'Qori Fahmi',
+            'role'             => 'Operator',
+            'email'            => 'qori.fahmi@nagahytam.co.id',
+            'phone'            => '+62 811-0000-0017',
+            'password'         => 'karyawan123',
+            'photo_url'        => 'img/profil_operator.jpg',
+            'bio'              => 'Memeriksa kondisi packing & material.',
+            'alamat'           => 'Jl. Bumi No. 27, Semarang',
+            'joined_at'        => '2019-07-29',
+            'education'        => 'Teknik Material, UGM',
+            'department'       => 'Gudang',
+            'level'            => 'Junior',
+            'job_descriptions' => 'Material inspection',
+            'skills'           => 'QC, Material science',
+            'achievements'     => 'Material Master'
+        ]);
+
+        User::create([
+            'name'             => 'Raden Hadi',
+            'role'             => 'Operator',
+            'email'            => 'raden.hadi@nagahytam.co.id',
+            'phone'            => '+62 811-0000-0018',
+            'password'         => 'karyawan123',
+            'photo_url'        => 'img/profil_operator.jpg',
+            'bio'              => 'Penataan ulang clusters barang.',
+            'alamat'           => 'Jl. Sawit No. 28, Surabaya',
+            'joined_at'        => '2020-05-20',
+            'education'        => 'Manajemen, ITS',
+            'department'       => 'Gudang',
+            'level'            => 'Mid-level',
+            'job_descriptions' => 'Cluster organization',
+            'skills'           => 'Organization',
+            'achievements'     => 'Cluster Champ'
+        ]);
+
+        User::create([
+            'name'             => 'Sandi Permana',
+            'role'             => 'Operator',
+            'email'            => 'sandi.permana@nagahytam.co.id',
+            'phone'            => '+62 811-0000-0019',
+            'password'         => 'karyawan123',
+            'photo_url'        => 'img/profil_operator.jpg',
+            'bio'              => 'Mengelola retur dan recycle packing.',
+            'alamat'           => 'Jl. Durian No. 29, Yogyakarta',
+            'joined_at'        => '2021-10-10',
+            'education'        => 'Administrasi, UNDIP',
+            'department'       => 'Gudang',
+            'level'            => 'Junior',
+            'job_descriptions' => 'Return handling',
+            'skills'           => 'Recycling',
+            'achievements'     => 'Return Star'
+        ]);
+
+        User::create([
+            'name'             => 'Tony Wijaya',
+            'role'             => 'Operator',
+            'email'            => 'tony.wijaya@nagahytam.co.id',
+            'phone'            => '+62 811-0000-0020',
+            'password'         => 'karyawan123',
+            'photo_url'        => 'img/profil_operator.jpg',
+            'bio'              => 'Melakukan pengepakan besar dan berat.',
+            'alamat'           => 'Jl. Rambutan No. 30, Medan',
+            'joined_at'        => '2018-08-08',
+            'education'        => 'Teknik Mesin, USU',
+            'department'       => 'Gudang',
+            'level'            => 'Mid-level',
+            'job_descriptions' => 'Heavy item packing',
+            'skills'           => 'Strength, Teamwork',
+            'achievements'     => 'Heavy Lifter'
+        ]);
+
+        User::create([
+            'name'             => 'Udin Setiawan',
+            'role'             => 'Operator',
+            'email'            => 'udin.setiawan@nagahytam.co.id',
+            'phone'            => '+62 811-0000-0021',
+            'password'         => 'karyawan123',
+            'photo_url'        => 'img/profil_operator.jpg',
+            'bio'              => 'Sorting express shipments.',
+            'alamat'           => 'Jl. Melur No. 31, Bandung',
+            'joined_at'        => '2019-02-14',
+            'education'        => 'Logistik, UNPAD',
+            'department'       => 'Gudang',
+            'level'            => 'Junior',
+            'job_descriptions' => 'Express sorting',
+            'skills'           => 'Speed',
+            'achievements'     => 'Express Ace'
+        ]);
+
+        User::create([
+            'name'             => 'Vito Rinaldi',
+            'role'             => 'Operator',
+            'email'            => 'vito.rinaldi@nagahytam.co.id',
+            'phone'            => '+62 811-0000-0022',
+            'password'         => 'karyawan123',
+            'photo_url'        => 'img/profil_operator.jpg',
+            'bio'              => 'QC sample batch sebelum packing.',
+            'alamat'           => 'Jl. Pinus No. 32, Bekasi',
+            'joined_at'        => '2020-09-09',
+            'education'        => 'Teknik Kimia, ITB',
+            'department'       => 'Gudang',
+            'level'            => 'Junior',
+            'job_descriptions' => 'Batch QC',
+            'skills'           => 'Attention to detail',
+            'achievements'     => 'Batch Star'
+        ]);
+
+        User::create([
+            'name'             => 'Willy Prakoso',
+            'role'             => 'Operator',
+            'email'            => 'willy.prakoso@nagahytam.co.id',
+            'phone'            => '+62 811-0000-0023',
+            'password'         => 'karyawan123',
+            'photo_url'        => 'img/profil_operator.jpg',
+            'bio'              => 'Menangani logistik internal gudang.',
+            'alamat'           => 'Jl. Flamboyan No. 33, Jakarta Timur',
+            'joined_at'        => '2021-06-06',
+            'education'        => 'Logistik, UI',
+            'department'       => 'Gudang',
+            'level'            => 'Mid-level',
+            'job_descriptions' => 'Internal logistics',
+            'skills'           => 'Coordination',
+            'achievements'     => 'Logistic Hero'
+        ]);
+
+        User::create([
+            'name'             => 'Xavier Paul',
+            'role'             => 'Operator',
+            'email'            => 'xavier.paul@nagahytam.co.id',
+            'phone'            => '+62 811-0000-0024',
+            'password'         => 'karyawan123',
+            'photo_url'        => 'img/profil_operator.jpg',
+            'bio'              => 'Memproses pengiriman ekspor.',
+            'alamat'           => 'Jl. Kenanga No. 34, Surabaya',
+            'joined_at'        => '2018-04-04',
+            'education'        => 'Logistik, ITS',
+            'department'       => 'Gudang',
+            'level'            => 'Senior',
+            'job_descriptions' => 'Export processing',
+            'skills'           => 'Export regulations',
+            'achievements'     => 'Export Champion'
+        ]);
+
+        User::create([
+            'name'             => 'Yusuf Ramadhan',
+            'role'             => 'Operator',
+            'email'            => 'yusuf.ramadhan@nagahytam.co.id',
+            'phone'            => '+62 811-0000-0025',
+            'password'         => 'karyawan123',
+            'photo_url'        => 'img/profil_operator.jpg',
+            'bio'              => 'Koordinasi pengiriman last-mile.',
+            'alamat'           => 'Jl. Kemuning No. 35, Medan',
+            'joined_at'        => '2019-11-11',
+            'education'        => 'Manajemen, USU',
+            'department'       => 'Gudang',
+            'level'            => 'Mid-level',
+            'job_descriptions' => 'Last-mile coordination',
+            'skills'           => 'Communication',
+            'achievements'     => 'Last Mile Star'
         ]);
         User::create([
             'name' => 'Fahri',

@@ -20,7 +20,7 @@
     .navbar-custom { background:#fff; border-bottom:1px solid #dee2e6; padding:.5rem 1rem; position:fixed; top:0; width:100%; z-index:1000; }
     .navbar-brand { display:flex; align-items:center; gap:.5rem; font-weight:600; color:#495057; text-decoration:none; }
     .navbar-brand .dot { width:10px; height:10px; background:#00c8c8; border-radius:50%; display:inline-block; }
-    .navbar-nav .nav-link { margin-left:1rem; color:#6c757d; }
+    .navbar-nav .nav-link { margin-left:1.5rem; color:#6c757d; }
     .navbar-nav .nav-link.active { color:#0d6efd; font-weight:500; }
     .manager-card { background:#fff; border:1px solid #dee2e6; border-radius:.5rem; box-shadow:0 2px 4px rgba(0,0,0,.05); padding:1.5rem; display:flex; flex-direction:row; align-items:center; gap:1.5rem; transition:transform .2s; }
     .manager-card:hover { transform:translateY(-5px); }
@@ -31,11 +31,13 @@
     .footer { background:#fff; border-top:1px solid #dee2e6; padding:1rem 0; text-align:center; }
     .form-control {
       display: block;
-      width: 100%;
+
+      width: 373px;
+
       margin-left: 37px;
     }
     .main-container {
- margin-top: 20px;
+ margin-top: 25px;
 }
 .profile-photo {
   width: 120px;            /* lebar */
@@ -46,6 +48,9 @@
   display: block;          /* hilangkan inline-spacing */
   border: 2px solid #dee2e6;
 }
+    .navbar-expand-lg .navbar-collapse {
+        margin-right: 21px;
+    }
 
   </style>
 </head>
@@ -89,7 +94,7 @@
             <div class="manager-info">
               <h5>{{ $op->name }}</h5>
               <div class="role">{{ $op->role }} <span class="badge bg-info text-dark ms-2">{{ $op->level }}</span></div>
-              <p>{{ $op->email }} | {{ $op->phone }}</p>
+              <p>{{ $op->email }}</p>
               <p>{{ Str::limit($op->bio, 100) }}</p>
               <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal{{ $op->id }}">Detail</button>
             </div>
@@ -97,38 +102,80 @@
         </div>
 
         <!-- Modal Detail -->
-        <div class="modal fade" id="detailModal{{ $op->id }}" tabindex="-1" aria-hidden="true">
-          <div class="modal-dialog modal-lg modal-dialog-scrollable">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title">{{ $op->name }} — Detail Profil</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-              </div>
-              <div class="modal-body">
-                <div class="d-flex align-items-center mb-4">
-                  <img src="{{ asset($op->photo_url) }}" class="profile-photo me-3" alt="">
-                  <div>
-                    <h6>{{ $op->name }}</h6>
-                    <small class="role">{{ $op->role }} <span class="badge bg-info text-dark ms-2">{{ $op->level }}</span></small>
-                    <p class="mt-2"><i class="bi bi-envelope me-1"></i> {{ $op->email }}</p>
-                    <p><i class="bi bi-telephone me-1"></i> {{ $op->phone }}</p>
-                  </div>
-                </div>
-                <h6>Bio</h6>
-                <p>{{ $op->bio }}</p>
-                <h6>Deskripsi Pekerjaan</h6>
-                <ul>@foreach(explode(', ', $op->job_descriptions) as $jd)<li>{{ $jd }}</li>@endforeach</ul>
-                <h6>Keahlian</h6>
-                <p>@foreach(explode(', ', $op->skills) as $s)<span class="badge bg-secondary me-1">{{ $s }}</span>@endforeach</p>
-                <h6>Pencapaian</h6>
-                <ul>@foreach(explode(', ', $op->achievements) as $a)<li>{{ $a }}</li>@endforeach</ul>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Tutup</button>
-              </div>
-            </div>
+<div class="modal fade" id="detailModal{{ $op->id }}" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ $op->name }} — Detail Profil</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="d-flex align-items-center mb-4">
+          <img src="{{ asset($op->photo_url) }}" class="profile-photo me-3" alt="">
+          <div>
+            <h6>{{ $op->name }}</h6>
+            <small class="role">
+              {{ $op->role }}
+              <span class="badge bg-info text-dark ms-2">{{ $op->level }}</span>
+            </small>
+            <p class="mt-2"><i class="bi bi-envelope me-1"></i> {{ $op->email }}</p>
+            <p><i class="bi bi-telephone me-1"></i> {{ $op->phone }}</p>
           </div>
         </div>
+
+        <h6>Informasi Pribadi</h6>
+        <div class="row mb-3">
+          <div class="col-sm-6">
+            <strong>Alamat:</strong><br>
+            {{ $op->alamat }}
+          </div>
+          <div class="col-sm-6">
+            <strong>Joined:</strong><br>
+            {{ \Carbon\Carbon::parse($op->joined_at)->format('d M Y') }}
+          </div>
+        </div>
+        <div class="row mb-4">
+          <div class="col-sm-6">
+            <strong>Pendidikan:</strong><br>
+            {{ $op->education }}
+          </div>
+          <div class="col-sm-6">
+            <strong>Departemen:</strong><br>
+            {{ $op->department }}
+          </div>
+        </div>
+
+        <h6>Bio</h6>
+        <p>{{ $op->bio }}</p>
+
+        <h6>Deskripsi Pekerjaan</h6>
+        <ul>
+          @foreach(explode(', ', $op->job_descriptions) as $jd)
+            <li>{{ $jd }}</li>
+          @endforeach
+        </ul>
+
+        <h6>Keahlian</h6>
+        <p>
+          @foreach(explode(', ', $op->skills) as $s)
+            <span class="badge bg-secondary me-1">{{ $s }}</span>
+          @endforeach
+        </p>
+
+        <h6>Pencapaian</h6>
+        <ul>
+          @foreach(explode(', ', $op->achievements) as $a)
+            <li>{{ $a }}</li>
+          @endforeach
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>
+
       @empty
         <div class="col-12">
           <div class="alert alert-warning text-center">Tidak ada operator ditemukan.</div>

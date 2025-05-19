@@ -20,10 +20,17 @@ class HrDashboardController extends Controller
         return view('index.leader', compact('users'));
     }
 
-    public function manajemen_index(){
-        $managers=User::where('role', '=', 'Manajer')->first();
-        return view('index.manajemen', compact('managers'));
-    }
+  public function manajemen_index(){
+    $managers = User::where('role', '=', 'Manajer')->first();
+
+    // Ubah string jadi array agar bisa digunakan di @foreach di Blade
+    $managers['jobs'] = explode(', ', $managers->job_descriptions);
+    $managers['skills'] = explode(', ', $managers->skills);
+    $managers['achievements'] = explode(', ', $managers->achievements);
+
+    return view('index.manajemen', compact('managers'));
+}
+
 
   public function karyawan_index(Request $request)
 {
