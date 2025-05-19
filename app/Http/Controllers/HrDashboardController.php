@@ -25,13 +25,19 @@ class HrDashboardController extends Controller
         return view('index.manajemen', compact('managers'));
     }
 
-   public function karyawan_index(Request $request)
+  public function karyawan_index(Request $request)
 {
     $tahun       = Carbon::now()->year;
     $user        = Auth::user();
     $sisa_cuti   = SisaCuti::pluck('cuti_sisa', 'user_id');
     $role        = $user->role;
+
+    $search      = $request->input('search');
+
     $operators   = User::where('role', 'Operator')
+                       ->when($search, function ($query, $search) {
+                           $query->where('name', 'like', '%' . $search . '%');
+                       })
                        ->orderBy('name')
                        ->get();
 
@@ -42,14 +48,15 @@ class HrDashboardController extends Controller
         ]);
     }
 
-    // Bukan AJAX: render halaman penuh
+    // Tampilan full saat pertama kali load
     return view('index.operator', [
-        'Operator'   => $operators,
-        'tahun'      => $tahun,
-        'role'       => $role,
-        'sisa_cuti'  => $sisa_cuti,
+        'Operator'  => $operators,
+        'sisa_cuti' => $sisa_cuti,
+        'tahun'     => $tahun,
+        'role'      => $role,
     ]);
 }
+
 
     
     public function updateSisaCuti(Request $request)

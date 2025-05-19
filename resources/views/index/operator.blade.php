@@ -17,12 +17,11 @@
     html, body { height:100%; margin:0; }
     body { display:flex; flex-direction:column; font-family:'Poppins',sans-serif; font-size:.9rem; color:#6c757d; background:#f8f9fa; }
     main { flex:1; padding-top:70px; }
-    .navbar-custom { background:#fff; border-bottom:1px solid #dee2e6; padding:.5rem 1rem; position:fixed; top:0; width:100%; z-index:1000; margin-bottom: 10px; }
+    .navbar-custom { background:#fff; border-bottom:1px solid #dee2e6; padding:.5rem 1rem; position:fixed; top:0; width:100%; z-index:1000; }
     .navbar-brand { display:flex; align-items:center; gap:.5rem; font-weight:600; color:#495057; text-decoration:none; }
     .navbar-brand .dot { width:10px; height:10px; background:#00c8c8; border-radius:50%; display:inline-block; }
     .navbar-nav .nav-link { margin-left:1rem; color:#6c757d; }
     .navbar-nav .nav-link.active { color:#0d6efd; font-weight:500; }
-
     .manager-card { background:#fff; border:1px solid #dee2e6; border-radius:.5rem; box-shadow:0 2px 4px rgba(0,0,0,.05); padding:1.5rem; display:flex; flex-direction:row; align-items:center; gap:1.5rem; transition:transform .2s; }
     .manager-card:hover { transform:translateY(-5px); }
     .profile-photo { width:120px; height:120px; border-radius:50%; object-fit:cover; border:2px solid #dee2e6; }
@@ -30,34 +29,17 @@
     .manager-info .role { font-size:.9rem; color:#00c8c8; font-weight:500; }
     .manager-info p { margin:.5rem 0; line-height:1.5; }
     .footer { background:#fff; border-top:1px solid #dee2e6; padding:1rem 0; text-align:center; }
-    .main-container { margin-top: 47px; padding-top: 2rem; }
-    .profile-photo { width: 120px; height: 120px; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 50%; border: 2px solid #dee2e6; }
-
     .form-control {
-    display: block;
-    width: 407px;
-    margin-left: 37px;
-    padding: .375rem .75rem;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
-    color: var(--bs-body-color);
-    background-color: var(--bs-body-bg);
-    background-clip: padding-box;
-    border: var(--bs-border-width) solid var(--bs-border-color);
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    border-radius: var(--bs-border-radius);
-    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
-}
+      display: block;
+      width: 407px;
+      margin-left: 37px;
+    }
   </style>
 </head>
 <body>
   <nav class="navbar navbar-expand-lg navbar-custom">
     <div class="container-fluid">
       <a class="navbar-brand" href="{{ url('dashboard') }}"><span class="dot"></span>Divisi Operator</a>
-      <!-- Search Bar -->
       <form class="d-flex ms-3" role="search">
         <input
           class="form-control me-2"
@@ -84,9 +66,10 @@
   </nav>
 
   <main class="container py-5 main-container">
-    @endunless 
+@endunless
+
     <div class="row g-4" id="operator-list">
-      @foreach($Operator as $op)
+      @forelse($Operator as $op)
         <div class="col-md-6">
           <div class="manager-card">
             <img src="{{ asset($op->photo_url) }}" alt="{{ $op->name }}" class="profile-photo">
@@ -100,7 +83,7 @@
           </div>
         </div>
 
-        <!-- Detail Modal -->
+        <!-- Modal Detail -->
         <div class="modal fade" id="detailModal{{ $op->id }}" tabindex="-1" aria-hidden="true">
           <div class="modal-dialog modal-lg modal-dialog-scrollable">
             <div class="modal-content">
@@ -133,28 +116,35 @@
             </div>
           </div>
         </div>
-      @endforeach
+      @empty
+        <div class="col-12">
+          <div class="alert alert-warning text-center">Tidak ada operator ditemukan.</div>
+        </div>
+      @endforelse
     </div>
 
-   @unless(request()->has('ajax'))
-
-  <footer id="my-footer" class="footer">
+@unless(request()->has('ajax'))
+  </main>
+  <footer class="footer">
     <small>© {{ date('Y') }} PT Naga Hytam Sejahtera Abadi.</small>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    // AJAX search
     document.addEventListener('DOMContentLoaded', () => {
       const input = document.getElementById('searchInput');
       const list  = document.getElementById('operator-list');
       if (!input || !list) return;
 
+      let timeout = null;
       input.addEventListener('input', () => {
-        fetch(`{{ url('operator') }}?search=${encodeURIComponent(input.value)}&ajax=1`)
-          .then(res => res.text())
-          .then(html => list.innerHTML = html)
-          .catch(console.error);
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+          fetch(`{{ url('operator') }}?search=${encodeURIComponent(input.value)}&ajax=1`)
+            .then(res => res.text())
+            .then(html => list.innerHTML = html)
+            .catch(err => console.error('Search error:', err));
+        }, 300); // Debounce: 300ms
       });
     });
   </script>
