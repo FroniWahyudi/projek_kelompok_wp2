@@ -20,12 +20,20 @@ class DatabaseSeeder extends Seeder
     {
         User::create([
             'name' => 'Alice Putri',
-            'role' => 'HR',
+            'role' => 'Admin',
             'email' => 'alice.putri@nagahtam.co.id',
             'phone' => '08123456789',
             'password' => '12345',
             'photo_url'=> 'img/nami.jpeg',
             'bio' => 'Bertugas mengelola seluruh administrasi karyawan termasuk persetujuan cuti, pemberian hak cuti, serta membaca dan menindaklanjuti laporakaryawan.',
+            'alamat' => 'Jl. Raya No. 1, Jakarta',
+            'joined_at' => '2025-01-01',
+            'education' => 'S1 Manajemen Sumber Daya Manusia',
+            'department' => 'HR',
+            'level' => 'Senior',
+            'job_description' => 'Rekrutmen dan seleksi karyawan, Pengelolaan data karyawan, Pelatihan dan onboarding.',
+            'skills' => 'Komunikasi, Microsoft Excel, Manajemen SDM',
+            'achievements' => 'Penghargaan Karyawan Terbaik 2024, Sertifikasi Manajemen SDM',
         ]);
 
         User::create([

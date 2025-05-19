@@ -1,93 +1,158 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manajemen Dashboard - Naga Hytam Sejahtera Abadi</title>
-  @vite([
-      'resources/js/app.js',
-      'resources/sass/app.scss',
-      'resources/css/app.css'
-      ])
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Profil {{ $mgr['name'] }}</title>
+
+  <!-- Bootstrap & Poppins -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ asset('bootstrap-5.3.5-dist/css/bootstrap.min.css') }}">
   <style>
     body {
+      font-size: .85rem;
+      font-family: 'Poppins', sans-serif;
+      color: #6c757d;
       background-color: #f8f9fa;
     }
-    .manager-card {
-      border: 1px solid #dee2e6;
-      border-radius: 0.5rem;
-      background-color: #ffffff;
-      padding: 1rem;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-      transition: transform 0.2s;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-    }
-    .manager-card:hover {
-      transform: translateY(-5px);
-    }
-    .profile-photo {
-      width: 80px;
-      height: 80px;
+    .profile-img {
+      width: 322px;
+      height: 322px;
       object-fit: cover;
-      border-radius: 50%;
     }
-    @media (max-width: 765px) {
-      .manager-card .d-flex {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-      }
-      .profile-photo {
-        margin-bottom: 1rem;
-        margin-right: 0 !important;
-      }
+    .dot {
+      width: 10px;
+      height: 10px;
+      background-color: #00c8c8;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .navbar-custom {
+      background-color: #fff;
+      border-bottom: 1px solid #dee2e6;
+      padding: .5rem 1rem;
+    }
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-weight: 600;
+      color: #495057;
+    }
+    .navbar-brand .dot {
+      background-color: #00c8c8;
+    }
+    .nav-link {
+      color: #6c757d;
+      font-weight: 500;
+      margin-left: 1.5rem;
+      font-size: .9rem;
+    }
+    .nav-link:hover,
+    .nav-link.active {
+       color: #0d6efd !important;
+    }
+
+    .footer .info-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6.7rem;
+      font-size: .8rem;
+      color: #495057;
+    }
+    #my-footer {
+      border-top: 2px solid #dee2e6;
+      padding-top: 1rem;
+    }
+    .nama h1 {
+      font-size: 2.5rem;
+      font-weight: 600;
+      color: #495057;
+      margin-bottom: .5rem;
+    }
+    .nama h5 {
+      font-size: .95rem;
+      font-weight: bold;
+      color: #495057 !important;
+      margin-bottom: 1rem;
+    }
+    .nama p {
+      font-size: .85rem;
+      line-height: 1.6;
+      color: #6c757d;
+    }
+    .custom-padding-bottom {
+      padding-bottom: 60px;
+      margin-bottom: 40px;
     }
   </style>
 </head>
-<body>
+<body class="bg-light">
 
-<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
-  <div class="container-fluid">
-    <a href="{{ url('dashboard') }}" class="btn btn-primary me-3">
-      <i class="bi bi-house-door-fill me-1"></i> Home
-    </a>
-    <a class="navbar-brand" href="#">Manajemen Dashboard</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item"><a class="nav-link" href="{{ url('hr') }}">HR</a></li>
-        <li class="nav-item"><a class="nav-link active" href="#">Manajemen</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ url('karyawan') }}">Karyawan</a></li>
-      </ul>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-custom">
+    <div class="container-fluid px-lg-5">
+      <a class="navbar-brand" href="#">
+        <span class="dot"></span>
+        <span>Manajer</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+              data-bs-target="#mainNav" aria-controls="mainNav"
+              aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="mainNav">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="{{ url('dashboard') }}">Home</a></li>
+          <li class="nav-item"><a class="nav-link active" href="#">{{ $mgr['role'] }}</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url('admin') }}">Admin</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url('leader') }}">Leader</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url('operator') }}">Operator</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Profile Section -->
+  <div class="container mt-5 px-lg-5 pb-5 custom-padding-bottom">
+    <div class="row justify-content-center align-items-center">
+      <div class="col-lg-4 col-md-6 text-center mb-4 mb-md-0">
+        <img src="{{ $managers['photo_url'] }}"
+             class="rounded-circle profile-img"
+             alt="{{ $managers['name'] }}">
+      </div>
+      <div class="col-lg-4 col-md-6 nama">
+        <h1 class="fw-bold">{{ $mgr['name'] }}</h1>
+        <h5 style="color: #00c8c8 !important;">Tentang Saya</h5>
+        <p class="text-start">{!! nl2br(e($mgr['bio'])) !!}</p>
+        @if (!empty($jobs[0]))
+          <h6>Deskripsi Pekerjaan:</h6>
+          <ul class="text-start">
+            @foreach ($jobs as $j)
+              <li>{{ $j }}</li>
+            @endforeach
+          </ul>
+        @endif
+      </div>
     </div>
   </div>
-</nav>
 
-<div class="container py-4">
-  <h3 class="mb-4">Divisi Manajemen</h3>
-  <div class="row row-cols-1 row-cols-md-2 g-4">
-    @foreach ($managers as $manager)
-      <div class="col">
-        <div class="manager-card d-flex flex-column h-100">
-          <div class="d-flex mb-3">
-            <img src="{{ asset($manager->photo_url) }}" alt="Foto {{ $manager->name }}" class="profile-photo me-3">
-            <div>
-              <h5 class="mb-1">{{ $manager->name }}</h5>
-              <p class="mb-1"><strong>Jabatan:</strong> {{ $manager->role }}</p>
-              <p class="mb-1"><strong>Email:</strong> {{ $manager->email }}</p>
-              <p class="mb-1"><strong>Telepon:</strong> {{ $manager->phone }}</p>
-            </div>
-          </div>
-          <p class="mt-auto mb-0">{{ $manager->bio }}</p>
-        </div>
+  <!-- Footer -->
+  <footer class="footer mt-5 pt-4" id="my-footer">
+    <div class="container">
+      <div class="info-list mb-2">
+        <div><strong>Nama<br></strong>{{ $mgr['name'] }}</div>
+        <div><strong>Jabatan<br></strong>{{ $mgr['role'] }}</div>
+        <div><strong>Email<br></strong>{{ $mgr['email'] }}</div>
+        <div><strong>Telepon<br></strong>{{ $mgr['phone'] }}</div>
+        <div><strong>Alamat<br></strong>{{ $mgr['alamat'] }}</div>
       </div>
-    @endforeach
-  </div>
-</div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

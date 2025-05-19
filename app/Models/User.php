@@ -26,6 +26,14 @@ class User extends Authenticatable
         'password',
         'photo_url',
         'bio',
+        'alamat',
+        'joined_at',
+        'education',
+        'department',
+        'level',
+        'job_description',
+        'skills',
+        'achievements',
     ];
 
     /**
