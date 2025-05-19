@@ -40,7 +40,11 @@
       </div>
       <section>
         <div class="bg-white p-4 rounded shadow-sm text-center">
-          <img src="{{ asset($user->photo_url) }}" alt="Foto Profil" style="width:120px; height:120px; object-fit:cover; border-radius:50%; margin-bottom:1rem;">
+          @if(is_object($user) && isset($user->photo_url))
+            <img src="{{ asset($user->photo_url) }}" alt="Foto Profil" style="width:120px; height:120px; object-fit:cover; border-radius:50%; margin-bottom:1rem;">
+          @else
+            <img src="{{ asset('default-profile.png') }}" alt="Foto Profil" style="width:120px; height:120px; object-fit:cover; border-radius:50%; margin-bottom:1rem;">
+          @endif
           <h3>{{ $user->name }}</h3>
           <hr>
           <div class="text-start">

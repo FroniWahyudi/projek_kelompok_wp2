@@ -41,12 +41,12 @@
       </div>
       <section>
         <div class="bg-white p-4 rounded shadow-sm">
-          <form method="POST" action="{{ route('profil.update', $user->id) }}" autocomplete="off">
+          <form method="POST" action="{{ route('profil.update', is_object($user) ? $user->id : '') }}" autocomplete="off">
             @csrf
             @method('PUT')
 
             <div class="text-center mb-4">
-              <img src="{{ asset($user->photo_url) }}" alt="Foto Profil" style="width:120px; height:120px; object-fit:cover; border-radius:50%;">
+              <img src="{{ asset(is_object($user) && isset($user->photo_url) ? $user->photo_url : 'img/default.jpg') }}" alt="Foto Profil" style="width:120px; height:120px; object-fit:cover; border-radius:50%;">
             </div>
 
             @if(session('success'))
