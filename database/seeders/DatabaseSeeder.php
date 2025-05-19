@@ -25,15 +25,15 @@ class DatabaseSeeder extends Seeder
             'phone' => '08123456789',
             'password' => '12345',
             'photo_url'=> 'img/nami.jpeg',
-            'bio' => 'Bertugas mengelola seluruh administrasi karyawan termasuk persetujuan cuti, pemberian hak cuti, serta membaca dan menindaklanjuti laporakaryawan.',
+            'bio' => 'Bertugas mengelola seluruh administrasi Operator termasuk persetujuan cuti, pemberian hak cuti, serta membaca dan menindaklanjuti laporaOperator.',
             'alamat' => 'Jl. Raya No. 1, Jakarta',
             'joined_at' => '2025-01-01',
             'education' => 'S1 Manajemen Sumber Daya Manusia',
             'department' => 'HR',
             'level' => 'Senior',
-            'job_descriptions' => 'Rekrutmen dan seleksi karyawan, Pengelolaan data karyawan, Pelatihan dan onboarding.',
+            'job_descriptions' => 'Rekrutmen dan seleksi Operator, Pengelolaan data Operator, Pelatihan dan onboarding.',
             'skills' => 'Komunikasi, Microsoft Excel, Manajemen SDM',
-            'achievements' => 'Penghargaan Karyawan Terbaik 2024, Sertifikasi Manajemen SDM'
+            'achievements' => 'Penghargaan Operator Terbaik 2024, Sertifikasi Manajemen SDM'
         ]);
 
         User::create([
@@ -92,28 +92,28 @@ class DatabaseSeeder extends Seeder
 
         User::create([
             'name' => 'Ahmad Yusuf',
-            'role' => 'Karyawan',
+            'role' => 'Operator',
             'email' => 'ahmad.yusuf@nagahtam.co.id',
             'phone' => '08123456783',
-            'password' => 'Karyawan',
+            'password' => 'Operator',
             'photo_url'=> 'img/ahmad_yusuf.jpg',
-            'bio' => 'Staf HR yang berfokus pada administrasi dan pengelolaan karyawan.',
+            'bio' => 'Staf HR yang berfokus pada administrasi dan pengelolaan Operator.',
             'alamat' => 'Jl. HRD No. 8, Tangerang',
             'joined_at' => '2023-05-20',
             'education' => 'S1 Psikologi',
             'department' => 'HR',
             'level' => 'Junior',
-            'job_descriptions' => 'Input data karyawan, Administrasi cuti, Arsip dokumen SDM.',
+            'job_descriptions' => 'Input data Operator, Administrasi cuti, Arsip dokumen SDM.',
             'skills' => 'Filing, Administrasi, Komunikasi',
-            'achievements' => 'Karyawan Teladan Bulan Februari 2024'
+            'achievements' => 'Operator Teladan Bulan Februari 2024'
         ]);
 
         User::create([
             'name' => 'Wanda',
-            'role' => 'Karyawan',
+            'role' => 'Operator',
             'email' => 'wanda@nagahtam.co.id',
             'phone' => '08123456784',
-            'password' => 'Karyawan',
+            'password' => 'Operator',
             'photo_url'=> 'img/wanda.jpg',
             'bio' => 'Supervisor yang memimpin tim dengan orientasi hasil dan efisiensi operasional.',
             'alamat' => 'Jl. Mekar No. 12, Bandung',
@@ -128,10 +128,10 @@ class DatabaseSeeder extends Seeder
 
         User::create([
             'name' => 'Agus',
-            'role' => 'Karyawan',
+            'role' => 'Operator',
             'email' => 'agus@nagahtam.co.id',
             'phone' => '08123456785',
-            'password' => 'Karyawan',
+            'password' => 'Operator',
             'photo_url'=> 'img/budi.jpg',
             'bio' => 'Operator yang mengawasi proses produksi dan memastikan kualitas barang yang dihasilkan.',
             'alamat' => 'Jl. Produksi No. 3, Karawang',
@@ -146,10 +146,10 @@ class DatabaseSeeder extends Seeder
 
         User::create([
             'name' => 'Lina Marlina',
-            'role' => 'Karyawan',
+            'role' => 'Operator',
             'email' => 'lina.marlina@nagahtam.co.id',
             'phone' => '08123456786',
-            'password' => 'Karyawan',
+            'password' => 'Operator',
             'photo_url'=> 'img/lina.jpg',
             'bio' => 'Manager yang memimpin divisi dengan fokus pada strategi dan pengembangan tim.',
             'alamat' => 'Jl. Sentosa No. 4, Depok',
@@ -164,10 +164,10 @@ class DatabaseSeeder extends Seeder
 
         User::create([
             'name' => 'Rudi Hartono',
-            'role' => 'Karyawan',
+            'role' => 'Operator',
             'email' => 'rudi.hartono@nagahtam.co.id',
             'phone' => '08123456771',
-            'password' => 'Karyawan',
+            'password' => 'Operator',
             'photo_url'=> 'img/rudi.jpg',
             'bio' => 'Staf gudang yang bertanggung jawab atas pengelolaan stok dan pengiriman barang.',
             'alamat' => 'Jl. Gudang No. 9, Bogor',
@@ -183,7 +183,7 @@ class DatabaseSeeder extends Seeder
         News::create([
             'date' => '2025-06-29',
             'title' => 'Pengembangan Produk Inovatif',
-            'image_url' => 'img/karyawan_inovasi.png',
+            'image_url' => 'img/Operator_inovasi.png',
             'description' => 'Tim R&D kami telah menyelesaikan serangkaian pengujian ekstensif terhadap prototipe produk inovatif yang menggabungkan material komposit ramah lingkungan dan teknologi penghematan energi terkini. Hasil uji laboratorium menunjukkan peningkatan performa hingga 30% serta pengurangan konsumsi energi hampir 20%, sekaligus menjaga stabilitas suhu operasional di bawah ambang batas keamanan. Fase uji lapangan kini melibatkan mitra strategis dan pelanggan pilot, dengan target validasi kualitas dan skalabilitas produksi massal dalam dua bulan ke depan. Rencana peluncuran komersial dijadwalkan pada kuartal berikutnya, lengkap dengan dukungan layanan purna jual dan pelatihan teknis untuk memastikan adopsi optimal di berbagai sektor industri.',
             'link' => 'Null',
         ]);
@@ -192,7 +192,7 @@ class DatabaseSeeder extends Seeder
             'date' => '2025-06-29',
             'title' => 'Promosi Jabatan',
             'image_url' => 'img/naik_jabatan.png',
-            'description' => 'Sebagai bagian dari upaya membangun budaya meritokrasi, perusahaan telah memberikan promosi jabatan kepada karyawan terpilih yang menunjukkan prestasi luar biasa dalam proyek strategis dan pengembangan tim. Setiap kandidat dinilai berdasarkan pencapaian KPI, kualitas kepemimpinan, serta kontribusi inovatif dalam proses kerja-mulai dari efisiensi biaya hingga peningkatan kepuasan pelanggan. Upacara serah terima jabatan akan diselenggarakan dalam bentuk webinar interaktif, di mana para penerima promosi akan berbagi wawasan dan rencana aksi mereka untuk semester mendatang. Dokumen resmi yang memuat daftar nama, jabatan baru, dan uraian tanggung jawab terbaru dapat diunduh dari portal HR di menu Pengumuman.',
+            'description' => 'Sebagai bagian dari upaya membangun budaya meritokrasi, perusahaan telah memberikan promosi jabatan kepada Operator terpilih yang menunjukkan prestasi luar biasa dalam proyek strategis dan pengembangan tim. Setiap kandidat dinilai berdasarkan pencapaian KPI, kualitas kepemimpinan, serta kontribusi inovatif dalam proses kerja-mulai dari efisiensi biaya hingga peningkatan kepuasan pelanggan. Upacara serah terima jabatan akan diselenggarakan dalam bentuk webinar interaktif, di mana para penerima promosi akan berbagi wawasan dan rencana aksi mereka untuk semester mendatang. Dokumen resmi yang memuat daftar nama, jabatan baru, dan uraian tanggung jawab terbaru dapat diunduh dari portal HR di menu Pengumuman.',
             'link' => 'Null',
         ]);
 
@@ -224,7 +224,7 @@ class DatabaseSeeder extends Seeder
             'date' => '2025-06-29',
             'title' => 'Integrasi Aplikasi Mobile',
             'image_url' => 'img/integrasi_mobile.png',
-            'description' => 'Aplikasi mobile terbaru telah diluncurkan dengan fitur lengkap: pelaporan harian lokasi kerja dilengkapi foto dan tanda tangan elektronik, notifikasi push untuk tugas mendesak, serta dashboard ringkas yang menampilkan KPI harian dan progres target. Mode offline memungkinkan pengguna bekerja di area tanpa sinyal, dengan data tersinkronisasi otomatis begitu koneksi kembali terhubung. Integrasi API real-time ke sistem ERP perusahaan memastikan bahwa setiap laporan lapangan tercatat dalam modul keuangan dan logistik tanpa delay. Uji coba internal menunjukkan peningkatan efisiensi pelaporan hingga 50% dan tingkat adopsi karyawan mencapai 90% dalam minggu pertama penggunaan.',
+            'description' => 'Aplikasi mobile terbaru telah diluncurkan dengan fitur lengkap: pelaporan harian lokasi kerja dilengkapi foto dan tanda tangan elektronik, notifikasi push untuk tugas mendesak, serta dashboard ringkas yang menampilkan KPI harian dan progres target. Mode offline memungkinkan pengguna bekerja di area tanpa sinyal, dengan data tersinkronisasi otomatis begitu koneksi kembali terhubung. Integrasi API real-time ke sistem ERP perusahaan memastikan bahwa setiap laporan lapangan tercatat dalam modul keuangan dan logistik tanpa delay. Uji coba internal menunjukkan peningkatan efisiensi pelaporan hingga 50% dan tingkat adopsi Operator mencapai 90% dalam minggu pertama penggunaan.',
             'link' => 'Null',
         ]);
 

@@ -32,9 +32,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard_profil', [DashboardController::class, 'profil']);
     Route::get('/logout', [AuthController::class, 'logout']);
     Route::get('/whats-new/{id}', [NewsController::class, 'show'])->name('whats_new');
-    Route::get('/hr', [HrDashboardController::class, 'hr_index']);
+    Route::get('/admin', [HrDashboardController::class, 'hr_index']);
+    Route::get('/leader', [HrDashboardController::class, 'leader_index']);
     Route::get('/manajemen', [HrDashboardController::class, 'manajemen_index']);
-    Route::get('/karyawan', [HrDashboardController::class, 'karyawan_index']);
+    Route::get('/operator', [HrDashboardController::class, 'karyawan_index']);
     Route::post('/karyawan/update_sisa_cuti', [HrDashboardController::class, 'updateSisaCuti'])->name('karyawan.update_sisa_cuti');
     Route::get('/edit_profil/{id}', [DashboardController::class, 'edit'])->name('profil.edit');
     Route::put('/edit_profil/{id}', [DashboardController::class, 'update'])->name('profil.update');

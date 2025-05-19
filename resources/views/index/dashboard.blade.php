@@ -374,14 +374,17 @@
 <nav class="sidebar">
   <h6 class="fw-bold text-uppercase">Divisi Karyawan</h6>
 
-  <a href="hr" class="btn btn-outline-primary w-100 mb-2">
-    <i class="bi bi-person-circle me-1"></i> HR & Leader
-  </a>
   <a href="manajemen" class="btn btn-outline-primary w-100 mb-2">
     <i class="bi bi-people-fill me-1"></i> Manajemen
   </a>
-  <a href="karyawan" class="btn btn-outline-primary w-100 mb-2">
-    <i class="bi bi-people-fill me-1"></i> Karyawan
+  <a href="admin" class="btn btn-outline-primary w-100 mb-2">
+    <i class="bi bi-person-circle me-1"></i> Admin officer
+  </a>
+  <a href="leader" class="btn btn-outline-primary w-100 mb-2">
+    <i class="bi bi-people-fill me-1"></i> Leader
+  </a>
+  <a href="operator" class="btn btn-outline-primary w-100 mb-2">
+    <i class="bi bi-people-fill me-1"></i> Operator Gudang
   </a>
 
   <hr>

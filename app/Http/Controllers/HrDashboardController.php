@@ -12,8 +12,12 @@ use Illuminate\Http\Request;
 class HrDashboardController extends Controller
 {
     public function hr_index() {
-        $users=User::whereIn('role', ['HR', 'Leader'])->get();
-        return view('index.hr_dashboard', compact('users'));
+        $users=User::whereIn('role', ['Admin'])->get();
+        return view('index.admin', compact('users'));
+    }
+    public function leader_index() {
+        $users=User::whereIn('role', ['Leader'])->get();
+        return view('index.leader', compact('users'));
     }
 
     public function manajemen_index(){
@@ -21,17 +25,32 @@ class HrDashboardController extends Controller
         return view('index.manajemen', compact('managers'));
     }
 
-    public function karyawan_index(){
-        $tahun = Carbon::now()->year;
-        $user = Auth::user();
-        $sisa_cuti = SisaCuti::pluck('cuti_sisa', 'user_id');
-        $role = $user->role;
-        $karyawan = User::where('role', 'Karyawan')
-            ->orderBy('name')
-            ->get();
+   public function karyawan_index(Request $request)
+{
+    $tahun       = Carbon::now()->year;
+    $user        = Auth::user();
+    $sisa_cuti   = SisaCuti::pluck('cuti_sisa', 'user_id');
+    $role        = $user->role;
+    $operators   = User::where('role', 'Operator')
+                       ->orderBy('name')
+                       ->get();
 
-        return view('index.karyawan', compact('karyawan', 'tahun','role','sisa_cuti'));
+    // Jika AJAX, kembalikan partial list saja
+    if ($request->ajax()) {
+        return view('index.partials.operator_list', [
+            'Operator'  => $operators,
+        ]);
     }
+
+    // Bukan AJAX: render halaman penuh
+    return view('index.operator', [
+        'Operator'   => $operators,
+        'tahun'      => $tahun,
+        'role'       => $role,
+        'sisa_cuti'  => $sisa_cuti,
+    ]);
+}
+
     
     public function updateSisaCuti(Request $request)
     {
