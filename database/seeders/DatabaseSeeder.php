@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
+          User::create([
             'name' => 'Alice Putri',
             'role' => 'Admin',
             'email' => 'alice.putri@nagahtam.co.id',
@@ -31,9 +31,9 @@ class DatabaseSeeder extends Seeder
             'education' => 'S1 Manajemen Sumber Daya Manusia',
             'department' => 'HR',
             'level' => 'Senior',
-            'job_description' => 'Rekrutmen dan seleksi karyawan, Pengelolaan data karyawan, Pelatihan dan onboarding.',
+            'job_descriptions' => 'Rekrutmen dan seleksi karyawan, Pengelolaan data karyawan, Pelatihan dan onboarding.',
             'skills' => 'Komunikasi, Microsoft Excel, Manajemen SDM',
-            'achievements' => 'Penghargaan Karyawan Terbaik 2024, Sertifikasi Manajemen SDM',
+            'achievements' => 'Penghargaan Karyawan Terbaik 2024, Sertifikasi Manajemen SDM'
         ]);
 
         User::create([
@@ -44,6 +44,14 @@ class DatabaseSeeder extends Seeder
             'password' => '12345',
             'photo_url'=> 'img/zoro.jpeg',
             'bio' => 'Bertugas memberikan laporan pekerjaan per satu shift, serta memantau dan mengarahkan operator di lapangan agar pekerjaan berjalan sesuai target.',
+            'alamat' => 'Jl. Industri No. 2, Bekasi',
+            'joined_at' => '2024-08-15',
+            'education' => 'S1 Teknik Industri',
+            'department' => 'Produksi',
+            'level' => 'Menengah',
+            'job_descriptions' => 'Koordinasi tim shift, Monitoring target produksi, Pelaporan harian.',
+            'skills' => 'Kepemimpinan, Analisis Data, Komunikasi',
+            'achievements' => 'Ketua Tim Produksi Terbaik 2023'
         ]);
 
         User::create([
@@ -54,6 +62,14 @@ class DatabaseSeeder extends Seeder
             'password' => '12345',
             'photo_url'=> 'img/sanji.jpeg',
             'bio' => 'Bertugas memberikan laporan pekerjaan per satu shift, serta memantau dan mengarahkan operator di lapangan agar pekerjaan berjalan sesuai target.',
+            'alamat' => 'Jl. Pelabuhan No. 5, Surabaya',
+            'joined_at' => '2024-07-01',
+            'education' => 'D3 Manufaktur',
+            'department' => 'Produksi',
+            'level' => 'Menengah',
+            'job_descriptions' => 'Pengawasan mesin produksi, Koordinasi teknisi, Pelaporan kualitas harian.',
+            'skills' => 'Manajemen Waktu, Problem Solving, Mesin Industri',
+            'achievements' => 'Peningkatan Efisiensi Produksi 15%'
         ]);
 
         User::create([
@@ -64,6 +80,14 @@ class DatabaseSeeder extends Seeder
             'password' => 'sutoyo123',
             'photo_url'=> 'img/sutoyo.jpeg',
             'bio' => 'Bertanggung jawab atas keseluruhan operasional perusahaan dan pengambilan keputusan strategis di semua divisi.',
+            'alamat' => 'Jl. Merdeka No. 10, Jakarta',
+            'joined_at' => '2020-01-10',
+            'education' => 'S2 Administrasi Bisnis',
+            'department' => 'Manajemen',
+            'level' => 'Eksekutif',
+            'job_descriptions' => 'Pengambilan keputusan, Evaluasi kinerja divisi, Penyusunan strategi perusahaan.',
+            'skills' => 'Analisis Strategis, Manajemen Risiko, Kepemimpinan',
+            'achievements' => 'Peningkatan ROI Tahunan, Pemimpin Inspiratif 2022'
         ]);
 
         User::create([
@@ -71,9 +95,17 @@ class DatabaseSeeder extends Seeder
             'role' => 'Karyawan',
             'email' => 'ahmad.yusuf@nagahtam.co.id',
             'phone' => '08123456783',
-            'password' => 'karyawan123',
+            'password' => 'Karyawan',
             'photo_url'=> 'img/ahmad_yusuf.jpg',
             'bio' => 'Staf HR yang berfokus pada administrasi dan pengelolaan karyawan.',
+            'alamat' => 'Jl. HRD No. 8, Tangerang',
+            'joined_at' => '2023-05-20',
+            'education' => 'S1 Psikologi',
+            'department' => 'HR',
+            'level' => 'Junior',
+            'job_descriptions' => 'Input data karyawan, Administrasi cuti, Arsip dokumen SDM.',
+            'skills' => 'Filing, Administrasi, Komunikasi',
+            'achievements' => 'Karyawan Teladan Bulan Februari 2024'
         ]);
 
         User::create([
@@ -81,9 +113,17 @@ class DatabaseSeeder extends Seeder
             'role' => 'Karyawan',
             'email' => 'wanda@nagahtam.co.id',
             'phone' => '08123456784',
-            'password' => 'karyawan123',
+            'password' => 'Karyawan',
             'photo_url'=> 'img/wanda.jpg',
             'bio' => 'Supervisor yang memimpin tim dengan orientasi hasil dan efisiensi operasional.',
+            'alamat' => 'Jl. Mekar No. 12, Bandung',
+            'joined_at' => '2022-11-01',
+            'education' => 'S1 Teknik Mesin',
+            'department' => 'Operasional',
+            'level' => 'Senior',
+            'job_descriptions' => 'Koordinasi tim operasional, Monitoring peralatan, Laporan hasil kerja.',
+            'skills' => 'Supervisi, Teknik Produksi, Microsoft Excel',
+            'achievements' => 'Peningkatan Output Bulanan 2023'
         ]);
 
         User::create([
@@ -91,9 +131,17 @@ class DatabaseSeeder extends Seeder
             'role' => 'Karyawan',
             'email' => 'agus@nagahtam.co.id',
             'phone' => '08123456785',
-            'password' => 'karyawan123',
+            'password' => 'Karyawan',
             'photo_url'=> 'img/budi.jpg',
             'bio' => 'Operator yang mengawasi proses produksi dan memastikan kualitas barang yang dihasilkan.',
+            'alamat' => 'Jl. Produksi No. 3, Karawang',
+            'joined_at' => '2023-02-17',
+            'education' => 'SMK Otomasi Industri',
+            'department' => 'Produksi',
+            'level' => 'Junior',
+            'job_descriptions' => 'Pengoperasian mesin, Pemeriksaan kualitas, Pemeliharaan alat.',
+            'skills' => 'Operator Mesin, QC, Maintenance',
+            'achievements' => 'Zero Defect Award 2024'
         ]);
 
         User::create([
@@ -101,9 +149,17 @@ class DatabaseSeeder extends Seeder
             'role' => 'Karyawan',
             'email' => 'lina.marlina@nagahtam.co.id',
             'phone' => '08123456786',
-            'password' => 'karyawan123',
+            'password' => 'Karyawan',
             'photo_url'=> 'img/lina.jpg',
             'bio' => 'Manager yang memimpin divisi dengan fokus pada strategi dan pengembangan tim.',
+            'alamat' => 'Jl. Sentosa No. 4, Depok',
+            'joined_at' => '2021-03-30',
+            'education' => 'S1 Administrasi Publik',
+            'department' => 'Manajemen',
+            'level' => 'Senior',
+            'job_descriptions' => 'Perencanaan strategi divisi, Evaluasi performa tim, Pengembangan sumber daya.',
+            'skills' => 'Perencanaan, Manajemen Tim, Coaching',
+            'achievements' => 'Manager Inspiratif 2023'
         ]);
 
         User::create([
@@ -111,9 +167,17 @@ class DatabaseSeeder extends Seeder
             'role' => 'Karyawan',
             'email' => 'rudi.hartono@nagahtam.co.id',
             'phone' => '08123456771',
-            'password' => 'karyawan123',
+            'password' => 'Karyawan',
             'photo_url'=> 'img/rudi.jpg',
             'bio' => 'Staf gudang yang bertanggung jawab atas pengelolaan stok dan pengiriman barang.',
+            'alamat' => 'Jl. Gudang No. 9, Bogor',
+            'joined_at' => '2022-01-05',
+            'education' => 'SMA',
+            'department' => 'Gudang',
+            'level' => 'Junior',
+            'job_descriptions' => 'Stok barang, Pengiriman, Pelaporan gudang.',
+            'skills' => 'Stok Opname, Pengemasan, Ketelitian',
+            'achievements' => 'Staf Gudang Teladan 2023'
         ]);
 
         News::create([

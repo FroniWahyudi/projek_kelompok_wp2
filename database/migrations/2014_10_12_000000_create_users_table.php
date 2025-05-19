@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('education')->nullable();
             $table->string('department')->nullable();
             $table->string('level')->nullable();
-            $table->text('job_description')->nullable();
+            $table->text('job_descriptions')->nullable();
             $table->text('skills')->nullable();
             $table->text('achievements')->nullable();
             $table->timestamps();
