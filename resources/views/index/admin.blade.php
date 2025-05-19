@@ -102,9 +102,9 @@
   <ul class="navbar-nav">
     <li class="nav-item"><a class="nav-link" href="{{ url('dashboard') }}">Home</a></li>
     <li class="nav-item"><a class="nav-link" href="{{ url('manajemen') }}">Manajer</a></li>
-    <li class="nav-item"><a class="nav-link" href="{{ url('admin') }}">Admin</a></li>
+    <li class="nav-item"><a class="nav-link active" href="{{ url('admin') }}">Admin</a></li>
     <li class="nav-item"><a class="nav-link" href="{{ url('leader') }}">Leader</a></li>
-    <li class="nav-item"><a class="nav-link active" href="{{ url('operator') }}">Operator</a></li>
+    <li class="nav-item"><a class="nav-link" href="{{ url('operator') }}">Operator</a></li>
   </ul>
 </div>
 

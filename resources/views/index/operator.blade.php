@@ -34,6 +34,19 @@
       width: 407px;
       margin-left: 37px;
     }
+    .main-container {
+ margin-top: 20px;
+}
+.profile-photo {
+  width: 120px;            /* lebar */
+  height: 120px;           /* tinggi sama dengan lebar */
+  aspect-ratio: 1 / 1;     /* jaga rasio 1:1 jika dimensinya berubah */
+  border-radius: 50%;      /* buat sudut melingkar penuh */
+  object-fit: cover;       /* potong gambar agar penuh area */
+  display: block;          /* hilangkan inline-spacing */
+  border: 2px solid #dee2e6;
+}
+
   </style>
 </head>
 <body>
