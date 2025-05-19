@@ -116,29 +116,29 @@
     </div>
   </nav>
 
-  <!-- Profile Section -->
-  <div class="container mt-5 px-lg-5 pb-5 custom-padding-bottom">
-    <div class="row justify-content-center align-items-center">
-      <div class="col-lg-4 col-md-6 text-center mb-4 mb-md-0">
-        <img src="{{ $managers->photo_url }}"
-             class="rounded-circle profile-img"
-             alt="{{ $managers['name'] }}">
-      </div>
-      <div class="col-lg-4 col-md-6 nama">
-        <h1 class="fw-bold">{{ $managers['name'] }}</h1>
-        <h5 style="color: #00c8c8 !important;">Tentang Saya</h5>
-        <p class="text-start">{!! nl2br(e($managers['bio'])) !!}</p>
-        @if (!empty($managers['jobs']))
-          <h6>Deskripsi Pekerjaan:</h6>
-          <ul class="text-start">
-            @foreach ($managers['jobs'] as $j)
-              <li>{{ $j }}</li>
-            @endforeach
-          </ul>
-        @endif
-      </div>
+ <!-- Profile Section -->
+<div class="container mt-5 px-lg-5 pb-5 custom-padding-bottom">
+  <div class="row justify-content-center align-items-center">
+    <div class="col-lg-4 col-md-6 text-center mb-4 mb-md-0">
+      <img src="{{ $managers->photo_url }}"
+           class="rounded-circle profile-img"
+           alt="{{ $managers['name'] }}">
+    </div>
+    <div class="col-lg-4 col-md-6 nama">
+      <h1 class="fw-bold">{{ $managers['name'] }}</h1>
+      <h5 style="color: #00c8c8 !important;">Tentang Saya</h5>
+      <p class="text-start">{!! nl2br(e($managers['bio'])) !!}</p>
+
+
+
+
+   
+
+     
     </div>
   </div>
+</div>
+
 
   <!-- Footer -->
   <footer class="footer mt-5 pt-4" id="my-footer">
