@@ -128,13 +128,6 @@
       <h1 class="fw-bold">{{ $managers['name'] }}</h1>
       <h5 style="color: #00c8c8 !important;">Tentang Saya</h5>
       <p class="text-start">{!! nl2br(e($managers['bio'])) !!}</p>
-
-
-
-
-   
-
-     
     </div>
   </div>
 </div>
