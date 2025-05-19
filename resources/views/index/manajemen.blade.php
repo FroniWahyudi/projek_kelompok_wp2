@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Profil {{ $mgr['name'] }}</title>
+  <title>Profil {{ $managers->name }}</title>
 
   <!-- Bootstrap & Poppins -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -107,7 +107,7 @@
       <div class="collapse navbar-collapse justify-content-end" id="mainNav">
         <ul class="navbar-nav">
           <li class="nav-item"><a class="nav-link" href="{{ url('dashboard') }}">Home</a></li>
-          <li class="nav-item"><a class="nav-link active" href="#">{{ $mgr['role'] }}</a></li>
+          <li class="nav-item"><a class="nav-link active" href="#">{{ $managers['role'] }}</a></li>
           <li class="nav-item"><a class="nav-link" href="{{ url('admin') }}">Admin</a></li>
           <li class="nav-item"><a class="nav-link" href="{{ url('leader') }}">Leader</a></li>
           <li class="nav-item"><a class="nav-link" href="{{ url('operator') }}">Operator</a></li>
@@ -120,18 +120,18 @@
   <div class="container mt-5 px-lg-5 pb-5 custom-padding-bottom">
     <div class="row justify-content-center align-items-center">
       <div class="col-lg-4 col-md-6 text-center mb-4 mb-md-0">
-        <img src="{{ $managers['photo_url'] }}"
+        <img src="{{ $managers->photo_url }}"
              class="rounded-circle profile-img"
              alt="{{ $managers['name'] }}">
       </div>
       <div class="col-lg-4 col-md-6 nama">
-        <h1 class="fw-bold">{{ $mgr['name'] }}</h1>
+        <h1 class="fw-bold">{{ $managers['name'] }}</h1>
         <h5 style="color: #00c8c8 !important;">Tentang Saya</h5>
-        <p class="text-start">{!! nl2br(e($mgr['bio'])) !!}</p>
-        @if (!empty($jobs[0]))
+        <p class="text-start">{!! nl2br(e($managers['bio'])) !!}</p>
+        @if (!empty($managers['jobs']))
           <h6>Deskripsi Pekerjaan:</h6>
           <ul class="text-start">
-            @foreach ($jobs as $j)
+            @foreach ($managers['jobs'] as $j)
               <li>{{ $j }}</li>
             @endforeach
           </ul>
@@ -144,11 +144,11 @@
   <footer class="footer mt-5 pt-4" id="my-footer">
     <div class="container">
       <div class="info-list mb-2">
-        <div><strong>Nama<br></strong>{{ $mgr['name'] }}</div>
-        <div><strong>Jabatan<br></strong>{{ $mgr['role'] }}</div>
-        <div><strong>Email<br></strong>{{ $mgr['email'] }}</div>
-        <div><strong>Telepon<br></strong>{{ $mgr['phone'] }}</div>
-        <div><strong>Alamat<br></strong>{{ $mgr['alamat'] }}</div>
+        <div><strong>Nama<br></strong>{{ $managers['name'] }}</div>
+        <div><strong>Jabatan<br></strong>{{ $managers['role'] }}</div>
+        <div><strong>Email<br></strong>{{ $managers['email'] }}</div>
+        <div><strong>Telepon<br></strong>{{ $managers['phone'] }}</div>
+        <div><strong>Alamat<br></strong>{{ $managers['alamat'] }}</div>
       </div>
     </div>
   </footer>

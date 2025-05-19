@@ -17,7 +17,7 @@ class HrDashboardController extends Controller
     }
 
     public function manajemen_index(){
-        $managers=User::where('role', '=', 'Manajer')->get();
+        $managers=User::where('role', '=', 'Manajer')->first();
         return view('index.manajemen', compact('managers'));
     }
 
