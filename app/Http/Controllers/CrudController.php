@@ -37,7 +37,7 @@ class CrudController extends Controller
         return view('index.modal_edit', compact('user'));
     }
 
-   public function usersUpdate(Request $request, $id)
+public function usersUpdate(Request $request, $id)
 {
     $user = User::findOrFail($id);
 
@@ -47,7 +47,6 @@ class CrudController extends Controller
         'email',
         'role',
         'phone',
-        // 'photo_url',  ← hapus atau abaikan ini jika menggunakan upload file
         'bio',
         'alamat',
         'joined_at',
@@ -57,13 +56,14 @@ class CrudController extends Controller
         'job_descriptions',
         'skills',
         'achievements',
+        'divisi',  // ← Tambahkan ini
     ]);
 
     // Jika ada file 'photo', simpan di storage dan set ke data
-    if ($request->hasFile('photo')) {            // ← Tambahkan di sini
+    if ($request->hasFile('photo')) {
         $file     = $request->file('photo');
         $path     = $file->store('photos', 'public');
-        $data['photo_url'] = '/storage/' . $path; // ← Dan di sini
+        $data['photo_url'] = '/storage/' . $path;
     }
 
     // Jika password diisi, hash dan masukkan ke data
