@@ -60,7 +60,7 @@
   <nav class="navbar navbar-expand-lg navbar-custom">
     <div class="container-fluid">
       <a class="navbar-brand" href="{{ url('dashboard') }}"><span class="dot"></span>Divisi Operator</a>
-      <form class="d-flex ms-3" role="search">
+      <div class="d-flex ms-3">
         <input
           class="form-control me-2"
           type="search"
@@ -69,7 +69,7 @@
           id="searchInput"
           value="{{ request('search') }}"
         />
-      </form>
+      </div>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
         <span class="navbar-toggler-icon"></span>
       </button>

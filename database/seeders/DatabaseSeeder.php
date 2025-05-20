@@ -19,7 +19,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-           User::create([
+        //   / Pengguna dengan role 'Admin', 'Manajer', 'Leader' (tanpa 'divisi')
+        User::create([
             'name'             => 'Alice Putri',
             'role'             => 'Admin',
             'email'            => 'alice.putri@nagahytam.co.id',
@@ -92,7 +93,6 @@ class DatabaseSeeder extends Seeder
         ]);
 
         User::create([
-
             'name'             => 'Putri Tanjung',
             'role'             => 'Admin',
             'email'            => 'putri.tanjung@nagahytam.co.id',
@@ -110,7 +110,7 @@ class DatabaseSeeder extends Seeder
             'achievements'     => 'Employee of the Month 2022'
         ]);
 
-        // Operator 6–35
+        // Operator 1-10: divisi 'inbound'
         User::create([
             'name'             => 'Ahmad Yusuf',
             'role'             => 'Operator',
@@ -126,8 +126,8 @@ class DatabaseSeeder extends Seeder
             'level'            => 'Junior',
             'job_descriptions' => 'Sortir barang, Packing pesanan, Cek inventory',
             'skills'           => 'Ketelitian, Kecepatan, Barcode scanning',
-            'achievements'     => 'Zero Error Packing 2022'
-
+            'achievements'     => 'Zero Error Packing 2022',
+            'divisi'           => 'inbound'
         ]);
 
         User::create([
@@ -145,11 +145,11 @@ class DatabaseSeeder extends Seeder
             'level'            => 'Senior',
             'job_descriptions' => 'Penerimaan barang, Sortir kualitas, Packing & labeling',
             'skills'           => 'QC, Supervisi, Komunikasi',
-            'achievements'     => 'Akurasi 99% 2021'
+            'achievements'     => 'Akurasi 99% 2021',
+            'divisi'           => 'inbound'
         ]);
 
         User::create([
-
             'name'             => 'Agus Santoso',
             'role'             => 'Operator',
             'email'            => 'agus.santoso@nagahytam.co.id',
@@ -164,8 +164,8 @@ class DatabaseSeeder extends Seeder
             'level'            => 'Junior',
             'job_descriptions' => 'Packing barang, Tata rak, Pengecekan batch',
             'skills'           => 'Organisasi, Machine Op',
-            'achievements'     => 'Zero Defect April 2023'
-
+            'achievements'     => 'Zero Defect April 2023',
+            'divisi'           => 'inbound'
         ]);
 
         User::create([
@@ -183,7 +183,8 @@ class DatabaseSeeder extends Seeder
             'level'            => 'Senior',
             'job_descriptions' => 'Sortir otomatis, Maintenance, Packing ekspor',
             'skills'           => 'Monitoring, Maintenance',
-            'achievements'     => 'Divisi Terbaik 2022'
+            'achievements'     => 'Divisi Terbaik 2022',
+            'divisi'           => 'inbound'
         ]);
 
         User::create([
@@ -201,7 +202,8 @@ class DatabaseSeeder extends Seeder
             'level'            => 'Mid-level',
             'job_descriptions' => 'Audit inventory, Packing, Koordinasi ekspedisi',
             'skills'           => 'Inventory Mgmt, Forklift',
-            'achievements'     => 'On-Time Delivery 2021'
+            'achievements'     => 'On-Time Delivery 2021',
+            'divisi'           => 'inbound'
         ]);
 
         User::create([
@@ -219,7 +221,8 @@ class DatabaseSeeder extends Seeder
             'level'            => 'Junior',
             'job_descriptions' => 'Sortir, Penataan rak, Packing',
             'skills'           => 'Ketelitian, Kecepatan',
-            'achievements'     => 'Best Sorter 2020'
+            'achievements'     => 'Best Sorter 2020',
+            'divisi'           => 'inbound'
         ]);
 
         User::create([
@@ -237,7 +240,8 @@ class DatabaseSeeder extends Seeder
             'level'            => 'Junior',
             'job_descriptions' => 'Packing, Labeling, QC',
             'skills'           => 'Label Accuracy, Packing Speed',
-            'achievements'     => 'Employee of Month Mar 2022'
+            'achievements'     => 'Employee of Month Mar 2022',
+            'divisi'           => 'inbound'
         ]);
 
         User::create([
@@ -255,7 +259,8 @@ class DatabaseSeeder extends Seeder
             'level'            => 'Junior',
             'job_descriptions' => 'Penerimaan barang, Sortir QC',
             'skills'           => 'QC, Data Entry',
-            'achievements'     => 'Zero Defect Jun 2023'
+            'achievements'     => 'Zero Defect Jun 2023',
+            'divisi'           => 'inbound'
         ]);
 
         User::create([
@@ -273,7 +278,8 @@ class DatabaseSeeder extends Seeder
             'level'            => 'Mid-level',
             'job_descriptions' => 'Packing, Koordinasi kirim',
             'skills'           => 'Logistik, Forklift',
-            'achievements'     => 'Best Packer 2021'
+            'achievements'     => 'Best Packer 2021',
+            'divisi'           => 'inbound'
         ]);
 
         User::create([
@@ -291,9 +297,11 @@ class DatabaseSeeder extends Seeder
             'level'            => 'Junior',
             'job_descriptions' => 'Rak organization, Inventory check',
             'skills'           => 'Detail-oriented',
-            'achievements'     => 'Inventory Hero 2023'
+            'achievements'     => 'Inventory Hero 2023',
+            'divisi'           => 'inbound'
         ]);
 
+        // Operator 11-20: divisi 'outbound'
         User::create([
             'name'             => 'Fajar Nugroho',
             'role'             => 'Operator',
@@ -309,7 +317,8 @@ class DatabaseSeeder extends Seeder
             'level'            => 'Senior',
             'job_descriptions' => 'Supervisi packing, QC',
             'skills'           => 'Leadership',
-            'achievements'     => 'Night Shift Star'
+            'achievements'     => 'Night Shift Star',
+            'divisi'           => 'outbound'
         ]);
 
         User::create([
@@ -327,7 +336,8 @@ class DatabaseSeeder extends Seeder
             'level'            => 'Mid-level',
             'job_descriptions' => 'Sortir manual & mesin',
             'skills'           => 'Machine Ops',
-            'achievements'     => 'Sort Master 2022'
+            'achievements'     => 'Sort Master 2022',
+            'divisi'           => 'outbound'
         ]);
 
         User::create([
@@ -345,7 +355,8 @@ class DatabaseSeeder extends Seeder
             'level'            => 'Junior',
             'job_descriptions' => 'Return processing, Re-QC',
             'skills'           => 'QC',
-            'achievements'     => 'Return King 2022'
+            'achievements'     => 'Return King 2022',
+            'divisi'           => 'outbound'
         ]);
 
         User::create([
@@ -363,7 +374,8 @@ class DatabaseSeeder extends Seeder
             'level'            => 'Junior',
             'job_descriptions' => 'Forklift operation, Stoking',
             'skills'           => 'Forklift',
-            'achievements'     => 'Forklift Ace 2023'
+            'achievements'     => 'Forklift Ace 2023',
+            'divisi'           => 'outbound'
         ]);
 
         User::create([
@@ -381,7 +393,8 @@ class DatabaseSeeder extends Seeder
             'level'            => 'Mid-level',
             'job_descriptions' => 'Heavy item packing',
             'skills'           => 'Strength, Teamwork',
-            'achievements'     => 'Heavy Lifter Award'
+            'achievements'     => 'Heavy Lifter Award',
+            'divisi'           => 'outbound'
         ]);
 
         User::create([
@@ -399,7 +412,8 @@ class DatabaseSeeder extends Seeder
             'level'            => 'Junior',
             'job_descriptions' => 'Express packing',
             'skills'           => 'Speed Packing',
-            'achievements'     => 'Flash Packer'
+            'achievements'     => 'Flash Packer',
+            'divisi'           => 'outbound'
         ]);
 
         User::create([
@@ -417,7 +431,8 @@ class DatabaseSeeder extends Seeder
             'level'            => 'Senior',
             'job_descriptions' => 'Final QC',
             'skills'           => 'QC, Detail',
-            'achievements'     => 'QC Champion'
+            'achievements'     => 'QC Champion',
+            'divisi'           => 'outbound'
         ]);
 
         User::create([
@@ -435,7 +450,8 @@ class DatabaseSeeder extends Seeder
             'level'            => 'Junior',
             'job_descriptions' => 'Data entry inventory, Sortir',
             'skills'           => 'MS Excel',
-            'achievements'     => 'Data Star'
+            'achievements'     => 'Data Star',
+            'divisi'           => 'outbound'
         ]);
 
         User::create([
@@ -453,7 +469,8 @@ class DatabaseSeeder extends Seeder
             'level'            => 'Mid-level',
             'job_descriptions' => 'E-commerce packing',
             'skills'           => 'Speed & Care',
-            'achievements'     => 'E-commerce Hero'
+            'achievements'     => 'E-commerce Hero',
+            'divisi'           => 'outbound'
         ]);
 
         User::create([
@@ -471,9 +488,11 @@ class DatabaseSeeder extends Seeder
             'level'            => 'Junior',
             'job_descriptions' => 'Sortir elektronik',
             'skills'           => 'Delicate handling',
-            'achievements'     => 'Electronics Ace'
+            'achievements'     => 'Electronics Ace',
+            'divisi'           => 'outbound'
         ]);
 
+        // Operator 21-30: divisi 'storage'
         User::create([
             'name'             => 'Prio Nugroho',
             'role'             => 'Operator',
@@ -489,7 +508,8 @@ class DatabaseSeeder extends Seeder
             'level'            => 'Senior',
             'job_descriptions' => 'Team coordination',
             'skills'           => 'Leadership',
-            'achievements'     => 'Morning Lead'
+            'achievements'     => 'Morning Lead',
+            'divisi'           => 'storage'
         ]);
 
         User::create([
@@ -507,7 +527,8 @@ class DatabaseSeeder extends Seeder
             'level'            => 'Junior',
             'job_descriptions' => 'Material inspection',
             'skills'           => 'QC, Material science',
-            'achievements'     => 'Material Master'
+            'achievements'     => 'Material Master',
+            'divisi'           => 'storage'
         ]);
 
         User::create([
@@ -525,7 +546,8 @@ class DatabaseSeeder extends Seeder
             'level'            => 'Mid-level',
             'job_descriptions' => 'Cluster organization',
             'skills'           => 'Organization',
-            'achievements'     => 'Cluster Champ'
+            'achievements'     => 'Cluster Champ',
+            'divisi'           => 'storage'
         ]);
 
         User::create([
@@ -543,7 +565,8 @@ class DatabaseSeeder extends Seeder
             'level'            => 'Junior',
             'job_descriptions' => 'Return handling',
             'skills'           => 'Recycling',
-            'achievements'     => 'Return Star'
+            'achievements'     => 'Return Star',
+            'divisi'           => 'storage'
         ]);
 
         User::create([
@@ -561,7 +584,8 @@ class DatabaseSeeder extends Seeder
             'level'            => 'Mid-level',
             'job_descriptions' => 'Heavy item packing',
             'skills'           => 'Strength, Teamwork',
-            'achievements'     => 'Heavy Lifter'
+            'achievements'     => 'Heavy Lifter',
+            'divisi'           => 'storage'
         ]);
 
         User::create([
@@ -579,7 +603,8 @@ class DatabaseSeeder extends Seeder
             'level'            => 'Junior',
             'job_descriptions' => 'Express sorting',
             'skills'           => 'Speed',
-            'achievements'     => 'Express Ace'
+            'achievements'     => 'Express Ace',
+            'divisi'           => 'storage'
         ]);
 
         User::create([
@@ -597,7 +622,8 @@ class DatabaseSeeder extends Seeder
             'level'            => 'Junior',
             'job_descriptions' => 'Batch QC',
             'skills'           => 'Attention to detail',
-            'achievements'     => 'Batch Star'
+            'achievements'     => 'Batch Star',
+            'divisi'           => 'storage'
         ]);
 
         User::create([
@@ -615,7 +641,8 @@ class DatabaseSeeder extends Seeder
             'level'            => 'Mid-level',
             'job_descriptions' => 'Internal logistics',
             'skills'           => 'Coordination',
-            'achievements'     => 'Logistic Hero'
+            'achievements'     => 'Logistic Hero',
+            'divisi'           => 'storage'
         ]);
 
         User::create([
@@ -633,7 +660,8 @@ class DatabaseSeeder extends Seeder
             'level'            => 'Senior',
             'job_descriptions' => 'Export processing',
             'skills'           => 'Export regulations',
-            'achievements'     => 'Export Champion'
+            'achievements'     => 'Export Champion',
+            'divisi'           => 'storage'
         ]);
 
         User::create([
@@ -651,24 +679,8 @@ class DatabaseSeeder extends Seeder
             'level'            => 'Mid-level',
             'job_descriptions' => 'Last-mile coordination',
             'skills'           => 'Communication',
-            'achievements'     => 'Last Mile Star'
-        ]);
-        User::create([
-            'name' => 'Fahri',
-            'role' => 'Admin',
-            'email' => 'fahri@nagahtam.co.id',
-            'phone' => '08123456772',
-            'password' => '12345',
-            'photo_url'=> 'img/fahri.jpg',
-            'bio' => 'Bertugas mengelola seluruh administrasi Operator termasuk persetujuan cuti, pemberian hak cuti, serta membaca dan menindaklanjuti laporaOperator.',
-            'alamat' => 'Jl. Raya No. 1, Jakarta',
-            'joined_at' => '2025-01-01',
-            'education' => 'S1 Manajemen Sumber Daya Manusia',
-            'department' => 'HR',
-            'level' => 'Senior',
-            'job_descriptions' => 'Rekrutmen dan seleksi Operator, Pengelolaan data Operator, Pelatihan dan onboarding.',
-            'skills' => 'Komunikasi, Microsoft Excel, Manajemen SDM',
-            'achievements' => 'Penghargaan Operator Terbaik 2024, Sertifikasi Manajemen SDM',
+            'achievements'     => 'Last Mile Star',
+            'divisi'           => 'storage'
         ]);
 
         News::create([
