@@ -77,7 +77,7 @@
 }
 .me-2 {
     margin-right: 0.5rem !important;
-    margin-top: 0.5;
+    margin-top: 0.5rem !important;
 }
 
   </style>
@@ -151,6 +151,12 @@
                   <div class="form-group">
                     <label for="role">Role</label>
                     <input type="text" class="form-control" id="role" name="role" value="{{ old('role', $user->role ?? '') }}" placeholder="Enter your role">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="alamat">Address</label>
+                    <input type="text" class="form-control" id="alamat" name="alamat" value="{{ old('alamat', $user->alamat ?? '') }}" placeholder="Enter your address">
                   </div>
                 </div>
               </div>

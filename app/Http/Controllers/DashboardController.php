@@ -65,7 +65,7 @@ class DashboardController extends Controller
 
         if ($request->hasFile('photo')) {
             $file = $request->file('photo');
-            $path = $file->store('uploads', 'public');
+            $path = $file->store('photos', 'public');
             $validated['photo_url'] = '/storage/' . $path;
         }
 
