@@ -253,6 +253,36 @@
       width: 100%;
     }
   }
+
+  /* === Modal Profil === */
+  .join {
+    font-size: 14px;
+    color: #a0a0a0;
+    font-weight: bold
+  }
+  .date {
+    background-color: #ccc
+  }
+  .name {
+    font-size: 22px;
+    font-weight: bold
+  }
+
+.idd {
+    font-size: 14px;
+    font-weight: 600
+  }
+
+.idd1 {
+    font-size: 12px
+  }
+
+.number {
+    font-size: 22px;
+    font-weight: bold
+  }
+
+  
 </style>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -320,7 +350,7 @@
   </div>
 
 <!-- Profile -->
-<div id="profileDropdownToggle" class="d-flex align-items-center nav-item" style="cursor:pointer;">
+<div id="profileDropdownToggle" class="d-flex align-items-center nav-item" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#profileModal">
   <img src="<?= htmlspecialchars($user['photo_url'] ?: 'img/default_profile.png') ?>"
        class="rounded-circle me-2" width="50" height="50" alt="Foto Profil" style="object-fit:cover; border-radius:50%; margin-bottom:1rem;">
   <div class="d-none d-md-block">
@@ -437,6 +467,8 @@
   </a>
 </nav>
 
+
+
  <!-- Main Content -->
  
 <main>
@@ -466,6 +498,56 @@
   </div>
 </main>
 
+<!-- Modal Profil -->
+  <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="profileModalLabel">{{ htmlspecialchars($user['name']) }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Modal Body (Card Content) -->
+      <div class="modal-body">
+        <div class="container p-3 d-flex justify-content-center">
+          <div class="card p-4 w-100">
+            <div class="image d-flex flex-column justify-content-center align-items-center">
+              <img src={{ htmlspecialchars($user['photo_url']) }} height="100" width="100" style="object-fit:cover; border-radius:50%; margin-bottom:1rem;">
+              <span class="name mt-3">{{ htmlspecialchars($user['name']) }}</span>
+              <span class="idd">{{ htmlspecialchars($user['email']) }}</span>
+
+              <div class="d-flex flex-row justify-content-center align-items-center gap-2">
+                <span class="idd1">{{ htmlspecialchars($user['phone']) }}</span>
+                <span>
+                  <i class="fa fa-copy"></i>
+                </span>
+              </div>
+              <div class="d-flex mt-2">
+                <a href="edit_profil/{{ $user['id'] }}" class="btn btn-primary btn-sm">Edit Profile</a>
+              </div>
+
+              <div class="text mt-3">
+                <span>
+                  <p>{{ htmlspecialchars($user['bio']) }}</p>
+                </span>
+              </div>
+
+              <h6><b>Deskripsi Pekerjaan</b></h6>
+              <ul>
+                  @foreach(explode(', ', $user['job_descriptions']) as $jd)
+                    <li>{{ $jd }}</li>
+                  @endforeach
+                </ul>
+              <div class="px-2 rounded mt-4 date">
+                <span class="join">Joined May, 2021</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
 
 
 <!-- jQuery Script -->
@@ -482,9 +564,6 @@
         $('#profileDropdown').slideToggle(150);
       } 
       // Jika desktop, redirect ke halaman profil
-      else if (w > 765) {
-        window.location.href = 'dashboard_profil';
-      }
     });
 
     // Jika klik di luar dropdown, sembunyikan dropdown
