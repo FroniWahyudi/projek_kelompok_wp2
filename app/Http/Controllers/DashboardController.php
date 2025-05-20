@@ -46,6 +46,7 @@ class DashboardController extends Controller
             abort(403);
         }
 
+        
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
@@ -55,11 +56,17 @@ class DashboardController extends Controller
             'bio' => 'required|string',
             'photo_url' => 'nullable|string|max:255'
         ]);
-
+        
         if ($request->filled('password')) {
             $validated['password'] = Hash::make($request->password);
         } else {
             unset($validated['password']);
+        }
+
+        if ($request->hasFile('photo')) {
+            $file = $request->file('photo');
+            $path = $file->store('uploads', 'public');
+            $validated['photo_url'] = '/storage/' . $path;
         }
 
         $user->fill($validated);

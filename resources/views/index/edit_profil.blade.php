@@ -100,7 +100,7 @@
                   </div>
                   <h5 class="user-name">{{ is_object($user) && isset($user->name) ? $user->name : '' }}</h5>
                   <h6 class="user-email">{{ is_object($user) && isset($user->email) ? $user->email : '' }}</h6>
-                  <input type="file" name="photo_url" class="form-control mt-2">
+                  <input type="file" name="photo" class="form-control mt-2">
                 </div>
                 <div class="about mt-3">
                   <h5>About</h5>
