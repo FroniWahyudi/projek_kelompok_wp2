@@ -7,104 +7,193 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
   <style>
-    body { opacity: 0; transition: opacity 0.5s ease; }
-    body.fade-in { opacity: 1; }
-    :root { --sidebar-width: 260px; --primary-color: #0d6efd; --hover-bg: #f8f9fa; }
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f1f3f5; margin: 0; padding: 0; }
-    .wrapper { display: flex; min-height: 100vh; }
-    .sidebar { width: var(--sidebar-width); background-color: #fff; box-shadow: 2px 0 10px rgba(0,0,0,0.05); padding: 2rem 1rem; }
-    .sidebar h2 { font-size: 1.5rem; color: var(--primary-color); margin-bottom: 1.5rem; }
-    .sidebar .nav-link { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 0.375rem; color: #495057; text-decoration: none; }
-    .sidebar .nav-link:hover, .sidebar .nav-link.active { background-color: var(--hover-bg); color: var(--primary-color); }
-    .content { flex: 1; padding: 2rem; }
-    .content-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-    .content-header h1 { font-size: 1.75rem; margin: 0; }
+    body {
+    margin: 0;
+    padding-top: 40px;
+    color: #2e323c;
+    background: #f5f6fa;
+    position: relative;
+    height: 100%;
+}
+.account-settings .user-profile {
+    margin: 0 0 1rem 0;
+    padding-bottom: 1rem;
+    text-align: center;
+}
+.account-settings .user-profile .user-avatar {
+    margin: 0 0 1rem 0;
+}
+.account-settings .user-profile .user-avatar img {
+    width: 90px;
+    height: 90px;
+    -webkit-border-radius: 100px;
+    -moz-border-radius: 100px;
+    border-radius: 100px;
+}
+.account-settings .user-profile h5.user-name {
+    margin: 0 0 0.5rem 0;
+}
+.account-settings .user-profile h6.user-email {
+    margin: 0;
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: #9fa8b9;
+}
+.account-settings .about {
+    margin: 2rem 0 0 0;
+    text-align: center;
+}
+.account-settings .about h5 {
+    margin: 0 0 15px 0;
+    color: #007ae1;
+}
+.account-settings .about p {
+    font-size: 0.825rem;
+}
+.form-control {
+    border: 1px solid #cfd1d8;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    font-size: .825rem;
+    background: #ffffff;
+    color: #2e323c;
+}
+
+.card {
+    background: #ffffff;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    border: 0;
+    margin-bottom: 1rem;
+}
+
+.tombol-upload {
+    width: 60%;
+    height: 50%;
+    font-size: 80%;
+    margin-top: 15px;
+}
+.me-2 {
+    margin-right: 0.5rem !important;
+    margin-top: 0.5;
+}
+
   </style>
 </head>
 <body>
-  <div class="wrapper">
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <h2>Profil</h2>
-      <nav class="nav flex-column">
-        <a class="nav-link" href="{{ url('dashboard_profil') }}"><i class="fas fa-user"></i> Profil Saya</a>
-        <a class="nav-link active" href="#"><i class="fas fa-pen"></i> Edit Profil</a>
-        <a class="nav-link" href="{{ url('ganti_password') }}"><i class="fas fa-key"></i> Ganti Password</a>
-        <a class="nav-link" href="{{ url('dashboard') }}"><i class="fas fa-right-from-bracket"></i> Keluar</a>
-      </nav>
-    </aside>
-
-    <!-- Main Content -->
-    <main class="content">
-      <div class="content-header">
-        <h1>Edit Profil Saya</h1>
-      </div>
-      <section>
-        <div class="bg-white p-4 rounded shadow-sm">
-          <form method="POST" action="{{ route('profil.update', is_object($user) ? $user->id : '') }}" autocomplete="off">
-            @csrf
-            @method('PUT')
-
-            <div class="text-center mb-4">
-              <img src="{{ asset(is_object($user) && isset($user->photo_url) ? $user->photo_url : 'img/default.jpg') }}" alt="Foto Profil" style="width:120px; height:120px; object-fit:cover; border-radius:50%;">
+  <div class="container">
+		<form method="POST" action="{{ route('profil.update', is_object($user) ? $user->id : '') }}" autocomplete="off">
+    @csrf
+    <div class="row gutters">
+        <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="account-settings">
+                        <div class="user-profile">
+                            <div class="user-avatar">
+                                <img src="{{ is_object($user) && isset($user->photo_url) ? asset($user->photo_url) : asset('default-avatar.png') }}" alt="User Avatar">
+                            </div>
+                            <h5 class="user-name">{{ is_object($user) && isset($user->name) ? $user->name : '' }}</h5>
+                            <h6 class="user-email">{{ is_object($user) && isset($user->email) ? $user->email : '' }}</h6>
+                            <input type="file" name="photo_url" class="form-control mt-2">
+                        </div>
+                        <div class="about mt-3">
+                            <h5>About</h5>
+                            <p>{{ is_object($user) && isset($user->bio) ? $user->bio : '' }}</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            @if(session('success'))
-              <div class="alert alert-success">{{ session('success') }}</div>
-            @endif
-
-            <div class="row mb-3">
-              <label class="col-sm-2 col-form-label">Nama</label>
-              <div class="col-sm-10">
-                <input type="text" name="name" class="form-control" value="{{ old('name', $user->name) }}" required>
-              </div>
-            </div>
-            <div class="row mb-3">
-              <label class="col-sm-2 col-form-label">Email</label>
-              <div class="col-sm-10">
-                <input type="email" name="email" class="form-control" value="{{ old('email', $user->email) }}" required>
-              </div>
-            </div>           
-            <div class="row mb-3">
-              <label class="col-sm-2 col-form-label">Password</label>
-              <div class="col-sm-10">
-                <input type="password" name="password" class="form-control" placeholder="Password">
-              </div>
-            </div>
-            <div class="row mb-3">
-              <label class="col-sm-2 col-form-label">Telepon</label>
-              <div class="col-sm-10">
-                <input type="text" name="phone" class="form-control" value="{{ old('phone', $user->phone) }}" required>
-              </div>
-            </div>
-            <div class="row mb-3">
-              <label class="col-sm-2 col-form-label">Jabatan</label>
-              <div class="col-sm-10">
-                <input type="text" name="role" class="form-control" value="{{ old('role', $user->role) }}" required>
-              </div>
-            </div>
-            <div class="row mb-3">
-              <label class="col-sm-2 col-form-label">Bio</label>
-              <div class="col-sm-10">
-                <textarea name="bio" class="form-control" rows="4" required>{{ old('bio', $user->bio) }}</textarea>
-              </div>
-            </div>
-            <div class="row mb-4">
-              <label class="col-sm-2 col-form-label">URL Foto</label>
-              <div class="col-sm-10">
-                <input type="text" name="photo_url" class="form-control" value="{{ old('photo_url', $user->photo_url) }}">
-                <small class="text-muted">Masukkan path gambar (contoh: img/user.jpg)</small>
-              </div>
-            </div>
-            <div class="text-end">
-              <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Simpan Perubahan</button>
-              <a href="{{ url('dashboard_profil') }}" class="btn btn-secondary ms-2"><i class="fas fa-arrow-left"></i> Batal</a>
-            </div>
-          </form>
         </div>
-      </section>
-    </main>
-  </div>
+        <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="row gutters">
+                        <div class="col-12">
+                            <h6 class="mb-2 text-primary">Personal Details</h6>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="name">Full Name</label>
+                                <input type="text" class="form-control" id="name" name="name" value="{{ old('name', $user->name ?? '') }}" placeholder="Enter full name">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" value="{{ old('email', $user->email ?? '') }}" placeholder="Enter email ID">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="phone">Phone</label>
+                                <input type="text" class="form-control" id="phone" name="phone" value="{{ old('phone', $user->phone ?? '') }}" placeholder="Enter phone number">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Enter password (leave blank to keep current password)">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="bio">Bio</label>
+                                <input type="text" class="form-control" id="bio" name="bio" value="{{ old('bio', $user->bio ?? '') }}" placeholder="Enter your bio">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="role">Role</label>
+                                <input type="text" class="form-control" id="role" name="role" value="{{ old('role', $user->role ?? '') }}" placeholder="Enter your role">
+                            </div>
+                        </div>
+                    </div>
+                    <!--
+                    <div class="row gutters">
+                        <div class="col-12">
+                            <h6 class="mt-3 mb-2 text-primary">Address</h6>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="street">Street</label>
+                                <input type="text" class="form-control" id="street" name="street" placeholder="Enter Street">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="city">City</label>
+                                <input type="text" class="form-control" id="city" name="city" placeholder="Enter City">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="state">State</label>
+                                <input type="text" class="form-control" id="state" name="state" placeholder="Enter State">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="zip">Zip Code</label>
+                                <input type="text" class="form-control" id="zip" name="zip" placeholder="Zip Code">
+                            </div>
+                        </div>
+                    </div>
+                    -->
+                    <div class="row gutters">
+                        <div class="col-12 text-right">
+                            <button type="reset" class="btn btn-secondary me-2">Cancel</button>
+                            <button type="submit" class="btn btn-primary me-2">Update</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
