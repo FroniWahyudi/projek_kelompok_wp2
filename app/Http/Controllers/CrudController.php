@@ -37,40 +37,48 @@ class CrudController extends Controller
         return view('index.modal_edit', compact('user'));
     }
 
-    public function usersUpdate(Request $request, $id)
-    {
-        $user = User::findOrFail($id);
+   public function usersUpdate(Request $request, $id)
+{
+    $user = User::findOrFail($id);
 
-        // Ambil hanya field-field yang ada di form
-        $data = $request->only([
-            'name',
-            'email',
-            'role',
-            'phone',
-            'photo_url',
-            'bio',
-            'alamat',
-            'joined_at',
-            'education',
-            'department',
-            'level',
-            'job_descriptions',
-            'skills',
-            'achievements',
-        ]);
+    // Ambil hanya field-field yang ada di form
+    $data = $request->only([
+        'name',
+        'email',
+        'role',
+        'phone',
+        // 'photo_url',  ← hapus atau abaikan ini jika menggunakan upload file
+        'bio',
+        'alamat',
+        'joined_at',
+        'education',
+        'department',
+        'level',
+        'job_descriptions',
+        'skills',
+        'achievements',
+    ]);
 
-        // Jika password diisi, hash dan masukkan ke data
-        if ($request->filled('password')) {
-            $data['password'] = Hash::make($request->password);
-        }
-
-        // Update model
-        $user->update($data);
-
-        return redirect()
-               ->route('operator.index')
-               ->with('success', 'Data berhasil diperbarui.');
+    // Jika ada file 'photo', simpan di storage dan set ke data
+    if ($request->hasFile('photo')) {            // ← Tambahkan di sini
+        $file     = $request->file('photo');
+        $path     = $file->store('photos', 'public');
+        $data['photo_url'] = '/storage/' . $path; // ← Dan di sini
     }
+
+    // Jika password diisi, hash dan masukkan ke data
+    if ($request->filled('password')) {
+        $data['password'] = Hash::make($request->password);
+    }
+
+    // Update model dengan semua data, termasuk photo_url kalau ada
+    $user->update($data);
+
+    return redirect()
+           ->route('operator.index')
+           ->with('success', 'Data berhasil diperbarui.');
+}
+
 
     // === SISA CUTI ===
 
