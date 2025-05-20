@@ -1,4 +1,7 @@
-@php use Illuminate\Support\Str; @endphp
+@php 
+use Illuminate\Support\Str; 
+use Illuminate\Support\Carbon;
+@endphp
 
 
 <!DOCTYPE html>
@@ -541,7 +544,7 @@
                   @endforeach
                 </ul>
               <div class="px-2 rounded mt-4 date">
-                <span class="join">Joined May, 2021</span>
+                <span class="join">Joined {{ \Carbon\Carbon::parse($user['joined_at'])->format('j F Y') }}</span>
               </div>
             </div>
           </div>
