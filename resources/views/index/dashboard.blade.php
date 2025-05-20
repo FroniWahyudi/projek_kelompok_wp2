@@ -287,7 +287,7 @@
       </li>
       <li><hr class="dropdown-divider"></li>
       <li><h6 class="dropdown-header">Menu Lainnya</h6></li>
-      <?php// if($user['role']==='Manajer'): ?>
+     
       @if($role == 'Manajer')
       <li>
         <a class="dropdown-item" href="laporan_kerja.php">
@@ -295,7 +295,7 @@
           Laporan Kerja
         </a>
       </li>
-      <?php// elseif($user['role']==='Leader'): ?>
+   
       @elseif($role == 'Leader')
       <li>
         <a class="dropdown-item" href="laporan_kerja.php">
@@ -378,7 +378,7 @@
     <i class="bi bi-people-fill me-1"></i> Manajemen
   </a>
   <a href="admin" class="btn btn-outline-primary w-100 mb-2">
-    <i class="bi bi-person-circle me-1"></i> Admin officer
+    <i class="bi bi-person-circle me-1"></i> Administrasi
   </a>
   <a href="leader" class="btn btn-outline-primary w-100 mb-2">
     <i class="bi bi-people-fill me-1"></i> Leader
@@ -401,7 +401,7 @@
   <?php //if ($user['role'] === 'Leader' || $user['role'] === 'HR' ): ?>
   @if($role == "Leader" || $role == "Admin")
     @if($role == "Leader")
-    <?php// if ($user['role'] === 'Leader'): ?>
+
       <a href="laporan_kerja.php" class="btn btn-outline-dark w-100 mb-2">
         <i class="bi bi-journal-text me-1"></i> Kirim Laporan Kerja
       </a>

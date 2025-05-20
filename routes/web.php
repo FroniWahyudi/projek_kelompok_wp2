@@ -7,7 +7,7 @@ use App\Http\Controllers\NewsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HrDashboardController;
 use App\Http\Controllers\LaporanKerjaController;
-
+use App\Http\Controllers\CrudController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -36,7 +36,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin', [HrDashboardController::class, 'hr_index']);
     Route::get('/leader', [HrDashboardController::class, 'leader_index']);
     Route::get('/manajemen', [HrDashboardController::class, 'manajemen_index']);
-    Route::get('/operator', [HrDashboardController::class, 'karyawan_index']);
+Route::get('/operator', [HrDashboardController::class, 'karyawan_index'])->name('operator.index');
+
     Route::post('/karyawan/update_sisa_cuti', [HrDashboardController::class, 'updateSisaCuti'])->name('karyawan.update_sisa_cuti');
     Route::get('/edit_profil/{id}', [DashboardController::class, 'edit'])->name('profil.edit');
     Route::put('/edit_profil/{id}', [DashboardController::class, 'update'])->name('profil.update');
@@ -55,4 +56,14 @@ Route::middleware('guest')->group(function () {
     // Optional: Registration routes
     // Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
     // Route::post('/register', [RegisterController::class, 'register']);
+});
+
+Route::middleware(['auth'])->group(function () {
+    // ... semua route lain ...
+
+    // Move these inside auth
+    Route::get('operator/{id}/edit',   [CrudController::class,'usersEdit'])
+         ->name('operator.edit');
+    Route::put('operator/{id}',        [CrudController::class,'usersUpdate'])
+         ->name('operator.update');
 });

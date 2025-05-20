@@ -53,6 +53,8 @@
     }
 
   </style>
+    <meta name="csrf-token" content="{{ csrf_token() }}">  {{-- ✅ DITAMBAH --}}
+
 </head>
 <body>
   <nav class="navbar navbar-expand-lg navbar-custom">
@@ -97,6 +99,12 @@
               <p>{{ $op->email }}</p>
               <p>{{ Str::limit($op->bio, 100) }}</p>
               <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal{{ $op->id }}">Detail</button>
+  <button 
+     class="btn btn-warning btn-sm btn-edit ms-2" 
+     data-id="{{ $op->id }}" 
+     title="Edit Profil Operator">
+     Edit
+   </button>
             </div>
           </div>
         </div>
@@ -207,7 +215,59 @@
         }, 300); // Debounce: 300ms
       });
     });
+
+   // Listener untuk tombol Edit (GET modal)
+    document.addEventListener('click', function(e) {
+      if (!e.target.matches('.btn-edit')) return;
+      const id      = e.target.dataset.id;
+      const modalEl = document.getElementById('editModal');
+      const modal   = new bootstrap.Modal(modalEl);
+
+      fetch(`{{ url('operator') }}/${id}/edit`)
+        .then(r => r.text())
+        .then(html => {
+          modalEl.querySelector('.modal-dialog').innerHTML = html;
+          modal.show();
+        })
+        .catch(() => alert('Gagal memuat form edit.'));
+    });
+
+   document.addEventListener('submit', function(e) {
+  if (e.target.id !== 'formEditUser') return;
+  e.preventDefault();
+
+  const form = e.target;
+  const data = new FormData(form);
+
+  fetch(form.action, {
+    method: 'POST',
+    headers: {
+      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') // ✅ PASTIKAN meta ini ADA
+    },
+    body: data
+  })
+  .then(r => {
+    if (!r.ok) throw new Error('Gagal');      // ✅ TAMBAH untuk deteksi error non-200
+    return r.json()
+  })
+  .then(json => {
+    if (json.success) {
+      bootstrap.Modal.getInstance(document.getElementById('editModal')).hide();
+      window.location.href = '{{ url("operator") }}'; // ✅ redirect manual
+    } else {
+      alert('Gagal menyimpan perubahan.');
+    }
+  })
+  .catch(() => alert('Error saat menyimpan')); // ✅ tangani error
+});
   </script>
+  
+ <!-- Modal kosong untuk AJAX EDIT (DI SINI) -->
+  <div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <!-- konten akan di-overwrite oleh JS -->
+    </div>
+  </div>
 </body>
 </html>
 @endunless

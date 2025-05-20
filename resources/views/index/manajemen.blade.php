@@ -97,7 +97,7 @@
     <div class="container-fluid px-lg-5">
       <a class="navbar-brand" href="#">
         <span class="dot"></span>
-        <span>Manajer</span>
+        <span>Divisi Manajemen</span>
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
               data-bs-target="#mainNav" aria-controls="mainNav"

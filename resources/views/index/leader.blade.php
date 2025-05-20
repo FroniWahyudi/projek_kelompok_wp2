@@ -93,7 +93,7 @@
     <div class="container-fluid px-lg-5">
       <a class="navbar-brand" href="{{ url('dashboard') }}">
         <span class="dot"></span>
-        <span>Divisi Administrasi</span>
+        <span>Divisi Leader</span>
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
         <span class="navbar-toggler-icon"></span>
