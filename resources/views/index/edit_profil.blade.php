@@ -96,7 +96,7 @@
               <div class="account-settings">
                 <div class="user-profile">
                   <div class="user-avatar">
-                    <img src="{{ is_object($user) && isset($user->photo_url) ? asset($user->photo_url) : asset('default-avatar.png') }}" alt="User Avatar">
+                    <img src="{{ is_object($user) && isset($user->photo_url) ? asset($user->photo_url) : asset('default-avatar.png') }}" alt="User Avatar" style="object-fit:cover; border-radius:50%; margin-bottom:1rem;">
                   </div>
                   <h5 class="user-name">{{ is_object($user) && isset($user->name) ? $user->name : '' }}</h5>
                   <h6 class="user-email">{{ is_object($user) && isset($user->email) ? $user->email : '' }}</h6>
