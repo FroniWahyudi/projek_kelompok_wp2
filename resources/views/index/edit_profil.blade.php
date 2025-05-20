@@ -84,116 +84,88 @@
 </head>
 <body>
   <div class="container">
-		<form method="POST" action="{{ route('profil.update', is_object($user) ? $user->id : '') }}" autocomplete="off">
-    @csrf
-    <div class="row gutters">
+    <form action="{{ isset($user) && is_object($user) ? route('profil.update', $user->id) : '#' }}" method="POST" enctype="multipart/form-data">
+      @csrf
+      @if(isset($user) && is_object($user))
+        @method('PUT')
+      @endif
+      <div class="row gutters">
         <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
-            <div class="card h-100">
-                <div class="card-body">
-                    <div class="account-settings">
-                        <div class="user-profile">
-                            <div class="user-avatar">
-                                <img src="{{ is_object($user) && isset($user->photo_url) ? asset($user->photo_url) : asset('default-avatar.png') }}" alt="User Avatar">
-                            </div>
-                            <h5 class="user-name">{{ is_object($user) && isset($user->name) ? $user->name : '' }}</h5>
-                            <h6 class="user-email">{{ is_object($user) && isset($user->email) ? $user->email : '' }}</h6>
-                            <input type="file" name="photo_url" class="form-control mt-2">
-                        </div>
-                        <div class="about mt-3">
-                            <h5>About</h5>
-                            <p>{{ is_object($user) && isset($user->bio) ? $user->bio : '' }}</p>
-                        </div>
-                    </div>
+          <div class="card h-100">
+            <div class="card-body">
+              <div class="account-settings">
+                <div class="user-profile">
+                  <div class="user-avatar">
+                    <img src="{{ is_object($user) && isset($user->photo_url) ? asset($user->photo_url) : asset('default-avatar.png') }}" alt="User Avatar">
+                  </div>
+                  <h5 class="user-name">{{ is_object($user) && isset($user->name) ? $user->name : '' }}</h5>
+                  <h6 class="user-email">{{ is_object($user) && isset($user->email) ? $user->email : '' }}</h6>
+                  <input type="file" name="photo_url" class="form-control mt-2">
                 </div>
+                <div class="about mt-3">
+                  <h5>About</h5>
+                  <p>{{ is_object($user) && isset($user->bio) ? $user->bio : '' }}</p>
+                </div>
+              </div>
             </div>
+          </div>
         </div>
         <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
-            <div class="card h-100">
-                <div class="card-body">
-                    <div class="row gutters">
-                        <div class="col-12">
-                            <h6 class="mb-2 text-primary">Personal Details</h6>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="name">Full Name</label>
-                                <input type="text" class="form-control" id="name" name="name" value="{{ old('name', $user->name ?? '') }}" placeholder="Enter full name">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" class="form-control" id="email" name="email" value="{{ old('email', $user->email ?? '') }}" placeholder="Enter email ID">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="phone">Phone</label>
-                                <input type="text" class="form-control" id="phone" name="phone" value="{{ old('phone', $user->phone ?? '') }}" placeholder="Enter phone number">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="password">Password</label>
-                                <input type="password" class="form-control" id="password" name="password" placeholder="Enter password (leave blank to keep current password)">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="bio">Bio</label>
-                                <input type="text" class="form-control" id="bio" name="bio" value="{{ old('bio', $user->bio ?? '') }}" placeholder="Enter your bio">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="role">Role</label>
-                                <input type="text" class="form-control" id="role" name="role" value="{{ old('role', $user->role ?? '') }}" placeholder="Enter your role">
-                            </div>
-                        </div>
-                    </div>
-                    <!--
-                    <div class="row gutters">
-                        <div class="col-12">
-                            <h6 class="mt-3 mb-2 text-primary">Address</h6>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="street">Street</label>
-                                <input type="text" class="form-control" id="street" name="street" placeholder="Enter Street">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="city">City</label>
-                                <input type="text" class="form-control" id="city" name="city" placeholder="Enter City">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="state">State</label>
-                                <input type="text" class="form-control" id="state" name="state" placeholder="Enter State">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="zip">Zip Code</label>
-                                <input type="text" class="form-control" id="zip" name="zip" placeholder="Zip Code">
-                            </div>
-                        </div>
-                    </div>
-                    -->
-                    <div class="row gutters">
-                        <div class="col-12 text-right">
-                            <button type="reset" class="btn btn-secondary me-2">Cancel</button>
-                            <button type="submit" class="btn btn-primary me-2">Update</button>
-                        </div>
-                    </div>
+          <div class="card h-100">
+            <div class="card-body">
+              <div class="row gutters">
+                <div class="col-12">
+                  <h6 class="mb-2 text-primary">Personal Details</h6>
                 </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" class="form-control" id="name" name="name" value="{{ old('name', $user->name ?? '') }}" placeholder="Enter full name">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" value="{{ old('email', $user->email ?? '') }}" placeholder="Enter email ID">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="phone">Phone</label>
+                    <input type="text" class="form-control" id="phone" name="phone" value="{{ old('phone', $user->phone ?? '') }}" placeholder="Enter phone number">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Enter password (leave blank to keep current password)">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="bio">Bio</label>
+                    <input type="text" class="form-control" id="bio" name="bio" value="{{ old('bio', $user->bio ?? '') }}" placeholder="Enter your bio">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="role">Role</label>
+                    <input type="text" class="form-control" id="role" name="role" value="{{ old('role', $user->role ?? '') }}" placeholder="Enter your role">
+                  </div>
+                </div>
+              </div>
+              <div class="row gutters">
+                <div class="col-12 text-right">
+                  <button type="reset" class="btn btn-secondary me-2">Cancel</button>
+                  <button type="submit" class="btn btn-primary me-2">Update</button>
+                </div>
+              </div>
             </div>
+          </div>
         </div>
-    </div>
-</form>
-
+      </div>
+    </form>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
