@@ -23,7 +23,7 @@ class User extends Authenticatable
     'photo_url','bio','alamat','joined_at',
     'education','department','level',
     'job_descriptions','skills','achievements',
-    'division', // <— juga tambahkan di sini
+    'divisi', // <— juga tambahkan di sini
 ];
 
 

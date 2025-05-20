@@ -153,24 +153,29 @@
           </div>
         </div>
 
-        <h6>Bio</h6>
+        <div class="col-sm-6">
+          <strong>Divisi:</strong><br>
+          {{ $op->divisi }}
+        </div><br>
+
+        <h6><strong>Bio</strong></h6>
         <p>{{ $op->bio }}</p>
 
-        <h6>Deskripsi Pekerjaan</h6>
+        <h6><strong>Deskripsi Pekerjaan</strong></h6>
         <ul>
           @foreach(explode(', ', $op->job_descriptions) as $jd)
             <li>{{ $jd }}</li>
           @endforeach
         </ul>
 
-        <h6>Keahlian</h6>
+        <h6><strong>Keahlian</strong></h6>
         <p>
           @foreach(explode(', ', $op->skills) as $s)
             <span class="badge bg-secondary me-1">{{ $s }}</span>
           @endforeach
         </p>
 
-        <h6>Pencapaian</h6>
+        <h6><strong>Pencapaian</strong></h6>
         <ul>
           @foreach(explode(', ', $op->achievements) as $a)
             <li>{{ $a }}</li>
