@@ -176,7 +176,7 @@
         <div class="row g-4" id="operator-list">
             @forelse($Operator as $op)
                 <div class="col-md-6">
-                    <div class="manager-card">
+                    <div class="manager-card" data-divisi="{{ strtolower($op->divisi) }}">
                         <img src="{{ asset($op->photo_url) }}" alt="{{ $op->name }}" class="profile-photo">
                         <div class="manager-info">
                             <h5>{{ $op->name }}</h5>
@@ -287,12 +287,6 @@
     const input = document.getElementById('searchInput');
     const list = document.getElementById('operator-list');
 
-    const btnAll      = document.getElementById('btnAll');
-    const btnInbound  = document.getElementById('btnFilterInbound');
-    const btnOutbound = document.getElementById('btnFilterOutbound');
-    const btnStorage  = document.getElementById('btnFilterStorage');
-
-    const buttons = [btnAll, btnInbound, btnOutbound, btnStorage];
 
     if (!input || !list) return;
 
@@ -321,57 +315,51 @@
     });
 
     // Filter: All
-    if (btnAll) {
-        btnAll.addEventListener('click', () => {
-            fetch(`{{ url('operator') }}?ajax=1`)
-                .then(res => res.text())
-                .then(html => {
-                    list.innerHTML = html;
-                    setActiveButton(btnAll);
-                })
-                .catch(err => console.error('Filter All error:', err));
-        });
+    const buttons = {
+      all: document.getElementById('btnAll'),
+      inbound: document.getElementById('btnFilterInbound'),
+      outbound: document.getElementById('btnFilterOutbound'),
+      storage: document.getElementById('btnFilterStorage'),
+    };
+    const cards = document.querySelectorAll('#operator-list .manager-card');
+
+    function setActive(btn) {
+      // reset all
+      Object.values(buttons).forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
     }
 
-    // Filter: Inbound
-    if (btnInbound) {
-        btnInbound.addEventListener('click', () => {
-            fetch(`{{ url('operator') }}?search=inbound&ajax=1`)
-                .then(res => res.text())
-                .then(html => {
-                    list.innerHTML = html;
-                    setActiveButton(btnInbound);
-                })
-                .catch(err => console.error('Filter Inbound error:', err));
-        });
+    function filterBy(divisi) {
+      cards.forEach(card => {
+        const d = card.dataset.divisi;
+        card.parentElement.style.display =
+          (divisi === 'all' || d.includes(divisi))
+            ? ''   // show
+            : 'none'; // hide
+      });
     }
 
-    // Filter: Outbound
-    if (btnOutbound) {
-        btnOutbound.addEventListener('click', () => {
-            fetch(`{{ url('operator') }}?search=outbound&ajax=1`)
-                .then(res => res.text())
-                .then(html => {
-                    list.innerHTML = html;
-                    setActiveButton(btnOutbound);
-                })
-                .catch(err => console.error('Filter Outbound error:', err));
-        });
-    }
+    // wire up
+    buttons.all.addEventListener('click', () => {
+      setActive(buttons.all);
+      filterBy('all');
+    });
+    buttons.inbound.addEventListener('click', () => {
+      setActive(buttons.inbound);
+      filterBy('inbound');
+    });
+    buttons.outbound.addEventListener('click', () => {
+      setActive(buttons.outbound);
+      filterBy('outbound');
+    });
+    buttons.storage.addEventListener('click', () => {
+      setActive(buttons.storage);
+      filterBy('storage');
+    });
 
-    // Filter: Storage
-    if (btnStorage) {
-        btnStorage.addEventListener('click', () => {
-            fetch(`{{ url('operator') }}?search=storage&ajax=1`)
-                .then(res => res.text())
-                .then(html => {
-                    list.innerHTML = html;
-                    setActiveButton(btnStorage);
-                })
-                .catch(err => console.error('Filter Storage error:', err));
-        });
-    }
-});
+    // initialize to “All”
+    setActive(buttons.all);
+  });
 
         document.addEventListener('click', function(e) {
             if (!e.target.matches('.btn-edit')) return;
