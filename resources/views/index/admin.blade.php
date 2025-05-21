@@ -165,21 +165,21 @@
                   <div class="col-sm-6"><strong>Departemen:</strong><br>{{ $user->department }}</div>
                 </div>
 
-                <h6>Deskripsi Pekerjaan</h6>
+                <h6><strong>Deskripsi Pekerjaan</strong></h6>
                 <ul>
                   @foreach(explode(', ', $user->job_descriptions) as $jd)
                     <li>{{ $jd }}</li>
                   @endforeach
                 </ul>
 
-                <h6>Keahlian</h6>
+                <h6><strong>Keahlian</strong></h6>
                 <div class="mb-3">
                   @foreach(explode(', ', $user->skills) as $s)
                     <span class="badge bg-secondary me-1">{{ $s }}</span>
                   @endforeach
                 </div>
 
-                <h6>Pencapaian</h6>
+                <h6><strong>Pencapaian</strong></h6>
                 <ul>
                   @foreach(explode(', ', $user->achievements) as $a)
                     <li>{{ $a }}</li>
