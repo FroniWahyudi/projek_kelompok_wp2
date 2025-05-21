@@ -17,19 +17,29 @@ class CrudController extends Controller
 {
     // === OPERATOR (Users) ===
 
-    public function usersIndex(Request $request)
-    {
-        $users = User::where('role', 'Operator')
-                     ->when($request->search, fn($q) => $q->where('name', 'like', "%{$request->search}%"))
-                     ->orderBy('id')
-                     ->get();
+public function usersIndex(Request $request)
+{
+    $search = $request->get('search');
 
-        if ($request->ajax()) {
-            return view('operator', ['Operator' => $users]);
-        }
+    $users = User::where('role', 'Operator')
+        ->when($search, fn($q) => 
+            $q->where(function($q2) use ($search) {
+                $q2->where('name',   'like', "%{$search}%")
+                    ->orWhere('divisi','like', "%{$search}%");
+            })
+        )
+        ->orderBy('name')
+        ->get();
 
-        return view('operator', ['Operator' => $users]);
+    if ($request->ajax()) {
+        return view('operator', ['Operator' => $users])->render();
     }
+
+    return view('index.operator', ['Operator' => $users]);
+}
+
+
+
 
     public function usersEdit($id)
     {

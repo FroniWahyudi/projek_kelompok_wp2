@@ -14,21 +14,100 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
     <style>
-        html, body { height:100%; margin:0; }
-        body { display:flex; flex-direction:column; font-family:'Poppins',sans-serif; font-size:.9rem; color:#6c757d; background:#f8f9fa; }
-        main { flex:1; padding-top:70px; }
-        .navbar-custom { background:#fff; border-bottom:1px solid #dee2e6; padding:.5rem 1rem; position:fixed; top:0; width:100%; z-index:1000; }
-        .navbar-brand { display:flex; align-items:center; gap:.5rem; font-weight:600; color:#495057; text-decoration:none; }
-        .navbar-brand .dot { width:10px; height:10px; background:#00c8c8; border-radius:50%; display:inline-block; }
-        .navbar-nav .nav-link { margin-left:1.5rem; color:#6c757d; }
-        .navbar-nav .nav-link.active { color:#0d6efd; font-weight:500; }
-        .manager-card { background:#fff; border:1px solid #dee2e6; border-radius:.5rem; box-shadow:0 2px 4px rgba(0,0,0,.05); padding:1.5rem; display:flex; flex-direction:row; align-items:center; gap:1.5rem; transition:transform .2s; }
-        .manager-card:hover { transform:translateY(-5px); }
-        .profile-photo { width:120px; height:120px; border-radius:50%; object-fit:cover; border:2px solid #dee2e6; }
-        .manager-info h5 { margin:0; font-size:1.25rem; font-weight:600; color:#495057; }
-        .manager-info .role { font-size:.9rem; color:#00c8c8; font-weight:500; }
-        .manager-info p { margin:.5rem 0; line-height:1.5; }
-        .footer { background:#fff; border-top:1px solid #dee2e6; padding:1rem 0; text-align:center; }
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            font-family: 'Poppins', sans-serif;
+            font-size: .9rem;
+            color: #6c757d;
+            background: #f8f9fa;
+        }
+        main {
+            flex: 1;
+            padding-top: 70px;
+        }
+        .navbar-custom {
+            background: #fff;
+            border-bottom: 1px solid #dee2e6;
+            padding: .5rem 1rem;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            font-weight: 600;
+            color: #495057;
+            text-decoration: none;
+        }
+        .navbar-brand .dot {
+            width: 10px;
+            height: 10px;
+            background: #00c8c8;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .navbar-nav .nav-link {
+            margin-left: 1.5rem;
+            color: #6c757d;
+        }
+        .navbar-nav .nav-link.active {
+            color: #0d6efd;
+            font-weight: 500;
+        }
+        .manager-card {
+            background: #fff;
+            border: 1px solid #dee2e6;
+            border-radius: .5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,.05);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 1.5rem;
+            transition: transform .2s;
+            min-height: 250px;
+        }
+        .manager-card:hover {
+            transform: translateY(-5px);
+        }
+        .profile-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #dee2e6;
+            aspect-ratio: 1 / 1;
+            display: block;
+        }
+        .manager-info h5 {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #495057;
+        }
+        .manager-info .role {
+            font-size: .9rem;
+            color: #00c8c8;
+            font-weight: 500;
+        }
+        .manager-info p {
+            margin: .5rem 0;
+            line-height: 1.5;
+        }
+        .footer {
+            background: #fff;
+            border-top: 1px solid #dee2e6;
+            padding: 1rem 0;
+            text-align: center;
+        }
         .form-control {
             display: block;
             width: 373px;
@@ -37,18 +116,21 @@
         .main-container {
             margin-top: 25px;
         }
-        .profile-photo {
-            width: 120px;            /* lebar */
-            height: 120px;           /* tinggi sama dengan lebar */
-            aspect-ratio: 1 / 1;     /* jaga rasio 1:1 jika dimensinya berubah */
-            border-radius: 50%;      /* buat sudut melingkar penuh */
-            object-fit: cover;       /* potong gambar agar penuh area */
-            display: block;          /* hilangkan inline-spacing */
-            border: 2px solid #dee2e6;
-        }
         .navbar-expand-lg .navbar-collapse {
             margin-right: 21px;
         }
+        button.active {
+            background-color: #0d6efd;
+            color: white;
+        }
+        #operator-list {
+    min-height: 400px; /* atur sesuai kira-kira jumlah card minimal */
+    transition: all 0.3s ease; /* animasi halus jika isi berubah */
+    margin-top: 0; /* hindari margin tambahan */
+}
+.mb-3 {
+    margin-bottom: 0rem !important;
+}
     </style>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
@@ -81,6 +163,14 @@
         </div>
     </nav>
     <main class="container py-5 main-container">
+
+       <div class="mb-3">
+    <button id="btnAll" class="btn btn-outline-secondary">Semua</button>
+    <button id="btnFilterInbound" class="btn btn-outline-primary">Inbound</button>
+    <button id="btnFilterOutbound" class="btn btn-outline-success">Outbound</button>
+    <button id="btnFilterStorage" class="btn btn-outline-warning">Storage</button>
+</div>
+
 @endunless
         <div class="row g-4" id="operator-list">
             @forelse($Operator as $op)
@@ -91,13 +181,15 @@
                             <h5>{{ $op->name }}</h5>
                             <div class="role">{{ $op->role }} <span class="badge bg-info text-dark ms-2">{{ $op->level }}</span></div>
                             <p>{{ $op->email }}</p>
+                            <p>{{ $op->divisi }}</p>
                             <p>{{ Str::limit($op->bio, 100) }}</p>
                             <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal{{ $op->id }}">Detail</button>
                             @if(Auth::user() && Auth::user()->role === 'Admin')
-                                <button 
-                                    class="btn btn-warning btn-sm btn-edit ms-2" 
-                                    data-id="{{ $op->id }}" 
-                                    title="Edit Profil Operator">
+                                <button
+                                    class="btn btn-warning btn-sm btn-edit ms-2"
+                                    data-id="{{ $op->id }}"
+                                    title="Edit Profil Operator"
+                                >
                                     Edit
                                 </button>
                             @endif
@@ -191,26 +283,100 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const input = document.getElementById('searchInput');
-            const list  = document.getElementById('operator-list');
-            if (!input || !list) return;
-            let timeout = null;
-            input.addEventListener('input', () => {
-                clearTimeout(timeout);
-                timeout = setTimeout(() => {
-                    fetch(`{{ url('operator') }}?search=${encodeURIComponent(input.value)}&ajax=1`)
-                        .then(res => res.text())
-                        .then(html => list.innerHTML = html)
-                        .catch(err => console.error('Search error:', err));
-                }, 300); // Debounce: 300ms
-            });
+    const input = document.getElementById('searchInput');
+    const list = document.getElementById('operator-list');
+
+    const btnAll      = document.getElementById('btnAll');
+    const btnInbound  = document.getElementById('btnFilterInbound');
+    const btnOutbound = document.getElementById('btnFilterOutbound');
+    const btnStorage  = document.getElementById('btnFilterStorage');
+
+    const buttons = [btnAll, btnInbound, btnOutbound, btnStorage];
+
+    if (!input || !list) return;
+
+    let timeout = null;
+
+    // Fungsi untuk set tombol aktif
+    const setActiveButton = (activeBtn) => {
+        buttons.forEach(btn => {
+            if (btn) btn.classList.remove('active');
         });
-        // Listener untuk tombol Edit (GET modal)
+        if (activeBtn) activeBtn.classList.add('active');
+    };
+
+    // Pencarian input
+    input.addEventListener('input', () => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            fetch(`{{ url('operator') }}?search=${encodeURIComponent(input.value)}&ajax=1`)
+                .then(res => res.text())
+                .then(html => {
+                    list.innerHTML = html;
+                    setActiveButton(null); // Hilangkan highlight tombol saat input
+                })
+                .catch(err => console.error('Search error:', err));
+        }, 300);
+    });
+
+    // Filter: All
+    if (btnAll) {
+        btnAll.addEventListener('click', () => {
+            fetch(`{{ url('operator') }}?ajax=1`)
+                .then(res => res.text())
+                .then(html => {
+                    list.innerHTML = html;
+                    setActiveButton(btnAll);
+                })
+                .catch(err => console.error('Filter All error:', err));
+        });
+    }
+
+    // Filter: Inbound
+    if (btnInbound) {
+        btnInbound.addEventListener('click', () => {
+            fetch(`{{ url('operator') }}?search=inbound&ajax=1`)
+                .then(res => res.text())
+                .then(html => {
+                    list.innerHTML = html;
+                    setActiveButton(btnInbound);
+                })
+                .catch(err => console.error('Filter Inbound error:', err));
+        });
+    }
+
+    // Filter: Outbound
+    if (btnOutbound) {
+        btnOutbound.addEventListener('click', () => {
+            fetch(`{{ url('operator') }}?search=outbound&ajax=1`)
+                .then(res => res.text())
+                .then(html => {
+                    list.innerHTML = html;
+                    setActiveButton(btnOutbound);
+                })
+                .catch(err => console.error('Filter Outbound error:', err));
+        });
+    }
+
+    // Filter: Storage
+    if (btnStorage) {
+        btnStorage.addEventListener('click', () => {
+            fetch(`{{ url('operator') }}?search=storage&ajax=1`)
+                .then(res => res.text())
+                .then(html => {
+                    list.innerHTML = html;
+                    setActiveButton(btnStorage);
+                })
+                .catch(err => console.error('Filter Storage error:', err));
+        });
+    }
+});
+
         document.addEventListener('click', function(e) {
             if (!e.target.matches('.btn-edit')) return;
-            const id      = e.target.dataset.id;
+            const id = e.target.dataset.id;
             const modalEl = document.getElementById('editModal');
-            const modal   = new bootstrap.Modal(modalEl);
+            const modal = new bootstrap.Modal(modalEl);
             fetch(`{{ url('operator') }}/${id}/edit`)
                 .then(r => r.text())
                 .then(html => {
@@ -219,6 +385,7 @@
                 })
                 .catch(() => alert('Gagal memuat form edit.'));
         });
+
         document.addEventListener('submit', function(e) {
             if (e.target.id !== 'formEditUser') return;
             e.preventDefault();
@@ -233,7 +400,7 @@
             })
             .then(r => {
                 if (!r.ok) throw new Error('Gagal');
-                return r.json()
+                return r.json();
             })
             .then(json => {
                 if (json.success) {
@@ -246,7 +413,7 @@
             .catch(() => alert('Error saat menyimpan'));
         });
     </script>
-    <!-- Modal kosong untuk AJAX EDIT (DI SINI) -->
+    <!-- Modal kosong untuk AJAX EDIT -->
     <div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-scrollable">
             <!-- konten akan di-overwrite oleh JS -->

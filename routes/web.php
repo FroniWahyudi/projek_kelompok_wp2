@@ -36,7 +36,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin', [HrDashboardController::class, 'hr_index']);
     Route::get('/leader', [HrDashboardController::class, 'leader_index']);
     Route::get('/manajemen', [HrDashboardController::class, 'manajemen_index']);
-Route::get('/operator', [HrDashboardController::class, 'karyawan_index'])->name('operator.index');
+    // Route::get('/operator', [HrDashboardController::class, 'karyawan_index'])->name('operator.index');
 
     Route::post('/karyawan/update_sisa_cuti', [HrDashboardController::class, 'updateSisaCuti'])->name('karyawan.update_sisa_cuti');
     Route::get('/edit_profil/{id}', [DashboardController::class, 'edit'])->name('profil.edit');
@@ -66,4 +66,5 @@ Route::middleware(['auth'])->group(function () {
          ->name('operator.edit');
     Route::put('operator/{id}',        [CrudController::class,'usersUpdate'])
          ->name('operator.update');
+         Route::get('/operator', [CrudController::class, 'usersIndex'])->name('operator.index');
 });

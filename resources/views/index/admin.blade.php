@@ -155,7 +155,7 @@
                   </div>
                 </div>
 
-                <h6>Informasi Pribadi</h6>
+                <h6><strong>Informasi Pribadi</strong></h6>
                 <div class="row mb-3">
                   <div class="col-sm-6"><strong>Alamat:</strong><br>{{ $user->alamat }}</div>
                   <div class="col-sm-6"><strong>Joined:</strong><br>{{ \Carbon\Carbon::parse($user->joined_at)->format('d M Y') }}</div>

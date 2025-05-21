@@ -155,7 +155,7 @@
                   </div>
                 </div>
 
-                <h6>Informasi Pribadi</h6>
+                <h6><strong>Informasi Pribadi</strong></h6>
                 <div class="row mb-3">
                   <div class="col-sm-6"><strong>Alamat:</strong><br>{{ $user->alamat }}</div>
                   <div class="col-sm-6"><strong>Joined:</strong><br>{{ \Carbon\Carbon::parse($user->joined_at)->format('d M Y') }}</div>
@@ -165,21 +165,21 @@
                   <div class="col-sm-6"><strong>Departemen:</strong><br>{{ $user->department }}</div>
                 </div>
 
-                <h6>Deskripsi Pekerjaan</h6>
+                <h6><strong>Deskripsi Pekerjaan</strong></h6>
                 <ul>
                   @foreach(explode(', ', $user->job_descriptions) as $jd)
                     <li>{{ $jd }}</li>
                   @endforeach
                 </ul>
 
-                <h6>Keahlian</h6>
+                <h6><strong>Keahlian</strong></h6>
                 <div class="mb-3">
                   @foreach(explode(', ', $user->skills) as $s)
                     <span class="badge bg-secondary me-1">{{ $s }}</span>
                   @endforeach
                 </div>
 
-                <h6>Pencapaian</h6>
+                <h6><strong>Pencapaian</strong></h6>
                 <ul>
                   @foreach(explode(', ', $user->achievements) as $a)
                     <li>{{ $a }}</li>
