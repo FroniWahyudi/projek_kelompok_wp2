@@ -9,6 +9,9 @@ use App\Models\News;
 use App\Models\CutiRequest;
 use App\Models\CutiLogs;
 use App\Models\LaporanKerja;
+use Database\Seeders\ResiSeeder;
+use Database\Seeders\ResiItemSeeder;
+use Database\Seeders\ItemChecklistSeeder;
 
 use function Symfony\Component\String\s;
 
@@ -838,6 +841,12 @@ class DatabaseSeeder extends Seeder
             ['tanggal' => '2025-05-21', 'nama' => 'Froni ', 'divisi' => 'HR specialist', 'deskripsi' => 'target sudah tercapai ,gudang sudah mengeluarkan barang sebanyak 250 unit', 'created_at' => '2025-05-02 12:12:42'],
             ['tanggal' => '2025-05-05', 'nama' => 'Froni Wahyudi', 'divisi' => 'Operator Gudang', 'deskripsi' => "barang sudah keluar 300 unit\r\n", 'created_at' => '2025-05-05 09:14:38'],
         ]);*/
+
+        $this->call([
+            ResiSeeder::class,
+            ResiItemSeeder::class,
+            ItemChecklistSeeder::class,
+        ]);
 
     }
 }
