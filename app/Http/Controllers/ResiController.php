@@ -34,4 +34,23 @@ class ResiController extends Controller
         // Kirim data ke view laporan kerja
         return view('index.laporan_kerja', compact('data'));
     }
+
+    public function updateStatus(Request $request)
+    {
+        $request->validate([
+            'kode' => 'required|string',
+            'status' => 'required|string',
+        ]);
+
+        $resi = Resi::where('kode', $request->kode)->first();
+
+        if ($resi) {
+            $resi->status = $request->status;
+            $resi->save();
+
+            return response()->json(['message' => 'Status updated successfully.']);
+        }
+
+        return response()->json(['message' => 'Resi not found.'], 404);
+    }
 }

@@ -60,6 +60,7 @@ Route::middleware(['auth'])->group(function () {
     // Laporan kerja menggunakan ResiController
     Route::get('/laporan_kerja', [ResiController::class, 'index'])
          ->name('laporan.index');
+    Route::post('/update-status', [ResiController::class, 'updateStatus'])->name('resi.update_status');
 
     // Operator CRUD
     Route::get('operator/{id}/edit', [CrudController::class,'usersEdit'])

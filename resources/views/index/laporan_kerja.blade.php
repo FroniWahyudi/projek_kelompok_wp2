@@ -143,6 +143,9 @@
     $("#percentDone").text(pct + "%");
     $("#progressBar").css("width", pct + "%");
     $("#infoStatus").text(done === all && all > 0 ? "Selesai" : "Pending");
+
+    // Enable or disable the "markAll" button based on checklist status
+    $("#markAll").prop("disabled", done !== all);
   }
 
   $(function() {
@@ -155,8 +158,25 @@
     });
 
     $("#markAll").on("click", function() {
-      $(".checklist").prop("checked", true);
-      updateProgress();
+      const kode = $("#infoKode").text();
+      if (kode !== "-") {
+        $.ajax({
+          url: `/update-status`,
+          method: "POST",
+          data: {
+            _token: "{{ csrf_token() }}",
+            kode: kode,
+            status: "Selesai"
+          },
+          success: function() {
+            $(".checklist").prop("checked", true);
+            updateProgress();
+          },
+          error: function() {
+            alert("Gagal memperbarui status. Silakan coba lagi.");
+          }
+        });
+      }
     });
 
     $(document).on("change", ".checklist", updateProgress);
