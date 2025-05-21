@@ -12,7 +12,8 @@
 
 <div class="container py-4">
   <div class="d-flex align-items-center mb-4">
-    <a href="#" class="me-3 text-secondary fs-4"><i class="bi bi-house-door"></i></a>
+    <!-- Ubah tombol home agar mengarah ke dashboard -->
+    <a href="{{ route('dashboard') }}" class="me-3 text-secondary fs-4"><i class="bi bi-house-door"></i></a>
     <h2 class="m-0">Tugas Harian Resi – Naga Hytam</h2>
   </div>
 

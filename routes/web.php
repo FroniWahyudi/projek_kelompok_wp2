@@ -13,48 +13,66 @@ use App\Http\Controllers\ResiController;
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
+| Here is where you can register web routes for your application.
+| These routes are loaded by the RouteServiceProvider within a group
+| which contains the "web" middleware group.
 */
 
 Route::get('/', function() {
-    return Auth::check() ? redirect('/dashboard') : redirect('/login');
+    return Auth::check() ? redirect()->route('dashboard') : redirect()->route('login');
 });
 
 // Routes requiring authentication
 Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index']);
-    Route::get('/dashboard_profil', [DashboardController::class, 'profil']);
-    Route::get('/logout', [AuthController::class, 'logout']);
+    // Dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+         ->name('dashboard');
+    Route::get('/dashboard_profil', [DashboardController::class, 'profil'])
+         ->name('dashboard.profil');
+    Route::get('/logout', [AuthController::class, 'logout'])
+         ->name('logout');
 
-    Route::get('/whats-new/{id}', [NewsController::class, 'show'])->name('whats_new');
-    Route::get('/admin', [HrDashboardController::class, 'hr_index']);
-    Route::get('/leader', [HrDashboardController::class, 'leader_index']);
-    Route::get('/manajemen', [HrDashboardController::class, 'manajemen_index']);
+    // News detail
+    Route::get('/whats-new/{id}', [NewsController::class, 'show'])
+         ->name('whats_new');
 
-    Route::post('/karyawan/update_sisa_cuti', [HrDashboardController::class, 'updateSisaCuti'])->name('karyawan.update_sisa_cuti');
-    Route::get('/edit_profil/{id}', [DashboardController::class, 'edit'])->name('profil.edit');
-    Route::put('/edit_profil/{id}', [DashboardController::class, 'update'])->name('profil.update');
+    // HR sections
+    Route::get('/admin', [HrDashboardController::class, 'hr_index'])
+         ->name('hr.admin');
+    Route::get('/leader', [HrDashboardController::class, 'leader_index'])
+         ->name('hr.leader');
+    Route::get('/manajemen', [HrDashboardController::class, 'manajemen_index'])
+         ->name('hr.manajemen');
 
-    Route::view('/shift_karyawan', 'index.shift_karyawan');
+    Route::post('/karyawan/update_sisa_cuti', [HrDashboardController::class, 'updateSisaCuti'])
+         ->name('karyawan.update_sisa_cuti');
+
+    // Profile edit
+    Route::get('/edit_profil/{id}', [DashboardController::class, 'edit'])
+         ->name('profil.edit');
+    Route::put('/edit_profil/{id}', [DashboardController::class, 'update'])
+         ->name('profil.update');
+
+    // Shift view
+    Route::view('/shift_karyawan', 'index.shift_karyawan')
+         ->name('shift.karyawan');
 
     // Laporan kerja menggunakan ResiController
-    Route::get('/laporan_kerja', [ResiController::class, 'index'])->name('laporan.index');
+    Route::get('/laporan_kerja', [ResiController::class, 'index'])
+         ->name('laporan.index');
 
     // Operator CRUD
-    Route::get('operator/{id}/edit',   [CrudController::class,'usersEdit'])->name('operator.edit');
-    Route::put('operator/{id}',        [CrudController::class,'usersUpdate'])->name('operator.update');
-    Route::get('/operator',            [CrudController::class,'usersIndex'])->name('operator.index');
+    Route::get('operator/{id}/edit', [CrudController::class,'usersEdit'])
+         ->name('operator.edit');
+    Route::put('operator/{id}', [CrudController::class,'usersUpdate'])
+         ->name('operator.update');
+    Route::get('/operator', [CrudController::class,'usersIndex'])
+         ->name('operator.index');
 });
 
 // Guest routes
 Route::middleware('guest')->group(function () {
-    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+    Route::get('/login', [AuthController::class, 'showLoginForm'])
+         ->name('login');
     Route::post('/login', [AuthController::class, 'login']);
-    // Registration routes (optional)
-    // Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
-    // Route::post('/register', [RegisterController::class, 'register']);
 });
