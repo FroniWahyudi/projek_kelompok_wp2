@@ -148,6 +148,7 @@
                     value="{{ request('search') }}"
                 />
             </div>
+            
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
                 <span class="navbar-toggler-icon"></span>
             </button>
