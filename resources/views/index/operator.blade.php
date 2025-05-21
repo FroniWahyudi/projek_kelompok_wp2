@@ -283,125 +283,120 @@
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('DOMContentLoaded', () => {
     const input = document.getElementById('searchInput');
-    const list = document.getElementById('operator-list');
-
-
+    const list  = document.getElementById('operator-list');
     if (!input || !list) return;
 
     let timeout = null;
 
-    // Fungsi untuk set tombol aktif
-    const setActiveButton = (activeBtn) => {
-        buttons.forEach(btn => {
-            if (btn) btn.classList.remove('active');
-        });
-        if (activeBtn) activeBtn.classList.add('active');
-    };
-
-    // Pencarian input
-    input.addEventListener('input', () => {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => {
-            fetch(`{{ url('operator') }}?search=${encodeURIComponent(input.value)}&ajax=1`)
-                .then(res => res.text())
-                .then(html => {
-                    list.innerHTML = html;
-                    setActiveButton(null); // Hilangkan highlight tombol saat input
-                })
-                .catch(err => console.error('Search error:', err));
-        }, 300);
-    });
-
-    // Filter: All
+    // Tombol filter
     const buttons = {
-      all: document.getElementById('btnAll'),
-      inbound: document.getElementById('btnFilterInbound'),
+      all:      document.getElementById('btnAll'),
+      inbound:  document.getElementById('btnFilterInbound'),
       outbound: document.getElementById('btnFilterOutbound'),
-      storage: document.getElementById('btnFilterStorage'),
+      storage:  document.getElementById('btnFilterStorage'),
     };
-    const cards = document.querySelectorAll('#operator-list .manager-card');
 
-    function setActive(btn) {
-      // reset all
-      Object.values(buttons).forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+    // Fungsi untuk set tombol aktif
+    function setActiveButton(activeBtn) {
+      Object.values(buttons).forEach(btn => btn.classList.remove('active'));
+      if (activeBtn) activeBtn.classList.add('active');
     }
 
+    // Fungsi filter ulang berdasarkan divisi
     function filterBy(divisi) {
+      // ambil ulang semua kartu terbaru dari DOM
+      const cards = document.querySelectorAll('#operator-list .manager-card');
       cards.forEach(card => {
-        const d = card.dataset.divisi;
+        const d = card.dataset.divisi || '';
         card.parentElement.style.display =
           (divisi === 'all' || d.includes(divisi))
-            ? ''   // show
-            : 'none'; // hide
+            ? ''   // tampilkan
+            : 'none'; // sembunyikan
       });
     }
 
-    // wire up
+    // --- AJAX search ---
+    input.addEventListener('input', () => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        fetch(`{{ url('operator') }}?search=${encodeURIComponent(input.value)}&ajax=1`)
+          .then(res => res.text())
+          .then(html => {
+            list.innerHTML = html;
+            // setelah merender ulang list:
+            setActiveButton(null); // hilangkan highlight tombol
+            // (opsional) Anda bisa memanggil filterBy('all') 
+            //   kalau ingin langsung show semuanya
+          })
+          .catch(err => console.error('Search error:', err));
+      }, 300);
+    });
+
+    // --- wire up tombol filter ---
     buttons.all.addEventListener('click', () => {
-      setActive(buttons.all);
+      setActiveButton(buttons.all);
       filterBy('all');
     });
     buttons.inbound.addEventListener('click', () => {
-      setActive(buttons.inbound);
+      setActiveButton(buttons.inbound);
       filterBy('inbound');
     });
     buttons.outbound.addEventListener('click', () => {
-      setActive(buttons.outbound);
+      setActiveButton(buttons.outbound);
       filterBy('outbound');
     });
     buttons.storage.addEventListener('click', () => {
-      setActive(buttons.storage);
+      setActiveButton(buttons.storage);
       filterBy('storage');
     });
 
-    // initialize to “All”
-    setActive(buttons.all);
+    // initialize ke “All”
+    setActiveButton(buttons.all);
   });
 
-        document.addEventListener('click', function(e) {
-            if (!e.target.matches('.btn-edit')) return;
-            const id = e.target.dataset.id;
-            const modalEl = document.getElementById('editModal');
-            const modal = new bootstrap.Modal(modalEl);
-            fetch(`{{ url('operator') }}/${id}/edit`)
-                .then(r => r.text())
-                .then(html => {
-                    modalEl.querySelector('.modal-dialog').innerHTML = html;
-                    modal.show();
-                })
-                .catch(() => alert('Gagal memuat form edit.'));
-        });
 
-        document.addEventListener('submit', function(e) {
-            if (e.target.id !== 'formEditUser') return;
-            e.preventDefault();
-            const form = e.target;
-            const data = new FormData(form);
-            fetch(form.action, {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
-                body: data
-            })
-            .then(r => {
-                if (!r.ok) throw new Error('Gagal');
-                return r.json();
-            })
-            .then(json => {
-                if (json.success) {
-                    bootstrap.Modal.getInstance(document.getElementById('editModal')).hide();
-                    window.location.href = '{{ url("operator") }}';
-                } else {
-                    alert('Gagal menyimpan perubahan.');
-                }
-            })
-            .catch(() => alert('Error saat menyimpan'));
-        });
-    </script>
+  // kode untuk edit modal tetap sama…
+  document.addEventListener('click', function(e) {
+    if (!e.target.matches('.btn-edit')) return;
+    const id = e.target.dataset.id;
+    const modalEl = document.getElementById('editModal');
+    const modal   = new bootstrap.Modal(modalEl);
+    fetch(`{{ url('operator') }}/${id}/edit`)
+      .then(r => r.text())
+      .then(html => {
+        modalEl.querySelector('.modal-dialog').innerHTML = html;
+        modal.show();
+      })
+      .catch(() => alert('Gagal memuat form edit.'));
+  });
+
+  document.addEventListener('submit', function(e) {
+    if (e.target.id !== 'formEditUser') return;
+    e.preventDefault();
+    const form = e.target;
+    const data = new FormData(form);
+    fetch(form.action, {
+      method: 'POST',
+      headers: {
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+      },
+      body: data
+    })
+    .then(r => { if (!r.ok) throw new Error('Gagal'); return r.json(); })
+    .then(json => {
+      if (json.success) {
+        bootstrap.Modal.getInstance(document.getElementById('editModal')).hide();
+        window.location.href = '{{ url("operator") }}';
+      } else {
+        alert('Gagal menyimpan perubahan.');
+      }
+    })
+    .catch(() => alert('Error saat menyimpan'));
+  });
+</script>
+
     <!-- Modal kosong untuk AJAX EDIT -->
     <div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-scrollable">
