@@ -124,13 +124,13 @@
             color: white;
         }
         #operator-list {
-    min-height: 400px; /* atur sesuai kira-kira jumlah card minimal */
-    transition: all 0.3s ease; /* animasi halus jika isi berubah */
-    margin-top: 0; /* hindari margin tambahan */
-}
-.mb-3 {
-    margin-bottom: 0rem !important;
-}
+            min-height: 400px;
+            /* transition: opacity 0.15s ease; */
+            margin-top: 0;
+        }
+        .mb-3 {
+            margin-bottom: 0rem !important;
+        }
     </style>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
@@ -163,15 +163,17 @@
         </div>
     </nav>
     <main class="container py-5 main-container">
-
-       <div class="mb-3">
-    <button id="btnAll" class="btn btn-outline-secondary">Semua</button>
-    <button id="btnFilterInbound" class="btn btn-outline-primary">Inbound</button>
-    <button id="btnFilterOutbound" class="btn btn-outline-success">Outbound</button>
-    <button id="btnFilterStorage" class="btn btn-outline-warning">Storage</button>
-</div>
-
+        <div class="mb-3">
+            <button id="btnAll" class="btn btn-outline-secondary">Semua</button>
+            <button id="btnFilterInbound" class="btn btn-outline-primary">Inbound</button>
+            <button id="btnFilterOutbound" class="btn btn-outline-success">Outbound</button>
+            <button id="btnFilterStorage" class="btn btn-outline-warning">Storage</button>
+        </div>
+        <!-- <div id="spinner" class="d-none text-center py-3">
+            <div class="spinner-border spinner-border-sm" role="status"></div>
+        </div> -->
 @endunless
+
         <div class="row g-4" id="operator-list">
             @forelse($Operator as $op)
                 <div class="col-md-6">
@@ -196,12 +198,11 @@
                         </div>
                     </div>
                 </div>
-                <!-- Modal Detail -->
                 <div class="modal fade" id="detailModal{{ $op->id }}" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-lg modal-dialog-scrollable">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">{{ $op->name }} — Detail Profil</h5>
+tanhke                                <h5 class="modal-title">{{ $op->name }} — Detail Profil</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
                             <div class="modal-body">
@@ -275,148 +276,102 @@
                 </div>
             @endforelse
         </div>
+
 @unless(request()->has('ajax'))
     </main>
     <footer class="footer">
         <small>© {{ date('Y') }} PT Naga Hytam Sejahtera Abadi.</small>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-    const input = document.getElementById('searchInput');
-    const list = document.getElementById('operator-list');
+   <script>
+document.addEventListener("DOMContentLoaded", () => {
+  const list      = document.getElementById("operator-list");
+  const input     = document.getElementById("searchInput");
+//   const spinner   = document.getElementById("spinner");
+  const btnAll    = document.getElementById("btnAll");
+  const btnIn     = document.getElementById("btnFilterInbound");
+  const btnOut    = document.getElementById("btnFilterOutbound");
+  const btnSto    = document.getElementById("btnFilterStorage");
+  const buttons   = [btnAll, btnIn, btnOut, btnSto];
 
-    const btnAll      = document.getElementById('btnAll');
-    const btnInbound  = document.getElementById('btnFilterInbound');
-    const btnOutbound = document.getElementById('btnFilterOutbound');
-    const btnStorage  = document.getElementById('btnFilterStorage');
+  // Aktifkan highlight pada tombol
+  function setActive(btn) {
+    buttons.forEach(b => b?.classList.remove("active"));
+    btn?.classList.add("active");
+  }
 
-    const buttons = [btnAll, btnInbound, btnOutbound, btnStorage];
+  // Fetch dan pasang HTML
+  function load(path, activeBtn = null) {
+    // spinner?.classList.remove("d-none");
+    fetch(path)
+      .then(r => r.text())
+      .then(html => {
+        list.innerHTML = html;
+        setActive(activeBtn);
+      })
+      .catch(console.error)
+      .finally(() => spinner?.classList.add("d-none"));
+  }
 
-    if (!input || !list) return;
+  // Debounce untuk search
+  let to;
+  input?.addEventListener("input", () => {
+    clearTimeout(to);
+    to = setTimeout(() => {
+      load(`{{ url('operator') }}?search=${encodeURIComponent(input.value)}&ajax=1`);
+    }, 300);
+    setActive(null);
+  });
 
-    let timeout = null;
-
-    // Fungsi untuk set tombol aktif
-    const setActiveButton = (activeBtn) => {
-        buttons.forEach(btn => {
-            if (btn) btn.classList.remove('active');
-        });
-        if (activeBtn) activeBtn.classList.add('active');
-    };
-
-    // Pencarian input
-    input.addEventListener('input', () => {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => {
-            fetch(`{{ url('operator') }}?search=${encodeURIComponent(input.value)}&ajax=1`)
-                .then(res => res.text())
-                .then(html => {
-                    list.innerHTML = html;
-                    setActiveButton(null); // Hilangkan highlight tombol saat input
-                })
-                .catch(err => console.error('Search error:', err));
-        }, 300);
-    });
-
-    // Filter: All
-    if (btnAll) {
-        btnAll.addEventListener('click', () => {
-            fetch(`{{ url('operator') }}?ajax=1`)
-                .then(res => res.text())
-                .then(html => {
-                    list.innerHTML = html;
-                    setActiveButton(btnAll);
-                })
-                .catch(err => console.error('Filter All error:', err));
-        });
-    }
-
-    // Filter: Inbound
-    if (btnInbound) {
-        btnInbound.addEventListener('click', () => {
-            fetch(`{{ url('operator') }}?search=inbound&ajax=1`)
-                .then(res => res.text())
-                .then(html => {
-                    list.innerHTML = html;
-                    setActiveButton(btnInbound);
-                })
-                .catch(err => console.error('Filter Inbound error:', err));
-        });
-    }
-
-    // Filter: Outbound
-    if (btnOutbound) {
-        btnOutbound.addEventListener('click', () => {
-            fetch(`{{ url('operator') }}?search=outbound&ajax=1`)
-                .then(res => res.text())
-                .then(html => {
-                    list.innerHTML = html;
-                    setActiveButton(btnOutbound);
-                })
-                .catch(err => console.error('Filter Outbound error:', err));
-        });
-    }
-
-    // Filter: Storage
-    if (btnStorage) {
-        btnStorage.addEventListener('click', () => {
-            fetch(`{{ url('operator') }}?search=storage&ajax=1`)
-                .then(res => res.text())
-                .then(html => {
-                    list.innerHTML = html;
-                    setActiveButton(btnStorage);
-                })
-                .catch(err => console.error('Filter Storage error:', err));
-        });
-    }
+  // Klik filter
+  btnAll?.addEventListener("click", () => load(`{{ url('operator') }}?ajax=1`, btnAll));
+  btnIn?.addEventListener("click", () => load(`{{ url('operator') }}?search=inbound&ajax=1`, btnIn));
+  btnOut?.addEventListener("click", () => load(`{{ url('operator') }}?search=outbound&ajax=1`, btnOut));
+  btnSto?.addEventListener("click", () => load(`{{ url('operator') }}?search=storage&ajax=1`, btnSto));
 });
 
-        document.addEventListener('click', function(e) {
-            if (!e.target.matches('.btn-edit')) return;
-            const id = e.target.dataset.id;
-            const modalEl = document.getElementById('editModal');
-            const modal = new bootstrap.Modal(modalEl);
-            fetch(`{{ url('operator') }}/${id}/edit`)
-                .then(r => r.text())
-                .then(html => {
-                    modalEl.querySelector('.modal-dialog').innerHTML = html;
-                    modal.show();
-                })
-                .catch(() => alert('Gagal memuat form edit.'));
-        });
+// Modal edit
+document.addEventListener("click", e => {
+  if (!e.target.matches(".btn-edit")) return;
+  const id = e.target.dataset.id;
+  const modalEl = document.getElementById("editModal");
+  fetch(`{{ url('operator') }}/${id}/edit`)
+    .then(r => r.text())
+    .then(html => {
+      modalEl.querySelector(".modal-dialog").innerHTML = html;
+      new bootstrap.Modal(modalEl).show();
+    })
+    .catch(() => alert("Gagal memuat form edit."));
+});
 
-        document.addEventListener('submit', function(e) {
-            if (e.target.id !== 'formEditUser') return;
-            e.preventDefault();
-            const form = e.target;
-            const data = new FormData(form);
-            fetch(form.action, {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
-                body: data
-            })
-            .then(r => {
-                if (!r.ok) throw new Error('Gagal');
-                return r.json();
-            })
-            .then(json => {
-                if (json.success) {
-                    bootstrap.Modal.getInstance(document.getElementById('editModal')).hide();
-                    window.location.href = '{{ url("operator") }}';
-                } else {
-                    alert('Gagal menyimpan perubahan.');
-                }
-            })
-            .catch(() => alert('Error saat menyimpan'));
-        });
-    </script>
-    <!-- Modal kosong untuk AJAX EDIT -->
+// Submit edit
+document.addEventListener("submit", e => {
+  if (e.target.id !== "formEditUser") return;
+  e.preventDefault();
+  const form = e.target;
+  const data = new FormData(form);
+  fetch(form.action, {
+    method: "POST",
+    headers: {
+      "X-CSRF-TOKEN": document.querySelector("meta[name='csrf-token']").content
+    },
+    body: data
+  })
+    .then(r => r.ok ? r.json() : Promise.reject())
+    .then(json => {
+      if (json.success) {
+        bootstrap.Modal.getInstance(document.getElementById("editModal")).hide();
+        window.location.href = "{{ url('operator') }}";
+      } else {
+        alert("Gagal menyimpan perubahan.");
+      }
+    })
+    .catch(() => alert("Error saat menyimpan"));
+});
+</script>
+
     <div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-scrollable">
-            <!-- konten akan di-overwrite oleh JS -->
         </div>
     </div>
 </body>
