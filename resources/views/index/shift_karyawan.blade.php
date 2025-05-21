@@ -51,7 +51,7 @@
       <button class="btn btn-outline-primary" onclick="filterShift('All')">Semua</button>
       <button class="btn btn-outline-info" onclick="filterShift('Pagi')">Pagi</button>
       <button class="btn btn-outline-warning" onclick="filterShift('Sore')">Sore</button>
-      <button class="btn btn-outline-dark" onclick="filterShift('Malam')">Malam</button>
+      <button class="btn btn-outline-dark" onclick="filterShift('Overtime')">Overtime</button>
     </div>
 
     <div class="card">
@@ -132,7 +132,7 @@
                   <option value="" disabled selected>Pilih shift...</option>
                   <option>Pagi</option>
                   <option>Sore</option>
-                  <option>Malam</option>
+                  <option>Overtime</option>
                 </select>
               </div>
             </form>
