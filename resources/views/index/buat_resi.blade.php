@@ -16,11 +16,11 @@
     <div class="row g-3">
       <div class="col-md-6">
         <label for="kode" class="form-label">Kode Resi</label>
-        <input type="text" name="kode" id="kode" class="form-control" required>
+        <input type="text" name="kode" id="kode" class="form-control" required value="SPXID{{ old('kode', mt_rand(10000000, 99999999)) }}">
       </div>
       <div class="col-md-6">
         <label for="tanggal" class="form-label">Tanggal</label>
-        <input type="date" name="tanggal" id="tanggal" class="form-control" required>
+        <input type="date" name="tanggal" id="tanggal" class="form-control" required value="{{ date('Y-m-d') }}">
       </div>
       <div class="col-md-12">
         <label for="tujuan" class="form-label">Tujuan</label>
