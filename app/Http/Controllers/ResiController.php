@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Resi;
+use App\Models\ResiItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
@@ -14,7 +15,24 @@ class ResiController extends Controller
      */
    public function index()
 {
-    $resis = Resi::with('items')->orderBy('tanggal', 'desc')->get();
+    $resi = Resi::with('items.checklist')->get();
+    $resis = $resi->mapWithKeys(function ($r) {
+            return [
+                'resi' . $r->id => [
+                    'kode'    => $r->kode,
+                    'tujuan'  => $r->tujuan,
+                    'tanggal' => \Carbon\Carbon::parse($r->tanggal)->format('d M Y'),
+                    'status'  => $r->status,
+                    'items'   => $r->items->map(fn($it) => [
+                        'item'      => $it->nama_item,
+                        'qty'       => $it->qty,
+                        'checklist' => $it->checklist->map(fn($c) => [
+                            'checked' => $c->is_checked,
+                        ])->toArray(),
+                    ])->values(),
+                ]
+            ];
+        })->all();
     return view('index.laporan_kerja', compact('resis'));
 }
 
@@ -38,8 +56,18 @@ class ResiController extends Controller
             'tanggal' => 'required|date',
         ]);
 
+        $item = $request->input('items');
+
         $data['status'] = 'Pending';
-        $resi = Resi::create($data);
+        Resi::create($data);
+        $id_resi = Resi::select('id')->where('kode', $data['kode'])->first();
+
+        ResiItem::create([
+            'resi_id' => $id_resi,
+            'nama_item' => $item['nama_item'],
+            'qty' => $item['qty'],
+        ]);
+        
 
         // <<< opsional: jika mau simpan items dari form
         // foreach ($request->items as $it) {
