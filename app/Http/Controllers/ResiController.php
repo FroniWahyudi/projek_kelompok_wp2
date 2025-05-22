@@ -56,26 +56,19 @@ class ResiController extends Controller
             'tanggal' => 'required|date',
         ]);
 
-        $item = $request->input('items');
-
         $data['status'] = 'Pending';
-        Resi::create($data);
+        $resi = Resi::create($data);
         $id_resi = Resi::select('id')->where('kode', $data['kode'])->first();
+        // Simpan items ke ResiItem model
+        foreach ($request['items'] as $item) {
+            ResiItem::create([
+                'resi_id'   => $id_resi->id,
+                'nama_item' => $item['nama_item'],
+                'qty'       => $item['qty'],
+            ]);
+        }
 
-        ResiItem::create([
-            'resi_id' => $id_resi,
-            'nama_item' => $item['nama_item'],
-            'qty' => $item['qty'],
-        ]);
-        
-
-        // <<< opsional: jika mau simpan items dari form
-        // foreach ($request->items as $it) {
-        //     $resi->items()->create($it);
-        // }
-
-        // <<< SESUAI: redirect ke laporan.index setelah simpan
-        return redirect()->route('laporan.index')
+         return redirect()->route('laporan.index')
                          ->with('success', 'Resi berhasil dibuat.');
     }
 
