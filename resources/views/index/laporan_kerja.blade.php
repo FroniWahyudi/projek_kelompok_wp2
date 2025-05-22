@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Tugas Harian Resi – Naga Hytam</title>
+  <meta name="csrf-token" content="{{ csrf_token() }}"> <!-- ADDED -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <style>
@@ -81,8 +82,15 @@
     <a href="{{ route('dashboard') }}" class="me-3 text-secondary fs-4">
       <i class="bi bi-house-door"></i>
     </a>
-    <!-- Judul utama -->
-    <h2 class="m-0">Tugas Harian Resi – Naga Hytam</h2>
+    <h2 class="m-0 flex-grow-1">Tugas Harian Resi – Naga Hytam</h2>
+ 
+<!-- Tombol Buat Resi -->
+<a href="{{ route('resi.buat') }}" class="btn btn-success">
+  <i class="bi bi-plus-lg me-1"></i> Buat Resi
+</a>
+
+
+
   </div>
 
   <div class="row gx-4">
@@ -92,20 +100,7 @@
         <button id="dropdownResiBtn" class="btn btn-outline-secondary dropdown-toggle w-100 text-start" data-bs-toggle="dropdown">
           Pilih resi dari daftar
         </button>
-        <ul id="dropdownMenu" class="dropdown-menu w-100">
-          @foreach($data as $key => $r)
-            <li>
-              <a class="dropdown-item" href="#" data-key="{{ $key }}">
-                <div><strong>{{ $r['kode'] }}</strong>
-                  <div class="resi-info">{{ $r['tujuan'] }}</div>
-                </div>
-                <span class="badge {{ $r['status']==='Selesai'?'bg-success':'bg-warning text-dark' }}">
-                  {{ $r['status'] }}
-                </span>
-              </a>
-            </li>
-          @endforeach
-        </ul>
+        <ul id="dropdownMenu" class="dropdown-menu w-100"></ul>
       </div>
 
       <div class="card mb-4 p-3">
@@ -137,9 +132,7 @@
         <h5 class="mb-3 text-primary">Checklist Item</h5>
         <div class="table-responsive">
           <table class="table mb-0">
-            <thead>
-              <tr><th>No</th><th>Item</th><th>Qty</th><th>Checklist</th></tr>
-            </thead>
+            <thead><tr><th>No</th><th>Item</th><th>Qty</th><th>Checklist</th></tr></thead>
             <tbody id="resiTableBody"></tbody>
           </table>
         </div>
@@ -148,24 +141,36 @@
   </div>
 </div>
 
+
 <!-- Modal Overlay -->
 <div id="resultOverlay">
   <div class="box">
     <div class="spinner" id="spinner"></div>
     <div class="checkmark" id="checkmark"></div>
     <h3 id="textTitle">Berhasil!</h3>
-    <p id="textDesc">Status diubah menjadi Selesai.</p>
+    <p id="textDesc">Operasi berhasil.</p>
   </div>
 </div>
 
 <script>
-  const resiData = <?= json_encode($data, JSON_UNESCAPED_UNICODE) ?>;
+  // Set header AJAX global dengan CSRF token
+  $.ajaxSetup({
+    headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+  });
+
+  // Inisialisasi data dari server
+ const resiData = <?= json_encode($resis, JSON_UNESCAPED_UNICODE) ?>;
+
+  console.log("[DEBUG] resiData:", resiData); // Debug konsol
 
   function buildDropdown() {
     $("#dropdownMenu").empty();
-    Object.keys(resiData).forEach(key => {
-      const r = resiData[key];
-      const badgeClass = r.status === "Selesai" ? "bg-success" : "bg-warning text-dark";
+    Object.entries(resiData).forEach(([key, r]) => {
+      const badgeClass = r.status === 'Selesai'
+        ? 'bg-success'
+        : 'bg-warning text-dark';
       $("#dropdownMenu").append(`
         <li>
           <a class="dropdown-item" href="#" data-key="${key}">
@@ -181,40 +186,41 @@
 
   function renderResi(key) {
     const d = resiData[key];
-    // Update header & info
+    if (!d) return;
+
     $("#dropdownResiBtn").text(d.kode);
     $("#infoKode").text(d.kode);
     $("#infoTujuan").text(d.tujuan);
     $("#infoTanggal").text(d.tanggal);
     $("#infoStatus").text(d.status);
 
-    // Bangun tabel checklist
     const tbody = $("#resiTableBody").empty();
-    d.items.forEach((it, i) => {
-      tbody.append(`
-        <tr>
-          <td>${i+1}</td>
-          <td>${it.item}</td>
-          <td>${it.qty}</td>
-          <td class="text-center">
-            <input type="checkbox" class="form-check-input checklist" data-index="${i}">
-          </td>
-        </tr>
-      `);
-    });
 
-    // Jika status sudah Selesai, ceklis & disable semuanya
-    if (d.status === "Selesai") {
-      $(".checklist")
-        .prop("checked", true)
-        .prop("disabled", true);
-      $("#markAll").prop("disabled", true);
-      // Pastikan progress full
-      $("#doneCount").text(d.items.length);
-      $("#totalCount").text(d.items.length);
+    if (d.items && d.items.length > 0) {
+      d.items.forEach((it, i) => {
+        tbody.append(`
+          <tr>
+            <td>${i + 1}</td>
+            <td>${it.nama ?? it.item ?? '-'}</td>
+            <td>${it.qty ?? '-'}</td>
+            <td class="text-center">
+              <input type="checkbox" class="form-check-input checklist" data-index="${i}" 
+                ${d.status === 'Selesai' ? 'checked disabled' : ''}>
+            </td>
+          </tr>
+        `);
+      });
+    } else {
+      tbody.append(`<tr><td colspan="4" class="text-center text-muted">Belum ada item</td></tr>`);
+    }
+
+    if (d.status === 'Selesai') {
+      const total = d.items.length;
+      $("#doneCount").text(total);
+      $("#totalCount").text(total);
       $("#percentDone").text("100%");
       $("#progressBar").css("width", "100%");
-      $("#infoStatus").text("Selesai");
+      $("#markAll").prop("disabled", true);
     } else {
       updateProgress();
     }
@@ -223,13 +229,12 @@
   function updateProgress() {
     const all  = $(".checklist").length;
     const done = $(".checklist:checked").length;
-    const pct  = all ? Math.round(done/all*100) : 0;
+    const pct  = all ? Math.round(done / all * 100) : 0;
     $("#doneCount").text(done);
     $("#totalCount").text(all);
     $("#percentDone").text(pct + "%");
     $("#progressBar").css("width", pct + "%");
-    $("#infoStatus").text(done===all && all>0 ? "Selesai" : "Pending");
-    $("#markAll").prop("disabled", done!==all);
+    $("#markAll").prop("disabled", done !== all);
   }
 
   function showSuccess(title, desc, delay = 1800) {
@@ -244,46 +249,105 @@
       $("#textDesc").text(desc).show();
     }, 600);
 
-    setTimeout(() => location.reload(), delay);
+    setTimeout(() => $("#resultOverlay").fadeOut(200), delay);
   }
 
-  $(function(){
+  $(function() {
     buildDropdown();
-    renderResi(Object.keys(resiData)[0]);
+    const firstKey = Object.keys(resiData)[0];
+    if (firstKey) {
+      renderResi(firstKey);
+    }
 
-    // Event pick resi
-    $(document).on("click", "#dropdownMenu .dropdown-item", function(e){
+    // Pilih resi dari dropdown
+    $(document).on("click", "#dropdownMenu .dropdown-item", function(e) {
       e.preventDefault();
       renderResi($(this).data("key"));
     });
 
-    // Tandai selesai
-    $("#markAll").on("click", function(){
+    // Tandai semua checklist selesai
+    $("#markAll").on("click", function() {
       const kode = $("#infoKode").text();
       if (kode !== "-") {
-        $.ajax({
-          url: `/update-status`,
-          method: "POST",
-          data: {
-            _token: "{{ csrf_token() }}",
-            kode: kode,
-            status: "Selesai"
-          },
-          success: function(){
-            // langsung animasi & reload
-            showSuccess("Berhasil!", "Status diubah menjadi Selesai.");
-          },
-          error: function(){
-            alert("Gagal memperbarui status. Silakan coba lagi.");
-          }
-        });
+        $.post('{{ route("resi.update_status") }}', {
+          kode,
+          status: "Selesai"
+        })
+        .done(() => {
+          const currentKey = Object.keys(resiData).find(k => resiData[k].kode === kode);
+          resiData[currentKey].status = "Selesai";
+          showSuccess("Berhasil!", "Status diubah menjadi Selesai.");
+          buildDropdown();
+          renderResi(currentKey);
+        })
+        .fail(() => alert("Gagal memperbarui status."));
       }
     });
 
-    // Update progress on checkbox change
+    // Tambah/Hapus item di form modal
+    let itemIndex = 1;
+    $("#addItem").on("click", () => {
+      const row = $(".item-row:first").clone();
+      row.find("input").each(function() {
+        const oldName = $(this).attr("name");
+        const newName = oldName.replace(/items\[\d+\]/, `items[${itemIndex}]`);
+        $(this).attr("name", newName).val("");
+      });
+      $("#itemsContainer").append(row);
+      itemIndex++;
+    });
+
+    $(document).on("click", ".remove-item", function() {
+      if ($("#itemsContainer .item-row").length > 1) {
+        $(this).closest(".item-row").remove();
+      }
+    });
+
+    // Submit pembuatan resi baru via AJAX
+    $("#submitCreate").on("click", function() {
+      const raw = $("#createResiForm").serializeArray();
+      const data = raw.reduce((acc, { name, value }) => {
+        if (name.startsWith("items")) {
+          const m = name.match(/items\[(\d+)\]\[(\w+)\]/);
+          if (m) {
+            const idx = m[1], fld = m[2];
+            acc.items = acc.items || {};
+            acc.items[idx] = acc.items[idx] || {};
+            acc.items[idx][fld] = value;
+          }
+        } else {
+          acc[name] = value;
+        }
+        return acc;
+      }, { items: {} });
+
+      data.items = Object.values(data.items);
+
+      $.post('{{ route("resi.store") }}', data)
+        .done(newResi => {
+          $("#createResiModal").modal("hide");
+          showSuccess("Berhasil!", "Resi baru dibuat.");
+          const key = "resi" + newResi.id;
+          resiData[key] = {
+            kode:    newResi.kode,
+            tujuan:  newResi.tujuan,
+            tanggal: newResi.tanggal,
+            status:  newResi.status,
+            items:   newResi.items
+          };
+          buildDropdown();
+          renderResi(key);
+        })
+        .fail(xhr => {
+          alert("Gagal membuat resi: " + (xhr.responseJSON?.message || xhr.statusText));
+        });
+    });
+
+    // Update progress saat checklist diubah
     $(document).on("change", ".checklist", updateProgress);
   });
 </script>
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
 </body>

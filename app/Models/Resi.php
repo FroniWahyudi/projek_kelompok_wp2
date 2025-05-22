@@ -7,6 +7,10 @@ class Resi extends Model
     protected $table = 'resi';
     protected $fillable = ['kode','tujuan','tanggal','status'];
 
+    protected $casts = [
+        'tanggal' => 'date',
+    ];
+
     public function items()
     {
         return $this->hasMany(ResiItem::class);
