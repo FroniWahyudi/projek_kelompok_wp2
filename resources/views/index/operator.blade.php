@@ -3,16 +3,16 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Manajemen Dashboard - Naga Hytam Sejahtera Abadi</title>
     @vite([
         'resources/js/app.js',
         'resources/sass/app.scss',
         'resources/css/app.css'
     ])
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet"/>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
     <style>
         html, body {
             height: 100%;
@@ -84,7 +84,7 @@
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid #dee2e6;
-            aspect-ratio: 1 / 1;
+            aspect-ratio: 1/1;
             display: block;
         }
         .manager-info h5 {
@@ -124,13 +124,13 @@
             color: white;
         }
         #operator-list {
-    min-height: 400px; /* atur sesuai kira-kira jumlah card minimal */
-    transition: all 0.3s ease; /* animasi halus jika isi berubah */
-    margin-top: 0; /* hindari margin tambahan */
-}
-.mb-3 {
-    margin-bottom: 0rem !important;
-}
+            min-height: 400px;
+            transition: all 0.3s ease;
+            margin-top: 0;
+        }
+        .mb-3 {
+            margin-bottom: 0 !important;
+        }
     </style>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
@@ -148,7 +148,6 @@
                     value="{{ request('search') }}"
                 />
             </div>
-            
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -164,14 +163,12 @@
         </div>
     </nav>
     <main class="container py-5 main-container">
-
-       <div class="mb-3">
-    <button id="btnAll" class="btn btn-outline-secondary">Semua</button>
-    <button id="btnFilterInbound" class="btn btn-outline-primary">Inbound</button>
-    <button id="btnFilterOutbound" class="btn btn-outline-success">Outbound</button>
-    <button id="btnFilterStorage" class="btn btn-outline-warning">Storage</button>
-</div>
-
+        <div class="mb-3">
+            <button id="btnAll" class="btn btn-outline-secondary">Semua</button>
+            <button id="btnFilterInbound" class="btn btn-outline-primary">Inbound</button>
+            <button id="btnFilterOutbound" class="btn btn-outline-success">Outbound</button>
+            <button id="btnFilterStorage" class="btn btn-outline-warning">Storage</button>
+        </div>
 @endunless
         <div class="row g-4" id="operator-list">
             @forelse($Operator as $op)
@@ -190,14 +187,11 @@
                                     class="btn btn-warning btn-sm btn-edit ms-2"
                                     data-id="{{ $op->id }}"
                                     title="Edit Profil Operator"
-                                >
-                                    Edit
-                                </button>
+                                >Edit</button>
                             @endif
                         </div>
                     </div>
                 </div>
-                <!-- Modal Detail -->
                 <div class="modal fade" id="detailModal{{ $op->id }}" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-lg modal-dialog-scrollable">
                         <div class="modal-content">
@@ -209,58 +203,64 @@
                                 <div class="d-flex align-items-center mb-4">
                                     <img src="{{ asset($op->photo_url) }}" class="profile-photo me-3" alt="">
                                     <div>
-                                        <h6>{{ $op->name }}</h6>
+                                        <h6 class="mb-1">{{ $op->name }}</h6>
                                         <small class="role">
                                             {{ $op->role }}
                                             <span class="badge bg-info text-dark ms-2">{{ $op->level }}</span>
                                         </small>
-                                        <p class="mt-2"><i class="bi bi-envelope me-1"></i> {{ $op->email }}</p>
-                                        <p><i class="bi bi-telephone me-1"></i> {{ $op->phone }}</p>
+                                        <p class="mt-2 mb-1"><i class="bi bi-envelope me-1"></i> {{ $op->email }}</p>
+                                        <p class="mb-0"><i class="bi bi-telephone me-1"></i> {{ $op->phone }}</p>
                                     </div>
                                 </div>
-                                <h6>Informasi Pribadi</h6>
-                                <div class="row mb-3">
+                                <h6 class="mt-4"><strong>Informasi Pribadi</strong></h6>
+                                <div class="row g-3 mb-4">
                                     <div class="col-sm-6">
-                                        <strong>Alamat:</strong><br>
-                                        {{ $op->alamat }}
+                                        <p class="mb-1"><strong>Alamat:</strong></p>
+                                        <p class="mb-0">{{ $op->alamat }}</p>
                                     </div>
                                     <div class="col-sm-6">
-                                        <strong>Joined:</strong><br>
-                                        {{ \Carbon\Carbon::parse($op->joined_at)->format('d M Y') }}
+                                        <p class="mb-1"><strong>Joined:</strong></p>
+                                        <p class="mb-0">{{ \Carbon\Carbon::parse($op->joined_at)->format('d M Y') }}</p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="mb-1"><strong>Pendidikan:</strong></p>
+                                        <p class="mb-0">{{ $op->education }}</p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="mb-1"><strong>Departemen:</strong></p>
+                                        <p class="mb-0">{{ $op->department }}</p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="mb-1"><strong>Divisi:</strong></p>
+                                        <p class="mb-0">{{ $op->divisi }}</p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="mb-1"><strong>Keahlian:</strong></p>
+                                        <p class="mb-0">
+                                            @foreach(explode(', ', $op->skills) as $s)
+                                                <span class="badge bg-secondary me-1 mb-1">{{ $s }}</span>
+                                            @endforeach
+                                        </p>
                                     </div>
                                 </div>
-                                <div class="row mb-4">
-                                    <div class="col-sm-6">
-                                        <strong>Pendidikan:</strong><br>
-                                        {{ $op->education }}
+                                <div class="row g-4 mb-4">
+                                    <div class="col-lg-6">
+                                        <h6><strong>Bio</strong></h6>
+                                        <p class="mb-0">{{ $op->bio }}</p>
                                     </div>
-                                    <div class="col-sm-6">
-                                        <strong>Departemen:</strong><br>
-                                        {{ $op->department }}
+                                    <div class="col-lg-6">
+                                        <h6><strong>Pencapaian</strong></h6>
+                                        <ul class="mb-0">
+                                            @foreach(explode(', ', $op->achievements) as $a)
+                                                <li>{{ $a }}</li>
+                                            @endforeach
+                                        </ul>
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
-                                    <strong>Divisi:</strong><br>
-                                    {{ $op->divisi }}
-                                </div><br>
-                                <h6><strong>Bio</strong></h6>
-                                <p>{{ $op->bio }}</p>
-                                <h6><strong>Deskripsi Pekerjaan</strong></h6>
-                                <ul>
+                                <h6 class="mt-3"><strong>Deskripsi Pekerjaan</strong></h6>
+                                <ul class="mb-4">
                                     @foreach(explode(', ', $op->job_descriptions) as $jd)
                                         <li>{{ $jd }}</li>
-                                    @endforeach
-                                </ul>
-                                <h6><strong>Keahlian</strong></h6>
-                                <p>
-                                    @foreach(explode(', ', $op->skills) as $s)
-                                        <span class="badge bg-secondary me-1">{{ $s }}</span>
-                                    @endforeach
-                                </p>
-                                <h6><strong>Pencapaian</strong></h6>
-                                <ul>
-                                    @foreach(explode(', ', $op->achievements) as $a)
-                                        <li>{{ $a }}</li>
                                     @endforeach
                                 </ul>
                             </div>
@@ -283,121 +283,104 @@
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const input = document.getElementById('searchInput');
-    const list  = document.getElementById('operator-list');
-    if (!input || !list) return;
+        document.addEventListener('DOMContentLoaded', () => {
+            const input = document.getElementById('searchInput');
+            const list = document.getElementById('operator-list');
+            if (!input || !list) return;
 
-    let timeout = null;
+            let timeout = null;
 
-    // Tombol filter
-    const buttons = {
-      all:      document.getElementById('btnAll'),
-      inbound:  document.getElementById('btnFilterInbound'),
-      outbound: document.getElementById('btnFilterOutbound'),
-      storage:  document.getElementById('btnFilterStorage'),
-    };
+            const buttons = {
+                all: document.getElementById('btnAll'),
+                inbound: document.getElementById('btnFilterInbound'),
+                outbound: document.getElementById('btnFilterOutbound'),
+                storage: document.getElementById('btnFilterStorage')
+            };
 
-    // Fungsi untuk set tombol aktif
-    function setActiveButton(activeBtn) {
-      Object.values(buttons).forEach(btn => btn.classList.remove('active'));
-      if (activeBtn) activeBtn.classList.add('active');
-    }
+            function setActiveButton(activeBtn) {
+                Object.values(buttons).forEach(btn => btn.classList.remove('active'));
+                if (activeBtn) activeBtn.classList.add('active');
+            }
 
-    // Fungsi filter ulang berdasarkan divisi
-    function filterBy(divisi) {
-      // ambil ulang semua kartu terbaru dari DOM
-      const cards = document.querySelectorAll('#operator-list .manager-card');
-      cards.forEach(card => {
-        const d = card.dataset.divisi || '';
-        card.parentElement.style.display =
-          (divisi === 'all' || d.includes(divisi))
-            ? ''   // tampilkan
-            : 'none'; // sembunyikan
-      });
-    }
+            function filterBy(divisi) {
+                const cards = document.querySelectorAll('#operator-list .manager-card');
+                cards.forEach(card => {
+                    const d = card.dataset.divisi || '';
+                    card.parentElement.style.display = (divisi === 'all' || d.includes(divisi)) ? '' : 'none';
+                });
+            }
 
-    // --- AJAX search ---
-    input.addEventListener('input', () => {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        fetch(`{{ url('operator') }}?search=${encodeURIComponent(input.value)}&ajax=1`)
-          .then(res => res.text())
-          .then(html => {
-            list.innerHTML = html;
-            // setelah merender ulang list:
-            setActiveButton(null); // hilangkan highlight tombol
-            // (opsional) Anda bisa memanggil filterBy('all') 
-            //   kalau ingin langsung show semuanya
-          })
-          .catch(err => console.error('Search error:', err));
-      }, 300);
-    });
+            input.addEventListener('input', () => {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => {
+                    fetch(`{{ url('operator') }}?search=${encodeURIComponent(input.value)}&ajax=1`)
+                        .then(res => res.text())
+                        .then(html => {
+                            list.innerHTML = html;
+                            setActiveButton(null);
+                        })
+                        .catch(err => console.error('Search error:', err));
+                }, 300);
+            });
 
-    // --- wire up tombol filter ---
-    buttons.all.addEventListener('click', () => {
-      setActiveButton(buttons.all);
-      filterBy('all');
-    });
-    buttons.inbound.addEventListener('click', () => {
-      setActiveButton(buttons.inbound);
-      filterBy('inbound');
-    });
-    buttons.outbound.addEventListener('click', () => {
-      setActiveButton(buttons.outbound);
-      filterBy('outbound');
-    });
-    buttons.storage.addEventListener('click', () => {
-      setActiveButton(buttons.storage);
-      filterBy('storage');
-    });
+            buttons.all.addEventListener('click', () => {
+                setActiveButton(buttons.all);
+                filterBy('all');
+            });
+            buttons.inbound.addEventListener('click', () => {
+                setActiveButton(buttons.inbound);
+                filterBy('inbound');
+            });
+            buttons.outbound.addEventListener('click', () => {
+                setActiveButton(buttons.outbound);
+                filterBy('outbound');
+            });
+            buttons.storage.addEventListener('click', () => {
+                setActiveButton(buttons.storage);
+                filterBy('storage');
+            });
 
-    // initialize ke “All”
-    setActiveButton(buttons.all);
-  });
+            setActiveButton(buttons.all);
+        });
 
+        document.addEventListener('click', function(e) {
+            if (!e.target.matches('.btn-edit')) return;
+            const id = e.target.dataset.id;
+            const modalEl = document.getElementById('editModal');
+            const modal = new bootstrap.Modal(modalEl);
+            fetch(`{{ url('operator') }}/${id}/edit`)
+                .then(r => r.text())
+                .then(html => {
+                    modalEl.querySelector('.modal-dialog').innerHTML = html;
+                    modal.show();
+                })
+                .catch(() => alert('Gagal memuat form edit.'));
+        });
 
-  // kode untuk edit modal tetap sama…
-  document.addEventListener('click', function(e) {
-    if (!e.target.matches('.btn-edit')) return;
-    const id = e.target.dataset.id;
-    const modalEl = document.getElementById('editModal');
-    const modal   = new bootstrap.Modal(modalEl);
-    fetch(`{{ url('operator') }}/${id}/edit`)
-      .then(r => r.text())
-      .then(html => {
-        modalEl.querySelector('.modal-dialog').innerHTML = html;
-        modal.show();
-      })
-      .catch(() => alert('Gagal memuat form edit.'));
-  });
-
-  document.addEventListener('submit', function(e) {
-    if (e.target.id !== 'formEditUser') return;
-    e.preventDefault();
-    const form = e.target;
-    const data = new FormData(form);
-    fetch(form.action, {
-      method: 'POST',
-      headers: {
-        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-      },
-      body: data
-    })
-    .then(r => { if (!r.ok) throw new Error('Gagal'); return r.json(); })
-    .then(json => {
-      if (json.success) {
-        bootstrap.Modal.getInstance(document.getElementById('editModal')).hide();
-        window.location.href = '{{ url("operator") }}';
-      } else {
-        alert('Gagal menyimpan perubahan.');
-      }
-    })
-    .catch(() => alert('Error saat menyimpan'));
-  });
-</script>
-
-    <!-- Modal kosong untuk AJAX EDIT -->
+        document.addEventListener('submit', function(e) {
+            if (e.target.id !== 'formEditUser') return;
+            e.preventDefault();
+            const form = e.target;
+            const data = new FormData(form);
+            fetch(form.action, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: data
+            })
+                .then(r => { if (!r.ok) throw new Error('Gagal'); return r.json(); })
+                .then(json => {
+                    if (json.success) {
+                        bootstrap.Modal.getInstance(document.getElementById('editModal')).hide();
+                        window.location.href = '{{ url("operator") }}';
+                    } else {
+                        alert('Gagal menyimpan perubahan.');
+                    }
+                })
+                .catch(() => alert('Error saat menyimpan'));
+        });
+    </script>
     <div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-scrollable">
             <!-- konten akan di-overwrite oleh JS -->
