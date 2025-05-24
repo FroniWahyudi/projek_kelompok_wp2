@@ -455,7 +455,7 @@ use Illuminate\Support\Carbon;
     </a>
   @endif
 
-  <a href="#" class="btn btn-outline-dark w-100 mb-2">
+  <a href="feedback" class="btn btn-outline-dark w-100 mb-2">
     <i class="bi bi-chat-dots me-1"></i>
     @if(auth()->user()->role === 'Operator')
       Evaluasi Kinerja
