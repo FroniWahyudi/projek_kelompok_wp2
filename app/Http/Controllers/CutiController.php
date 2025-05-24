@@ -12,20 +12,22 @@ use Carbon\Carbon;
 class CutiController extends Controller
 {
     // Tampilkan daftar pengajuan
-    public function index()
+    public function index(Request $request)
     {
         $user = auth()->user();
 
-        $query = CutiRequest::with('user')
-            ->orderByDesc('tanggal_pengajuan');
+        $query = CutiRequest::with('user.sisaCuti');
 
-        if ($user->role === 'Manajer') {
-            // HR lihat semua, diurutkan status Menunggu dahulu
-            $query->orderByRaw("FIELD(status,'Menunggu','Disetujui','Ditolak')");
-        } else {
-            // User biasa hanya lihat miliknya
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if ($user->role !== 'Manajer') {
             $query->where('user_id', $user->id);
         }
+
+        $query->orderByRaw("FIELD(status, 'Menunggu', 'Disetujui', 'Ditolak')")
+              ->orderByDesc('tanggal_pengajuan');
 
         $cutiRequests = $query->get();
 
@@ -41,25 +43,25 @@ class CutiController extends Controller
             'alasan'      => 'required|string',
         ]);
 
-        $user    = auth()->user();
-        $start   = Carbon::parse($request->tgl_mulai);
-        $end     = Carbon::parse($request->tgl_selesai);
-        $lama    = $start->diffInDays($end) + 1;
-        $tahun   = $start->year;
+        $user  = auth()->user();
+        $start = Carbon::parse($request->tgl_mulai);
+        $end   = Carbon::parse($request->tgl_selesai);
+        $lama  = $start->diffInDays($end) + 1;
+        $tahun = $start->year;
 
         // Ambil atau buat record sisa_cuti
         $sisa = SisaCuti::firstOrCreate(
             ['user_id' => $user->id, 'tahun' => $tahun],
-            ['cuti_sisa' => 0, 'cuti_terpakai' => 0]
+            ['cuti_sisa' => 12, 'cuti_terpakai' => 0]
         );
 
-        if (($sisa->cuti_sisa - $sisa->cuti_terpakai) < $lama) {
-            return back()->with('error', "Sisa cuti Anda hanya ".
-                ($sisa->cuti_sisa - $sisa->cuti_terpakai)." hari, permintaan $lama hari.");
+        // Validasi sisa cuti cukup
+        if ($sisa->cuti_sisa < $lama) {
+            return back()->with('error', "Sisa cuti Anda hanya {$sisa->cuti_sisa} hari, permintaan {$lama} hari.");
         }
 
-        DB::transaction(function () use ($user, $request, $lama) {
-            // Insert pengajuan
+        DB::transaction(function () use ($user, $request, $lama, $tahun) {
+            // Simpan pengajuan cuti
             $cuti = CutiRequest::create([
                 'user_id'           => $user->id,
                 'tanggal_pengajuan' => now()->toDateString(),
@@ -70,7 +72,7 @@ class CutiController extends Controller
                 'status'            => 'Menunggu',
             ]);
 
-            // Log pembuatan
+            // Log pembuatan pengajuan
             CutiLogs::create([
                 'cuti_request_id' => $cuti->id,
                 'aksi'            => 'Dibuat',
@@ -78,33 +80,36 @@ class CutiController extends Controller
                 'keterangan'      => 'Pengajuan dibuat',
             ]);
 
-            // Update cuti_terpakai
+                        // Update sisa_cuti: tambah cuti_terpakai dan kurangi cuti_sisa sekaligus
             SisaCuti::where('user_id', $user->id)
-                ->where('tahun', Carbon::parse($request->tgl_mulai)->year)
-                ->increment('cuti_terpakai', $lama);
+                ->where('tahun', $tahun)
+                ->update([
+                    'cuti_terpakai' => DB::raw("cuti_terpakai + {$lama}"),
+                    'cuti_sisa'     => DB::raw("cuti_sisa - {$lama}"),
+                ]);
         });
 
-        return redirect()->route('cuti.index');
+        return redirect()->route('cuti.index')->with('success', 'Pengajuan cuti berhasil dibuat dan sisa cuti terupdate.');
     }
 
-    // Hapus pengajuan + rollback sisa
+    // Hapus pengajuan + rollback sisa cuti
     public function destroy(CutiRequest $cuti)
     {
         $user = auth()->user();
-
         abort_unless($user->id === $cuti->user_id || $user->role === 'Manajer', 403);
 
         DB::transaction(function () use ($cuti) {
-            // Kurangi terpakai
+            // rollback cuti_terpakai dan cuti_sisa bila sudah dihitung
             SisaCuti::where('user_id', $cuti->user_id)
                 ->where('tahun', Carbon::parse($cuti->tanggal_mulai)->year)
-                ->decrement('cuti_terpakai', $cuti->lama_cuti);
+                ->decrement('cuti_terpakai', $cuti->lama_cuti)
+                ->increment('cuti_sisa', $cuti->lama_cuti);
 
-            // Hapus log & request (cascade FK)
+            // Hapus pengajuan dan log (cascade)
             $cuti->delete();
         });
 
-        return redirect()->route('cuti.index');
+        return redirect()->route('cuti.index')->with('success', 'Pengajuan cuti dibatalkan dan sisa cuti dipulihkan.');
     }
 
     // Approve oleh Manajer
@@ -115,9 +120,9 @@ class CutiController extends Controller
 
         DB::transaction(function () use ($cuti, $user) {
             $cuti->update([
-                'status'           => 'Disetujui',
-                'disetujui_oleh'   => $user->id,
-                'tanggal_disetujui'=> now()->toDateString(),
+                'status'            => 'Disetujui',
+                'disetujui_oleh'    => $user->id,
+                'tanggal_disetujui' => now()->toDateString(),
             ]);
 
             CutiLogs::create([
@@ -128,19 +133,20 @@ class CutiController extends Controller
             ]);
         });
 
-        return redirect()->route('cuti.index');
+        return redirect()->route('cuti.index')->with('success', 'Pengajuan cuti disetujui.');
     }
 
-      public function sisaIndex()
+    // Tampilkan rekap sisa cuti
+    public function sisaIndex()
     {
-        // ambil semua record SisaCuti (atau sesuaikan dengan role/user)
-        $rekap = SisaCuti::with('user')->orderBy('tahun', 'desc')->get();
+        $rekap = SisaCuti::with('user')
+            ->orderBy('tahun', 'desc')
+            ->get();
+
         return view('cuti.sisa_index', compact('rekap'));
     }
 
-    /**
-     * Update sisa cuti manual (misal di Manajer)
-     */
+    // Update sisa cuti manual
     public function sisaUpdate(Request $request, SisaCuti $sisa)
     {
         $request->validate([
@@ -148,8 +154,30 @@ class CutiController extends Controller
             'cuti_terpakai' => 'required|integer|min:0',
         ]);
 
-        $sisa->update($request->only(['cuti_sisa','cuti_terpakai']));
-        return redirect()->route('cuti.sisa.index')
-                         ->with('success','Rekap sisa cuti berhasil di-update.');
+        $sisa->update($request->only(['cuti_sisa', 'cuti_terpakai']));
+
+        return redirect()->route('cuti.sisa.index')->with('success', 'Rekap sisa cuti berhasil di-update.');
+    }
+
+    // Reset tahunan
+    public function resetTahunan()
+    {
+        DB::table('sisa_cuti')->update([
+            'total_cuti'     => 12,
+            'cuti_sisa'      => 12,
+            'cuti_terpakai'  => 0,
+        ]);
+
+        return redirect()->route('cuti.index')->with('success', 'Cuti tahunan berhasil di-reset.');
+    }
+
+    // Reject pengajuan
+    public function reject($id)
+    {
+        $cuti = CutiRequest::findOrFail($id);
+        $cuti->status = 'Ditolak';
+        $cuti->save();
+
+        return redirect()->route('cuti.index')->with('success', 'Pengajuan cuti ditolak.');
     }
 }

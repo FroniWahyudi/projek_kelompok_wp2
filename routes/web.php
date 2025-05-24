@@ -96,12 +96,18 @@ Route::middleware('auth')->group(function () {
          ->name('resi.store');
 });
 
+// Grup route untuk Cuti
 Route::middleware('auth')->group(function() {
     Route::resource('cuti', CutiController::class);
     Route::post('cuti/{cuti}/accept', [CutiController::class, 'accept'])
-     ->name('cuti.accept');
+         ->name('cuti.accept');
+
+    // **Tambahkan route reset tahunan di sini (tanpa mengubah yang lain)**
+    Route::post('cuti/reset', [CutiController::class, 'resetTahunan'])
+         ->name('cuti.reset');
 });
 
+// Grup lain untuk sisa cuti
 Route::middleware('auth')->group(function () {
     // Tampilkan halaman rekap sisa cuti
     Route::get('cuti/sisa', [CutiController::class, 'sisaIndex'])
@@ -110,4 +116,7 @@ Route::middleware('auth')->group(function () {
     // Proses update sisa cuti (misal dari form edit)
     Route::put('cuti/sisa/{sisa}', [CutiController::class, 'sisaUpdate'])
          ->name('cuti.sisa.update');
+
+     Route::post('/cuti/{id}/reject', [CutiController::class, 'reject'])->name('cuti.reject');
+
 });

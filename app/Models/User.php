@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\SisaCuti; // ← penting: tambahkan ini
+use Illuminate\Database\Eloquent\Relations\HasOne; // ← penting: tambahkan ini juga
 
 class User extends Authenticatable
 {
@@ -31,14 +33,15 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    // === Tambahan relasi cuti ===
+    // === Relasi ke cuti requests ===
     public function cutiRequests()
     {
         return $this->hasMany(CutiRequest::class);
     }
 
-    public function sisaCuti()
+    // === Relasi one-to-one ke sisa cuti ===
+    public function sisaCuti(): HasOne
     {
-        return $this->hasOne(SisaCuti::class)->latestOfMany();
+        return $this->hasOne(SisaCuti::class, 'user_id');
     }
 }
