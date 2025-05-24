@@ -355,7 +355,7 @@ use Illuminate\Support\Carbon;
 <!-- Profile -->
 <div id="profileDropdownToggle" class="d-flex align-items-center nav-item" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#profileModal">
   <img src="<?= htmlspecialchars($user['photo_url'] ?: 'img/default_profile.png') ?>"
-       class="rounded-circle me-2" width="50" height="50" alt="Foto Profil" style="object-fit:cover; border-radius:50%; margin-bottom:1rem;">
+       class="rounded-circle me-2" width="50" height="50" alt="Foto Profil" style="object-fit:cover; border-radius:50%; ">
   <div class="d-none d-md-block">
     <strong><?= htmlspecialchars($user['name']) ?></strong><br>
     <small class="text-muted"><?= htmlspecialchars($user['role']) ?></small>
