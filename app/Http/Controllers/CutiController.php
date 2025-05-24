@@ -93,24 +93,24 @@ class CutiController extends Controller
     }
 
     // Hapus pengajuan + rollback sisa cuti
-    public function destroy(CutiRequest $cuti)
-    {
-        $user = auth()->user();
-        abort_unless($user->id === $cuti->user_id || $user->role === 'Manajer', 403);
+public function destroy(CutiRequest $cuti)
+{
+    $user = auth()->user();
+    abort_unless($user->id === $cuti->user_id || $user->role === 'Manajer', 403);
 
-        DB::transaction(function () use ($cuti) {
-            // rollback cuti_terpakai dan cuti_sisa bila sudah dihitung
-            SisaCuti::where('user_id', $cuti->user_id)
-                ->where('tahun', Carbon::parse($cuti->tanggal_mulai)->year)
-                ->decrement('cuti_terpakai', $cuti->lama_cuti)
-                ->increment('cuti_sisa', $cuti->lama_cuti);
+    DB::transaction(function () use ($cuti) {
+        // Hapus dulu log terkait
+        CutiLogs::where('cuti_request_id', $cuti->id)->delete();
 
-            // Hapus pengajuan dan log (cascade)
-            $cuti->delete();
-        });
+        // Hapus pengajuan cuti
+        $cuti->delete();
+    });
 
-        return redirect()->route('cuti.index')->with('success', 'Pengajuan cuti dibatalkan dan sisa cuti dipulihkan.');
-    }
+    return redirect()
+        ->route('cuti.index')
+        ->with('success', 'Pengajuan cuti dan log terkait berhasil dihapus.');
+}
+
 
     // Approve oleh Manajer
     public function accept(CutiRequest $cuti)
