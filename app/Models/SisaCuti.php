@@ -2,22 +2,30 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class SisaCuti extends Model
 {
-    use HasFactory;
+    protected $table = 'sisa_cuti'; // <-- Tambahkan baris ini
 
-    protected $table = "sisa_cuti";
+    // Non-incrementing primary key (composite)
+    public $incrementing = false;
+    protected $primaryKey = ['user_id', 'tahun'];
 
+    // Kolom yang boleh di mass-assign
     protected $fillable = [
         'user_id',
         'tahun',
-        'total_cuti',
-        'cuti_terpakai',
         'cuti_sisa',
+        'cuti_terpakai',
     ];
 
-    protected $guarded = 'id';
+    /**
+     * Relasi ke User
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }

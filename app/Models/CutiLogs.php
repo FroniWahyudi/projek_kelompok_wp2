@@ -2,15 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class CutiLogs extends Model
 {
-    use HasFactory;
-
-    protected $table = "cuti_logs";
-
+    // Kolom yang boleh di mass-assign
     protected $fillable = [
         'cuti_request_id',
         'aksi',
@@ -18,5 +15,19 @@ class CutiLogs extends Model
         'keterangan',
     ];
 
-    protected $guarded = 'id';
+    /**
+     * Relasi ke CutiRequest
+     */
+    public function cutiRequest(): BelongsTo
+    {
+        return $this->belongsTo(CutiRequest::class);
+    }
+
+    /**
+     * Relasi ke User (yang melakukan aksi)
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'oleh_user_id');
+    }
 }

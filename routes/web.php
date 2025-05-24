@@ -8,6 +8,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HrDashboardController;
 use App\Http\Controllers\CrudController;
 use App\Http\Controllers\ResiController;
+use App\Http\Controllers\CutiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -93,4 +94,20 @@ Route::middleware('auth')->group(function () {
          ->name('resi.buat');
     Route::post('/buat-resi', [ResiController::class, 'store'])
          ->name('resi.store');
+});
+
+Route::middleware('auth')->group(function() {
+    Route::resource('cuti', CutiController::class);
+    Route::post('cuti/{cuti}/accept', [CutiController::class, 'accept'])
+     ->name('cuti.accept');
+});
+
+Route::middleware('auth')->group(function () {
+    // Tampilkan halaman rekap sisa cuti
+    Route::get('cuti/sisa', [CutiController::class, 'sisaIndex'])
+         ->name('cuti.sisa.index');
+
+    // Proses update sisa cuti (misal dari form edit)
+    Route::put('cuti/sisa/{sisa}', [CutiController::class, 'sisaUpdate'])
+         ->name('cuti.sisa.update');
 });

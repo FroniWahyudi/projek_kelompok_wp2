@@ -407,16 +407,16 @@ use Illuminate\Support\Carbon;
 <nav class="sidebar">
   <h6 class="fw-bold text-uppercase">Divisi Karyawan</h6>
 
-  <a href="manajemen" class="btn btn-outline-primary w-100 mb-2">
+  <a href="{{ route('hr.manajemen') }}" class="btn btn-outline-primary w-100 mb-2">
     <i class="bi bi-people-fill me-1"></i> Manajemen
   </a>
-  <a href="admin" class="btn btn-outline-primary w-100 mb-2">
+  <a href="{{ route('hr.admin') }}" class="btn btn-outline-primary w-100 mb-2">
     <i class="bi bi-person-circle me-1"></i> Administrasi
   </a>
-  <a href="leader" class="btn btn-outline-primary w-100 mb-2">
+  <a href="{{ route('hr.leader') }}" class="btn btn-outline-primary w-100 mb-2">
     <i class="bi bi-people-fill me-1"></i> Leader
   </a>
-  <a href="operator" class="btn btn-outline-primary w-100 mb-2">
+  <a href="{{ route('operator.index') }}" class="btn btn-outline-primary w-100 mb-2">
     <i class="bi bi-people-fill me-1"></i> Operator Gudang
   </a>
 
@@ -424,51 +424,51 @@ use Illuminate\Support\Carbon;
 
   <h6 class="fw-bold">Menu Lainnya</h6>
 
-  <?php //if ($user['role'] === 'Manajer' || $user['role'] === 'HR' ): ?>
-  @if($role == 'Manajer' || $role == 'Admin')
-    <a href="laporan_kerja" class="btn btn-outline-dark w-100 mb-2">
+  {{-- Manajer dan HR --}}
+  @if(auth()->user()->role === 'Manajer' || auth()->user()->role === 'Admin')
+    <a href="{{ route('laporan.index') }}" class="btn btn-outline-dark w-100 mb-2">
       <i class="bi bi-journal-text me-1"></i> Laporan Kerja
     </a>
   @endif
-  
-  <?php //if ($user['role'] === 'Leader' || $user['role'] === 'HR' ): ?>
-  @if($role == "Leader" || $role == "Admin")
-    @if($role == "Leader")
 
-      <a href="laporan_kerja.php" class="btn btn-outline-dark w-100 mb-2">
-        <i class="bi bi-journal-text me-1"></i> Kirim Laporan Kerja
-      </a>
-    @endif
-    <a href="cuti.php" class="btn btn-outline-dark w-100 mb-2">
+  {{-- Leader dan HR kirim laporan --}}
+  @if(auth()->user()->role === 'Leader' || auth()->user()->role === 'Admin')
+    <a href="{{ route('laporan.index') }}" class="btn btn-outline-dark w-100 mb-2">
+      <i class="bi bi-journal-text me-1"></i> Kirim Laporan Kerja
+    </a>
+  @endif
+
+  {{-- Manajer akses Pengajuan Cuti --}}
+  @if(auth()->user()->role === 'Manajer')
+    <a href="{{ route('cuti.index') }}" class="btn btn-outline-dark w-100 mb-2">
       <i class="bi bi-check-square me-1"></i> Daftar Pengajuan Cuti
     </a>
   @endif
-  <?php //elseif ($user['role'] === 'Karyawan'): ?>
-  @if($role == 'Operator')
-    <a href="cuti.php" class="btn btn-outline-dark w-100 mb-2">
+
+  {{-- Operator --}}
+  @if(auth()->user()->role === 'Operator')
+    <a href="{{ route('cuti.index') }}" class="btn btn-outline-dark w-100 mb-2">
       <i class="bi bi-file-earmark-text me-1"></i> Pengajuan Cuti
     </a>
-    <a href="slip_gaji.php" class="btn btn-outline-dark w-100 mb-2">
+    <a href="#" class="btn btn-outline-dark w-100 mb-2">
       <i class="bi bi-receipt me-1"></i> Slip Gaji
     </a>
   @endif
 
-  
-
-  
-  <a href="feedback_pegawai.php" class="btn btn-outline-dark w-100 mb-2">
-    <i class="bi bi-chat-dots me-1"></i> 
-    @if($role == "Operator")
-    Evaluasi Kinerja
+  <a href="#" class="btn btn-outline-dark w-100 mb-2">
+    <i class="bi bi-chat-dots me-1"></i>
+    @if(auth()->user()->role === 'Operator')
+      Evaluasi Kinerja
     @else
-    Feedback Pegawai
+      Feedback Pegawai
     @endif
   </a>
 
-  <a href="shift_karyawan" class="btn btn-outline-dark w-100">
+  <a href="{{ route('shift.karyawan') }}" class="btn btn-outline-dark w-100">
     <i class="bi bi-clock-history me-1"></i> Shift & Jadwal
   </a>
 </nav>
+
 
 
 
