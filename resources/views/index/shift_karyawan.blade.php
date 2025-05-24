@@ -38,15 +38,16 @@
 </head>
 <body>
   <div class="container py-4">
-    <a href="dashboard" class="btn btn-outline-dark nav-button">
+    <a href="{{ route('dashboard') }}" class="btn btn-outline-dark nav-button">
       <i class="bi bi-house-door me-1"></i> Home
     </a>
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h2 class="mb-0">Shift & Jadwal Karyawan</h2>
-      <button class="btn btn-success mt-2 mt-md-0" data-bs-toggle="modal" data-bs-target="#editModal">
+      <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#shiftModal" id="createBtn">
         <i class="bi bi-plus-circle me-1"></i> Jadwal Baru
       </button>
     </div>
+
     <div class="filter-group mb-3">
       <button class="btn btn-outline-primary" onclick="filterShift('All')">Semua</button>
       <button class="btn btn-outline-info" onclick="filterShift('Pagi')">Pagi</button>
@@ -70,77 +71,85 @@
               </tr>
             </thead>
             <tbody>
-              <tr data-shift="Pagi">
-                <td>1</td>
-                <td><img src="https://ui-avatars.com/api/?name=Ahmad+Yusuf" width="40" height="40" class="rounded-circle" alt="Ahmad Yusuf"></td>
-                <td>Ahmad Yusuf</td>
-                <td>HR</td>
-                <td>2025-05-01</td>
-                <td><span class="badge bg-info text-dark badge-shift">Pagi</span></td>
+              @foreach ($shifts as $index => $shift)
+              <tr data-shift="{{ $shift->type }}">
+                <td>{{ $index + 1 }}</td>
                 <td>
-                  <button class="btn btn-sm btn-outline-warning" onclick="openEditModal(this)"><i class="bi bi-pencil"></i></button>
-                  <button class="btn btn-sm btn-outline-danger" onclick="deleteShift(this)"><i class="bi bi-trash"></i></button>
+                  <img src="https://ui-avatars.com/api/?name={{ urlencode($shift->user->name) }}" 
+                       width="40" height="40" class="rounded-circle" 
+                       alt="{{ $shift->user->name }}">
+                </td>
+                <td>{{ $shift->user->name }}</td>
+                <td>{{ $shift->user->department }}</td>
+                <td>{{ $shift->date->format('Y-m-d') }}</td>
+                <td>
+                  <span class="badge bg-{{ $shift->type=='Pagi'?'info':($shift->type=='Sore'?'warning':'dark') }} text-dark badge-shift">
+                    {{ $shift->type }}
+                  </span>
+                </td>
+                <td>
+                  <button class="btn btn-sm btn-outline-warning" 
+                          onclick="openEditModal('{{ $shift->id }}')">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <form action="{{ route('shifts.destroy', $shift) }}" method="POST" class="d-inline">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-sm btn-outline-danger" 
+                            onclick="return confirm('Hapus jadwal shift ini?')">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </form>
                 </td>
               </tr>
-              <tr data-shift="Sore">
-                <td>2</td>
-                <td><img src="https://ui-avatars.com/api/?name=Siti+Rahma" width="40" height="40" class="rounded-circle" alt="Siti Rahma"></td>
-                <td>Siti Rahma</td>
-                <td>Manajemen</td>
-                <td>2025-05-01</td>
-                <td><span class="badge bg-warning text-dark badge-shift">Sore</span></td>
-                <td>
-                  <button class="btn btn-sm btn-outline-warning" onclick="openEditModal(this)"><i class="bi bi-pencil"></i></button>
-                  <button class="btn btn-sm btn-outline-danger" onclick="deleteShift(this)"><i class="bi bi-trash"></i></button>
-                </td>
-              </tr>
+              @endforeach
             </tbody>
           </table>
         </div>
       </div>
     </div>
 
-    <!-- Modal Edit/Tambah -->
-    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <!-- Modal Create/Edit -->
+    <div class="modal fade" id="shiftModal" tabindex="-1" aria-labelledby="shiftModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="editModalLabel">Jadwal Shift</h5>
+            <h5 class="modal-title" id="shiftModalLabel">Jadwal Shift</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <div class="modal-body">
-            <form id="modalForm">
-              <input type="hidden" id="rowIndex">
+          <form id="shiftForm" method="POST" action="" novalidate>
+            @csrf
+            <div class="modal-body">
+              <input type="hidden" name="shift_id" id="shiftId">
               <div class="mb-3">
-                <label for="modalNama" class="form-label">Nama Karyawan</label>
-                <select id="modalNama" class="form-select" required>
+                <label for="usersSelect" class="form-label">Nama Karyawan</label>
+                <select name="users_id" id="usersSelect" class="form-select" required>
                   <option value="" disabled selected>Pilih karyawan...</option>
-                  <option>Ahmad Yusuf</option>
-                  <option>Siti Rahma</option>
-                  <option>Budi Santoso</option>
-                  <option>Lina Marlina</option>
-                  <option>Rudi Hartono</option>
+            @foreach ($users as $user)
+    <option value="{{ $user->id }}">{{ $user->name }}</option>
+@endforeach
+
                 </select>
               </div>
               <div class="mb-3">
-                <label for="modalTanggal" class="form-label">Tanggal</label>
-                <input type="date" id="modalTanggal" class="form-control" required>
+                <label for="dateInput" class="form-label">Tanggal</label>
+                <input type="date" name="date" id="dateInput" class="form-control" required>
               </div>
               <div class="mb-3">
-                <label for="modalShift" class="form-label">Shift</label>
-                <select id="modalShift" class="form-select" required>
+                <label for="typeSelect" class="form-label">Shift</label>
+                <select name="type" id="typeSelect" class="form-select" required>
                   <option value="" disabled selected>Pilih shift...</option>
-                  <option>Pagi</option>
-                  <option>Sore</option>
-                  <option>Overtime</option>
+                  <option value="Pagi">Pagi</option>
+                  <option value="Sore">Sore</option>
+                  <option value="Overtime">Overtime</option>
                 </select>
               </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-            <button type="button" class="btn btn-primary" onclick="saveShift()">Simpan</button>
-          </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+              <button type="submit" class="btn btn-primary">Simpan</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
@@ -153,52 +162,43 @@
         row.style.display = (type === 'All' || row.dataset.shift === type) ? '' : 'none';
       });
     }
-    function openEditModal(btn) {
-      const row = btn.closest('tr');
-      const idx = Array.from(row.parentNode.children).indexOf(row);
-      const [ , , nameCell, , dateCell, shiftCell ] = row.children;
-      document.getElementById('rowIndex').value = idx;
-      document.getElementById('modalNama').value = nameCell.textContent;
-      document.getElementById('modalTanggal').value = dateCell.textContent;
-      document.getElementById('modalShift').value = shiftCell.textContent.trim();
-      new bootstrap.Modal(document.getElementById('editModal')).show();
-    }
-    function saveShift() {
-      const idx = document.getElementById('rowIndex').value;
-      const name = document.getElementById('modalNama').value;
-      const date = document.getElementById('modalTanggal').value;
-      const shift = document.getElementById('modalShift').value;
-      const table = document.getElementById('shiftTable').querySelector('tbody');
-      if (idx) {
-        const row = table.children[idx];
-        row.children[2].textContent = name;
-        row.children[4].textContent = date;
-        const badge = row.children[5].querySelector('span');
-        badge.textContent = shift;
-        badge.className = `badge badge-shift bg-${shift==='Pagi'?'info':shift==='Sore'?'warning':'dark'} text-dark`;
-        row.dataset.shift = shift;
-      } else {
-        const newRow = table.insertRow();
-        newRow.dataset.shift = shift;
-        newRow.innerHTML = `
-          <td>${table.children.length}</td>
-          <td><img src="https://ui-avatars.com/api/?name=${encodeURIComponent(name)}" width="40" height="40" class="rounded-circle"></td>
-          <td>${name}</td>
-          <td>--</td>
-          <td>${date}</td>
-          <td><span class="badge badge-shift bg-${shift==='Pagi'?'info':shift==='Sore'?'warning':'dark'} text-dark">${shift}</span></td>
-          <td>
-            <button class="btn btn-sm btn-outline-warning" onclick="openEditModal(this)"><i class="bi bi-pencil"></i></button>
-            <button class="btn btn-sm btn-outline-danger" onclick="deleteShift(this)"><i class="bi bi-trash"></i></button>
-          </td>`;
-      }
-      document.getElementById('modalForm').reset();
-      document.getElementById('rowIndex').value = '';
-      bootstrap.Modal.getInstance(document.getElementById('editModal')).hide();
-    }
-    function deleteShift(btn) {
-      if (confirm('Hapus jadwal shift ini?')) btn.closest('tr').remove();
-    }
+
+  
+  // Cetak data shifts PHP ke JavaScript
+  <?php $shiftsJson = json_encode($shifts); ?>
+  const shifts = <?php echo $shiftsJson; ?>;
+
+  function openEditModal(id) {
+    const shift = shifts.find(s => s.id == id);
+    if (!shift) return;
+    const form  = document.getElementById('shiftForm');
+
+    // Set action URL untuk update
+    form.action = '/shifts/' + shift.id;
+
+    // Hapus input _method lama jika ada
+    const oldMethod = form.querySelector('[name="_method"]');
+    if (oldMethod) oldMethod.remove();
+
+    // Tambah input method PUT untuk update
+    form.insertAdjacentHTML('afterbegin',
+      '<input type="hidden" name="_method" value="PUT">'
+    );
+
+    // Isi form dengan data shift
+    document.getElementById('shiftId').value        = shift.id;
+    document.getElementById('usersSelect').value  = shift.users_id;
+    // Jika shift.date masih ISO full, potong 10 karakter pertama:
+    document.getElementById('dateInput').value       = shift.date.substr(0,10);
+    document.getElementById('typeSelect').value      = shift.type;
+
+    // Tampilkan modal
+    new bootstrap.Modal(
+      document.getElementById('shiftModal')
+    ).show();
+  }
+
+
   </script>
 </body>
 </html>

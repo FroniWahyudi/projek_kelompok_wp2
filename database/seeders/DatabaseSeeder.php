@@ -848,5 +848,11 @@ class DatabaseSeeder extends Seeder
             ItemChecklistSeeder::class,
         ]);
 
+
+         User::factory(10)->create(); // Jika perlu dummy user
+    $this->call([
+        ShiftSeeder::class,
+    ]);
+
     }
 }

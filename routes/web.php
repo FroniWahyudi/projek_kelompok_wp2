@@ -9,6 +9,8 @@ use App\Http\Controllers\HrDashboardController;
 use App\Http\Controllers\CrudController;
 use App\Http\Controllers\ResiController;
 use App\Http\Controllers\CutiController;
+use App\Http\Controllers\ShiftController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -120,3 +122,11 @@ Route::middleware('auth')->group(function () {
      Route::post('/cuti/{id}/reject', [CutiController::class, 'reject'])->name('cuti.reject');
 
 });
+
+// Shift view
+Route::get('/shift_karyawan', [ShiftController::class, 'index'])->name('shift.karyawan');
+
+
+// Resource route untuk shifts (index, store, update, destroy)
+Route::resource('shifts', ShiftController::class)->except(['create', 'show', 'edit']);
+
