@@ -427,14 +427,14 @@ use Illuminate\Support\Carbon;
   {{-- Manajer dan HR --}}
   @if(auth()->user()->role === 'Manajer' || auth()->user()->role === 'Admin')
     <a href="{{ route('laporan.index') }}" class="btn btn-outline-dark w-100 mb-2">
-      <i class="bi bi-journal-text me-1"></i> Laporan Kerja
+      <i class="bi bi-journal-text me-1"></i> Daftar Resi
     </a>
   @endif
 
   {{-- Leader dan HR kirim laporan --}}
-  @if(auth()->user()->role === 'Leader' || auth()->user()->role === 'Admin')
+  @if(auth()->user()->role === 'Leader')
     <a href="{{ route('laporan.index') }}" class="btn btn-outline-dark w-100 mb-2">
-      <i class="bi bi-journal-text me-1"></i> Kirim Laporan Kerja
+      <i class="bi bi-journal-text me-1"></i> Resi hari ini
     </a>
   @endif
 
@@ -446,7 +446,7 @@ use Illuminate\Support\Carbon;
   @endif
 
   {{-- Operator --}}
-  @if(auth()->user()->role === 'Operator')
+  @if(auth()->user()->role === 'Operator' || auth()->user()->role === 'Admin')
     <a href="{{ route('cuti.index') }}" class="btn btn-outline-dark w-100 mb-2">
       <i class="bi bi-file-earmark-text me-1"></i> Pengajuan Cuti
     </a>

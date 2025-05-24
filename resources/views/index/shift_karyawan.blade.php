@@ -139,7 +139,7 @@
                                     <td>{{ $shift->user->department }}</td>
                                     <td>{{ $shift->date->format('Y-m-d') }}</td>
                                     <td>
-                                        <span class="badge bg-{{ $shift->type=='Pagi'?'info':($shift->type=='Sore'?'warning':'dark') }} text-dark badge-shift">
+                                        <span class="badge bg-{{ $shift->type=='Pagi'?'info':($shift->type=='Sore'?'warning':'dark') }}  badge-shift">
                                             {{ $shift->type }}
                                         </span>
                                     </td>
@@ -148,14 +148,6 @@
                                                 onclick="openEditModal('{{ $shift->id }}')">
                                             <i class="bi bi-pencil"></i>
                                         </button>
-                                        <form action="{{ route('shifts.destroy', $shift) }}" method="POST" class="d-inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-outline-danger"
-                                                    onclick="return confirm('Hapus jadwal shift ini?')">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </form>
                                     </td>
                                 </tr>
                             @endforeach
