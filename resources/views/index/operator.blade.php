@@ -177,7 +177,16 @@
                         <img src="{{ asset($op->photo_url) }}" alt="{{ $op->name }}" class="profile-photo">
                         <div class="manager-info">
                             <h5>{{ $op->name }}</h5>
-                            <div class="role">{{ $op->role }} <span class="badge bg-info text-dark ms-2">{{ $op->level }}</span></div>
+                            <div class="role">{{ $op->role }} 
+                            <span class="badge
+                                @if(strtolower($op->level) === 'junior') bg-success 
+                                @elseif(strtolower($op->level) === 'mid-level') bg-primary 
+                                @elseif(strtolower($op->level) === 'senior') bg-warning text-dark 
+                                @else bg-info text-dark 
+                                @endif ms-2">
+                                {{ $op->level }}
+                            </span>
+                            </div>
                             <p>{{ $op->email }}</p>
                             <p>{{ $op->divisi }}</p>
                             <p>{{ Str::limit($op->bio, 100) }}</p>
