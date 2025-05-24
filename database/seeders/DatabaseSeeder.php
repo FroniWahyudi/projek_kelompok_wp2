@@ -777,6 +777,38 @@ class DatabaseSeeder extends Seeder
         ]);
 
         SisaCuti::create([
+            'user_id' => 1,
+            'tahun' => 2025,
+            'total_cuti' => 12,
+            'cuti_terpakai' => 0,
+            'cuti_sisa' => 12,
+        ]);
+
+        SisaCuti::create([
+            'user_id' => 2,
+            'tahun' => 2025,
+            'total_cuti' => 12,
+            'cuti_terpakai' => 0,
+            'cuti_sisa' => 12,
+        ]);
+
+        SisaCuti::create([
+            'user_id' => 3,
+            'tahun' => 2025,
+            'total_cuti' => 12,
+            'cuti_terpakai' => 0,
+            'cuti_sisa' => 12,
+        ]);
+
+        SisaCuti::create([
+            'user_id' => 4,
+            'tahun' => 2025,
+            'total_cuti' => 12,
+            'cuti_terpakai' => 0,
+            'cuti_sisa' => 12,
+        ]);
+
+        SisaCuti::create([
             'user_id' => 5,
             'tahun' => 2025,
             'total_cuti' => 12,

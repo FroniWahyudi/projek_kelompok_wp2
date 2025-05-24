@@ -1,3 +1,4 @@
+<!-- why is this page so complicated? -->
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -46,7 +47,7 @@
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h2 class="mb-0">Pengajuan Cuti</h2>
             <div>
-                @if(in_array(auth()->user()->role, ['Operator']))
+                @if(!in_array(auth()->user()->role, ['Manajer']))
                     <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#cutiModal">
                         <i class="bi bi-plus-circle me-1"></i> Ajukan Cuti
                     </button>
@@ -55,7 +56,7 @@
         </div>
 
         {{-- Kartu Sisa Cuti Pengguna --}}
-        @if(auth()->user()->sisaCuti)
+        @if(!in_array(auth()->user()->role, ['Manajer']))
             <div class="card mb-4 shadow-sm">
                 <div class="card-body d-flex justify-content-between align-items-center">
                     <div>
@@ -146,7 +147,7 @@
             </div>
         </div>
 
-        @if(in_array(auth()->user()->role, ['Admin', 'Manajer']))
+        @if(in_array(auth()->user()->role, ['Manajer']))
             @php
                 $currentFilter = request('status');
             @endphp
@@ -162,6 +163,10 @@
                 <a href="{{ route('cuti.index', ['status' => 'Disetujui']) }}"
                    class="btn {{ $currentFilter === 'Disetujui' ? 'btn-success' : 'btn-outline-success' }}">
                     Disetujui
+                </a>
+                <a href="{{ route('cuti.index', ['status' => 'Ditolak']) }}"
+                   class="btn {{ $currentFilter === 'Ditolak' ? 'btn-danger' : 'btn-outline-danger' }}">
+                    Ditolak
                 </a>
                 <form action="{{ route('cuti.reset') }}"
                       method="POST"
@@ -190,7 +195,7 @@
                                 <th>Durasi Cuti</th>
                                 <th class="alasan">Keterangan</th>
                                 <th>Status</th>
-                                @if(in_array(auth()->user()->role, ['Admin', 'Manajer']))
+                                @if(in_array(auth()->user()->role, ['Manajer']))
                                     <th>Aksi</th>
                                 @endif
                             </tr>
@@ -217,7 +222,7 @@
                                             {{ $r->status }}
                                         </span>
                                     </td>
-                                    @if(in_array(auth()->user()->role, ['Admin', 'Manajer']) && $r->status === 'Menunggu')
+                                    @if(in_array(auth()->user()->role, ['Manajer']) && $r->status === 'Menunggu')
                                         <td class="d-flex gap-1" style="padding-bottom: 10px;">
                                             <form action="{{ route('cuti.accept', $r->id) }}"
                                                   method="POST"
@@ -249,7 +254,7 @@
                                             </form>
                                         </td>
                                     @endif
-                                    @if(in_array(auth()->user()->role, ['Admin', 'Manajer']) && ($r->status === 'Disetujui' || $r->status === 'Ditolak'))
+                                    @if(in_array(auth()->user()->role, ['Manajer']) && ($r->status === 'Disetujui' || $r->status === 'Ditolak'))
                                         <td class="d-flex gap-1" style="padding-bottom: 10px;">
                                             <form action="{{ route('cuti.destroy', $r->id) }}"
                                                   method="POST"
@@ -266,7 +271,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="{{ in_array(auth()->user()->role, ['Admin', 'Manajer']) ? 9 : 8 }}"
+                                    <td colspan="{{ in_array(auth()->user()->role, ['Manajer']) ? 9 : 8 }}"
                                         class="text-center py-4">
                                         Belum ada pengajuan cuti.
                                     </td>

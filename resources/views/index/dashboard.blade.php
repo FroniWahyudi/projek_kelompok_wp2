@@ -446,7 +446,7 @@ use Illuminate\Support\Carbon;
   @endif
 
   {{-- Operator --}}
-  @if(auth()->user()->role === 'Operator' || auth()->user()->role === 'Admin')
+  @if(auth()->user()->role === 'Operator' || auth()->user()->role === 'Admin' || auth()->user()->role === 'Leader')
     <a href="{{ route('cuti.index') }}" class="btn btn-outline-dark w-100 mb-2">
       <i class="bi bi-file-earmark-text me-1"></i> Pengajuan Cuti
     </a>
