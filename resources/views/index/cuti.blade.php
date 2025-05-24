@@ -29,8 +29,11 @@
         }
         .table th.alasan,
         .table td.alasan {
-            width: 25%;
+            width: 15%;
             white-space: normal;
+        }
+        .bg-th {
+            width: 100%;
         }
     </style>
 </head>
@@ -43,7 +46,6 @@
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h2 class="mb-0">Pengajuan Cuti</h2>
             <div>
-                
                 @if(in_array(auth()->user()->role, ['Operator']))
                     <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#cutiModal">
                         <i class="bi bi-plus-circle me-1"></i> Ajukan Cuti
@@ -51,6 +53,21 @@
                 @endif
             </div>
         </div>
+
+          {{-- Kartu Sisa Cuti Pengguna --}}
+    @if(auth()->user()->sisaCuti)
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body d-flex justify-content-between align-items-center">
+            <div>
+                <h5 class="card-title mb-1">Sisa Cuti Anda</h5>
+                <p class="display-6 mb-0 text-primary">
+                    {{ auth()->user()->sisaCuti->cuti_sisa ?? 0 }} hari
+                </p>
+            </div>
+            <i class="bi bi-calendar-check display-4 text-primary"></i>
+        </div>
+    </div>
+    @endif
 
         @if(session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
@@ -76,41 +93,35 @@
                    class="btn {{ $currentFilter === 'Disetujui' ? 'btn-success' : 'btn-outline-success' }}">
                     Disetujui
                 </a>
-
-
-             <form action="{{ route('cuti.reset') }}" method="POST" class="d-inline">
-    @csrf
-    <button type="submit" 
-            class="btn btn-info float-end"
-            onclick="return confirm('Anda yakin ingin melakukan Reset Cuti Tahunan?')">
-        <i class="bi bi-arrow-counterclockwise me-1"></i> Reset Cuti Tahunan
-    </button>
-</form>
-
-
-
-
+                <form action="{{ route('cuti.reset') }}" method="POST" class="d-inline">
+                    @csrf
+                    <button type="submit" 
+                            class="btn btn-info float-end"
+                            onclick="return confirm('Anda yakin ingin melakukan Reset Cuti Tahunan?')">
+                        <i class="bi bi-arrow-counterclockwise me-1"></i> Reset Cuti Tahunan
+                    </button>
+                </form>
             </div>
         @endif
 
-        <div class="card">
-            <div class="card-body p-0">
+        <div>
+            <div class="card-body p-0 bg-th">
                 <div class="table-responsive">
                     <table class="table table-striped align-middle mb-0">
                         <thead class="table-dark">
                             <tr>
                                 <th>#</th>
-                                @if(in_array(auth()->user()->role, ['Admin','Manajer','Operator']))
-                                    <th>Nama</th>
-                                    <th>Sisa Cuti</th>
-                                @endif
+                                <th>Nama</th>
+                              
                                 <th>Tgl Pengajuan</th>
                                 <th>Mulai</th>
                                 <th>Selesai</th>
                                 <th>Durasi Cuti</th>
                                 <th class="alasan">Alasan</th>
                                 <th>Status</th>
-                                <th>Aksi</th>
+                                @if(in_array(auth()->user()->role, ['Admin','Manajer']))
+                                    <th>Aksi</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -124,10 +135,8 @@
                                 @endphp
                                 <tr>
                                     <td>{{ $i + 1 }}</td>
-                                    @if(in_array(auth()->user()->role, ['Admin','Manajer','Operator']))
-                                        <td>{{ $r->user->name }}</td>
-                                        <td>{{ $r->user->sisaCuti->cuti_sisa ?? 0 }}</td>
-                                    @endif
+                                    <td>{{ $r->user->name }}</td>
+                                
                                     <td>{{ $r->tanggal_pengajuan->format('Y-m-d') }}</td>
                                     <td>{{ $r->tanggal_mulai->format('Y-m-d') }}</td>
                                     <td>{{ $r->tanggal_selesai->format('Y-m-d') }}</td>
@@ -138,26 +147,32 @@
                                             {{ $r->status }}
                                         </span>
                                     </td>
-                                  <td class="d-flex gap-1">
-    @if(in_array(auth()->user()->role, ['Admin','Manajer']) && $r->status === 'Menunggu')
-        <form action="{{ route('cuti.accept', $r->id) }}" method="POST" onsubmit="return confirm('Setujui pengajuan ini?')">
-            @csrf
-            <button class="btn btn-sm btn-outline-success"><i class="bi bi-check-circle"></i></button>
-        </form>
-
-        <form action="{{ route('cuti.reject', $r->id) }}" method="POST" onsubmit="return confirm('Tolak pengajuan ini?')">
-            @csrf
-            <button class="btn btn-sm btn-outline-warning"><i class="bi bi-x-circle"></i></button>
-        </form>
-    @endif
-
-    <form action="{{ route('cuti.destroy', $r->id) }}" method="POST" onsubmit="return confirm('Hapus pengajuan ini?')">
-        @csrf
-        @method('DELETE')
-        <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
-    </form>
-</td>
-
+                                    @if(in_array(auth()->user()->role, ['Admin','Manajer']) && $r->status === 'Menunggu')
+                                        <td class="d-flex gap-1" style="padding-bottom: 10px;">
+                                            <form action="{{ route('cuti.accept', $r->id) }}" method="POST" onsubmit="return confirm('Setujui pengajuan ini?')">
+                                                @csrf
+                                                <button class="btn btn-sm btn-outline-success"><i class="bi bi-check-circle"></i></button>
+                                            </form>
+                                            <form action="{{ route('cuti.reject', $r->id) }}" method="POST" onsubmit="return confirm('Tolak pengajuan ini?')">
+                                                @csrf
+                                                <button class="btn btn-sm btn-outline-warning"><i class="bi bi-x-circle"></i></button>
+                                            </form>
+                                            <form action="{{ route('cuti.destroy', $r->id) }}" method="POST" onsubmit="return confirm('Hapus pengajuan ini?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                            </form>
+                                        </td>
+                                    @endif
+                                    @if(in_array(auth()->user()->role, ['Admin','Manajer']) && $r->status === 'Disetujui')
+                                        <td class="d-flex gap-1" style="padding-bottom: 10px;">
+                                            <form action="{{ route('cuti.destroy', $r->id) }}" method="POST" onsubmit="return confirm('Hapus pengajuan ini?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                            </form>
+                                        </td>
+                                    @endif
                                 </tr>
                             @empty
                                 <tr>
