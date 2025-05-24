@@ -140,7 +140,7 @@
                                     <td>{{ $r->tanggal_pengajuan->format('Y-m-d') }}</td>
                                     <td>{{ $r->tanggal_mulai->format('Y-m-d') }}</td>
                                     <td>{{ $r->tanggal_selesai->format('Y-m-d') }}</td>
-                                    <td>{{ $r->lama_cuti }}</td>
+                                    <td>{{ $r->lama_cuti }} hari</td>
                                     <td class="alasan">{{ $r->alasan }}</td>
                                     <td>
                                         <span class="badge bg-{{ $badge }} text-dark badge-status">
