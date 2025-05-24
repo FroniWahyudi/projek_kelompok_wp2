@@ -215,7 +215,14 @@
                                         <h6 class="mb-1">{{ $op->name }}</h6>
                                         <small class="role">
                                             {{ $op->role }}
-                                            <span class="badge bg-info text-dark ms-2">{{ $op->level }}</span>
+                                            <span class="badge
+                                                @if(strtolower($op->level) === 'junior') bg-success 
+                                                @elseif(strtolower($op->level) === 'mid-level') bg-primary 
+                                                @elseif(strtolower($op->level) === 'senior') bg-warning text-dark 
+                                                @else bg-info text-dark 
+                                                @endif ms-2">
+                                                {{ $op->level }}
+                                            </span>
                                         </small>
                                         <p class="mt-2 mb-1"><i class="bi bi-envelope me-1"></i> {{ $op->email }}</p>
                                         <p class="mb-0"><i class="bi bi-telephone me-1"></i> {{ $op->phone }}</p>
