@@ -124,9 +124,18 @@ Route::middleware('auth')->group(function () {
 });
 
 // Shift view
-Route::get('/shift_karyawan', [ShiftController::class, 'index'])->name('shift.karyawan');
+Route::middleware('auth')->group(function () {
+     Route::get('/shift_karyawan', [ShiftController::class, 'index'])->name('shift.karyawan');
 
+     // Resource route untuk shifts (index, store, update, destroy)
+     Route::resource('shifts', ShiftController::class)->except(['create', 'show', 'edit']);
 
-// Resource route untuk shifts (index, store, update, destroy)
-Route::resource('shifts', ShiftController::class)->except(['create', 'show', 'edit']);
+});
 
+//feedback pegawai
+Route::middleware('auth')->group(function () {
+    Route::get('/feedback', [CrudController::class, 'feedbackIndex'])->name('feedback.index');
+    Route::post('/feedback', [CrudController::class, 'feedbackStore'])->name('feedback.store');
+    Route::get('/feedback/{id}/edit', [CrudController::class, 'feedbackEdit'])->name('feedback.edit');
+    Route::put('/feedback/{id}', [CrudController::class, 'feedbackUpdate'])->name('feedback.update');
+});

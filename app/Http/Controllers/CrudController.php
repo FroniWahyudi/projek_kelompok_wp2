@@ -240,4 +240,13 @@ public function usersUpdate(Request $request, $id)
         ));
         return back()->with('success','Shift ditambahkan');
     }
+
+    // === Feedback ===
+    public function feedbackIndex()
+    {
+        $pegawai = User::where('role', '=', 'Operator')
+            ->orderBy('name')
+            ->get();
+        return view('index.feedback_pegawai', compact('pegawai'));
+    }
 }
