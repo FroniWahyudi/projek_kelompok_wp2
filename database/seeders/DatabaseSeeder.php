@@ -849,7 +849,6 @@ class DatabaseSeeder extends Seeder
         ]);
 
 
-         User::factory(10)->create(); // Jika perlu dummy user
     $this->call([
         ShiftSeeder::class,
     ]);
