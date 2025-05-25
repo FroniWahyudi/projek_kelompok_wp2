@@ -355,9 +355,11 @@
                                                 <tfoot>
                                                     <tr>
                                                         <td colspan="3">
-                                                            <button type="button" class="btn btn-sm btn-outline-primary" id="add-earning-btn">
-                                                                <i class="bi bi-plus-lg"></i> Tambah
-                                                            </button>
+                                                        <!-- di tbody footer -->
+<button type="button" class="btn btn-sm btn-outline-primary add-earning-btn">
+  <i class="bi bi-plus-lg"></i> Tambah
+</button>
+
                                                         </td>
                                                     </tr>
                                                     {{-- ← GANTI PERHITUNGAN TOTAL JUGA: proteksi $slip --}}
@@ -426,9 +428,15 @@
                                                 <tfoot>
                                                     <tr>
                                                         <td colspan="3">
-                                                            <button type="button" class="btn btn-sm btn-outline-primary" id="add-deduction-btn">
-                                                                <i class="bi bi-plus-lg"></i> Tambah
-                                                            </button>
+                                                           <button
+  type="button"
+  class="btn btn-sm btn-outline-primary add-deduction-btn"
+  data-bs-toggle="tab"
+  data-bs-target="#deductions-content"
+>
+  <i class="bi bi-plus-lg"></i> Tambah
+</button>
+
                                                         </td>
                                                     </tr>
                                                     {{-- ← GANTI PERHITUNGAN TOTAL JUGA: proteksi $slip --}}
@@ -597,146 +605,206 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // format angka jadi ribuan
-            function formatCurrency(number) {
-                return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            }
+document.addEventListener('DOMContentLoaded', function() {
+    // format angka jadi ribuan
+    function formatCurrency(number) {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
 
-            // elemen views
-            const payslipsView    = document.getElementById('payslips-view');
-            const editPayslipView = document.getElementById('edit-payslip-view');
+    // elemen views (jika masih digunakan)
+    const payslipsView    = document.getElementById('payslips-view');
+    const editPayslipView = document.getElementById('edit-payslip-view');
 
-            // elemen input/tab untuk preview
-            const periodInput    = document.getElementById('payslip-period');
-            const employeeSelect = document.getElementById('employee-select');
-            const preview = {
-                period:         document.getElementById('preview-period'),
-                name:           document.getElementById('preview-employee-name'),
-                id:             document.getElementById('preview-employee-id'),
-                earningsBody:   document.getElementById('preview-earnings-body'),
-                deductionsBody: document.getElementById('preview-deductions-body'),
-                totalIncome:    document.getElementById('preview-total-income'),
-                totalDeduction: document.getElementById('preview-total-deduction'),
-                netSalary:      document.getElementById('preview-net-salary')
-            };
+    // elemen input/tab untuk preview
+    const periodInput    = document.getElementById('payslip-period');
+    const employeeSelect = document.getElementById('employee-select');
+    const preview = {
+        period:         document.getElementById('preview-period'),
+        name:           document.getElementById('preview-employee-name'),
+        id:             document.getElementById('preview-employee-id'),
+        earningsBody:   document.getElementById('preview-earnings-body'),
+        deductionsBody: document.getElementById('preview-deductions-body'),
+        totalIncome:    document.getElementById('preview-total-income'),
+        totalDeduction: document.getElementById('preview-total-deduction'),
+        netSalary:      document.getElementById('preview-net-salary')
+    };
 
-            // --- TOGGLE VIEWS ---
-            document.getElementById('create-payslip-btn')?.addEventListener('click', function(e) {
+    // --- TOGGLE VIEWS ---
+    document.getElementById('create-payslip-btn')?.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.getElementById('form-title').textContent = 'Buat Slip Gaji Baru';
+        payslipsView.style.display    = 'none';
+        editPayslipView.style.display = 'block';
+    });
+
+    document.getElementById('cancel-edit-btn')?.addEventListener('click', function(e) {
+        e.preventDefault();
+        payslipsView.style.display    = 'block';
+        editPayslipView.style.display = 'none';
+    });
+
+    document.querySelectorAll('.btn-action').forEach(button => {
+        if (button.querySelector('.bi-pencil')) {
+            button.addEventListener('click', function(e) {
                 e.preventDefault();
-                document.getElementById('form-title').textContent = 'Buat Slip Gaji Baru';
+                document.getElementById('form-title').textContent = 'Edit Slip Gaji';
                 payslipsView.style.display    = 'none';
                 editPayslipView.style.display = 'block';
             });
+        }
+    });
 
-            document.getElementById('cancel-edit-btn')?.addEventListener('click', function(e) {
-                e.preventDefault();
-                payslipsView.style.display    = 'block';
-                editPayslipView.style.display = 'none';
+    // --- UPDATE PREVIEW ---
+    function updatePreview() {
+        const [y, m] = (periodInput.value || "").split("-");
+        if (y && m) {
+            const date = new Date(`${y}-${m}-01`);
+            preview.period.textContent = date.toLocaleString('id-ID', {
+                month: 'long',
+                year: 'numeric'
             });
+        }
+        const sel = employeeSelect.selectedOptions[0];
+        preview.name.textContent = sel ? sel.textContent : "-";
+        preview.id.textContent   = sel ? sel.value       : "-";
 
-            document.querySelectorAll('.btn-action').forEach(button => {
-                if (button.querySelector('.bi-pencil')) {
-                    button.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        document.getElementById('form-title').textContent = 'Edit Slip Gaji';
-                        payslipsView.style.display    = 'none';
-                        editPayslipView.style.display = 'block';
-                    });
-                }
-            });
-
-            // --- UPDATE PREVIEW ---
-            function updatePreview() {
-                const [y, m] = (periodInput.value || "").split("-");
-                if (y && m) {
-                    const date = new Date(`${y}-${m}-01`);
-                    preview.period.textContent = date.toLocaleString('id-ID', {
-                        month: 'long',
-                        year: 'numeric'
-                    });
-                }
-                const sel = employeeSelect.selectedOptions[0];
-                preview.name.textContent = sel ? sel.textContent : "-";
-                preview.id.textContent   = sel ? sel.value       : "-";
-
-                preview.earningsBody.innerHTML = "";
-                document.querySelectorAll('#earnings-table tbody tr').forEach(row => {
-                    const [inpName, inpAmt] = row.querySelectorAll('input');
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td>${inpName.value}</td>
-                        <td class="text-end income">${formatCurrency(parseInt(inpAmt.value) || 0)}</td>
-                    `;
-                    preview.earningsBody.appendChild(tr);
-                });
-
-                preview.deductionsBody.innerHTML = "";
-                document.querySelectorAll('#deductions-table tbody tr').forEach(row => {
-                    const [inpName, inpAmt] = row.querySelectorAll('input');
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td>${inpName.value}</td>
-                        <td class="text-end deduction">${formatCurrency(parseInt(inpAmt.value) || 0)}</td>
-                    `;
-                    preview.deductionsBody.appendChild(tr);
-                });
-            }
-
-            // --- KALKULASI TOTAL ---
-            function calculateTotals() {
-                let totalEarnings   = 0;
-                let totalDeductions = 0;
-                document.querySelectorAll('.earning-amount').forEach(i => {
-                    totalEarnings += parseInt(i.value) || 0;
-                });
-                document.querySelectorAll('.deduction-amount').forEach(i => {
-                    totalDeductions += parseInt(i.value) || 0;
-                });
-                const netSalary = totalEarnings - totalDeductions;
-
-                document.getElementById('total-earnings').textContent    = 'Rp ' + formatCurrency(totalEarnings);
-                document.getElementById('total-deductions').textContent  = 'Rp ' + formatCurrency(totalDeductions);
-                document.getElementById('net-salary-amount').textContent = 'Rp ' + formatCurrency(netSalary);
-
-                preview.totalIncome.textContent    = formatCurrency(totalEarnings);
-                preview.totalDeduction.textContent = formatCurrency(totalDeductions);
-                preview.netSalary.textContent      = 'Rp ' + formatCurrency(netSalary);
-
-                updatePreview();
-            }
-
-            // --- AUTO-SUBMIT FILTER ---
-            // gunakan selector berdasarkan kelas form agar ketemu setelah blade render
-            const filterForm  = document.querySelector('form.row.mb-3');
-            const filterMonth = document.getElementById('filter-month');
-            const filterYear  = document.getElementById('filter-year');
-
-            filterMonth?.addEventListener('change', () => filterForm.submit());
-            filterYear?.addEventListener('change', () => filterForm.submit());
-
-            // event listeners add/tambah + input change
-            document.getElementById('add-earning-btn')?.addEventListener('click', e => {
-                e.preventDefault();
-                calculateTotals();
-            });
-            document.getElementById('add-deduction-btn')?.addEventListener('click', e => {
-                e.preventDefault();
-                calculateTotals();
-            });
-            document.querySelectorAll('.earning-amount, .deduction-amount').forEach(i => {
-                i.addEventListener('input', calculateTotals);
-            });
-            periodInput?.addEventListener('change', updatePreview);
-            employeeSelect?.addEventListener('change', updatePreview);
-
-            // update saat tab Pratinjau dibuka
-            document.querySelector('button[data-bs-target="#preview-content"]')
-                ?.addEventListener('shown.bs.tab', updatePreview);
-
-            // inisialisasi
-            calculateTotals();
+        preview.earningsBody.innerHTML = "";
+        document.querySelectorAll('#earnings-table tbody tr').forEach(row => {
+            const [inpName, inpAmt] = row.querySelectorAll('input');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${inpName.value}</td>
+                <td class="text-end income">${formatCurrency(parseInt(inpAmt.value) || 0)}</td>
+            `;
+            preview.earningsBody.appendChild(tr);
         });
-    </script>
+
+        preview.deductionsBody.innerHTML = "";
+        document.querySelectorAll('#deductions-table tbody tr').forEach(row => {
+            const [inpName, inpAmt] = row.querySelectorAll('input');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${inpName.value}</td>
+                <td class="text-end deduction">${formatCurrency(parseInt(inpAmt.value) || 0)}</td>
+            `;
+            preview.deductionsBody.appendChild(tr);
+        });
+    }
+
+    // --- KALKULASI TOTAL ---
+    function calculateTotals() {
+        let totalEarnings   = 0;
+        let totalDeductions = 0;
+        document.querySelectorAll('.earning-amount').forEach(i => {
+            totalEarnings += parseInt(i.value) || 0;
+        });
+        document.querySelectorAll('.deduction-amount').forEach(i => {
+            totalDeductions += parseInt(i.value) || 0;
+        });
+        const netSalary = totalEarnings - totalDeductions;
+
+        document.getElementById('total-earnings').textContent    = 'Rp ' + formatCurrency(totalEarnings);
+        document.getElementById('total-deductions').textContent  = 'Rp ' + formatCurrency(totalDeductions);
+        document.getElementById('net-salary-amount').textContent = 'Rp ' + formatCurrency(netSalary);
+
+        preview.totalIncome.textContent    = formatCurrency(totalEarnings);
+        preview.totalDeduction.textContent = formatCurrency(totalDeductions);
+        preview.netSalary.textContent      = 'Rp ' + formatCurrency(netSalary);
+
+        updatePreview();
+    }
+
+    // --- AUTO-SUBMIT FILTER ---
+    const filterForm  = document.querySelector('form.row.mb-3');
+    const filterMonth = document.getElementById('filter-month');
+    const filterYear  = document.getElementById('filter-year');
+
+    filterMonth?.addEventListener('change', () => filterForm.submit());
+    filterYear?.addEventListener('change', () => filterForm.submit());
+
+    // --- EVENT LISTENERS ADD/TAMBAH ---
+    // Pendapatan
+
+    document.querySelectorAll('.earning-amount').forEach(i => {
+  i.addEventListener('input', calculateTotals);
+});
+document.querySelectorAll('.deduction-amount').forEach(i => {
+  i.addEventListener('input', calculateTotals);
+});
+
+    document.querySelectorAll('.add-earning-btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        new bootstrap.Tab(document.querySelector('#earnings-content')).show();
+        const tbody = document.querySelector('#earnings-table tbody');
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td><input type="text" class="form-control" placeholder="Nama Komponen"></td>
+          <td><input type="number" class="form-control earning-amount" value="0"></td>
+          <td class="text-center">
+            <button type="button" class="btn btn-sm btn-outline-danger delete-row-btn">
+              <i class="bi bi-trash"></i>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(row);
+
+  // 2a) Pasang listener input pada input baru
+    const newInput = row.querySelector('.earning-amount');
+    newInput.addEventListener('input', calculateTotals);
+
+        calculateTotals();
+      });
+    });
+
+    // Potongan
+    document.querySelectorAll('.add-deduction-btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        new bootstrap.Tab(document.querySelector('#deductions-content')).show();
+        const tbody = document.querySelector('#deductions-table tbody');
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td><input type="text" class="form-control" placeholder="Nama Komponen"></td>
+          <td><input type="number" class="form-control deduction-amount" value="0"></td>
+          <td class="text-center">
+            <button type="button" class="btn btn-sm btn-outline-danger delete-row-btn">
+              <i class="bi bi-trash"></i>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(row);
+
+// 3a) Pasang listener input pada input baru
+    const newDeduct = row.querySelector('.deduction-amount');
+    newDeduct.addEventListener('input', calculateTotals);
+
+        calculateTotals();
+      });
+    });
+
+    // --- DELEGASI UNTUK DELETE ROW ---
+    document.querySelectorAll('#earnings-table tbody, #deductions-table tbody').forEach(tbody => {
+      tbody.addEventListener('click', function(e) {
+        const btn = e.target.closest('.delete-row-btn');
+        if (!btn) return;
+        e.preventDefault();
+        btn.closest('tr').remove();
+        calculateTotals();
+      });
+    });
+
+    // preview change listeners
+    periodInput?.addEventListener('change', updatePreview);
+    employeeSelect?.addEventListener('change', updatePreview);
+
+    document.querySelector('button[data-bs-target="#preview-content"]')
+      ?.addEventListener('shown.bs.tab', updatePreview);
+
+    // inisialisasi awal
+    calculateTotals();
+});
+</script>
+
 </body>
 </html>
