@@ -6,10 +6,11 @@ use App\Models\Slip;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class SlipController extends Controller
 {
-   public function index(Request $request)
+ public function index(Request $request)
 {
     $query = Slip::with('user');
 
@@ -24,24 +25,31 @@ class SlipController extends Controller
     $slips  = $query->orderByDesc('period')->get();
     $years  = Slip::selectRaw('YEAR(period) as year')->distinct()->pluck('year');
     $users  = User::all();
-    $nextId = Slip::count() + 1; // ✅ tambahkan ini
+    $nextId = Slip::count() + 1;
+    $mode   = 'index'; // ✅ tambahkan ini
 
-    return view('index.slip_gaji', compact('slips','years','users','nextId'));
+    return view('index.slip_gaji', compact('slips','years','users','nextId', 'mode'));
 }
 
 
-   public function create()
+
+public function create()
 {
     $slips  = Slip::with('user')->orderByDesc('period')->get();
     $users  = User::all();
-    $nextId = Slip::count() + 1; // ✅ tambahkan ini
+    $nextId = Slip::count() + 1;
+    $mode   = 'create'; // ✅ tambahkan ini
 
-    return view('index.slip_gaji', compact('slips','users','nextId'));
+    return view('index.slip_gaji', compact('slips','users','nextId', 'mode'));
 }
+
+
+
 
 
     public function store(Request $request)
     {
+         Log::info('Slip@store called', $request->all());
         // Validasi input
         $data = $request->validate([
             'user_id'            => 'required|exists:users,id',
@@ -106,15 +114,16 @@ class SlipController extends Controller
         return $base > 5000000 ? 500000 : 0;
     }
 
-   public function edit(Slip $slip)
+public function edit(Slip $slip)
 {
-    $slips  = Slip::with('user')->orderByDesc('period')->get();
     $users  = User::all();
-    $years  = Slip::selectRaw('YEAR(period) as year')->distinct()->pluck('year');
-    $nextId = Slip::count() + 1; // ✅ tambahkan ini
+    $nextId = Slip::count() + 1;
+    $mode   = 'edit'; // ✅ tambahkan ini
 
-    return view('index.slip_gaji', compact('slips','slip','users','years','nextId'));
+    return view('index.slip_gaji', compact('slip','users','nextId', 'mode'));
 }
+
+
 
 
     public function update(Request $request, Slip $slip)

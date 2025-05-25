@@ -11,11 +11,12 @@
         body {
             background-color: #f5f7fb;
             font-family: 'Segoe UI', Tahoma, sans-serif;
+            padding-top: 20px;
         }
         .main-content {
             background: #fff;
             border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
             padding: 25px;
             min-height: 90vh;
         }
@@ -28,7 +29,7 @@
         .card {
             border: none;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+            box-shadow: 0 1px 10px rgba(0, 0, 0, 0.05);
             margin-bottom: 20px;
         }
         .card-header {
@@ -40,6 +41,7 @@
         .table th {
             font-weight: 600;
             color: #495057;
+            background-color: #f8f9fa;
         }
         .btn-action {
             padding: 5px 10px;
@@ -77,7 +79,7 @@
             margin: 30px auto;
             background: #fff;
             border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
             padding: 30px;
         }
         .preview-header {
@@ -141,6 +143,14 @@
         .mt-auto {
             margin-top: 0.5rem !important;
         }
+        .btn-primary {
+            background-color: #3a86ff;
+            border-color: #3a86ff;
+        }
+        .btn-primary:hover {
+            background-color: #2a6ecc;
+            border-color: #2a6ecc;
+        }
     </style>
 </head>
 <body>
@@ -157,32 +167,30 @@
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <h1 class="page-title mb-0">{{ $title ?? 'Pengelolaan Slip Gaji' }}</h1>
-                            <!-- tombol di list view -->
-                            <!-- <button id="create-payslip-btn" class="btn btn-primary">
-                                <i class="bi bi-plus-lg"></i> Buat Slip Gaji Baru
-                            </button> -->
                         </div>
                         <form method="GET" action="{{ route('slips.index') }}" class="row mb-3">
                             <div class="col-md-3">
                                 <label for="filter-month" class="form-label">Pilih Bulan</label>
                                 <select name="month" id="filter-month" class="form-select">
-                                    <option value=""{{ request('month') == '' ? ' selected' : '' }}>Semua Bulan</option>
-                                    @foreach(range(1,12) as $m)
-                                        <option value="{{ sprintf('%02d', $m) }}"{{ request('month') == sprintf('%02d', $m) ? ' selected' : '' }}>{{ DateTime::createFromFormat('!m', $m)->format('F') }}</option>
+                                    <option value="" {{ request('month') == '' ? 'selected' : '' }}>Semua Bulan</option>
+                                    @foreach(range(1, 12) as $m)
+                                        <option value="{{ sprintf('%02d', $m) }}" {{ request('month') == sprintf('%02d', $m) ? 'selected' : '' }}>
+                                            {{ DateTime::createFromFormat('!m', $m)->format('F') }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="col-md-3">
                                 <label for="filter-year" class="form-label">Pilih Tahun</label>
                                 <select name="year" id="filter-year" class="form-select">
-                                    <option value=""{{ request('year') == '' ? ' selected' : '' }}>Semua Tahun</option>
+                                    <option value="" {{ request('year') == '' ? 'selected' : '' }}>Semua Tahun</option>
                                     @foreach($years as $year)
-                                        <option value="{{ $year }}"{{ request('year') == $year ? ' selected' : '' }}>{{ $year }}</option>
+                                        <option value="{{ $year }}" {{ request('year') == $year ? 'selected' : '' }}>{{ $year }}</option>
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-6 mt-auto justify-content-around text-end">
-                                <button id="create-payslip-btn" class="btn btn-primary justify-content-end mt-4">
+                            <div class="col-md-6 mt-auto text-end">
+                                <button id="create-payslip-btn" class="btn btn-primary mt-4">
                                     <i class="bi bi-plus-lg"></i> Buat Slip Gaji Baru
                                 </button>
                             </div>
@@ -205,8 +213,7 @@
                                         @foreach($slips as $slip)
                                             <tr>
                                                 <td>{{ $slip->id }}</td>
-                                                {{-- UBAH employee → user jika migrasi sudah di-rename --}}
-                                                <td>{{ $slip->user->name }}</td> {{-- ← ganti $slip->employee jadi $slip->user --}}
+                                                <td>{{ $slip->user->name }}</td>
                                                 <td>{{ $slip->period->formatLocalized('%B %Y') }}</td>
                                                 <td>{{ 'Rp ' . number_format($slip->net_salary, 0, ',', '.') }}</td>
                                                 <td>
@@ -221,7 +228,9 @@
                                                     <form action="{{ route('slips.destroy', $slip) }}" method="POST" class="d-inline">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="btn btn-sm btn-outline-danger btn-action"><i class="bi bi-trash"></i></button>
+                                                        <button type="submit" class="btn btn-sm btn-outline-danger btn-action">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
                                                     </form>
                                                 </td>
                                             </tr>
@@ -231,16 +240,25 @@
                             </div>
                         </div>
                     </div>
+
                     <!-- Create/Edit Payslip View -->
                     <div id="edit-payslip-view" style="display: none;">
-                        <form method="POST" action="{{ isset($slip) ? route('slips.update', $slip) : route('slips.store') }}">
+                        <form method="POST" action="{{ $mode === 'edit' ? route('slips.update', $slip) : route('slips.store') }}">
                             @csrf
-                            @if(isset($slip)) @method('PUT') @endif
+                            @if($mode === 'edit')
+                                @method('PUT')
+                            @endif
                             <div class="d-flex justify-content-between align-items-center mb-4">
-                                <h1 class="page-title mb-0" id="form-title">{{ isset($slip) ? 'Edit Slip Gaji' : 'Buat Slip Gaji Baru' }}</h1>
+                                <h1 class="page-title mb-0" id="form-title">
+                                    {{ $mode === 'edit' ? 'Edit Slip Gaji' : 'Buat Slip Gaji Baru' }}
+                                </h1>
                                 <div>
-                                    <a href="{{ route('slips.index') }}" class="btn btn-outline-secondary me-2"><i class="bi bi-x-lg"></i> Batal</a>
-                                    <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Simpan</button>
+                                    <a href="{{ route('slips.index') }}" class="btn btn-outline-secondary me-2">
+                                        <i class="bi bi-x-lg"></i> Batal
+                                    </a>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="bi bi-save"></i> Simpan
+                                    </button>
                                 </div>
                             </div>
                             <div class="card">
@@ -274,41 +292,23 @@
                                         <div class="tab-pane fade show active" id="info-content">
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <!-- ID Slip Gaji (readonly) -->
                                                     <div class="mb-3">
                                                         <label class="form-label">ID Slip Gaji</label>
-                                                        <input
-                                                            type="text"
-                                                            name="id"
-                                                            class="form-control"
-                                                            value="{{ old('id', $slip->id ?? 'SG-'.now()->format('Y').'-'.sprintf('%03d', $nextId)) }}"
-                                                            readonly
-                                                        >
+                                                        <input type="text" name="id" class="form-control" value="{{ old('id', $mode === 'edit' ? $slip->id : 'SG-' . now()->format('Y') . '-' . sprintf('%03d', $nextId)) }}" readonly>
                                                     </div>
-                                                    <!-- Periode -->
+                                                </div>
+                                                <div class="col-md-6">
                                                     <div class="mb-3">
                                                         <label class="form-label">Periode</label>
-                                                        <input
-                                                            type="month"
-                                                            name="period"
-                                                            id="payslip-period"
-                                                            class="form-control"
-                                                            value="{{ old('period', isset($slip) ? $slip->period->format('Y-m') : '') }}"
-                                                        >
+                                                        <input type="month" name="period" class="form-control" value="{{ old('period', $mode === 'edit' && $slip->period ? $slip->period->format('Y-m') : '') }}">
                                                     </div>
-                                                    <!-- Pilih Karyawan -->
+                                                </div>
+                                                <div class="col-md-12">
                                                     <div class="mb-3">
                                                         <label class="form-label">Pilih Karyawan</label>
-                                                        <select
-                                                            name="user_id"
-                                                            id="employee-select"
-                                                            class="form-select"
-                                                        >
+                                                        <select name="user_id" id="employee-select" class="form-select">
                                                             @foreach($users as $user)
-                                                                <option
-                                                                    value="{{ $user->id }}"
-                                                                    {{ old('user_id', $slip->user_id ?? '') == $user->id ? ' selected' : '' }}
-                                                                >
+                                                                <option value="{{ $user->id }}" {{ old('user_id', $mode === 'edit' ? $slip->user_id : '') == $user->id ? 'selected' : '' }}>
                                                                     {{ $user->name }}
                                                                 </option>
                                                             @endforeach
@@ -317,6 +317,7 @@
                                                 </div>
                                             </div>
                                         </div>
+
                                         <!-- Earnings -->
                                         <div class="tab-pane fade" id="earnings-content">
                                             <h5>Komponen Pendapatan</h5>
@@ -329,14 +330,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @foreach(
-                                                        old(
-                                                            'earnings',
-                                                            isset($slip)
-                                                                ? $slip->earnings->toArray()
-                                                                : [['name'=>'Gaji Pokok','amount'=>5000000]]
-                                                        ) as $i => $earning
-                                                    )
+                                                    @foreach(old('earnings', isset($slip) ? $slip->earnings->toArray() : [['name' => 'Gaji Pokok', 'amount' => 5000000]]) as $i => $earning)
                                                         <tr>
                                                             <td>
                                                                 <input type="text" name="earnings[{{ $i }}][name]" class="form-control" value="{{ $earning['name'] ?? '' }}" required>
@@ -361,25 +355,17 @@
                                                         </td>
                                                     </tr>
                                                     @php
-                                                        $totalEarnings = collect(
-                                                            old(
-                                                                'earnings',
-                                                                isset($slip)
-                                                                    ? $slip->earnings
-                                                                    : []
-                                                            )
-                                                        )->sum('amount');
+                                                        $totalEarnings = collect(old('earnings', isset($slip) ? $slip->earnings : []))->sum('amount');
                                                     @endphp
                                                     <tr class="total-row">
                                                         <td>Total Pendapatan</td>
-                                                        <td id="total-earnings">
-                                                            Rp {{ number_format($totalEarnings, 0, ',', '.') }}
-                                                        </td>
+                                                        <td id="total-earnings">Rp {{ number_format($totalEarnings, 0, ',', '.') }}</td>
                                                         <td></td>
                                                     </tr>
                                                 </tfoot>
                                             </table>
                                         </div>
+
                                         <!-- Deductions -->
                                         <div class="tab-pane fade" id="deductions-content">
                                             <h5>Komponen Potongan</h5>
@@ -392,26 +378,13 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @foreach(
-                                                        old(
-                                                            'deductions',
-                                                            isset($slip)
-                                                                ? $slip->deductions->toArray()
-                                                                : [['name'=>'BPJS Kesehatan','amount'=>50000]]
-                                                        ) as $i => $ded
-                                                    )
+                                                    @foreach(old('deductions', isset($slip) ? $slip->deductions->toArray() : [['name' => 'BPJS Kesehatan', 'amount' => 50000]]) as $i => $ded)
                                                         <tr>
                                                             <td>
-                                                                <input type="text"
-                                                                       name="deductions[{{ $i }}][name]"
-                                                                       class="form-control"
-                                                                       value="{{ $ded['name'] }}">
+                                                                <input type="text" name="deductions[{{ $i }}][name]" class="form-control" value="{{ $ded['name'] ?? '' }}" required>
                                                             </td>
                                                             <td>
-                                                                <input type="number"
-                                                                       name="deductions[{{ $i }}][amount]"
-                                                                       class="form-control deduction-amount"
-                                                                       value="{{ $ded['amount'] }}">
+                                                                <input type="number" name="deductions[{{ $i }}][amount]" class="form-control deduction-amount" value="{{ $ded['amount'] ?? 0 }}">
                                                             </td>
                                                             <td class="text-center">
                                                                 <button type="button" class="btn btn-sm btn-outline-danger delete-row-btn">
@@ -424,50 +397,29 @@
                                                 <tfoot>
                                                     <tr>
                                                         <td colspan="3">
-                                                            <button
-                                                                type="button"
-                                                                class="btn btn-sm btn-outline-primary add-deduction-btn"
-                                                                data-bs-toggle="tab"
-                                                                data-bs-target="#deductions-content"
-                                                            >
+                                                            <button type="button" class="btn btn-sm btn-outline-primary add-deduction-btn">
                                                                 <i class="bi bi-plus-lg"></i> Tambah
                                                             </button>
                                                         </td>
                                                     </tr>
                                                     @php
-                                                        $totalDeductions = collect(
-                                                            old(
-                                                                'deductions',
-                                                                isset($slip)
-                                                                    ? $slip->deductions
-                                                                    : []
-                                                            )
-                                                        )->sum('amount');
+                                                        $totalDeductions = collect(old('deductions', isset($slip) ? $slip->deductions : []))->sum('amount');
                                                     @endphp
                                                     <tr class="total-row">
                                                         <td>Total Potongan</td>
-                                                        <td id="total-deductions">
-                                                            Rp {{ number_format($totalDeductions, 0, ',', '.') }}
-                                                        </td>
+                                                        <td id="total-deductions">Rp {{ number_format($totalDeductions, 0, ',', '.') }}</td>
                                                         <td></td>
                                                     </tr>
                                                 </tfoot>
                                             </table>
-                                            @php
-                                                // Jika $slip belum terdefinisi (mis. mode index/create), gunakan array kosong
-                                                $earningRowsForPreview   = old('earnings', isset($slip) ? $slip->earnings->toArray() : []);
-                                                $deductionRowsForPreview = old('deductions', isset($slip) ? $slip->deductions->toArray() : []);
-                                                $previewTotalEarnings   = collect($earningRowsForPreview)->sum('amount');
-                                                $previewTotalDeductions = collect($deductionRowsForPreview)->sum('amount');
-                                                $previewNetSalary       = $previewTotalEarnings - $previewTotalDeductions;
-                                            @endphp
                                             <div class="net-salary d-flex justify-content-between mt-4 p-3 bg-light rounded">
                                                 <span class="fw-bold">Gaji Bersih</span>
                                                 <span class="fw-bold" id="net-salary-amount">
-                                                    Rp {{ number_format($previewNetSalary, 0, ',', '.') }}
+                                                    Rp {{ number_format($totalEarnings - $totalDeductions, 0, ',', '.') }}
                                                 </span>
                                             </div>
                                         </div>
+
                                         <!-- Preview -->
                                         <div class="tab-pane fade" id="preview-content">
                                             <div class="preview-container">
@@ -475,7 +427,9 @@
                                                     <div class="company-logo">{{ config('app.name') }}</div>
                                                     <div class="text-end">
                                                         <div class="slip-title mb-2">SLIP GAJI</div>
-                                                        <span class="period-badge" id="preview-period">{{ old('period', isset($slip) ? $slip->period->formatLocalized('%B %Y') : '') }}</span>
+                                                        <span class="period-badge" id="preview-period">
+                                                            {{ old('period', isset($slip) ? $slip->period->formatLocalized('%B %Y') : '') }}
+                                                        </span>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-4">
@@ -508,15 +462,10 @@
                                                                         </td>
                                                                     </tr>
                                                                 @endforeach
-                                                                @php
-                                                                    $previewTotalEarnings = collect(
-                                                                        old('earnings', isset($slip) ? $slip->earnings : [])
-                                                                    )->sum('amount');
-                                                                @endphp
                                                                 <tr class="total-row">
                                                                     <td>Total</td>
                                                                     <td class="text-end income" id="preview-total-income">
-                                                                        {{ number_format($previewTotalEarnings, 0, ',', '.') }}
+                                                                        {{ number_format($totalEarnings, 0, ',', '.') }}
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
@@ -528,50 +477,26 @@
                                                             <tbody id="preview-deductions-body">
                                                                 @foreach(old('deductions', isset($slip) ? $slip->deductions : []) as $ded)
                                                                     <tr>
-                                                                        <td>{{ $ded['name'] }}</td>
+                                                                        <td>{{ $ded['name'] ?? '-' }}</td>
                                                                         <td class="text-end deduction">
-                                                                            {{ number_format($ded['amount'], 0, ',', '.') }}
+                                                                            {{ number_format($ded['amount'] ?? 0, 0, ',', '.') }}
                                                                         </td>
                                                                     </tr>
                                                                 @endforeach
-                                                                @php
-                                                                    $previewTotalDeductions = collect(
-                                                                        old('deductions', isset($slip) ? $slip->deductions : [])
-                                                                    )->sum('amount');
-                                                                @endphp
                                                                 <tr class="total-row">
                                                                     <td>Total</td>
                                                                     <td class="text-end deduction" id="preview-total-deduction">
-                                                                        {{ number_format($previewTotalDeductions, 0, ',', '.') }}
+                                                                        {{ number_format($totalDeductions, 0, ',', '.') }}
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
                                                         </table>
                                                     </div>
                                                 </div>
-                                                @php
-                                                    $previewTotalEarnings = collect(
-                                                        old(
-                                                            'earnings',
-                                                            isset($slip)
-                                                                ? $slip->earnings
-                                                                : []
-                                                        )
-                                                    )->sum('amount');
-                                                    $previewTotalDeductions = collect(
-                                                        old(
-                                                            'deductions',
-                                                            isset($slip)
-                                                                ? $slip->deductions
-                                                                : []
-                                                        )
-                                                    )->sum('amount');
-                                                    $previewNetSalary = $previewTotalEarnings - $previewTotalDeductions;
-                                                @endphp
                                                 <div class="net-salary d-flex justify-content-between">
                                                     <span>Gaji Bersih</span>
                                                     <span id="preview-net-salary">
-                                                        Rp {{ number_format($previewNetSalary, 0, ',', '.') }}
+                                                        Rp {{ number_format($totalEarnings - $totalDeductions, 0, ',', '.') }}
                                                     </span>
                                                 </div>
                                             </div>
@@ -585,9 +510,10 @@
             </div>
         </div>
     </div>
+
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
+     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // format angka jadi ribuan
             function formatCurrency(number) {
@@ -781,5 +707,6 @@
             calculateTotals();
         });
     </script>
+
 </body>
 </html>
