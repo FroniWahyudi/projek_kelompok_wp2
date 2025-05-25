@@ -72,20 +72,21 @@ class SlipController extends Controller
     ]);
 
     // 4. Simpan detail earnings
-    foreach ($data['earnings'] as $e) {
-        $slip->earnings()->create([
-            'name'   => $e['name'],
-            'amount' => $e['amount'],
-        ]);
-    }
+ foreach ($data['earnings'] as $e) {
+    $slip->earnings()->create([
+        'name' => $e['name'],
+        'amount'      => $e['amount'],
+    ]);
+}
+
 
     // 5. Simpan detail deductions (jika ada)
-    foreach ($data['deductions'] ?? [] as $d) {
-        $slip->deductions()->create([
-            'name'   => $d['name'],
-            'amount' => $d['amount'],
-        ]);
-    }
+  foreach ($data['deductions'] ?? [] as $d) {
+    $slip->deductions()->create([
+        'name' => $d['name'],  // pakai kolom description
+        'amount'      => $d['amount'],
+    ]);
+}
 
     // 6. Redirect dengan pesan sukses
     return redirect()->route('slips.index')
