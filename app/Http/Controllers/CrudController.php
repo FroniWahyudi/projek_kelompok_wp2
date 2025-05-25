@@ -10,6 +10,8 @@ use App\Models\LaporanKerja;
 use App\Models\News;
 use App\Models\Payroll;
 use App\Models\Shift;
+use App\Models\Feedback;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -244,9 +246,37 @@ public function usersUpdate(Request $request, $id)
     // === Feedback ===
     public function feedbackIndex()
     {
-        $pegawai = User::where('role', '=', 'Operator')
-            ->orderBy('name')
-            ->get();
-        return view('index.feedback_pegawai', compact('pegawai'));
+        if (auth()->user()->role !== 'Operator') {
+            $pegawai = User::where('role', '=', 'Operator')
+                ->orderBy('name')
+                ->get();
+            return view('index.feedback_pegawai', compact('pegawai'));
+        } else {
+            $feedback = Feedback::where('user_id', '=', auth()->id())
+                ->orderBy('tanggal_pengajuan', 'desc')
+                ->get();
+
+            $username = User::whereIn('id', Feedback::pluck('disetujui_oleh'))
+                ->orderBy('name')
+                ->get();
+            return view('index.feedback_receive', compact('feedback', 'username'));
+        }
+    }
+
+    public function feedbackStore(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'feedback_text' => 'required|string|max:1000',
+        ]);
+
+        Feedback::create([
+            'user_id' => $request->user_id,
+            'feedback_text' => $request->feedback_text,
+            'tanggal_pengajuan' => Carbon::now()->toDateString(),
+            'disetujui_oleh' => auth()->id() // Set user yang mengirim feedback
+        ]);
+
+        return redirect()->route('feedback.index')->with('success', 'Feedback berhasil dikirim.');
     }
 }

@@ -60,9 +60,10 @@
               <td>{{ $data['divisi'] }}</td>
               <td>{{ $data['joined_at'] }}</td>
               <td>
-                <form method='post' action='proses_feedback'>
-                  <input type='hidden' name='nama' value={{ $data['name'] }}>
-                  <textarea name='feedback' class='form-control mb-2' rows='2' placeholder='Tulis feedback...' required></textarea>
+                <form method='post' action='{{ url('feedback') }}'>
+                  @csrf
+                  <input type='hidden' name='user_id' value={{ $data['id'] }}>
+                  <textarea name='feedback_text' class='form-control mb-2' rows='2' placeholder='Tulis feedback...' required></textarea>
                   <button type='submit' class='btn btn-sm btn-primary'>Kirim</button>
                 </form>
               </td>
