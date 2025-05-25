@@ -16,8 +16,10 @@ class SlipDeduction extends Model
         'amount',
     ];
 
-    public function slip()
-    {
-        return $this->belongsTo(Slip::class);
-    }
+// SlipEarning.php
+public function slip()
+{
+    return $this->belongsTo(Slip::class, 'slip_id');
+}
+
 }

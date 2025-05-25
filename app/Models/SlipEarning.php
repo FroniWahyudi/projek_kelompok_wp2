@@ -19,8 +19,10 @@ class SlipEarning extends Model
         'amount',    // jumlah nilai
     ];
 
-    public function slip()
-    {
-        return $this->belongsTo(Slip::class);
-    }
+  // SlipEarning.php
+public function slip()
+{
+    return $this->belongsTo(Slip::class, 'slip_id');
+}
+
 }

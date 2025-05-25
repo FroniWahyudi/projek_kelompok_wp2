@@ -150,8 +150,7 @@
                 <div class="main-content">
                     <!-- Payslips List View -->
                     <div id="payslips-view">
-
-                      <div class="mb-3">
+                        <div class="mb-3">
                             <a href="{{ route('dashboard') }}" class="btn btn-primary">
                                 <i class="bi bi-house-door-fill"></i> Home
                             </a>
@@ -163,9 +162,6 @@
                                 <i class="bi bi-plus-lg"></i> Buat Slip Gaji Baru
                             </button> -->
                         </div>
-
-                        
-                      
                         <form method="GET" action="{{ route('slips.index') }}" class="row mb-3">
                             <div class="col-md-3">
                                 <label for="filter-month" class="form-label">Pilih Bulan</label>
@@ -186,7 +182,7 @@
                                 </select>
                             </div>
                             <div class="col-md-6 mt-auto justify-content-around text-end">
-                                    <button id="create-payslip-btn" class="btn btn-primary justify-content-end mt-4">
+                                <button id="create-payslip-btn" class="btn btn-primary justify-content-end mt-4">
                                     <i class="bi bi-plus-lg"></i> Buat Slip Gaji Baru
                                 </button>
                             </div>
@@ -235,7 +231,6 @@
                             </div>
                         </div>
                     </div>
-
                     <!-- Create/Edit Payslip View -->
                     <div id="edit-payslip-view" style="display: none;">
                         <form method="POST" action="{{ isset($slip) ? route('slips.update', $slip) : route('slips.store') }}">
@@ -334,27 +329,20 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {{-- ← GANTI DISINI: lindungi akses $slip sebelum dipakai --}}
                                                     @foreach(
                                                         old(
                                                             'earnings',
                                                             isset($slip)
-                                                                ? $slip->earnings
+                                                                ? $slip->earnings->toArray()
                                                                 : [['name'=>'Gaji Pokok','amount'=>5000000]]
                                                         ) as $i => $earning
                                                     )
                                                         <tr>
                                                             <td>
-                                                                <input type="text"
-                                                                       name="earnings[{{ $i }}][name]"
-                                                                       class="form-control"
-                                                                       value="{{ $earning['name'] }}">
+                                                                <input type="text" name="earnings[{{ $i }}][name]" class="form-control" value="{{ $earning['name'] ?? '' }}" required>
                                                             </td>
                                                             <td>
-                                                                <input type="number"
-                                                                       name="earnings[{{ $i }}][amount]"
-                                                                       class="form-control earning-amount"
-                                                                       value="{{ $earning['amount'] }}">
+                                                                <input type="number" name="earnings[{{ $i }}][amount]" class="form-control earning-amount" value="{{ $earning['amount'] ?? 0 }}">
                                                             </td>
                                                             <td class="text-center">
                                                                 <button type="button" class="btn btn-sm btn-outline-danger delete-row-btn">
@@ -367,14 +355,11 @@
                                                 <tfoot>
                                                     <tr>
                                                         <td colspan="3">
-                                                        <!-- di tbody footer -->
-<button type="button" class="btn btn-sm btn-outline-primary add-earning-btn">
-  <i class="bi bi-plus-lg"></i> Tambah
-</button>
-
+                                                            <button type="button" class="btn btn-sm btn-outline-primary add-earning-btn">
+                                                                <i class="bi bi-plus-lg"></i> Tambah
+                                                            </button>
                                                         </td>
                                                     </tr>
-                                                    {{-- ← GANTI PERHITUNGAN TOTAL JUGA: proteksi $slip --}}
                                                     @php
                                                         $totalEarnings = collect(
                                                             old(
@@ -407,7 +392,6 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {{-- ← GANTI LOOP INI: old('deductions', isset($slip) ? $slip->deductions->toArray() : [['name'=>'BPJS Kesehatan','amount'=>50000]]) --}}
                                                     @foreach(
                                                         old(
                                                             'deductions',
@@ -440,18 +424,16 @@
                                                 <tfoot>
                                                     <tr>
                                                         <td colspan="3">
-                                                           <button
-  type="button"
-  class="btn btn-sm btn-outline-primary add-deduction-btn"
-  data-bs-toggle="tab"
-  data-bs-target="#deductions-content"
->
-  <i class="bi bi-plus-lg"></i> Tambah
-</button>
-
+                                                            <button
+                                                                type="button"
+                                                                class="btn btn-sm btn-outline-primary add-deduction-btn"
+                                                                data-bs-toggle="tab"
+                                                                data-bs-target="#deductions-content"
+                                                            >
+                                                                <i class="bi bi-plus-lg"></i> Tambah
+                                                            </button>
                                                         </td>
                                                     </tr>
-                                                    {{-- ← GANTI PERHITUNGAN TOTAL JUGA: proteksi $slip --}}
                                                     @php
                                                         $totalDeductions = collect(
                                                             old(
@@ -475,7 +457,6 @@
                                                 // Jika $slip belum terdefinisi (mis. mode index/create), gunakan array kosong
                                                 $earningRowsForPreview   = old('earnings', isset($slip) ? $slip->earnings->toArray() : []);
                                                 $deductionRowsForPreview = old('deductions', isset($slip) ? $slip->deductions->toArray() : []);
-
                                                 $previewTotalEarnings   = collect($earningRowsForPreview)->sum('amount');
                                                 $previewTotalDeductions = collect($deductionRowsForPreview)->sum('amount');
                                                 $previewNetSalary       = $previewTotalEarnings - $previewTotalDeductions;
@@ -483,7 +464,7 @@
                                             <div class="net-salary d-flex justify-content-between mt-4 p-3 bg-light rounded">
                                                 <span class="fw-bold">Gaji Bersih</span>
                                                 <span class="fw-bold" id="net-salary-amount">
-                                                    Rp {{ number_format($previewNetSalary, 0, ',', '.') }}  <!-- ← PERUBAHAN: pakai $previewNetSalary -->
+                                                    Rp {{ number_format($previewNetSalary, 0, ',', '.') }}
                                                 </span>
                                             </div>
                                         </div>
@@ -503,14 +484,12 @@
                                                         <div class="info-row row">
                                                             <div class="col-5 info-label">Nama</div>
                                                             <div class="col-7 info-value" id="preview-employee-name">
-                                                                {{-- Ambil nama langsung dari relasi user --}}
                                                                 {{ $slip->user->name ?? '-' }}
                                                             </div>
                                                         </div>
                                                         <div class="info-row row">
                                                             <div class="col-5 info-label">ID</div>
                                                             <div class="col-7 info-value" id="preview-employee-id">
-                                                                {{-- Tampilkan ID user --}}
                                                                 {{ $slip->user->id ?? '-' }}
                                                             </div>
                                                         </div>
@@ -521,17 +500,15 @@
                                                         <div class="section-title">Pendapatan</div>
                                                         <table class="table table-sm table-bordered">
                                                             <tbody id="preview-earnings-body">
-                                                                {{-- → GANTI LOOP INI: old('earnings', isset($slip) ? $slip->earnings : []) --}}
                                                                 @foreach(old('earnings', isset($slip) ? $slip->earnings : []) as $earning)
                                                                     <tr>
-                                                                        <td>{{ $earning['name'] }}</td>
+                                                                        <td>{{ $earning->name ?? '-' }}</td>
                                                                         <td class="text-end income">
-                                                                            {{ number_format($earning['amount'], 0, ',', '.') }}
+                                                                            {{ number_format($earning->amount ?? 0, 0, ',', '.') }}
                                                                         </td>
                                                                     </tr>
                                                                 @endforeach
                                                                 @php
-                                                                    // → GANTI JUGA HITUNG TOTAL INI:
                                                                     $previewTotalEarnings = collect(
                                                                         old('earnings', isset($slip) ? $slip->earnings : [])
                                                                     )->sum('amount');
@@ -549,7 +526,6 @@
                                                         <div class="section-title">Potongan</div>
                                                         <table class="table table-sm table-bordered">
                                                             <tbody id="preview-deductions-body">
-                                                                {{-- → GANTI LOOP INI: old('deductions', isset($slip) ? $slip->deductions : []) --}}
                                                                 @foreach(old('deductions', isset($slip) ? $slip->deductions : []) as $ded)
                                                                     <tr>
                                                                         <td>{{ $ded['name'] }}</td>
@@ -559,7 +535,6 @@
                                                                     </tr>
                                                                 @endforeach
                                                                 @php
-                                                                    // → GANTI JUGA HITUNG TOTAL INI:
                                                                     $previewTotalDeductions = collect(
                                                                         old('deductions', isset($slip) ? $slip->deductions : [])
                                                                     )->sum('amount');
@@ -575,7 +550,6 @@
                                                     </div>
                                                 </div>
                                                 @php
-                                                    // Hitung total pendapatan dan potongan untuk preview
                                                     $previewTotalEarnings = collect(
                                                         old(
                                                             'earnings',
@@ -584,7 +558,6 @@
                                                                 : []
                                                         )
                                                     )->sum('amount');
-
                                                     $previewTotalDeductions = collect(
                                                         old(
                                                             'deductions',
@@ -593,7 +566,6 @@
                                                                 : []
                                                         )
                                                     )->sum('amount');
-
                                                     $previewNetSalary = $previewTotalEarnings - $previewTotalDeductions;
                                                 @endphp
                                                 <div class="net-salary d-flex justify-content-between">
@@ -613,210 +585,201 @@
             </div>
         </div>
     </div>
-
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // format angka jadi ribuan
-    function formatCurrency(number) {
-        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
+        document.addEventListener('DOMContentLoaded', function() {
+            // format angka jadi ribuan
+            function formatCurrency(number) {
+                return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
 
-    // elemen views (jika masih digunakan)
-    const payslipsView    = document.getElementById('payslips-view');
-    const editPayslipView = document.getElementById('edit-payslip-view');
+            // elemen views (jika masih digunakan)
+            const payslipsView    = document.getElementById('payslips-view');
+            const editPayslipView = document.getElementById('edit-payslip-view');
 
-    // elemen input/tab untuk preview
-    const periodInput    = document.getElementById('payslip-period');
-    const employeeSelect = document.getElementById('employee-select');
-    const preview = {
-        period:         document.getElementById('preview-period'),
-        name:           document.getElementById('preview-employee-name'),
-        id:             document.getElementById('preview-employee-id'),
-        earningsBody:   document.getElementById('preview-earnings-body'),
-        deductionsBody: document.getElementById('preview-deductions-body'),
-        totalIncome:    document.getElementById('preview-total-income'),
-        totalDeduction: document.getElementById('preview-total-deduction'),
-        netSalary:      document.getElementById('preview-net-salary')
-    };
+            // elemen input/tab untuk preview
+            const periodInput    = document.getElementById('payslip-period');
+            const employeeSelect = document.getElementById('employee-select');
+            const preview = {
+                period:         document.getElementById('preview-period'),
+                name:           document.getElementById('preview-employee-name'),
+                id:             document.getElementById('preview-employee-id'),
+                earningsBody:   document.getElementById('preview-earnings-body'),
+                deductionsBody: document.getElementById('preview-deductions-body'),
+                totalIncome:    document.getElementById('preview-total-income'),
+                totalDeduction: document.getElementById('preview-total-deduction'),
+                netSalary:      document.getElementById('preview-net-salary')
+            };
 
-    // --- TOGGLE VIEWS ---
-    document.getElementById('create-payslip-btn')?.addEventListener('click', function(e) {
-        e.preventDefault();
-        document.getElementById('form-title').textContent = 'Buat Slip Gaji Baru';
-        payslipsView.style.display    = 'none';
-        editPayslipView.style.display = 'block';
-    });
-
-    document.getElementById('cancel-edit-btn')?.addEventListener('click', function(e) {
-        e.preventDefault();
-        payslipsView.style.display    = 'block';
-        editPayslipView.style.display = 'none';
-    });
-
-    document.querySelectorAll('.btn-action').forEach(button => {
-        if (button.querySelector('.bi-pencil')) {
-            button.addEventListener('click', function(e) {
+            // --- TOGGLE VIEWS ---
+            document.getElementById('create-payslip-btn')?.addEventListener('click', function(e) {
                 e.preventDefault();
-                document.getElementById('form-title').textContent = 'Edit Slip Gaji';
+                document.getElementById('form-title').textContent = 'Buat Slip Gaji Baru';
                 payslipsView.style.display    = 'none';
                 editPayslipView.style.display = 'block';
             });
-        }
-    });
 
-    // --- UPDATE PREVIEW ---
-    function updatePreview() {
-        const [y, m] = (periodInput.value || "").split("-");
-        if (y && m) {
-            const date = new Date(`${y}-${m}-01`);
-            preview.period.textContent = date.toLocaleString('id-ID', {
-                month: 'long',
-                year: 'numeric'
+            document.getElementById('cancel-edit-btn')?.addEventListener('click', function(e) {
+                e.preventDefault();
+                payslipsView.style.display    = 'block';
+                editPayslipView.style.display = 'none';
             });
-        }
-        const sel = employeeSelect.selectedOptions[0];
-        preview.name.textContent = sel ? sel.textContent : "-";
-        preview.id.textContent   = sel ? sel.value       : "-";
 
-        preview.earningsBody.innerHTML = "";
-        document.querySelectorAll('#earnings-table tbody tr').forEach(row => {
-            const [inpName, inpAmt] = row.querySelectorAll('input');
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${inpName.value}</td>
-                <td class="text-end income">${formatCurrency(parseInt(inpAmt.value) || 0)}</td>
-            `;
-            preview.earningsBody.appendChild(tr);
+            document.querySelectorAll('.btn-action').forEach(button => {
+                if (button.querySelector('.bi-pencil')) {
+                    button.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        document.getElementById('form-title').textContent = 'Edit Slip Gaji';
+                        payslipsView.style.display    = 'none';
+                        editPayslipView.style.display = 'block';
+                    });
+                }
+            });
+
+            // --- UPDATE PREVIEW ---
+            function updatePreview() {
+                const [y, m] = (periodInput.value || "").split("-");
+                if (y && m) {
+                    const date = new Date(`${y}-${m}-01`);
+                    preview.period.textContent = date.toLocaleString('id-ID', {
+                        month: 'long',
+                        year: 'numeric'
+                    });
+                }
+                const sel = employeeSelect.selectedOptions[0];
+                preview.name.textContent = sel ? sel.textContent : "-";
+                preview.id.textContent   = sel ? sel.value       : "-";
+
+                preview.earningsBody.innerHTML = "";
+                document.querySelectorAll('#earnings-table tbody tr').forEach(row => {
+                    const [inpName, inpAmt] = row.querySelectorAll('input');
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${inpName.value}</td>
+                        <td class="text-end income">${formatCurrency(parseInt(inpAmt.value) || 0)}</td>
+                    `;
+                    preview.earningsBody.appendChild(tr);
+                });
+
+                preview.deductionsBody.innerHTML = "";
+                document.querySelectorAll('#deductions-table tbody tr').forEach(row => {
+                    const [inpName, inpAmt] = row.querySelectorAll('input');
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${inpName.value}</td>
+                        <td class="text-end deduction">${formatCurrency(parseInt(inpAmt.value) || 0)}</td>
+                    `;
+                    preview.deductionsBody.appendChild(tr);
+                });
+            }
+
+            // --- KALKULASI TOTAL ---
+            function calculateTotals() {
+                let totalEarnings   = 0;
+                let totalDeductions = 0;
+                document.querySelectorAll('.earning-amount').forEach(i => {
+                    totalEarnings += parseInt(i.value) || 0;
+                });
+                document.querySelectorAll('.deduction-amount').forEach(i => {
+                    totalDeductions += parseInt(i.value) || 0;
+                });
+                const netSalary = totalEarnings - totalDeductions;
+
+                document.getElementById('total-earnings').textContent    = 'Rp ' + formatCurrency(totalEarnings);
+                document.getElementById('total-deductions').textContent  = 'Rp ' + formatCurrency(totalDeductions);
+                document.getElementById('net-salary-amount').textContent = 'Rp ' + formatCurrency(netSalary);
+
+                preview.totalIncome.textContent    = formatCurrency(totalEarnings);
+                preview.totalDeduction.textContent = formatCurrency(totalDeductions);
+                preview.netSalary.textContent      = 'Rp ' + formatCurrency(netSalary);
+
+                updatePreview();
+            }
+
+            // --- AUTO-SUBMIT FILTER ---
+            const filterForm  = document.querySelector('form.row.mb-3');
+            const filterMonth = document.getElementById('filter-month');
+            const filterYear  = document.getElementById('filter-year');
+
+            filterMonth?.addEventListener('change', () => filterForm.submit());
+            filterYear?.addEventListener('change', () => filterForm.submit());
+
+            // --- EVENT LISTENERS ADD/TAMBAH ---
+            // Pendapatan
+            document.querySelectorAll('.earning-amount').forEach(i => {
+                i.addEventListener('input', calculateTotals);
+            });
+            document.querySelectorAll('.deduction-amount').forEach(i => {
+                i.addEventListener('input', calculateTotals);
+            });
+
+            document.querySelectorAll('.add-earning-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    new bootstrap.Tab(document.querySelector('#earnings-content')).show();
+                    const tbody = document.querySelector('#earnings-table tbody');
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td><input type="text" class="form-control" name="earnings[][name]" placeholder="Nama Komponen"></td>
+                        <td><input type="number" class="form-control earning-amount" name="earnings[][amount]" value="0"></td>
+                        <td class="text-center">
+                            <button type="button" class="btn btn-sm btn-outline-danger delete-row-btn">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                    const newInput = row.querySelector('.earning-amount');
+                    newInput.addEventListener('input', calculateTotals);
+                    calculateTotals();
+                });
+            });
+
+            // Potongan
+            document.querySelectorAll('.add-deduction-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    new bootstrap.Tab(document.querySelector('#deductions-content')).show();
+                    const tbody = document.querySelector('#deductions-table tbody');
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td><input type="text" class="form-control" name="deductions[][name]" placeholder="Nama Komponen"></td>
+                        <td><input type="number" class="form-control deduction-amount" name="deductions[][amount]" value="0"></td>
+                        <td class="text-center">
+                            <button type="button" class="btn btn-sm btn-outline-danger delete-row-btn">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                    const newDeduct = row.querySelector('.deduction-amount');
+                    newDeduct.addEventListener('input', calculateTotals);
+                    calculateTotals();
+                });
+            });
+
+            // --- DELEGASI UNTUK DELETE ROW ---
+            document.querySelectorAll('#earnings-table tbody, #deductions-table tbody').forEach(tbody => {
+                tbody.addEventListener('click', function(e) {
+                    const btn = e.target.closest('.delete-row-btn');
+                    if (!btn) return;
+                    e.preventDefault();
+                    btn.closest('tr').remove();
+                    calculateTotals();
+                });
+            });
+
+            // preview change listeners
+            periodInput?.addEventListener('change', updatePreview);
+            employeeSelect?.addEventListener('change', updatePreview);
+
+            document.querySelector('button[data-bs-target="#preview-content"]')
+                ?.addEventListener('shown.bs.tab', updatePreview);
+
+            // inisialisasi awal
+            calculateTotals();
         });
-
-        preview.deductionsBody.innerHTML = "";
-        document.querySelectorAll('#deductions-table tbody tr').forEach(row => {
-            const [inpName, inpAmt] = row.querySelectorAll('input');
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${inpName.value}</td>
-                <td class="text-end deduction">${formatCurrency(parseInt(inpAmt.value) || 0)}</td>
-            `;
-            preview.deductionsBody.appendChild(tr);
-        });
-    }
-
-    // --- KALKULASI TOTAL ---
-    function calculateTotals() {
-        let totalEarnings   = 0;
-        let totalDeductions = 0;
-        document.querySelectorAll('.earning-amount').forEach(i => {
-            totalEarnings += parseInt(i.value) || 0;
-        });
-        document.querySelectorAll('.deduction-amount').forEach(i => {
-            totalDeductions += parseInt(i.value) || 0;
-        });
-        const netSalary = totalEarnings - totalDeductions;
-
-        document.getElementById('total-earnings').textContent    = 'Rp ' + formatCurrency(totalEarnings);
-        document.getElementById('total-deductions').textContent  = 'Rp ' + formatCurrency(totalDeductions);
-        document.getElementById('net-salary-amount').textContent = 'Rp ' + formatCurrency(netSalary);
-
-        preview.totalIncome.textContent    = formatCurrency(totalEarnings);
-        preview.totalDeduction.textContent = formatCurrency(totalDeductions);
-        preview.netSalary.textContent      = 'Rp ' + formatCurrency(netSalary);
-
-        updatePreview();
-    }
-
-    // --- AUTO-SUBMIT FILTER ---
-    const filterForm  = document.querySelector('form.row.mb-3');
-    const filterMonth = document.getElementById('filter-month');
-    const filterYear  = document.getElementById('filter-year');
-
-    filterMonth?.addEventListener('change', () => filterForm.submit());
-    filterYear?.addEventListener('change', () => filterForm.submit());
-
-    // --- EVENT LISTENERS ADD/TAMBAH ---
-    // Pendapatan
-
-    document.querySelectorAll('.earning-amount').forEach(i => {
-  i.addEventListener('input', calculateTotals);
-});
-document.querySelectorAll('.deduction-amount').forEach(i => {
-  i.addEventListener('input', calculateTotals);
-});
-
-    document.querySelectorAll('.add-earning-btn').forEach(btn => {
-      btn.addEventListener('click', function(e) {
-        e.preventDefault();
-        new bootstrap.Tab(document.querySelector('#earnings-content')).show();
-        const tbody = document.querySelector('#earnings-table tbody');
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td><input type="text" class="form-control" placeholder="Nama Komponen"></td>
-          <td><input type="number" class="form-control earning-amount" value="0"></td>
-          <td class="text-center">
-            <button type="button" class="btn btn-sm btn-outline-danger delete-row-btn">
-              <i class="bi bi-trash"></i>
-            </button>
-          </td>
-        `;
-        tbody.appendChild(row);
-
-  // 2a) Pasang listener input pada input baru
-    const newInput = row.querySelector('.earning-amount');
-    newInput.addEventListener('input', calculateTotals);
-
-        calculateTotals();
-      });
-    });
-
-    // Potongan
-    document.querySelectorAll('.add-deduction-btn').forEach(btn => {
-      btn.addEventListener('click', function(e) {
-        e.preventDefault();
-        new bootstrap.Tab(document.querySelector('#deductions-content')).show();
-        const tbody = document.querySelector('#deductions-table tbody');
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td><input type="text" class="form-control" placeholder="Nama Komponen"></td>
-          <td><input type="number" class="form-control deduction-amount" value="0"></td>
-          <td class="text-center">
-            <button type="button" class="btn btn-sm btn-outline-danger delete-row-btn">
-              <i class="bi bi-trash"></i>
-            </button>
-          </td>
-        `;
-        tbody.appendChild(row);
-
-// 3a) Pasang listener input pada input baru
-    const newDeduct = row.querySelector('.deduction-amount');
-    newDeduct.addEventListener('input', calculateTotals);
-
-        calculateTotals();
-      });
-    });
-
-    // --- DELEGASI UNTUK DELETE ROW ---
-    document.querySelectorAll('#earnings-table tbody, #deductions-table tbody').forEach(tbody => {
-      tbody.addEventListener('click', function(e) {
-        const btn = e.target.closest('.delete-row-btn');
-        if (!btn) return;
-        e.preventDefault();
-        btn.closest('tr').remove();
-        calculateTotals();
-      });
-    });
-
-    // preview change listeners
-    periodInput?.addEventListener('change', updatePreview);
-    employeeSelect?.addEventListener('change', updatePreview);
-
-    document.querySelector('button[data-bs-target="#preview-content"]')
-      ?.addEventListener('shown.bs.tab', updatePreview);
-
-    // inisialisasi awal
-    calculateTotals();
-});
-</script>
-
+    </script>
 </body>
 </html>

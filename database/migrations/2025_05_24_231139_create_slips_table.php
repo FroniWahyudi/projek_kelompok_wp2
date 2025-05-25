@@ -1,4 +1,3 @@
-// database/migrations/2025_05_25_000000_create_slips_table.php
 <?php
 
 use Illuminate\Database\Migrations\Migration;
@@ -9,14 +8,20 @@ return new class extends Migration {
     public function up()
     {
         Schema::create('slips', function (Blueprint $table) {
-            $table->string('id')->primary();
-            // ganti employee_id jadi user_id
+            // Gunakan auto-increment integer sebagai primary key
+            $table->increments('id');
+
+            // Nomor slip khusus (SG-YYYY-XXX) disimpan di kolom terpisah
+            $table->string('slip_number')->unique();
+
+            // Relasi ke users
             $table->foreignId('user_id')
                   ->constrained('users')
                   ->onDelete('cascade');
+
             $table->date('period');
             $table->decimal('net_salary', 15, 2)->nullable();
-            $table->enum('status', ['Draft','Terbit','Batal'])
+            $table->enum('status', ['Draft', 'Terbit', 'Batal'])
                   ->default('Draft');
             $table->timestamps();
         });
