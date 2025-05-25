@@ -178,9 +178,6 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-3 align-self-end">
-                                <button type="submit" class="btn btn-outline-primary w-100"><i class="bi bi-funnel"></i> Filter</button>
-                            </div>
                         </form>
                         <div class="card">
                             <div class="card-header">Daftar Slip Gaji</div>
