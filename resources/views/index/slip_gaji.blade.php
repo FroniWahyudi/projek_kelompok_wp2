@@ -138,6 +138,9 @@
             border-radius: 5px;
             margin-top: 20px;
         }
+        .mt-auto {
+            margin-top: 0.5rem !important;
+        }
     </style>
 </head>
 <body>
@@ -147,18 +150,22 @@
                 <div class="main-content">
                     <!-- Payslips List View -->
                     <div id="payslips-view">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h1 class="page-title mb-0">{{ $title ?? 'Pengelolaan Slip Gaji' }}</h1>
-                            <!-- tombol di list view -->
-                            <button id="create-payslip-btn" class="btn btn-primary">
-                                <i class="bi bi-plus-lg"></i> Buat Slip Gaji Baru
-                            </button>
-                        </div>
-                        <div class="mb-3">
+
+                      <div class="mb-3">
                             <a href="{{ route('dashboard') }}" class="btn btn-primary">
                                 <i class="bi bi-house-door-fill"></i> Home
                             </a>
                         </div>
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h1 class="page-title mb-0">{{ $title ?? 'Pengelolaan Slip Gaji' }}</h1>
+                            <!-- tombol di list view -->
+                            <!-- <button id="create-payslip-btn" class="btn btn-primary">
+                                <i class="bi bi-plus-lg"></i> Buat Slip Gaji Baru
+                            </button> -->
+                        </div>
+
+                        
+                      
                         <form method="GET" action="{{ route('slips.index') }}" class="row mb-3">
                             <div class="col-md-3">
                                 <label for="filter-month" class="form-label">Pilih Bulan</label>
@@ -177,6 +184,11 @@
                                         <option value="{{ $year }}"{{ request('year') == $year ? ' selected' : '' }}>{{ $year }}</option>
                                     @endforeach
                                 </select>
+                            </div>
+                            <div class="col-md-6 mt-auto justify-content-around text-end">
+                                    <button id="create-payslip-btn" class="btn btn-primary justify-content-end mt-4">
+                                    <i class="bi bi-plus-lg"></i> Buat Slip Gaji Baru
+                                </button>
                             </div>
                         </form>
                         <div class="card">
