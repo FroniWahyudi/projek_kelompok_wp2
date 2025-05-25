@@ -450,9 +450,11 @@ use Illuminate\Support\Carbon;
     <a href="{{ route('cuti.index') }}" class="btn btn-outline-dark w-100 mb-2">
       <i class="bi bi-file-earmark-text me-1"></i> Pengajuan Cuti
     </a>
-    <a href="#" class="btn btn-outline-dark w-100 mb-2">
-      <i class="bi bi-receipt me-1"></i> Slip Gaji
-    </a>
+  <a href="{{ route('slips.index') }}" 
+   class="btn btn-outline-dark w-100 mb-2">
+  <i class="bi bi-receipt me-1"></i> Slip Gaji
+</a>
+
   @endif
 
   <a href="#" class="btn btn-outline-dark w-100 mb-2">

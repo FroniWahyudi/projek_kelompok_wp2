@@ -88,6 +88,11 @@ Route::middleware('auth')->group(function () {
          ->name('operator.edit');
     Route::put('/operator/{id}', [CrudController::class, 'usersUpdate'])
          ->name('operator.update');
+
+         //slips
+     Route::resource('slips', App\Http\Controllers\SlipController::class)
+         ->except(['show']);  // atau tanpa except jika ingin semua method
+
 });
 
 // 5. Halaman terpisah: Buat Resi & Proses Simpan
