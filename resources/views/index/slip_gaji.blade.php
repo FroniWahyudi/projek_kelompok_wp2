@@ -131,7 +131,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($slips as $slip)
+                                        @foreach($slips->sortByDesc('id') as $slip)
                                             <tr>
                                                 <td class="text-center">{{ $slip->id }}</td>
                                                 <td>{{ $slip->user->name }}</td>

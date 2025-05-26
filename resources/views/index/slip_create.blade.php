@@ -195,7 +195,7 @@
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
                                                         <label class="form-label">Periode</label>
-                                                        <input type="month" id="payslip-period" name="period" class="form-control" value="{{ old('period') }}" required>
+                                                        <input type="month" id="payslip-period" name="period" class="form-control" value="{{ old('period', now()->format('Y-m')) }}" required>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-12">
@@ -604,7 +604,9 @@
                         <td><input type="number" class="form-control deduction-amount" name="deductions[${rowCount}][amount]" value="0"></td>
                         <td class="text-center">
                             <button type="button" class="btn btn-sm btn-outline-danger delete-row-btn">
-                                <i class="bi bi-trash"></i>
+                                <img src="{{ asset('img/logo_brand.png') }}" 
+                                                             alt="Logo {{ config('app.name') }}" 
+                                                             style="height: 71px; object-fit: contain;">
                             </button>
                         </td>
                     `;
