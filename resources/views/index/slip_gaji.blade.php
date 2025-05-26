@@ -67,6 +67,9 @@
             background-color: #2a6ecc;
             border-color: #2a6ecc;
         }
+        td {
+            text-align: left;
+        }
     </style>
 </head>
 <body>
@@ -119,18 +122,18 @@
                                 <table class="table table-hover">
                                     <thead>
                                         <tr>
-                                            <th>ID Slip</th>
-                                            <th>Nama Karyawan</th>
-                                            <th>Periode</th>
-                                            <th>Gaji Bersih</th>
-                                            <th>Status</th>
-                                            <th>Aksi</th>
+                                            <th class="col-1 text-center">ID Slip</th>
+                                            <th class="col-3">Nama Karyawan</th>
+                                            <th class="col-2">Periode</th>
+                                            <th class="col-2">Gaji Bersih</th>
+                                            <th class="col-1">Status</th>
+                                            <th class="col-3 text-center">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach($slips as $slip)
                                             <tr>
-                                                <td>{{ $slip->id }}</td>
+                                                <td class="text-center">{{ $slip->id }}</td>
                                                 <td>{{ $slip->user->name }}</td>
                                                 <td>{{ $slip->period->formatLocalized('%B %Y') }}</td>
                                                 <td>{{ 'Rp ' . number_format($slip->net_salary, 0, ',', '.') }}</td>
@@ -139,7 +142,7 @@
                                                         {{ $slip->status }}
                                                     </span>
                                                 </td>
-                                                <td>
+                                                <td class="text-center">
                                                     <a href="{{ route('slips.show', $slip->id) }}" class="btn btn-sm btn-outline-info btn-action">
                                                         <i class="bi bi-eye"></i> Lihat Detail
                                                     </a>
