@@ -11,7 +11,7 @@
             background-color: #f5f7fb;
             font-family: Arial, Helvetica, sans-serif;
             margin: 0;
-            padding: 20px;
+            /* padding: 20px; */
         }
         .main-content {
             background: #fff;
@@ -29,8 +29,8 @@
             margin-bottom: 20px;
         }
         .preview-container {
-            max-width: 539px; /* Lebar efektif A4 (595px - 2 x 28px margin) */
-            margin: 30px auto;
+            max-width: 1539px; /* Lebar efektif A4 (595px - 2 x 28px margin) */
+            /* margin: 30px auto; */
             background: #fff;
             border-radius: 10px;
             box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
@@ -180,37 +180,47 @@
             margin-top: 10px;
         }
 
-        /* Print Styles */
-        @media print {
-            /* Sembunyikan semua kecuali preview-container */
-            body * {
-                visibility: hidden;
-            }
-            .preview-container, .preview-container * {
-                visibility: visible;
-            }
-            /* Posisi dan ukuran */
-            .preview-container {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                max-width: 539px;
-                margin: 0;
-                padding: 20px;
-                box-shadow: none;
-                border-radius: 0;
-            }
-            /* Sembunyikan tombol aksi */
-            .footer-actions {
-                display: none;
-            }
-            /* Atur kertas */
-            @page {
-                size: A4;
-                margin: 28px;
-            }
+  /* ← Ditambahkan: Aturan @page harus di luar @media print */
+        @page {
+          size: A4;      /* ← Ditambahkan: Tentukan ukuran halaman A4 */
+          margin: 0;     /* ← Ditambahkan: Hilangkan margin kertas bawaan */
         }
+
+        /* ← Ditambahkan: Aturan print lainnya di dalam @media print */
+        @media print {
+          /* Sembunyikan seluruh elemen di halaman */
+          body * {
+            visibility: hidden;
+          }
+
+          /* Tampilkan kembali konten .preview-container dan anak‐anaknya */
+          .preview-container,
+          .preview-container * {
+            visibility: visible;
+          }
+
+          /* Posisi .preview-container agar menempel di pojok kiri atas */
+          .preview-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;   /* ← Diubah: dari width:100% menjadi width:210mm agar presisi A4 */
+            height: 288mm;  /* ← Ditambahkan: Tentukan tinggi persis A4 */
+          }
+
+          /* Sembunyikan tombol cetak (jika ada) */
+          .btn-print {
+            display: none !important;
+          }
+        }
+
+        /* ← Ditambahkan: Atur margin/padding HTML dan BODY agar benar‐benar mepet tepi */
+        html, 
+        body {
+          margin: 0;
+          padding: 0;
+        }
+
     </style>
 </head>
 <body>
@@ -317,6 +327,8 @@
                 Jika ada pertanyaan mengenai slip gaji ini, silakan hubungi Departemen SDM.
             </p>
         </div>
+
+
     </div>
 </body>
 </html>
