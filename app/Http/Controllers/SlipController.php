@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Dompdf\Options;
 
 class SlipController extends Controller
 {
@@ -177,9 +178,27 @@ class SlipController extends Controller
 }
 
 public function downloadPdf($id)
-    {
-        $slip = Slip::findOrFail($id); // Ambil data slip berdasarkan ID
-        $pdf = Pdf::loadView('index.slip_detail', compact('slip')); // Load view PDF
-        return $pdf->download('slip_detail' . $slip->id . '.pdf'); // Unduh PDF
-    }
+{
+    // Ambil data slip berdasarkan ID
+    $slip = Slip::findOrFail($id);
+
+    // Pastikan data relasi dimuat
+    $slip->load('user', 'earnings', 'deductions');
+
+    // Atur opsi sebagai array
+    $options = [
+        'isHtml5ParserEnabled' => true,
+        'isPhpEnabled' => true,
+        'isRemoteEnabled' => true,
+        'defaultPaperSize' => 'a4',
+        'defaultPaperOrientation' => 'portrait',
+    ];
+
+    // Load view PDF dengan data (sesuaikan dengan lokasi file)
+    $pdf = Pdf::setOptions($options)
+              ->loadView('index.slip_pdf', compact('slip'));
+
+    // Unduh PDF
+    return $pdf->download('slip_gaji_' . $slip->id . '.pdf');
+}
 }

@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detail Slip Gaji - {{ $slip->id }}</title>
-    <!-- Bootstrap CSS -->
-    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> -->
-      <link href="{{ asset('css\bootstrap-5.3.5-dist\css\bootstrap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
+        /* General Styles */
         body {
             background-color: #f5f7fb;
-            font-family: 'Segoe UI', Tahoma, sans-serif;
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 20px;
         }
         .main-content {
             background: #fff;
@@ -19,6 +19,8 @@
             box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
             padding: 25px;
             min-height: 90vh;
+            max-width: 900px;
+            margin: 0 auto;
         }
         .page-title {
             font-size: 24px;
@@ -27,27 +29,35 @@
             margin-bottom: 20px;
         }
         .preview-container {
-            max-width: 800px;
+            max-width: 539px; /* Lebar efektif A4 (595px - 2 x 28px margin) */
             margin: 30px auto;
             background: #fff;
             border-radius: 10px;
             box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-            padding: 30px;
+            padding: 20px;
+            box-sizing: border-box;
         }
+
+        /* Header Section */
         .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             border-bottom: 2px solid #dee2e6;
             padding-bottom: 15px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
-        .company-logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: #3a86ff;
+        .company-logo img {
+            width: 100px; /* Ukuran logo disesuaikan untuk A4 */
+            height: auto;
+            object-fit: contain;
         }
         .slip-title {
-            font-size: 22px;
+            font-size: 20px; /* Sedikit dikecilkan untuk A4 */
             font-weight: 600;
             color: #212529;
+            text-transform: uppercase;
+            margin-bottom: 5px;
         }
         .period-badge {
             background: #e9ecef;
@@ -56,23 +66,58 @@
             font-size: 14px;
             color: #495057;
         }
+
+        /* Employee Info Section */
         .section-title {
-            font-size: 16px;
+            font-size: 15px; /* Sedikit dikecilkan untuk A4 */
             font-weight: 600;
-            margin-bottom: 15px;
             color: #495057;
             border-bottom: 1px solid #e9ecef;
             padding-bottom: 5px;
+            margin-bottom: 15px;
         }
         .info-row {
+            display: flex;
+            justify-content: space-between;
             margin-bottom: 8px;
+            font-size: 14px;
         }
         .info-label {
             font-weight: 500;
             color: #6c757d;
+            width: 40%;
         }
         .info-value {
             font-weight: 500;
+            width: 60%;
+            text-align: left;
+        }
+
+        /* Tables for Earnings and Deductions */
+        .table-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        .table-section {
+            width: 48%;
+        }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px; /* Ukuran font tabel disesuaikan */
+        }
+        .table th, .table td {
+            padding: 6px 8px; /* Padding dikecilkan untuk menghemat ruang */
+            border: 1px solid #dee2e6;
+            text-align: left;
+        }
+        .table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+        .table .text-end {
+            text-align: right;
         }
         .total-row {
             font-weight: 700;
@@ -84,138 +129,199 @@
         .deduction {
             color: #dc3545;
         }
+
+        /* Net Salary Section */
         .net-salary {
-            font-size: 18px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 16px; /* Sedikit dikecilkan untuk A4 */
             font-weight: 700;
             background: #e9ecef;
-            padding: 10px;
+            padding: 8px 12px;
             border-radius: 5px;
             margin-top: 20px;
         }
-        .btn-primary {
-            background-color: #3a86ff;
-            border-color: #3a86ff;
+
+        /* Footer Section */
+        .footer-actions {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
         }
-        .btn-primary:hover {
-            background-color: #2a6ecc;
-            border-color: #2a6ecc;
+        .btn-secondary {
+            background-color: #6c757d;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+        }
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+        .btn-secondary i {
+            margin-right: 5px;
+        }
+        .footer-notes {
+            text-align: center;
+            color: #6c757d;
+            font-size: 11px; /* Sedikit dikecilkan untuk A4 */
+            margin-top: 10px;
+        }
+
+        /* Utility Classes */
+        .d-flex {
+            display: flex;
+        }
+        .justify-content-between {
+            justify-content: space-between;
+        }
+        .justify-content-center {
+            justify-content: center;
+        }
+        .align-items-center {
+            align-items: center;
+        }
+        .mb-4 {
+            margin-bottom: 20px;
+        }
+        .text-end {
+            text-align: right;
+        }
+
+        /* Print Styles */
+        @media print {
+            body * {
+                visibility: hidden; /* Sembunyikan semua elemen */
+            }
+            .preview-container, .preview-container * {
+                visibility: visible; /* Tampilkan hanya preview-container dan isinya */
+            }
+            .preview-container {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%; /* Pastikan mengisi lebar halaman */
+                max-width: 539px; /* Lebar efektif A4 */
+                box-shadow: none; /* Hapus bayangan saat cetak */
+                border-radius: 0; /* Hapus radius sudut saat cetak */
+                margin: 0; /* Reset margin untuk cetak */
+                padding: 20px; /* Sesuaikan padding sesuai kebutuhan */
+            }
+            .footer-actions {
+                display: none; /* Sembunyikan tombol unduh saat cetak */
+            }
+            @page {
+                size: A4; /* Tentukan ukuran kertas */
+                margin: 28px; /* 1cm margin */
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12 p-0">
-                <div class="main-content">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h1 class="page-title mb-0">Detail Slip Gaji</h1>
-                        <a href="{{ route('slips.index') }}" class="btn btn-outline-secondary">
-                            <i class="bi bi-arrow-left"></i> Kembali
-                        </a>
-                    </div>
-                    <div class="preview-container">
-                        <div class="preview-header d-flex justify-content-between align-items-center">
-                          <div class="company-logo">
-    <img src="{{ asset('img/logo_brand.png') }}" 
-         alt="Logo {{ config('app.name') }}" 
-         style="height: 71px; object-fit: contain;">
-</div>
+    <div class="main-content">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="page-title">Detail Slip Gaji</h1>
+            <a href="{{ route('slips.index') }}" class="btn-secondary">
+                <i class="bi bi-arrow-left"></i> Kembali
+            </a>
+        </div>
 
-                            <div class="text-end">
-                                <div class="slip-title mb-2">SLIP GAJI</div>
-                                <span class="period-badge">{{ $slip->period->formatLocalized('%B %Y') }}</span>
-                            </div>
-                        </div>
-
-                        <!-- Informasi Karyawan -->
-                        <div class="row mb-4">
-                            <div class="col-md-6">
-                                <div class="section-title">Informasi Karyawan</div>
-                                <div class="info-row row">
-                                    <div class="col-5 info-label">Nama</div>
-                                    <div class="col-7 info-value">{{ $slip->user->name }}</div>
-                                </div>
-                                <div class="info-row row">
-                                    <div class="col-5 info-label">ID</div>
-                                    <div class="col-7 info-value">{{ $slip->user->id }}</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Tabel Pendapatan & Potongan -->
-                        <div class="row mb-4">
-                            <div class="col-md-6">
-                                <div class="section-title">Pendapatan</div>
-                                <table class="table table-sm table-bordered">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th>Keterangan</th>
-                                            <th class="text-end">Jumlah (Rp)</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach($slip->earnings as $earning)
-                                            <tr>
-                                                <td>{{ $earning->name }}</td>
-                                                <td class="text-end income">{{ number_format($earning->amount, 0, ',', '.') }}</td>
-                                            </tr>
-                                        @endforeach
-                                        <tr class="total-row">
-                                            <td>Total Pendapatan</td>
-                                            <td class="text-end income">{{ number_format($slip->earnings->sum('amount'), 0, ',', '.') }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="section-title">Potongan</div>
-                                <table class="table table-sm table-bordered">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th>Keterangan</th>
-                                            <th class="text-end">Jumlah (Rp)</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach($slip->deductions as $deduction)
-                                            <tr>
-                                                <td>{{ $deduction->name }}</td>
-                                                <td class="text-end deduction">{{ number_format($deduction->amount, 0, ',', '.') }}</td>
-                                            </tr>
-                                        @endforeach
-                                        <tr class="total-row">
-                                            <td>Total Potongan</td>
-                                            <td class="text-end deduction">{{ number_format($slip->deductions->sum('amount'), 0, ',', '.') }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <!-- Gaji Bersih -->
-                        <div class="net-salary d-flex justify-content-between">
-                            <span>Gaji Bersih</span>
-                            <span>{{ number_format($slip->net_salary, 0, ',', '.') }}</span>
-                        </div>
-
-                        <!-- Tombol aksi -->
-                        <div class="d-flex justify-content-center mt-4">
-                            <a href="{{ route('slips.pdf', $slip) }}" class="btn btn-secondary me-2">
-    <i class="bi bi-file-earmark-pdf"></i> Unduh PDF
-</a>
-
-                        </div>
-                        <p class="text-center text-muted mt-3" style="font-size:12px;">
-                            Slip gaji ini dihasilkan secara elektronik dan sah tanpa tanda tangan.<br>
-                            Jika ada pertanyaan mengenai slip gaji ini, silakan hubungi Departemen SDM.
-                        </p>
-                    </div>
+        <div class="preview-container">
+            <!-- Header -->
+            <div class="preview-header">
+                <div class="company-logo">
+                    <img src="{{ asset('img/logo_brand.png') }}" alt="Logo {{ config('app.name') }}">
+                </div>
+                <div class="text-end">
+                    <div class="slip-title">SLIP GAJI</div>
+                    <span class="period-badge">{{ $slip->period->formatLocalized('%B %Y') }}</span>
                 </div>
             </div>
+
+            <!-- Employee Information -->
+            <div class="mb-4">
+                <div class="section-title">Informasi Karyawan</div>
+                <div class="info-row">
+                    <div class="info-label">Nama</div>
+                    <div class="info-value">{{ $slip->user->name }}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">ID</div>
+                    <div class="info-value">{{ $slip->user->id }}</div>
+                </div>
+            </div>
+
+            <!-- Earnings and Deductions -->
+            <div class="table-container mb-4">
+                <div class="table-section">
+                    <div class="section-title">Pendapatan</div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Keterangan</th>
+                                <th class="text-end">Jumlah (Rp)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($slip->earnings as $earning)
+                                <tr>
+                                    <td>{{ $earning->name }}</td>
+                                    <td class="text-end income">{{ number_format($earning->amount, 0, ',', '.') }}</td>
+                                </tr>
+                            @endforeach
+                            <tr class="total-row">
+                                <td>Total Pendapatan</td>
+                                <td class="text-end income">{{ number_format($slip->earnings->sum('amount'), 0, ',', '.') }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="table-section">
+                    <div class="section-title">Potongan</div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Keterangan</th>
+                                <th class="text-end">Jumlah (Rp)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($slip->deductions as $deduction)
+                                <tr>
+                                    <td>{{ $deduction->name }}</td>
+                                    <td class="text-end deduction">{{ number_format($deduction->amount, 0, ',', '.') }}</td>
+                                </tr>
+                            @endforeach
+                            <tr class="total-row">
+                                <td>Total Potongan</td>
+                                <td class="text-end deduction">{{ number_format($slip->deductions->sum('amount'), 0, ',', '.') }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Net Salary -->
+            <div class="net-salary">
+                <span>Gaji Bersih</span>
+                <span>{{ number_format($slip->net_salary, 0, ',', '.') }}</span>
+            </div>
+
+            <!-- Footer -->
+            <div class="footer-actions">
+                <a href="{{ route('slips.pdf', $slip) }}" class="btn-secondary">
+                    <i class="bi bi-file-earmark-pdf"></i> Unduh PDF
+                </a>
+            </div>
+            <p class="footer-notes">
+                Slip gaji ini dihasilkan secara elektronik dan sah tanpa tanda tangan.<br>
+                Jika ada pertanyaan mengenai slip gaji ini, silakan hubungi Departemen SDM.
+            </p>
         </div>
     </div>
-
-    <!-- Bootstrap JS bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
