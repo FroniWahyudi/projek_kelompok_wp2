@@ -5,13 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detail Slip Gaji - {{ $slip->id }}</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-        /* General Styles */
         body {
             background-color: #f5f7fb;
             font-family: Arial, Helvetica, sans-serif;
             margin: 0;
-            /* padding: 20px; */
         }
         .main-content {
             background: #fff;
@@ -29,16 +28,13 @@
             margin-bottom: 20px;
         }
         .preview-container {
-            max-width: 1539px; /* Lebar efektif A4 (595px - 2 x 28px margin) */
-            /* margin: 30px auto; */
+            max-width: 1539px;
             background: #fff;
             border-radius: 10px;
             box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
             padding: 20px;
             box-sizing: border-box;
         }
-
-        /* Header Section */
         .preview-header {
             display: flex;
             justify-content: space-between;
@@ -66,8 +62,6 @@
             font-size: 14px;
             color: #495057;
         }
-
-        /* Employee Info Section */
         .section-title {
             font-size: 15px;
             font-weight: 600;
@@ -92,8 +86,6 @@
             width: 60%;
             text-align: left;
         }
-
-        /* Tables for Earnings and Deductions */
         .table-container {
             display: flex;
             justify-content: space-between;
@@ -116,7 +108,7 @@
             background-color: #f8f9fa;
             font-weight: 600;
         }
-         th {
+        th {
             background-color: #f8f9fa;
             font-weight: 600;
         }
@@ -133,20 +125,6 @@
         .deduction {
             color: #dc3545;
         }
-
-        /* Net Salary Section */
-        .net-salary {
-            display: flex;
-            justify-content: space-between;
-            font-size: 16px;
-            font-weight: 700;
-            background: #e9ecef;
-            padding: 8px 12px;
-            border-radius: 5px;
-            margin-top: 20px;
-        }
-
-        /* Footer Section */
         .footer-actions {
             display: flex;
             justify-content: center;
@@ -179,48 +157,36 @@
             font-size: 11px;
             margin-top: 10px;
         }
-
-  /* ← Ditambahkan: Aturan @page harus di luar @media print */
         @page {
-          size: A4;      /* ← Ditambahkan: Tentukan ukuran halaman A4 */
-          margin: 0;     /* ← Ditambahkan: Hilangkan margin kertas bawaan */
+            size: A4;
+            margin: 0;
         }
-
-        /* ← Ditambahkan: Aturan print lainnya di dalam @media print */
         @media print {
-          /* Sembunyikan seluruh elemen di halaman */
-          body * {
-            visibility: hidden;
-          }
-
-          /* Tampilkan kembali konten .preview-container dan anak‐anaknya */
-          .preview-container,
-          .preview-container * {
-            visibility: visible;
-          }
-
-          /* Posisi .preview-container agar menempel di pojok kiri atas */
-          .preview-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;   /* ← Diubah: dari width:100% menjadi width:210mm agar presisi A4 */
-            height: 288mm;  /* ← Ditambahkan: Tentukan tinggi persis A4 */
-          }
-
-          /* Sembunyikan tombol cetak (jika ada) */
-          .btn-print {
-            display: none !important;
-          }
+            body * {
+                visibility: hidden;
+            }
+            .preview-container,
+            .preview-container * {
+                visibility: visible;
+            }
+            .preview-container {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 210mm;
+                height: 297mm;
+            }
+            .btn-print {
+                display: none !important;
+            }
+            .footer-actions .btn-print {
+                display: none !important;
+            }
         }
-
-        /* ← Ditambahkan: Atur margin/padding HTML dan BODY agar benar‐benar mepet tepi */
-        html, 
-        body {
-          margin: 0;
-          padding: 0;
+        html, body {
+            margin: 0;
+            padding: 0;
         }
-
     </style>
 </head>
 <body>
@@ -231,9 +197,7 @@
                 <i class="bi bi-arrow-left"></i> Kembali
             </a>
         </div>
-
         <div class="preview-container">
-            <!-- Header -->
             <div class="preview-header">
                 <div class="company-logo">
                     <img src="{{ asset('img/logo_brand.png') }}" alt="Logo {{ config('app.name') }}">
@@ -243,8 +207,6 @@
                     <span class="period-badge">{{ $slip->period->formatLocalized('%B %Y') }}</span>
                 </div>
             </div>
-
-            <!-- Employee Information -->
             <div class="mb-4">
                 <div class="section-title">Informasi Karyawan</div>
                 <div class="info-row">
@@ -256,8 +218,6 @@
                     <div class="info-value">{{ $slip->user->id }}</div>
                 </div>
             </div>
-
-            <!-- Earnings and Deductions -->
             <div class="table-container mb-4">
                 <div class="table-section">
                     <div class="section-title">Pendapatan</div>
@@ -306,29 +266,58 @@
                     </table>
                 </div>
             </div>
-
-            <!-- Net Salary -->
             <div>
                 <table class="table">
-                    <td style="border-right:none; background-color:lightgray; font-weight:bold;"> Gaji Bersih</td>
-                    <td style="border-left:none; text-align:end; background-color:lightgray; font-weight:bold;">{{ number_format($slip->net_salary, 0, ',', '.') }}</td>
+                    <tr>
+                        <td style="border-right:none; background-color:lightgray; font-weight:bold;"> Gaji Bersih</td>
+                        <td style="border-left:none; text-align:end; background-color:lightgray; font-weight:bold;">{{ number_format($slip->net_salary, 0, ',', '.') }}</td>
+                    </tr>
                 </table>
             </div>
-
-            <!-- Footer -->
-            <div class="footer-actions">
-                <button class="btn-print" onclick="window.print()">
-                    <i class="bi bi-printer"></i> Cetak / Save as PDF
-                </button>
-            </div>
-
+           
             <p class="footer-notes">
                 Slip gaji ini dihasilkan secara elektronik dan sah tanpa tanda tangan.<br>
                 Jika ada pertanyaan mengenai slip gaji ini, silakan hubungi Departemen SDM.
             </p>
         </div>
 
-
+        <div class="footer-actions">
+                <button class="btn-print" onclick="downloadPDF()">
+                    <i class="bi bi-printer"></i> Cetak / Save as PDF
+                </button>
+        </div>
     </div>
+    <script>
+        const slipId = "{{ $slip->id }}";
+        const slipPeriod = "{{ $slip->period->format('Y-m') }}";
+        function downloadPDF() {
+    if (typeof html2pdf === 'undefined') {
+        alert('Pustaka html2pdf gagal dimuat. Pastikan koneksi internet stabil atau coba lagi nanti.');
+        return;
+    }
+    const element = document.querySelector('.preview-container');
+    const opt = {
+        margin: 0,
+        filename: `slip-gaji-${slipId}-${slipPeriod}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: {
+            scale: 2,
+            useCORS: true,
+            onclone: function(clonedDoc) {
+                // Sembunyikan elemen footer-actions di klon dokumen
+                const footerActions = clonedDoc.querySelector('.footer-actions button .btn-print');
+                if (footerActions) {
+                    footerActions.style.display = 'none';
+                }
+            }
+        },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+    html2pdf().set(opt).from(element).save().catch(err => {
+        console.error('Gagal membuat PDF:', err);
+        alert('Terjadi kesalahan saat membuat PDF. Silakan coba lagi.');
+    });
+}
+    </script>
 </body>
 </html>
