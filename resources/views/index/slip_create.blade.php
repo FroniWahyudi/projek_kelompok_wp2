@@ -236,6 +236,19 @@
                                                             </button>
                                                         </td>
                                                     </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <input type="text" name="earnings[0][name]" class="form-control" value="Insentif Jabatan" required>
+                                                        </td>
+                                                        <td>
+                                                            <input type="number" name="earnings[0][amount]" class="form-control earning-amount" value="1000000" required>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <button type="button" class="btn btn-sm btn-outline-danger delete-row-btn">
+                                                                <i class="bi bi-trash"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
                                                 </tbody>
                                                 <tfoot>
                                                     <tr>

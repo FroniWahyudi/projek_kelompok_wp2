@@ -34,6 +34,7 @@
             box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
             padding: 20px;
             box-sizing: border-box;
+            margin-top: 39px;
         }
         .preview-header {
             display: flex;
