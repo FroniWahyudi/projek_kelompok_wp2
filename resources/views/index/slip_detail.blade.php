@@ -337,7 +337,7 @@ function downloadPDF() {
 
     // Konfigurasi html2pdf
     const opt = {
-        margin: [-10, 0, 20, 5], // [atas, kanan, bawah, kiri] dalam mm
+        margin: [0, 0, 20, 5], // [atas, kanan, bawah, kiri] dalam mm
         filename: `slip-gaji-${slipId}-${slipPeriod}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2, useCORS: true },
