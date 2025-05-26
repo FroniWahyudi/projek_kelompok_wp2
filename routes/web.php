@@ -10,7 +10,7 @@ use App\Http\Controllers\CrudController;
 use App\Http\Controllers\ResiController;
 use App\Http\Controllers\CutiController;
 use App\Http\Controllers\ShiftController;
-
+use App\Http\Controllers\SlipController;
 
 /*
 |--------------------------------------------------------------------------
@@ -89,10 +89,12 @@ Route::middleware('auth')->group(function () {
     Route::put('/operator/{id}', [CrudController::class, 'usersUpdate'])
          ->name('operator.update');
 
-         //slips
-     Route::resource('slips', App\Http\Controllers\SlipController::class)
-         ->except(['show']);  // atau tanpa except jika ingin semua method
-
+    // Slips routes
+    Route::resource('slips', SlipController::class)
+         ->except(['show']);  // Mengecualikan show karena akan ditambahkan secara manual
+    Route::get('/slip-create', [SlipController::class, 'create'])->name('slip_create');
+    // Tambahkan rute untuk slips.show
+    Route::get('/slips/{slip}', [SlipController::class, 'show'])->name('slips.show');
 });
 
 // 5. Halaman terpisah: Buat Resi & Proses Simpan
@@ -109,7 +111,7 @@ Route::middleware('auth')->group(function() {
     Route::post('cuti/{cuti}/accept', [CutiController::class, 'accept'])
          ->name('cuti.accept');
 
-    // **Tambahkan route reset tahunan di sini (tanpa mengubah yang lain)**
+    // Route reset tahunan
     Route::post('cuti/reset', [CutiController::class, 'resetTahunan'])
          ->name('cuti.reset');
 });
@@ -120,24 +122,22 @@ Route::middleware('auth')->group(function () {
     Route::get('cuti/sisa', [CutiController::class, 'sisaIndex'])
          ->name('cuti.sisa.index');
 
-    // Proses update sisa cuti (misal dari form edit)
+    // Proses update sisa cuti
     Route::put('cuti/sisa/{sisa}', [CutiController::class, 'sisaUpdate'])
          ->name('cuti.sisa.update');
 
-     Route::post('/cuti/{id}/reject', [CutiController::class, 'reject'])->name('cuti.reject');
-
+    Route::post('/cuti/{id}/reject', [CutiController::class, 'reject'])->name('cuti.reject');
 });
 
 // Shift view
 Route::middleware('auth')->group(function () {
-     Route::get('/shift_karyawan', [ShiftController::class, 'index'])->name('shift.karyawan');
+    Route::get('/shift_karyawan', [ShiftController::class, 'index'])->name('shift.karyawan');
 
-     // Resource route untuk shifts (index, store, update, destroy)
-     Route::resource('shifts', ShiftController::class)->except(['create', 'show', 'edit']);
-
+    // Resource route untuk shifts (index, store, update, destroy)
+    Route::resource('shifts', ShiftController::class)->except(['create', 'show', 'edit']);
 });
 
-//feedback pegawai
+// Feedback pegawai
 Route::middleware('auth')->group(function () {
     Route::get('/feedback', [CrudController::class, 'feedbackIndex'])->name('feedback.index');
     Route::post('/feedback', [CrudController::class, 'feedbackStore'])->name('feedback.store');
