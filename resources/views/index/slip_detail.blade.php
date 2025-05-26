@@ -11,7 +11,6 @@
         body {
             background-color: #f5f7fb;
             font-family: 'Segoe UI', Tahoma, sans-serif;
-            padding-top: 20px;
         }
         .main-content {
             background: #fff;
@@ -115,7 +114,12 @@
                     </div>
                     <div class="preview-container">
                         <div class="preview-header d-flex justify-content-between align-items-center">
-                            <div class="company-logo">{{ config('app.name') }}</div>
+                          <div class="company-logo">
+    <img src="{{ asset('img/logo_brand.png') }}" 
+         alt="Logo {{ config('app.name') }}" 
+         style="height: 71px; object-fit: contain;">
+</div>
+
                             <div class="text-end">
                                 <div class="slip-title mb-2">SLIP GAJI</div>
                                 <span class="period-badge">{{ $slip->period->formatLocalized('%B %Y') }}</span>
@@ -195,14 +199,8 @@
 
                         <!-- Tombol aksi -->
                         <div class="d-flex justify-content-center mt-4">
-                            <button class="btn btn-primary me-2">
-                                <i class="bi bi-printer"></i> Cetak Slip Gaji
-                            </button>
                             <button class="btn btn-secondary me-2">
                                 <i class="bi bi-file-earmark-pdf"></i> Unduh PDF
-                            </button>
-                            <button class="btn btn-outline-secondary">
-                                <i class="bi bi-pencil"></i> Edit Data
                             </button>
                         </div>
                         <p class="text-center text-muted mt-3" style="font-size:12px;">

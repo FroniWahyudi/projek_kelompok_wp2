@@ -11,7 +11,6 @@
         body {
             background-color: #f5f7fb;
             font-family: 'Segoe UI', Tahoma, sans-serif;
-            padding-top: 20px;
         }
         .main-content {
             background: #fff;
@@ -317,7 +316,11 @@
                                         <div class="tab-pane fade" id="preview-content">
                                             <div class="preview-container">
                                                 <div class="preview-header d-flex justify-content-between align-items-center">
-                                                    <div class="company-logo">{{ config('app.name') }}</div>
+                                                               <div class="company-logo">
+    <img src="{{ asset('img/logo_brand.png') }}" 
+         alt="Logo {{ config('app.name') }}" 
+         style="height: 71px; object-fit: contain;">
+</div>
                                                     <div class="text-end">
                                                         <div class="slip-title mb-2">SLIP GAJI</div>
                                                         <span class="period-badge" id="preview-period">-</span>
