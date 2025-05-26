@@ -29,12 +29,13 @@
         }
         .preview-container {
             max-width: 1539px;
+            max-height: 1000mm;
             background: #fff;
             border-radius: 10px;
             box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
             padding: 20px;
             box-sizing: border-box;
-            margin-top: 39px;
+            /* margin-top: 39px; */
         }
         .preview-header {
             display: flex;
@@ -68,7 +69,7 @@
             font-weight: 600;
             color: #495057;
             border-bottom: 1px solid #e9ecef;
-            padding-bottom: 5px;
+            padding-bottom: 5 punishments;
             margin-bottom: 15px;
         }
         .info-row {
@@ -143,6 +144,7 @@
             display: inline-flex;
             align-items: center;
             cursor: pointer;
+            margin-bottom: 20px;
         }
         .btn-secondary:hover,
         .btn-print:hover {
@@ -158,7 +160,8 @@
             font-size: 11px;
             margin-top: 10px;
         }
-        @page {
+
+        /* @page {
             size: A4;
             margin: 0;
         }
@@ -175,19 +178,26 @@
                 top: 0;
                 left: 0;
                 width: 210mm;
-                height: 297mm;
+                height: auto; 
             }
             .btn-print {
                 display: none !important;
             }
-            .footer-actions .btn-print {
+            .footer-actions {
                 display: none !important;
+            }
+            .footer-notes {
+                visibility: visible; 
+                position: relative;
+                bottom: 0;
+                width: 100%;
+                padding-top: 10px;
             }
         }
         html, body {
             margin: 0;
             padding: 0;
-        }
+        } */
     </style>
 </head>
 <body>
@@ -275,50 +285,85 @@
                     </tr>
                 </table>
             </div>
-           
             <p class="footer-notes">
                 Slip gaji ini dihasilkan secara elektronik dan sah tanpa tanda tangan.<br>
                 Jika ada pertanyaan mengenai slip gaji ini, silakan hubungi Departemen SDM.
             </p>
         </div>
-
         <div class="footer-actions">
-                <button class="btn-print" onclick="downloadPDF()">
-                    <i class="bi bi-printer"></i> Cetak / Save as PDF
-                </button>
+            <button class="btn-print" onclick="downloadPDF()">
+                <i class="bi bi-printer"></i> Cetak / Save as PDF
+            </button>
         </div>
     </div>
-    <script>
-        const slipId = "{{ $slip->id }}";
-        const slipPeriod = "{{ $slip->period->format('Y-m') }}";
-        function downloadPDF() {
+   <script>
+ const slipId = "{{ $slip->id }}";
+const slipPeriod = "{{ $slip->period->format('Y-m') }}";
+function downloadPDF() {
     if (typeof html2pdf === 'undefined') {
         alert('Pustaka html2pdf gagal dimuat. Pastikan koneksi internet stabil atau coba lagi nanti.');
         return;
     }
-    const element = document.querySelector('.preview-container');
+
+    // Pilih elemen parent yang lebih besar (misalnya .main-content)
+    const element = document.querySelector('.main-content');
+
+    if (!element) {
+        alert('Elemen .main-content tidak ditemukan. Pastikan elemen tersebut ada di halaman.');
+        return;
+    }
+
+    // Daftar elemen yang ingin disembunyikan
+    const elementsToHide = [
+        document.querySelector('.d-flex.justify-content-between.align-items-center.mb-4'), // Tombol "Batal" dan "Simpan"
+        document.querySelector('.nav-tabs'), // Tab navigasi
+        document.querySelector('#info-content'), // Tab Informasi Dasar
+        document.querySelector('#earnings-content'), // Tab Pendapatan
+        document.querySelector('#deductions-content'), // Tab Potongan
+        document.querySelector('.net-salary.d-flex.justify-content-between.mt-4.p-3.bg-light.rounded'), // Gaji Bersih di tab Potongan
+        document.querySelector('.footer-actions')
+    ];
+
+    // Simpan status display asli dan sembunyikan elemen
+    const originalDisplayStyles = [];
+    elementsToHide.forEach((el, index) => {
+        if (el) {
+            originalDisplayStyles[index] = el.style.display; // Simpan display asli
+            el.style.display = 'none'; // Sembunyikan elemen
+        } else {
+            originalDisplayStyles[index] = null; // Jika elemen tidak ditemukan
+        }
+    });
+
+    // Konfigurasi html2pdf
     const opt = {
-        margin: 0,
+        margin: [-10, 0, 20, 5], // [atas, kanan, bawah, kiri] dalam mm
         filename: `slip-gaji-${slipId}-${slipPeriod}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: {
-            scale: 2,
-            useCORS: true,
-            onclone: function(clonedDoc) {
-                // Sembunyikan elemen footer-actions di klon dokumen
-                const footerActions = clonedDoc.querySelector('.footer-actions button .btn-print');
-                if (footerActions) {
-                    footerActions.style.display = 'none';
-                }
-            }
-        },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] } // Hindari pemotongan elemen
     };
-    html2pdf().set(opt).from(element).save().catch(err => {
+
+    // Buat PDF dengan elemen yang telah dimodifikasi
+    html2pdf().set(opt).from(element).save().then(() => {
+        // Kembalikan tampilan elemen setelah PDF selesai dibuat
+        elementsToHide.forEach((el, index) => {
+            if (el && originalDisplayStyles[index] !== null) {
+                el.style.display = originalDisplayStyles[index] || ''; // Kembalikan display asli
+            }
+        });
+    }).catch(err => {
         console.error('Gagal membuat PDF:', err);
         alert('Terjadi kesalahan saat membuat PDF. Silakan coba lagi.');
+        // Kembalikan tampilan elemen meskipun terjadi error
+        elementsToHide.forEach((el, index) => {
+            if (el && originalDisplayStyles[index] !== null) {
+                el.style.display = originalDisplayStyles[index] || '';
+            }
+        });
     });
 }
-    </script>
+</script>
 </body>
 </html>

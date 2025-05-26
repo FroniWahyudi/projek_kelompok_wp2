@@ -238,10 +238,49 @@
                                                     </tr>
                                                     <tr>
                                                         <td>
-                                                            <input type="text" name="earnings[0][name]" class="form-control" value="Insentif Jabatan" required>
+                                                            <input type="text" name="earnings[1][name]" class="form-control" value="Tunjangan Transportasi" required>
                                                         </td>
                                                         <td>
-                                                            <input type="number" name="earnings[0][amount]" class="form-control earning-amount" value="1000000" required>
+                                                            <input type="number" name="earnings[1][amount]" class="form-control earning-amount" value="200000" required>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <button type="button" class="btn btn-sm btn-outline-danger delete-row-btn">
+                                                                <i class="bi bi-trash"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <input type="text" name="earnings[2][name]" class="form-control" value="Tunjangan Makan" required>
+                                                        </td>
+                                                        <td>
+                                                            <input type="number" name="earnings[2][amount]" class="form-control earning-amount" value="300000" required>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <button type="button" class="btn btn-sm btn-outline-danger delete-row-btn">
+                                                                <i class="bi bi-trash"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <input type="text" name="earnings[3][name]" class="form-control" value="Insentif Kinerja" required>
+                                                        </td>
+                                                        <td>
+                                                            <input type="number" name="earnings[3][amount]" class="form-control earning-amount" value="1000000" required>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <button type="button" class="btn btn-sm btn-outline-danger delete-row-btn">
+                                                                <i class="bi bi-trash"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <input type="text" name="earnings[4][name]" class="form-control" value="Tunjangan Jabatan" required>
+                                                        </td>
+                                                        <td>
+                                                            <input type="number" name="earnings[4][amount]" class="form-control earning-amount" value="1000000" required>
                                                         </td>
                                                         <td class="text-center">
                                                             <button type="button" class="btn btn-sm btn-outline-danger delete-row-btn">
@@ -280,10 +319,36 @@
                                                 <tbody>
                                                     <tr>
                                                         <td>
-                                                            <input type="text" name="deductions[0][name]" class="form-control" value="BPJS Kesehatan">
+                                                            <input type="text" name="deductions[0][name]" class="form-control" value="BPJS Kesehatan (1%)">
                                                         </td>
                                                         <td>
                                                             <input type="number" name="deductions[0][amount]" class="form-control deduction-amount" value="50000">
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <button type="button" class="btn btn-sm btn-outline-danger delete-row-btn">
+                                                                <i class="bi bi-trash"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <input type="text" name="deductions[1][name]" class="form-control" value="BPJS Ketenagakerjaan (2%)">
+                                                        </td>
+                                                        <td>
+                                                            <input type="number" name="deductions[1][amount]" class="form-control deduction-amount" value="100000">
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <button type="button" class="btn btn-sm btn-outline-danger delete-row-btn">
+                                                                <i class="bi bi-trash"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <input type="text" name="deductions[2][name]" class="form-control" value="PPh 21">
+                                                        </td>
+                                                        <td>
+                                                            <input type="number" name="deductions[2][amount]" class="form-control deduction-amount" value="125000">
                                                         </td>
                                                         <td class="text-center">
                                                             <button type="button" class="btn btn-sm btn-outline-danger delete-row-btn">
@@ -316,11 +381,11 @@
                                         <div class="tab-pane fade" id="preview-content">
                                             <div class="preview-container">
                                                 <div class="preview-header d-flex justify-content-between align-items-center">
-                                                                 <div class="company-logo">
-    <img src="{{ asset('img/logo_brand.png') }}" 
-         alt="Logo {{ config('app.name') }}" 
-         style="height: 71px; object-fit: contain;">
-</div>
+                                                    <div class="company-logo">
+                                                        <img src="{{ asset('img/logo_brand.png') }}" 
+                                                             alt="Logo {{ config('app.name') }}" 
+                                                             style="height: 71px; object-fit: contain;">
+                                                    </div>
                                                     <div class="text-end">
                                                         <div class="slip-title mb-2">SLIP GAJI</div>
                                                         <span class="period-badge" id="preview-period">-</span>
