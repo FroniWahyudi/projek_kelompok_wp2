@@ -44,11 +44,11 @@
             justify-content: space-between;
             align-items: center;
             border-bottom: 2px solid #dee2e6;
-            padding-bottom: 15px;
+            padding-bottom: 3px;
             margin-bottom: 15px;
         }
         .company-logo img {
-            width: 100px;
+            width: 200px;
             height: auto;
             object-fit: contain;
         }
@@ -113,6 +113,10 @@
             text-align: left;
         }
         .table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+         th {
             background-color: #f8f9fa;
             font-weight: 600;
         }
@@ -294,9 +298,11 @@
             </div>
 
             <!-- Net Salary -->
-            <div class="net-salary">
-                <span>Gaji Bersih</span>
-                <span>{{ number_format($slip->net_salary, 0, ',', '.') }}</span>
+            <div>
+                <table class="table">
+                    <td style="border-right:none; background-color:lightgray; font-weight:bold;"> Gaji Bersih</td>
+                    <td style="border-left:none; text-align:end; background-color:lightgray; font-weight:bold;">{{ number_format($slip->net_salary, 0, ',', '.') }}</td>
+                </table>
             </div>
 
             <!-- Footer -->
@@ -304,9 +310,6 @@
                 <button class="btn-print" onclick="window.print()">
                     <i class="bi bi-printer"></i> Cetak / Save as PDF
                 </button>
-                <a href="{{ route('slips.pdf', $slip) }}" class="btn-secondary">
-                    <i class="bi bi-file-earmark-pdf"></i> Unduh PDF
-                </a>
             </div>
 
             <p class="footer-notes">
