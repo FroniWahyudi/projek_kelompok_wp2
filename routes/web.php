@@ -95,6 +95,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/slip-create', [SlipController::class, 'create'])->name('slip_create');
     // Tambahkan rute untuk slips.show
     Route::get('/slips/{slip}', [SlipController::class, 'show'])->name('slips.show');
+    // Tambahkan rute untuk download PDF
+    Route::get('/slips/{slip}/pdf', [SlipController::class, 'downloadPdf'])->name('slips.pdf');
 });
 
 // 5. Halaman terpisah: Buat Resi & Proses Simpan

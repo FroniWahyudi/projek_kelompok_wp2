@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class SlipController extends Controller
 {
@@ -174,4 +175,11 @@ class SlipController extends Controller
     $slip->load('user', 'earnings', 'deductions');
     return view('index.slip_detail', compact('slip'));
 }
+
+public function downloadPdf($id)
+    {
+        $slip = Slip::findOrFail($id); // Ambil data slip berdasarkan ID
+        $pdf = Pdf::loadView('index.slip_detail', compact('slip')); // Load view PDF
+        return $pdf->download('slip_detail' . $slip->id . '.pdf'); // Unduh PDF
+    }
 }

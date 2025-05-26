@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detail Slip Gaji - {{ $slip->id }}</title>
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+      <link href="{{ asset('css\bootstrap-5.3.5-dist\css\bootstrap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
         body {
@@ -199,9 +200,10 @@
 
                         <!-- Tombol aksi -->
                         <div class="d-flex justify-content-center mt-4">
-                            <button class="btn btn-secondary me-2">
-                                <i class="bi bi-file-earmark-pdf"></i> Unduh PDF
-                            </button>
+                            <a href="{{ route('slips.pdf', $slip) }}" class="btn btn-secondary me-2">
+    <i class="bi bi-file-earmark-pdf"></i> Unduh PDF
+</a>
+
                         </div>
                         <p class="text-center text-muted mt-3" style="font-size:12px;">
                             Slip gaji ini dihasilkan secara elektronik dan sah tanpa tanda tangan.<br>
