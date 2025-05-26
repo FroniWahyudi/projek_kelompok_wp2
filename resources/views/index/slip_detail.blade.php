@@ -48,12 +48,12 @@
             margin-bottom: 15px;
         }
         .company-logo img {
-            width: 100px; /* Ukuran logo disesuaikan untuk A4 */
+            width: 100px;
             height: auto;
             object-fit: contain;
         }
         .slip-title {
-            font-size: 20px; /* Sedikit dikecilkan untuk A4 */
+            font-size: 20px;
             font-weight: 600;
             color: #212529;
             text-transform: uppercase;
@@ -69,7 +69,7 @@
 
         /* Employee Info Section */
         .section-title {
-            font-size: 15px; /* Sedikit dikecilkan untuk A4 */
+            font-size: 15px;
             font-weight: 600;
             color: #495057;
             border-bottom: 1px solid #e9ecef;
@@ -105,10 +105,10 @@
         .table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 13px; /* Ukuran font tabel disesuaikan */
+            font-size: 13px;
         }
         .table th, .table td {
-            padding: 6px 8px; /* Padding dikecilkan untuk menghemat ruang */
+            padding: 6px 8px;
             border: 1px solid #dee2e6;
             text-align: left;
         }
@@ -134,7 +134,7 @@
         .net-salary {
             display: flex;
             justify-content: space-between;
-            font-size: 16px; /* Sedikit dikecilkan untuk A4 */
+            font-size: 16px;
             font-weight: 700;
             background: #e9ecef;
             padding: 8px 12px;
@@ -147,8 +147,9 @@
             display: flex;
             justify-content: center;
             margin-top: 15px;
+            gap: 10px;
         }
-        .btn-secondary {
+        .btn-secondary, .btn-print {
             background-color: #6c757d;
             color: #fff;
             padding: 10px 20px;
@@ -158,65 +159,52 @@
             font-size: 14px;
             display: inline-flex;
             align-items: center;
+            cursor: pointer;
         }
-        .btn-secondary:hover {
+        .btn-secondary:hover,
+        .btn-print:hover {
             background-color: #5a6268;
         }
-        .btn-secondary i {
+        .btn-secondary i,
+        .btn-print i {
             margin-right: 5px;
         }
         .footer-notes {
             text-align: center;
             color: #6c757d;
-            font-size: 11px; /* Sedikit dikecilkan untuk A4 */
+            font-size: 11px;
             margin-top: 10px;
-        }
-
-        /* Utility Classes */
-        .d-flex {
-            display: flex;
-        }
-        .justify-content-between {
-            justify-content: space-between;
-        }
-        .justify-content-center {
-            justify-content: center;
-        }
-        .align-items-center {
-            align-items: center;
-        }
-        .mb-4 {
-            margin-bottom: 20px;
-        }
-        .text-end {
-            text-align: right;
         }
 
         /* Print Styles */
         @media print {
+            /* Sembunyikan semua kecuali preview-container */
             body * {
-                visibility: hidden; /* Sembunyikan semua elemen */
+                visibility: hidden;
             }
             .preview-container, .preview-container * {
-                visibility: visible; /* Tampilkan hanya preview-container dan isinya */
+                visibility: visible;
             }
+            /* Posisi dan ukuran */
             .preview-container {
                 position: absolute;
-                left: 0;
                 top: 0;
-                width: 100%; /* Pastikan mengisi lebar halaman */
-                max-width: 539px; /* Lebar efektif A4 */
-                box-shadow: none; /* Hapus bayangan saat cetak */
-                border-radius: 0; /* Hapus radius sudut saat cetak */
-                margin: 0; /* Reset margin untuk cetak */
-                padding: 20px; /* Sesuaikan padding sesuai kebutuhan */
+                left: 0;
+                width: 100%;
+                max-width: 539px;
+                margin: 0;
+                padding: 20px;
+                box-shadow: none;
+                border-radius: 0;
             }
+            /* Sembunyikan tombol aksi */
             .footer-actions {
-                display: none; /* Sembunyikan tombol unduh saat cetak */
+                display: none;
             }
+            /* Atur kertas */
             @page {
-                size: A4; /* Tentukan ukuran kertas */
-                margin: 28px; /* 1cm margin */
+                size: A4;
+                margin: 28px;
             }
         }
     </style>
@@ -313,10 +301,14 @@
 
             <!-- Footer -->
             <div class="footer-actions">
+                <button class="btn-print" onclick="window.print()">
+                    <i class="bi bi-printer"></i> Cetak / Save as PDF
+                </button>
                 <a href="{{ route('slips.pdf', $slip) }}" class="btn-secondary">
                     <i class="bi bi-file-earmark-pdf"></i> Unduh PDF
                 </a>
             </div>
+
             <p class="footer-notes">
                 Slip gaji ini dihasilkan secara elektronik dan sah tanpa tanda tangan.<br>
                 Jika ada pertanyaan mengenai slip gaji ini, silakan hubungi Departemen SDM.
