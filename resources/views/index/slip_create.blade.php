@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <!-- SweetAlert2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
     <style>
         body {
             background-color: #f5f7fb;
@@ -201,12 +203,12 @@
                                                 <div class="col-md-12">
                                                     <div class="mb-3">
                                                         <label class="form-label">Pilih Karyawan</label>
-                                                        <select name="user_id" id="employee-select" class="form-select" required>
-                                                            <option value="">-- Pilih Karyawan --</option>
-                                                            @foreach($users as $user)
-                                                                <option value="{{ $user->id }}">{{ $user->name }}</option>
-                                                            @endforeach
-                                                        </select>
+                                                       <select name="user_id" id="employee-select" class="form-select" required>
+    <option value="">-- Pilih Karyawan --</option>
+    @foreach($users as $user)
+        <option value="{{ $user->id }}">{{ $user->name }}</option>
+    @endforeach
+</select>
                                                     </div>
                                                 </div>
                                             </div>
@@ -455,6 +457,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- SweetAlert2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Fungsi untuk memformat angka ke dalam format mata uang
@@ -668,6 +671,13 @@
                         }
                     });
                 }
+
+$(document).ready(function() {
+        $('#employee-select').select2({
+            placeholder: "-- Pilih Karyawan --",
+            allowClear: true
+        });
+    });
 
                 // Cek potongan (opsional, tapi jika ada harus diisi dengan benar)
                 const deductionsRows = document.querySelectorAll('#deductions-table tbody tr');
