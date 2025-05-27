@@ -95,16 +95,7 @@
             font-weight: 600;
         }
         
-        .loading-spinner {
-            display: inline-block;
-            width: 1rem;
-            height: 1rem;
-            vertical-align: middle;
-            border: 0.2em solid currentColor;
-            border-right-color: transparent;
-            border-radius: 50%;
-            animation: spinner-border 0.75s linear infinite;
-        }
+        
         
         @keyframes spinner-border {
             to { transform: rotate(360deg); }
@@ -162,14 +153,14 @@
                             $('#slipPeriod').text(period);
                             $('#slipStatus').text('Not Available').addClass('status-not-exists').removeClass('status-exists status-error');
                         }
-                        $('#resultContainer').fadeIn();
-                        $('button[type="submit"]').html('<i class="fas fa-search me-1"></i> Check Slip').prop('disabled', false);
+                        // $('#resultContainer').fadeIn();
+                        // $('button[type="submit"]').html('<i class="fas fa-search me-1"></i> Check Slip').prop('disabled', false);
                     },
                     error: function(xhr, status, error) {
                         $('#slipStatus').text('Error').addClass('status-error').removeClass('status-exists status-not-exists');
                         console.error(error);
-                        $('#resultContainer').fadeIn();
-                        $('button[type="submit"]').html('<i class="fas fa-search me-1"></i> Check Slip').prop('disabled', false);
+                        // $('#resultContainer').fadeIn();
+                        // $('button[type="submit"]').html('<i class="fas fa-search me-1"></i> Check Slip').prop('disabled', false);
                     }
                 });
             });
@@ -276,13 +267,7 @@
                         <h6 class="m-0 font-weight-bold text-white"><i class="fas fa-users me-2"></i>Employee List</h6>
                     </div>
                     <div class="card-body">
-                        <div class="mb-3">
-                            <label for="filterPeriod" class="form-label">Filter by Payroll Period</label>
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-filter"></i></span>
-                                <input type="month" class="form-control" id="filterPeriod">
-                            </div>
-                        </div>
+                       
                         
                         <div class="table-responsive">
                             <table class="table table-hover">
@@ -290,7 +275,7 @@
                                     <tr>
                                         <th>Employee ID</th>
                                         <th>Name</th>
-                                        <th>Department</th>
+                
                                         <th>Slip Status</th>
                                     </tr>
                                 </thead>
@@ -300,7 +285,7 @@
                                             <tr>
                                                 <td>{{ $user->id }}</td>
                                                 <td>{{ $user->name }}</td>
-                                                <td>{{ $user->department ?? '' }}</td>
+                                          
                                                 <td><span class="status-badge"></span></td>
                                             </tr>
                                         @endforeach
