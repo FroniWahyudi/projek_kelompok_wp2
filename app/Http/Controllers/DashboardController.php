@@ -46,21 +46,23 @@ class DashboardController extends Controller
             abort(403);
         }
 
-        
-        $validated = $request->validate([
+        $rules = [
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'phone' => 'required|string|max:20',
-            'password' => 'nullable|min:4|confirmed',
             'role' => 'required|string|max:100',
             'bio' => 'required|string',
-            'photo_url' => 'nullable|string|max:255'
-        ]);
-        
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ];
+
+        if ($request->filled('password')) {
+            $rules['password'] = 'min:4|confirmed';
+        }
+
+        $validated = $request->validate($rules);
+
         if ($request->filled('password')) {
             $validated['password'] = Hash::make($request->password);
-        } else {
-            unset($validated['password']);
         }
 
         if ($request->hasFile('photo')) {
@@ -69,8 +71,7 @@ class DashboardController extends Controller
             $validated['photo_url'] = '/storage/' . $path;
         }
 
-        $user->fill($validated);
-        $user->save();
+        $user->update($validated);
 
         return redirect()->route('profil.edit', $user->id)->with('success', 'Profil berhasil diperbarui.');
     }

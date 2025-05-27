@@ -477,7 +477,14 @@ use Illuminate\Support\Carbon;
  <!-- Main Content -->
  
 <main>
-  <h3 class="mb-4">What's New</h3>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="mb-0">What's New</h3>
+    @if(auth()->user()->role === 'Manajer' || auth()->user()->role === 'Admin')
+      <a href="{{ route('whats_new.create') }}" class="btn btn-primary">
+        <i class="bi bi-plus-lg me-1"></i> New
+      </a>
+    @endif
+  </div>
   <div class="row g-3">
     @foreach($newsItems as $idx => $item)
       @php
@@ -487,15 +494,23 @@ use Illuminate\Support\Carbon;
       <div class="col-12 col-sm-6 {{ $col }}">
         <a href="{{ route('whats_new', ['id' => $item['id']]) }}"
            class="text-decoration-none text-reset">
-          <div class="card card-news shadow-sm h-100">
-            <img src="{{ htmlspecialchars($item['image_url']) }}"
-                 class="card-img-top"
-                 alt="{{ htmlspecialchars($item['title']) }}">
-            <div class="card-body">
-              <h6 class="fw-bold">{{ htmlspecialchars($item['title']) }}</h6>
-              <small class="text-muted">{{ htmlspecialchars($item['date']) }}</small>
-              <p class="small">{{ Str::limit($item['description'], 100) }}</p>
-            </div>
+          <div class="card card-news shadow-sm h-100 position-relative">
+        <img src="{{ htmlspecialchars($item['image_url']) }}"
+             class="card-img-top"
+             alt="{{ htmlspecialchars($item['title']) }}">
+        @if(auth()->user()->role === 'Admin' || auth()->user()->role === 'Manajer')
+          <a href="{{ route('whats_new.edit', ['id' => $item['id']]) }}"
+             class="btn btn-sm btn-light position-absolute"
+             style="top: 10px; right: 10px; z-index: 2;"
+             title="Edit">
+            <i class="bi bi-pencil-square"></i>
+          </a>
+        @endif
+        <div class="card-body">
+          <h6 class="fw-bold">{{ htmlspecialchars($item['title']) }}</h6>
+          <small class="text-muted">{{ htmlspecialchars($item['date']) }}</small>
+          <p class="small">{{ Str::limit($item['description'], 100) }}</p>
+        </div>
           </div>
         </a>
       </div>

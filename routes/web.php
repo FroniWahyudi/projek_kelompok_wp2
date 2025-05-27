@@ -42,8 +42,16 @@ Route::middleware('auth')->group(function () {
          ->name('logout');
 
     // News detail
-    Route::get('/whats-new/{id}', [NewsController::class, 'show'])
+     Route::get('/whats-new/{id}', [NewsController::class, 'show'])
          ->name('whats_new');
+     Route::get('/whats-new/edit/{id}', [NewsController::class, 'edit'])
+         ->name('whats_new.edit');
+     Route::put('/whats-new/update/{id}', [NewsController::class, 'update'])
+         ->name('whats_new.update'); 
+     Route::get('/whats-new/create', [NewsController::class, 'create'])
+         ->name('whats_new.create');
+     Route::post('/whats-new/store', [NewsController::class, 'store'])
+         ->name('whats_new.store');
 
     // HR sections
     Route::get('/admin', [HrDashboardController::class, 'hr_index'])
