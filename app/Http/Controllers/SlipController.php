@@ -204,4 +204,55 @@ public function downloadPdf($id)
     // Unduh PDF
     return $pdf->download('slip_gaji_' . $slip->id . '.pdf');
 }
+
+public function checkSlip(Request $request)
+{
+    $request->validate([
+        'user_id' => 'required|exists:users,id',
+        'period' => 'required|date_format:Y-m',
+    ]);
+
+    $userId = $request->input('user_id');
+    $period = $request->input('period') . '-01';
+
+    $slip = Slip::where('user_id', $userId)
+                ->where('period', $period)
+                ->first();
+
+    $users = User::all(['id', 'name']); // Tambahkan pengambilan data users
+
+    if ($slip) {
+        return view('index.cek_slip', [
+            'message' => 'Slip sudah dibuat.',
+            'users' => $users, // Kirimkan $users ke view
+        ]);
+    } else {
+        return view('index.cek_slip', [
+            'message' => 'Slip belum dibuat.',
+            'users' => $users, // Kirimkan $users ke view
+        ]);
+    }
+}
+public function showCheckSlipForm()
+{
+    $users = User::all(['id', 'name']); // Ambil hanya kolom id dan name
+    return view('index.cek_slip', compact('users'));
+}
+
+public function checkSlipAjax(Request $request)
+{
+    $request->validate([
+        'user_id' => 'required|exists:users,id',
+        'period' => 'required|date_format:Y-m',
+    ]);
+
+    $userId = $request->input('user_id');
+    $period = $request->input('period') . '-01';
+
+    $slip = Slip::where('user_id', $userId)
+                ->where('period', $period)
+                ->first();
+
+    return response()->json(['exists' => $slip ? true : false]);
+}
 }

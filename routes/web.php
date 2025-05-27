@@ -17,7 +17,8 @@ use App\Http\Controllers\SlipController;
 | Web Routes
 |--------------------------------------------------------------------------
 */
-
+Route::get('/slips/check', [SlipController::class, 'showCheckSlipForm'])->name('slips.check.form');
+Route::post('/slips/check-ajax', [SlipController::class, 'checkSlipAjax'])->name('slips.check.ajax');
 Route::get('/', function() {
     return Auth::check()
         ? redirect()->route('dashboard')
@@ -154,3 +155,5 @@ Route::middleware('auth')->group(function () {
     Route::get('/feedback/{id}/edit', [CrudController::class, 'feedbackEdit'])->name('feedback.edit');
     Route::put('/feedback/{id}', [CrudController::class, 'feedbackUpdate'])->name('feedback.update');
 });
+
+Route::post('/slips/check', [SlipController::class, 'checkSlip'])->name('slips.check');
