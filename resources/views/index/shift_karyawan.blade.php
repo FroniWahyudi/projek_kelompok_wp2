@@ -245,9 +245,6 @@
     <div class="container py-4">
         <div class="d-flex justify-content-between align-items-center mb-4 animate__animated animate__fadeIn">
             <h2 class="mb-0"><i class="bi bi-calendar-check me-2"></i>Shift & Jadwal Karyawan</h2>
-            <button class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#shiftModal" id="createBtn">
-                <i class="bi bi-plus-circle me-1"></i> Jadwal Baru
-            </button>
         </div>
 
         <div class="filter-group mb-4 animate__animated animate__fadeIn">
@@ -325,13 +322,12 @@
                         <div class="modal-body">
                             <input type="hidden" name="shift_id" id="shiftId">
                             <div class="mb-3">
-                                <label for="userSelect" class="form-label">Nama Karyawan</label>
-                                <select name="user_id" id="userSelect" class="form-select" required>
-                                    <option value="" disabled selected>Pilih karyawan...</option>
-                                    @foreach ($users as $user)
-                                        <option value="{{ $user->id }}">{{ $user->name }}</option>
-                                    @endforeach
-                                </select>
+                                
+   <div class="mb-3">
+    <label for="userSelect" class="form-label">Nama Karyawan</label>
+    <div id="userSelect" class="form-control" style="background-color: #f8f9fa; padding: 10px;" readonly>{{-- Nama akan diisi oleh JavaScript --}}</div>
+    <input type="hidden" name="user_id" id="userId">
+</div>
                             </div>
                             <div class="mb-3">
                                 <label for="dateInput" class="form-label">Tanggal</label>
@@ -377,35 +373,38 @@
         <?php $shiftsJson = json_encode($shifts); ?>
         const shifts = <?php echo $shiftsJson; ?>;
 
-        function openEditModal(id) {
-            const shift = shifts.find(s => s.id == id);
-            if (!shift) return;
-            const form = document.getElementById('shiftForm');
+      function openEditModal(id) {
+    const shift = shifts.find(s => s.id == id);
+    if (!shift) {
+        console.error('Shift tidak ditemukan untuk ID:', id);
+        return;
+    }
+    const form = document.getElementById('shiftForm');
 
-            // Set action URL untuk update
-            form.action = '/shifts/' + shift.id;
+    // Set action URL untuk update
+    form.action = '/shifts/' + shift.id;
 
-            // Hapus input _method lama jika ada
-            const oldMethod = form.querySelector('[name="_method"]');
-            if (oldMethod) oldMethod.remove();
+    // Hapus input _method lama jika ada
+    const oldMethod = form.querySelector('[name="_method"]');
+    if (oldMethod) oldMethod.remove();
 
-            // Tambah input method PUT untuk update
-            form.insertAdjacentHTML('afterbegin',
-                '<input type="hidden" name="_method" value="PUT">'
-            );
+    // Tambah input method PUT untuk update
+    form.insertAdjacentHTML('afterbegin',
+        '<input type="hidden" name="_method" value="PUT">'
+    );
 
-            // Isi form dengan data shift
-            document.getElementById('shiftId').value = shift.id;
-            document.getElementById('userSelect').value = shift.user_id;
-            // Jika shift.date masih ISO full, potong 10 karakter pertama:
-            document.getElementById('dateInput').value = shift.date.substr(0,10);
-            document.getElementById('typeSelect').value = shift.type;
+    // Isi form dengan data shift
+    document.getElementById('shiftId').value = shift.id;
+    document.getElementById('userSelect').textContent = shift.user.name; // Isi nama karyawan di div
+    document.getElementById('userId').value = shift.user_id; // Isi user_id di hidden input
+    document.getElementById('dateInput').value = shift.date.substr(0,10);
+    document.getElementById('typeSelect').value = shift.type;
 
-            // Tampilkan modal
-            new bootstrap.Modal(
-                document.getElementById('shiftModal')
-            ).show();
-        }
+    // Tampilkan modal
+    new bootstrap.Modal(
+        document.getElementById('shiftModal')
+    ).show();
+}
     </script>
 </body>
 </html>
