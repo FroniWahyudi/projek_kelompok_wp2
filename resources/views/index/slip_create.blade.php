@@ -135,6 +135,9 @@
             background-color: #2a6ecc;
             border-color: #2a6ecc;
         }
+        #employeeTable tbody tr {
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -216,7 +219,6 @@
                                                         <table class="table table-striped align-middle mb-0" id="employeeTable">
                                                             <thead class="table-dark">
                                                                 <tr>
-                                                                    <th>Pilih</th>
                                                                     <th>Foto</th>
                                                                     <th>Nama</th>
                                                                     <th>Departemen</th>
@@ -224,15 +226,12 @@
                                                             </thead>
                                                             <tbody>
                                                                 @foreach ($users as $user)
-                                                                    <tr data-department="{{ $user->department }}">
+                                                                    <tr data-department="{{ $user->department }}" data-id="{{ $user->id }}" data-name="{{ $user->name }}">
                                                                         <td>
-                                                                            <input type="radio" name="employee_radio" value="{{ $user->id }}" data-name="{{ $user->name }}" required>
+                                                                            <img src="{{ $user->photo_url ? asset($user->photo_url) : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) }}"
+                                                                                 width="40" height="40" class="rounded-circle"
+                                                                                 alt="{{ $user->name }}">
                                                                         </td>
-                                                                        <td>
-    <img src="{{ $user->photo_url ? asset($user->photo_url) : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) }}"
-         width="40" height="40" class="rounded-circle"
-         alt="{{ $user->name }}">
-</td>
                                                                         <td>{{ $user->name }}</td>
                                                                         <td>{{ $user->department }}</td>
                                                                     </tr>
@@ -514,11 +513,6 @@
                 document.getElementById('net-salary-amount').textContent = 'Rp ' + formatCurrency(netSalary);
 
                 // Perbarui pratinjau
-                updatePreview(totalEarnings, totalDeductions, netSalary);
-            }
-
-            // Fungsi untuk memperbarui pratinjau
-            function updatePreview(totalEarnings, totalDeductions, netSalary) {
                 const [y, m] = (periodInput.value || "").split("-");
                 if (y && m) {
                     const date = new Date(`${y}-${m}-01`);
@@ -530,10 +524,10 @@
                     preview.period.textContent = '-';
                 }
 
-                const selectedRadio = document.querySelector('input[name="employee_radio"]:checked');
-                if (selectedRadio) {
-                    preview.name.textContent = selectedRadio.dataset.name;
-                    preview.id.textContent = selectedRadio.value;
+                const selectedRow = document.querySelector('#employeeTable tbody tr.table-active');
+                if (selectedRow) {
+                    preview.name.textContent = selectedRow.getAttribute('data-name');
+                    preview.id.textContent = selectedRow.getAttribute('data-id');
                 } else {
                     preview.name.textContent = "-";
                     preview.id.textContent = "-";
@@ -581,12 +575,22 @@
                 preview.netSalary.textContent = 'Rp ' + formatCurrency(netSalary);
             }
 
-            // Event listener untuk radio buttons karyawan
-            document.querySelectorAll('input[name="employee_radio"]').forEach(radio => {
-                radio.addEventListener('change', function() {
-                    document.getElementById('selected-employee-id').value = this.value;
+            // Event listener untuk klik pada baris karyawan
+            const tbody = document.querySelector('#employeeTable tbody');
+            tbody.addEventListener('click', function(e) {
+                const tr = e.target.closest('tr');
+                if (tr) {
+                    // Deselect semua baris
+                    tbody.querySelectorAll('tr').forEach(row => row.classList.remove('table-active'));
+                    // Select baris yang diklik
+                    tr.classList.add('table-active');
+                    // Ambil ID karyawan
+                    const employeeId = tr.getAttribute('data-id');
+                    // Set input tersembunyi
+                    document.getElementById('selected-employee-id').value = employeeId;
+                    // Perbarui pratinjau
                     calculateTotals();
-                });
+                }
             });
 
             // Event listeners untuk input pendapatan dan potongan
@@ -730,7 +734,7 @@
                 const selectedDepartment = departmentFilter.value;
 
                 rows.forEach(row => {
-                    const name = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+                    const name = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
                     const department = row.getAttribute('data-department');
 
                     const matchesSearch = name.includes(searchText);
