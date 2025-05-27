@@ -201,6 +201,16 @@
                                                 <div class="col-md-12">
                                                     <div class="mb-3">
                                                         <label class="form-label">Pilih Karyawan</label>
+                                                        <!-- Search bar dan filter department -->
+                                                        <div class="d-flex mb-3">
+                                                            <input type="text" id="search-input" class="form-control me-2" placeholder="Cari nama karyawan...">
+                                                            <select id="department-filter" class="form-select">
+                                                                <option value="">Semua Department</option>
+                                                                @foreach ($departments as $department)
+                                                                    <option value="{{ $department }}">{{ $department }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
                                                         <!-- Hidden input untuk menyimpan user_id -->
                                                         <input type="hidden" name="user_id" id="selected-employee-id">
                                                         <table class="table table-striped align-middle mb-0" id="employeeTable">
@@ -214,15 +224,15 @@
                                                             </thead>
                                                             <tbody>
                                                                 @foreach ($users as $user)
-                                                                    <tr>
+                                                                    <tr data-department="{{ $user->department }}">
                                                                         <td>
                                                                             <input type="radio" name="employee_radio" value="{{ $user->id }}" data-name="{{ $user->name }}" required>
                                                                         </td>
                                                                         <td>
-                                                                            <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}"
-                                                                                 width="40" height="40" class="rounded-circle"
-                                                                                 alt="{{ $user->name }}">
-                                                                        </td>
+    <img src="{{ $user->photo_url ? asset($user->photo_url) : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) }}"
+         width="40" height="40" class="rounded-circle"
+         alt="{{ $user->name }}">
+</td>
                                                                         <td>{{ $user->name }}</td>
                                                                         <td>{{ $user->department }}</td>
                                                                     </tr>
@@ -708,6 +718,34 @@
                     });
                 }
             });
+
+            // Filter tabel karyawan
+            const searchInput = document.getElementById('search-input');
+            const departmentFilter = document.getElementById('department-filter');
+            const employeeTable = document.getElementById('employeeTable');
+            const rows = employeeTable.querySelectorAll('tbody tr');
+
+            function filterTable() {
+                const searchText = searchInput.value.toLowerCase();
+                const selectedDepartment = departmentFilter.value;
+
+                rows.forEach(row => {
+                    const name = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+                    const department = row.getAttribute('data-department');
+
+                    const matchesSearch = name.includes(searchText);
+                    const matchesDepartment = selectedDepartment === '' || department === selectedDepartment;
+
+                    if (matchesSearch && matchesDepartment) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            }
+
+            searchInput.addEventListener('input', filterTable);
+            departmentFilter.addEventListener('change', filterTable);
 
             // Inisialisasi awal
             calculateTotals();

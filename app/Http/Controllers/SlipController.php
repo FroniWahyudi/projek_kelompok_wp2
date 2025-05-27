@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Dompdf\Options;
 
+
 class SlipController extends Controller
 {
     public function index(Request $request)
@@ -43,20 +44,22 @@ class SlipController extends Controller
         return view('index.slip_gaji', compact('slips', 'years', 'users', 'nextId', 'mode'));
     }
 
-    public function create()
-    {
-        $years = Slip::selectRaw('YEAR(period) as year')
-                     ->distinct()
-                     ->orderByDesc('year')
-                     ->pluck('year');
-        $slips = Slip::with('user')->orderByDesc('period')->get();
-        $users = User::all();
-        $nextId = Slip::count() + 1;
-        $mode = 'create';
-        
-        return view('index.slip_create', compact('slips', 'years', 'users', 'nextId', 'mode'));
-    }
+ public function create()
+{
+    $years = Slip::selectRaw('YEAR(period) as year')
+                 ->distinct()
+                 ->orderByDesc('year')
+                 ->pluck('year');
+    $slips = Slip::with('user')->orderByDesc('period')->get();
+    $users = User::select('id', 'name', 'department', 'photo_url')->get(); // Pilih kolom yang diperlukan
+    $departments = User::select('department')
+                       ->distinct()
+                       ->pluck('department'); // Ambil daftar department unik
+    $nextId = Slip::count() + 1;
+    $mode = 'create';
 
+    return view('index.slip_create', compact('slips', 'years', 'users', 'departments', 'nextId', 'mode'));
+}
     public function store(Request $request)
     {
         Log::info('Slip@store called', $request->all());
