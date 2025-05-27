@@ -9,8 +9,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <!-- SweetAlert2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-
     <style>
         body {
             background-color: #f5f7fb;
@@ -203,12 +201,34 @@
                                                 <div class="col-md-12">
                                                     <div class="mb-3">
                                                         <label class="form-label">Pilih Karyawan</label>
-                                                       <select name="user_id" id="employee-select" class="form-select" required>
-    <option value="">-- Pilih Karyawan --</option>
-    @foreach($users as $user)
-        <option value="{{ $user->id }}">{{ $user->name }}</option>
-    @endforeach
-</select>
+                                                        <!-- Hidden input untuk menyimpan user_id -->
+                                                        <input type="hidden" name="user_id" id="selected-employee-id">
+                                                        <table class="table table-striped align-middle mb-0" id="employeeTable">
+                                                            <thead class="table-dark">
+                                                                <tr>
+                                                                    <th>Pilih</th>
+                                                                    <th>Foto</th>
+                                                                    <th>Nama</th>
+                                                                    <th>Departemen</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @foreach ($users as $user)
+                                                                    <tr>
+                                                                        <td>
+                                                                            <input type="radio" name="employee_radio" value="{{ $user->id }}" data-name="{{ $user->name }}" required>
+                                                                        </td>
+                                                                        <td>
+                                                                            <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}"
+                                                                                 width="40" height="40" class="rounded-circle"
+                                                                                 alt="{{ $user->name }}">
+                                                                        </td>
+                                                                        <td>{{ $user->name }}</td>
+                                                                        <td>{{ $user->department }}</td>
+                                                                    </tr>
+                                                                @endforeach
+                                                            </tbody>
+                                                        </table>
                                                     </div>
                                                 </div>
                                             </div>
@@ -411,14 +431,6 @@
                                                         <div class="section-title">Pendapatan</div>
                                                         <table class="table table-sm table-bordered">
                                                             <tbody id="preview-earnings-body">
-                                                                <tr>
-                                                                    <td>Gaji Pokok</td>
-                                                                    <td class="text-end income">5.000.000</td>
-                                                                </tr>
-                                                                <tr class="total-row">
-                                                                    <td>Total</td>
-                                                                    <td class="text-end income" id="preview-total-income">5.000.000</td>
-                                                                </tr>
                                                             </tbody>
                                                         </table>
                                                     </div>
@@ -426,21 +438,13 @@
                                                         <div class="section-title">Potongan</div>
                                                         <table class="table table-sm table-bordered">
                                                             <tbody id="preview-deductions-body">
-                                                                <tr>
-                                                                    <td>BPJS Kesehatan</td>
-                                                                    <td class="text-end deduction">50.000</td>
-                                                                </tr>
-                                                                <tr class="total-row">
-                                                                    <td>Total</td>
-                                                                    <td class="text-end deduction" id="preview-total-deduction">50.000</td>
-                                                                </tr>
                                                             </tbody>
                                                         </table>
                                                     </div>
                                                 </div>
                                                 <div class="net-salary d-flex justify-content-between">
                                                     <span>Gaji Bersih</span>
-                                                    <span id="preview-net-salary">Rp 4.950.000</span>
+                                                    <span id="preview-net-salary">Rp 0</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -457,7 +461,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- SweetAlert2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Fungsi untuk memformat angka ke dalam format mata uang
@@ -467,15 +470,12 @@
 
             // Elemen input/tab untuk preview
             const periodInput = document.getElementById('payslip-period');
-            const employeeSelect = document.getElementById('employee-select');
             const preview = {
                 period: document.getElementById('preview-period'),
                 name: document.getElementById('preview-employee-name'),
                 id: document.getElementById('preview-employee-id'),
                 earningsBody: document.getElementById('preview-earnings-body'),
                 deductionsBody: document.getElementById('preview-deductions-body'),
-                totalIncome: document.getElementById('preview-total-income'),
-                totalDeduction: document.getElementById('preview-total-deduction'),
                 netSalary: document.getElementById('preview-net-salary')
             };
 
@@ -520,9 +520,14 @@
                     preview.period.textContent = '-';
                 }
 
-                const sel = employeeSelect.selectedOptions[0];
-                preview.name.textContent = sel ? sel.textContent : "-";
-                preview.id.textContent = sel ? sel.value : "-";
+                const selectedRadio = document.querySelector('input[name="employee_radio"]:checked');
+                if (selectedRadio) {
+                    preview.name.textContent = selectedRadio.dataset.name;
+                    preview.id.textContent = selectedRadio.value;
+                } else {
+                    preview.name.textContent = "-";
+                    preview.id.textContent = "-";
+                }
 
                 // Update tabel pendapatan di pratinjau
                 preview.earningsBody.innerHTML = "";
@@ -566,6 +571,14 @@
                 preview.netSalary.textContent = 'Rp ' + formatCurrency(netSalary);
             }
 
+            // Event listener untuk radio buttons karyawan
+            document.querySelectorAll('input[name="employee_radio"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    document.getElementById('selected-employee-id').value = this.value;
+                    calculateTotals();
+                });
+            });
+
             // Event listeners untuk input pendapatan dan potongan
             document.querySelectorAll('.earning-amount, .deduction-amount').forEach(input => {
                 input.addEventListener('input', calculateTotals);
@@ -607,9 +620,7 @@
                         <td><input type="number" class="form-control deduction-amount" name="deductions[${rowCount}][amount]" value="0"></td>
                         <td class="text-center">
                             <button type="button" class="btn btn-sm btn-outline-danger delete-row-btn">
-                                <img src="{{ asset('img/logo_brand.png') }}" 
-                                                             alt="Logo {{ config('app.name') }}" 
-                                                             style="height: 71px; object-fit: contain;">
+                                <i class="bi bi-trash"></i>
                             </button>
                         </td>
                     `;
@@ -631,7 +642,6 @@
 
             // Preview change listeners
             periodInput?.addEventListener('change', calculateTotals);
-            employeeSelect?.addEventListener('change', calculateTotals);
             document.querySelector('button[data-bs-target="#preview-content"]')?.addEventListener('shown.bs.tab', calculateTotals);
 
             // Validasi form submit
@@ -647,7 +657,8 @@
                 }
 
                 // Cek karyawan
-                if (!employeeSelect.value) {
+                const selectedEmployeeId = document.getElementById('selected-employee-id').value;
+                if (!selectedEmployeeId) {
                     isValid = false;
                     errorMessage += 'Karyawan harus dipilih.\n';
                 }
@@ -671,13 +682,6 @@
                         }
                     });
                 }
-
-$(document).ready(function() {
-        $('#employee-select').select2({
-            placeholder: "-- Pilih Karyawan --",
-            allowClear: true
-        });
-    });
 
                 // Cek potongan (opsional, tapi jika ada harus diisi dengan benar)
                 const deductionsRows = document.querySelectorAll('#deductions-table tbody tr');
