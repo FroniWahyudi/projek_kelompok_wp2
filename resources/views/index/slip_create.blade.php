@@ -138,6 +138,29 @@
         #employeeTable tbody tr {
             cursor: pointer;
         }
+        /* Status Badge Styles */
+        .status-badge {
+            padding: 0.35em 0.65em;
+            font-size: 0.75em;
+            font-weight: 700;
+            border-radius: 0.25rem;
+        }
+        .status-checking {
+            background-color: #f6c23e;
+            color: #000;
+        }
+        .status-exists {
+            background-color: #1cc88a;
+            color: white;
+        }
+        .status-not-exists {
+            background-color: #e74a3b;
+            color: white;
+        }
+        .status-error {
+            background-color: #36b9cc;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -222,6 +245,7 @@
                                                                     <th>Foto</th>
                                                                     <th>Nama</th>
                                                                     <th>Departemen</th>
+                                                                    <th>Status</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -234,6 +258,7 @@
                                                                         </td>
                                                                         <td>{{ $user->name }}</td>
                                                                         <td>{{ $user->department }}</td>
+                                                                        <td></td> <!-- Status akan diperbarui via AJAX -->
                                                                     </tr>
                                                                 @endforeach
                                                             </tbody>
@@ -470,6 +495,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- SweetAlert2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Fungsi untuk memformat angka ke dalam format mata uang
@@ -753,6 +780,59 @@
 
             // Inisialisasi awal
             calculateTotals();
+
+            // Status check functionality
+            var checkAjaxUrl = "{{ route('slips.check.ajax') }}";
+            var csrfToken = '{{ csrf_token() }}';
+
+            function updateStatuses(period) {
+                if (period) {
+                    // Show loading state for all status cells
+                    $('#employeeTable tbody tr').each(function() {
+                        var statusCell = $(this).find('td:last');
+                        statusCell.html('<span class="status-badge status-checking"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Checking</span>');
+                    });
+
+                    // For each row, make AJAX call
+                    $('#employeeTable tbody tr').each(function() {
+                        var userId = $(this).data('id');
+                        var statusCell = $(this).find('td:last');
+
+                        $.ajax({
+                            url: checkAjaxUrl,
+                            method: 'POST',
+                            data: {
+                                user_id: userId,
+                                period: period,
+                                _token: csrfToken
+                            },
+                            success: function(response) {
+                                if (response.exists) {
+                                    statusCell.html('<span class="status-badge status-exists">Slip sudah dibuat</span>');
+                                } else {
+                                    statusCell.html('<span class="status-badge status-not-exists">Slip belum dibuat</span>');
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                statusCell.html('<span class="status-badge status-error">Error</span>');
+                                console.error(error);
+                            }
+                        });
+                    });
+                }
+            }
+
+            // Event listener for period change
+            $('#payslip-period').on('change', function() {
+                var period = $(this).val();
+                updateStatuses(period);
+            });
+
+            // Initial check on page load
+            var initialPeriod = $('#payslip-period').val();
+            if (initialPeriod) {
+                updateStatuses(initialPeriod);
+            }
         });
     </script>
 </body>
