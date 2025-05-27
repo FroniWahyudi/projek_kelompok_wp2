@@ -7,163 +7,376 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4cc9f0;
+            --light-bg: #f8f9fa;
+            --dark-text: #212529;
+            --light-text: #6c757d;
+            --success-color: #38b000;
+            --warning-color: #ff9e00;
+            --danger-color: #ef233c;
+        }
+        
         body {
             background-color: #f5f7fb;
-            font-family: 'Segoe UI', Tahoma, sans-serif;
+            font-family: 'Poppins', sans-serif;
+            color: var(--dark-text);
         }
+        
         .main-content {
             background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
-            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 30px;
             min-height: 90vh;
+            margin-top: 20px;
         }
+        
         .page-title {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: 600;
-            color: #212529;
-            margin-bottom: 20px;
+            color: var(--dark-text);
+            margin-bottom: 25px;
+            position: relative;
+            display: inline-block;
         }
+        
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 50px;
+            height: 4px;
+            background: var(--primary-color);
+            border-radius: 2px;
+        }
+        
         .card {
             border: none;
-            border-radius: 10px;
-            box-shadow: 0 1px 10px rgba(0, 0, 0, 0.05);
-            margin-bottom: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.06);
+            margin-bottom: 25px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
+        
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        
         .card-header {
-            background: #f8f9fa;
-            border-bottom: 1px solid #e9ecef;
-            padding: 15px;
-            font-weight: 600;
+            background: var(--primary-color);
+            color: white;
+            border-bottom: none;
+            padding: 15px 20px;
+            font-weight: 500;
+            border-radius: 12px 12px 0 0 !important;
         }
+        
+        .table {
+            margin-bottom: 0;
+        }
+        
         .table th {
             font-weight: 600;
-            color: #495057;
-            background-color: #f8f9fa;
+            color: var(--dark-text);
+            background-color: var(--light-bg);
+            padding: 12px 15px;
+            border-bottom: 1px solid #dee2e6;
         }
+        
+        .table td {
+            padding: 12px 15px;
+            vertical-align: middle;
+            border-bottom: 1px solid #f1f1f1;
+        }
+        
+        .table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .table tr:hover td {
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline-primary {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
         .btn-action {
             padding: 5px 10px;
             margin-right: 5px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
         }
+        
+        .btn-action:hover {
+            transform: translateY(-1px);
+        }
+        
         .status-badge {
-            padding: 5px 10px;
+            padding: 6px 12px;
             border-radius: 20px;
             font-size: 12px;
             font-weight: 500;
+            display: inline-block;
+            min-width: 80px;
+            text-align: center;
         }
+        
         .status-published {
-            background: #d1e7dd;
-            color: #0f5132;
+            background: rgba(56, 176, 0, 0.1);
+            color: var(--success-color);
         }
-        .mt-auto {
-            margin-top: 0.5rem !important;
+        
+        .status-draft {
+            background: rgba(255, 158, 0, 0.1);
+            color: var(--warning-color);
         }
-        .btn-primary {
-            background-color: #3a86ff;
-            border-color: #3a86ff;
+        
+        .status-canceled {
+            background: rgba(239, 35, 60, 0.1);
+            color: var(--danger-color);
         }
-        .btn-primary:hover {
-            background-color: #2a6ecc;
-            border-color: #2a6ecc;
+        
+        .form-select, .form-control {
+            border-radius: 8px;
+            padding: 10px 15px;
+            border: 1px solid #e0e0e0;
+            transition: all 0.3s ease;
         }
-        td {
-            text-align: left;
+        
+        .form-select:focus, .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
+        }
+        
+        .filter-section {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
+        }
+        
+        .filter-label {
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--dark-text);
+        }
+        
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: var(--light-text);
+        }
+        
+        .no-data i {
+            font-size: 50px;
+            margin-bottom: 15px;
+            color: #e0e0e0;
+        }
+        
+        .pagination {
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .page-item.active .page-link {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .page-link {
+            color: var(--primary-color);
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 15px;
+            }
+            
+            .page-title {
+                font-size: 22px;
+            }
+            
+            .table-responsive {
+                border-radius: 10px;
+                overflow: hidden;
+            }
+            
+            .table th, .table td {
+                padding: 8px 10px;
+                font-size: 14px;
+            }
+            
+            .btn-action {
+                margin-bottom: 5px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12 p-0">
+        <div class="row justify-content-center">
+            <div class="col-lg-11 col-xl-10">
                 <div class="main-content">
                     <!-- Payslips List View -->
                     <div id="payslips-view">
-                        <div class="mb-3">
-                            <a href="{{ route('dashboard') }}" class="btn btn-primary">
-                                <i class="bi bi-house-door-fill"></i> Home
-                            </a>
-                        </div>
                         <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h1 class="page-title mb-0">{{ $title ?? 'Pengelolaan Slip Gaji' }}</h1>
+                            <div>
+                                <a href="{{ route('dashboard') }}" class="btn btn-primary me-2">
+                                    <i class="bi bi-house-door-fill me-1"></i> Home
+                                </a>
+                                <h1 class="page-title d-inline-block ms-2">{{ $title ?? 'Pengelolaan Slip Gaji' }}</h1>
+                            </div>
+                            @if(auth()->user()->role != 'Operator')
+                                <a href="{{ route('slip_create') }}" class="btn btn-primary">
+                                    <i class="bi bi-plus-lg me-1"></i> Buat Slip Baru
+                                </a>
+                            @endif
                         </div>
-                        <form method="GET" action="{{ route('slips.index') }}" class="row mb-3">
-                            <div class="col-md-3">
-                                <label for="filter-month" class="form-label">Pilih Bulan</label>
-                                <select name="month" id="filter-month" class="form-select">
-                                    <option value="" {{ request('month') == '' ? 'selected' : '' }}>Semua Bulan</option>
-                                    @foreach(range(1, 12) as $m)
-                                        <option value="{{ sprintf('%02d', $m) }}" {{ request('month') == sprintf('%02d', $m) ? 'selected' : '' }}>
-                                            {{ DateTime::createFromFormat('!m', $m)->format('F') }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <label for="filter-year" class="form-label">Pilih Tahun</label>
-                                <select name="year" id="filter-year" class="form-select">
-                                    <option value="" {{ request('year') == '' ? 'selected' : '' }}>Semua Tahun</option>
-                                    @foreach($years as $year)
-                                        <option value="{{ $year }}" {{ request('year') == $year ? 'selected' : '' }}>{{ $year }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-6 mt-auto text-end">
-                                @if(auth()->user()->role != 'Operator')
-                                    <a href="{{ route('slip_create') }}" class="btn btn-primary mt-4">
-                                        <i class="bi bi-plus-lg"></i> Buat Slip Gaji Baru
-                                    </a>
-                                @endif
-                            </div>
-                        </form>
+                        
+                        <div class="filter-section mb-4">
+                            <form method="GET" action="{{ route('slips.index') }}" class="row g-3">
+                                <div class="col-md-3">
+                                    <label for="filter-month" class="filter-label">Pilih Bulan</label>
+                                    <select name="month" id="filter-month" class="form-select">
+                                        <option value="" {{ request('month') == '' ? 'selected' : '' }}>Semua Bulan</option>
+                                        @foreach(range(1, 12) as $m)
+                                            <option value="{{ sprintf('%02d', $m) }}" {{ request('month') == sprintf('%02d', $m) ? 'selected' : '' }}>
+                                                {{ DateTime::createFromFormat('!m', $m)->format('F') }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="filter-year" class="filter-label">Pilih Tahun</label>
+                                    <select name="year" id="filter-year" class="form-select">
+                                        <option value="" {{ request('year') == '' ? 'selected' : '' }}>Semua Tahun</option>
+                                        @foreach($years as $year)
+                                            <option value="{{ $year }}" {{ request('year') == $year ? 'selected' : '' }}>{{ $year }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-6 d-flex align-items-end justify-content-end">
+                                    <button type="button" id="reset-filter" class="btn btn-outline-secondary">
+                                        <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        
                         <div class="card">
-                            <div class="card-header">Daftar Slip Gaji</div>
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <span><i class="bi bi-file-earmark-text me-2"></i> Daftar Slip Gaji</span>
+                                <span class="badge bg-white text-primary">{{ $slips->count() }} Data Ditemukan</span>
+                            </div>
                             <div class="table-responsive">
-                                <table class="table table-hover">
+                                <table class="table table-hover mb-0">
                                     <thead>
                                         <tr>
-                                            <th class="col-1 text-center">ID Slip</th>
-                                            <th class="col-3">Nama Karyawan</th>
-                                            <th class="col-2">Periode</th>
-                                            <th class="col-2">Gaji Bersih</th>
-                                            <th class="col-1">Status</th>
-                                            <th class="col-3 text-center">Aksi</th>
+                                            <th class="text-center">ID Slip</th>
+                                            <th>Nama Karyawan</th>
+                                            <th>Periode</th>
+                                            <th>Gaji Bersih</th>
+                                            <th class="text-center">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($slips->sortByDesc('id') as $slip)
+                                        @if($slips->count() > 0)
+                                            @foreach($slips->sortByDesc('id') as $slip)
+                                                <tr>
+                                                    <td class="text-center fw-bold">#{{ $slip->id }}</td>
+                                                    <td>
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="avatar-sm bg-light rounded-circle d-flex align-items-center justify-content-center me-2">
+                                                                <i class="bi bi-person-fill text-primary"></i>
+                                                            </div>
+                                                            <span>{{ $slip->user->name }}</span>
+                                                        </div>
+                                                    </td>
+                                                    <td>{{ $slip->period->formatLocalized('%B %Y') }}</td>
+                                                    <td class="fw-bold text-success">{{ 'Rp ' . number_format($slip->net_salary, 0, ',', '.') }}</td>
+                                                    <td class="text-center">
+                                                        <div class="d-flex justify-content-center">
+                                                            <a href="{{ route('slips.show', $slip->id) }}" class="btn btn-sm btn-outline-info btn-action me-2" data-bs-toggle="tooltip" title="Lihat Detail">
+                                                                <i class="bi bi-eye"></i>
+                                                            </a>
+                                                            @if(auth()->user()->role != 'Operator')
+                                                                <a href="{{ route('slips.edit', $slip) }}" class="btn btn-sm btn-outline-primary btn-action me-2" data-bs-toggle="tooltip" title="Edit">
+                                                                    <i class="bi bi-pencil"></i>
+                                                                </a>
+                                                                <form action="{{ route('slips.destroy', $slip) }}" method="POST" class="d-inline">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <button type="submit" class="btn btn-sm btn-outline-danger btn-action" data-bs-toggle="tooltip" title="Hapus">
+                                                                        <i class="bi bi-trash"></i>
+                                                                    </button>
+                                                                </form>
+                                                            @endif
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @else
                                             <tr>
-                                                <td class="text-center">{{ $slip->id }}</td>
-                                                <td>{{ $slip->user->name }}</td>
-                                                <td>{{ $slip->period->formatLocalized('%B %Y') }}</td>
-                                                <td>{{ 'Rp ' . number_format($slip->net_salary, 0, ',', '.') }}</td>
-                                                <td>
-                                                    <span class="status-badge status-{{ strtolower($slip->status) }}">
-                                                        {{ $slip->status }}
-                                                    </span>
-                                                </td>
-                                                <td class="text-center">
-                                                    <a href="{{ route('slips.show', $slip->id) }}" class="btn btn-sm btn-outline-info btn-action">
-                                                        <i class="bi bi-eye"></i> Lihat Detail
-                                                    </a>
-                                                    @if(auth()->user()->role != 'Operator')
-                                                        <a href="{{ route('slips.edit', $slip) }}" class="btn btn-sm btn-outline-primary btn-action">
-                                                            <i class="bi bi-pencil"></i>
-                                                        </a>
-                                                        <form action="{{ route('slips.destroy', $slip) }}" method="POST" class="d-inline">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="btn btn-sm btn-outline-danger btn-action">
-                                                                <i class="bi bi-trash"></i>
-                                                            </button>
-                                                        </form>
-                                                    @endif
+                                                <td colspan="6" class="no-data">
+                                                    <i class="bi bi-file-earmark-excel"></i>
+                                                    <h5 class="mt-3">Tidak ada data slip gaji</h5>
+                                                    <p class="text-muted">Silakan buat slip gaji baru atau sesuaikan filter pencarian Anda</p>
                                                 </td>
                                             </tr>
-                                        @endforeach
+                                        @endif
                                     </tbody>
                                 </table>
                             </div>
+                            @if($slips->count() > 0)
+                                <div class="card-footer bg-white">
+                                    <nav aria-label="Page navigation">
+                                        <ul class="pagination justify-content-center mb-0">
+                                            <li class="page-item disabled">
+                                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                                            </li>
+                                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="#">Next</a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -175,13 +388,50 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialize tooltips
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+            
             // Auto-submit filter
-            const filterForm  = document.querySelector('form.row.mb-3');
+            const filterForm = document.querySelector('form.row.g-3');
             const filterMonth = document.getElementById('filter-month');
-            const filterYear  = document.getElementById('filter-year');
-
+            const filterYear = document.getElementById('filter-year');
+            
             filterMonth?.addEventListener('change', () => filterForm.submit());
             filterYear?.addEventListener('change', () => filterForm.submit());
+            
+            // Reset filter
+            const resetFilter = document.getElementById('reset-filter');
+            resetFilter?.addEventListener('click', function() {
+                filterMonth.value = '';
+                filterYear.value = '';
+                filterForm.submit();
+            });
+            
+            // Add animation to table rows
+            const tableRows = document.querySelectorAll('tbody tr');
+            tableRows.forEach((row, index) => {
+                row.style.opacity = '0';
+                row.style.transform = 'translateY(20px)';
+                row.style.transition = `all 0.3s ease ${index * 0.05}s`;
+                
+                setTimeout(() => {
+                    row.style.opacity = '1';
+                    row.style.transform = 'translateY(0)';
+                }, 50);
+            });
+            
+            // Add confirmation for delete action
+            const deleteButtons = document.querySelectorAll('.btn-outline-danger');
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    if (!confirm('Apakah Anda yakin ingin menghapus slip gaji ini?')) {
+                        e.preventDefault();
+                    }
+                });
+            });
         });
     </script>
 </body>
