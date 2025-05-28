@@ -13,7 +13,7 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
         $role = $user->role;
-        $newsItems = News::all();
+        $newsItems = News::orderBy('created_at', 'desc')->get();
 
         return view('index.dashboard', compact('user', 'role', 'newsItems'));
     }
