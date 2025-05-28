@@ -20,7 +20,8 @@ class NewsController extends Controller
     }
     public function create()
     {
-        return view('news.create');
+        $edit = false; // Flag to indicate if this is an edit or create operation
+        return view('news.edit', compact('edit'));
     }
 
     public function store(Request $request)
@@ -31,6 +32,9 @@ class NewsController extends Controller
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
+        $validated['date'] = now(); // Set current date
+        $validated['link'] = ''; // Initialize link, can be set later if needed
+
         if ($request->hasFile('photo')) {
             $file = $request->file('photo');
             $path = $file->store('photos', 'public');
@@ -38,13 +42,14 @@ class NewsController extends Controller
         }
 
         News::create($validated);
-        return redirect()->route('whats_new')->with('success', 'News created successfully.');
+        return redirect()->route('dashboard')->with('success', 'News created successfully.');
     }
 
     public function edit($id)
     {
         $news = News::findOrFail($id);
-        return view('news.edit', compact('news'));
+        $edit = true; // Flag to indicate this is an edit operation
+        return view('news.edit', compact('news', 'edit'));
     }
 
     public function update(Request $request, $id)

@@ -610,24 +610,145 @@
         @if(auth()->user()->role === 'Manajer' || auth()->user()->role === 'Admin')
           <li><a class="dropdown-item" href="{{ route('laporan.index') }}"><i class="bi bi-journal-text me-1"></i> Daftar Resi</a></li>
         @endif
-        @if(auth()->user()->role === 'Leader')
-          <li><a class="dropdown-item" href="{{ route('laporan.index') }}"><i class="bi bi-journal-text me-1"></i> Resi hari ini</a></li>
-        @endif
-        @if(auth()->user()->role === 'Manajer')
-          <li><a class="dropdown-item" href="{{ route('cuti.index') }}"><i class="bi bi-check-square me-1"></i> Daftar Pengajuan Cuti</a></li>
-        @endif
-        @if(auth()->user()->role === 'Operator' || auth()->user()->role === 'Admin' || auth()->user()->role === 'Leader')
-          <li><a class="dropdown-item" href="{{ route('cuti.index') }}"><i class="bi bi-file-earmark-text me-1"></i> Pengajuan Cuti</a></li>
-          <li><a class="dropdown-item" href="{{ route('slips.index') }}"><i class="bi bi-receipt me-1"></i> Slip Gaji</a></li>
-        @endif
-        <li>
-          <a class="dropdown-item" href="feedback">
-            <i class="bi bi-chat-dots me-1"></i>
-            @if(auth()->user()->role === 'Operator')
-              Evaluasi Kinerja
-            @else
-              Feedback Pegawai
-            @endif
+
+      </a>
+    </li>
+    <li><a class="dropdown-item" href="{{ route('shift.karyawan') }}"><i class="bi bi-clock-history me-1"></i> Shift & Jadwal</a></li>
+  </ul>
+</div>
+
+<!-- Profile -->
+<div id="profileDropdownToggle" class="d-flex align-items-center nav-item" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#profileModal">
+  <img src="<?= htmlspecialchars($user['photo_url'] ?: 'img/default_profile.png') ?>"
+       class="rounded-circle me-2" width="50" height="50" alt="Foto Profil" style="object-fit:cover; border-radius:50%; ">
+  <div class="d-none d-md-block">
+    <strong><?= htmlspecialchars($user['name']) ?></strong><br>
+    <small class="text-muted"><?= htmlspecialchars($user['role']) ?></small>
+  </div>
+</div>
+
+
+
+  <!-- Logo Center -->
+  <div class="logo-brand">
+    <img src="img/logo_brand.png" alt="Logo Brand">
+  </div>
+
+  <!-- Logout -->
+  <div class="ms-auto nav-item d-none d-md-block">
+    <a href="/logout" class="btn btn-outline-dark">
+      <i class="bi bi-box-arrow-right me-1"></i>
+      Logout
+    </a>
+  </div>
+</nav>
+
+ <!-- Sidebar -->
+<nav class="sidebar">
+  <h6 class="fw-bold text-uppercase">Divisi Karyawan</h6>
+
+  <a href="{{ route('hr.manajemen') }}" class="btn btn-outline-primary w-100 mb-2">
+    <i class="bi bi-people-fill me-1"></i> Manajemen
+  </a>
+  <a href="{{ route('hr.admin') }}" class="btn btn-outline-primary w-100 mb-2">
+    <i class="bi bi-person-circle me-1"></i> Administrasi
+  </a>
+  <a href="{{ route('hr.leader') }}" class="btn btn-outline-primary w-100 mb-2">
+    <i class="bi bi-people-fill me-1"></i> Leader
+  </a>
+  <a href="{{ route('operator.index') }}" class="btn btn-outline-primary w-100 mb-2">
+    <i class="bi bi-people-fill me-1"></i> Operator Gudang
+  </a>
+
+  <hr>
+
+  <h6 class="fw-bold">Menu Lainnya</h6>
+
+  {{-- Manajer dan HR --}}
+  @if(auth()->user()->role === 'Manajer' || auth()->user()->role === 'Admin')
+    <a href="{{ route('laporan.index') }}" class="btn btn-outline-dark w-100 mb-2">
+      <i class="bi bi-journal-text me-1"></i> Daftar Resi
+    </a>
+  @endif
+
+  {{-- Leader dan HR kirim laporan --}}
+  @if(auth()->user()->role === 'Leader')
+    <a href="{{ route('laporan.index') }}" class="btn btn-outline-dark w-100 mb-2">
+      <i class="bi bi-journal-text me-1"></i> Resi hari ini
+    </a>
+  @endif
+
+  {{-- Manajer akses Pengajuan Cuti --}}
+  @if(auth()->user()->role === 'Manajer')
+    <a href="{{ route('cuti.index') }}" class="btn btn-outline-dark w-100 mb-2">
+      <i class="bi bi-check-square me-1"></i> Daftar Pengajuan Cuti
+    </a>
+  @endif
+
+  {{-- Operator --}}
+  @if(auth()->user()->role === 'Operator' || auth()->user()->role === 'Admin' || auth()->user()->role === 'Leader')
+    <a href="{{ route('cuti.index') }}" class="btn btn-outline-dark w-100 mb-2">
+      <i class="bi bi-file-earmark-text me-1"></i> Pengajuan Cuti
+    </a>
+  <a href="{{ route('slips.index') }}" 
+   class="btn btn-outline-dark w-100 mb-2">
+  <i class="bi bi-receipt me-1"></i> Slip Gaji
+</a>
+
+  @endif
+
+  <a href="feedback" class="btn btn-outline-dark w-100 mb-2">
+    <i class="bi bi-chat-dots me-1"></i>
+    @if(auth()->user()->role === 'Operator')
+      Evaluasi Kinerja
+    @else
+      Feedback Pegawai
+    @endif
+  </a>
+
+  <a href="{{ route('shift.karyawan') }}" class="btn btn-outline-dark w-100 mb-2">
+    <i class="bi bi-clock-history me-1"></i> Shift & Jadwal
+  </a>
+
+  <a href="{{ route('reset.password.form') }}" class="btn btn-outline-dark w-100 mb-2">
+    <i class="bi bi-clock-history me-1"></i> Reset Password
+  </a>
+</nav>
+
+
+
+
+ <!-- Main Content -->
+ 
+<main>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="mb-0">What's New</h3>
+    @if(auth()->user()->role === 'Manajer' || auth()->user()->role === 'Admin')
+      <a href="{{ route('whats_new.create') }}" class="btn btn-primary">
+        <i class="bi bi-plus-lg me-1"></i> New
+      </a>
+    @endif
+  </div>
+  <div class="row g-3">
+    @foreach($newsItems as $idx => $item)
+      @php
+        $total = count($newsItems);
+        $col = ($idx >= $total - 2) ? 'col-md-6' : 'col-md-3';
+      @endphp
+      <div class="col-12 col-sm-6 {{ $col }}">
+        <a href="{{ route('whats_new', ['id' => $item['id']]) }}"
+           class="text-decoration-none text-reset">
+          <div class="card card-news shadow-sm h-100 position-relative">
+        <img src="{{ htmlspecialchars($item['image_url']) }}"
+             class="card-img-top"
+             alt="{{ htmlspecialchars($item['title']) }}">
+        @if(auth()->user()->role === 'Admin' || auth()->user()->role === 'Manajer')
+          <a href="{{ route('whats_new.edit', ['id' => $item['id']]) }}"
+             class="btn btn-sm btn-light position-absolute"
+             style="top: 10px; right: 10px; z-index: 2;"
+             title="Edit">
+            <i class="bi bi-pencil-square"></i>
+
           </a>
         </li>
         <li><a class="dropdown-item" href="{{ route('shift.karyawan') }}"><i class="bi bi-clock-history me-1"></i> Shift & Jadwal</a></li>
