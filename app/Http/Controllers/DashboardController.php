@@ -4,13 +4,11 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use App\Models\News;
 use App\Models\User;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class DashboardController extends Controller
 {
-
     public function index()
     {
         $user = Auth::user();
@@ -76,4 +74,23 @@ class DashboardController extends Controller
         return redirect()->route('profil.edit', $user->id)->with('success', 'Profil berhasil diperbarui.');
     }
 
+    public function showResetForm()
+    {
+        return view('index.reset_pw');
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:users,id',
+            'password' => 'required|min:4|confirmed',
+        ]);
+
+        $user = User::findOrFail($request->id);
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        return redirect()->route('reset.form')->with('success', 'Password berhasil direset.');
+    }
+    
 }

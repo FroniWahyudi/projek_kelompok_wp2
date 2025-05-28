@@ -17,6 +17,17 @@ use App\Http\Controllers\SlipController;
 | Web Routes
 |--------------------------------------------------------------------------
 */
+use App\Http\Controllers\PasswordController;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
+
+// Menampilkan form reset password
+Route::get('/reset-password', [DashboardController::class, 'showResetForm'])
+     ->name('reset.form');
+
+// Menangani form submission
+Route::post('/reset-password', [DashboardController::class, 'resetPassword'])
+     ->name('reset.password');
+
 Route::get('/slips/check', [SlipController::class, 'showCheckSlipForm'])->name('slips.check.form');
 Route::post('/slips/check-ajax', [SlipController::class, 'checkSlipAjax'])->name('slips.check.ajax');
 Route::get('/', function() {
