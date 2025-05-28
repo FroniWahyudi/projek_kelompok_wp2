@@ -1,566 +1,894 @@
-@php 
-use Illuminate\Support\Str; 
-use Illuminate\Support\Carbon;
-@endphp
-
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Dashboard - Naga Hytam Sejahtera Abadi</title>
-  @vite([
-      'resources/js/app.js',
-      'resources/sass/app.scss',
-      'resources/css/app.css'
-      ])
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
   <style>
-  /* === GAYA NAVBAR UTAMA === */
-  .navbar-custom {
-    background-color: #ffffff;
-    height: 80px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1030;
-    display: flex;
-    align-items: center;
-    padding: 0 1rem;
-  }
-
-  .navbar-custom .nav-item {
-    margin-right: 1rem;
-  }
-
-  .navbar-custom .logo-brand {
-    flex: 1;
-    text-align: center;
-  }
-
-  .navbar-custom .logo-brand img {
-    height: 86px;
-    object-fit: contain;
-  }
-
-  /* === GAYA SIDEBAR === */
-  .sidebar {
-    position: fixed;
-    top: 80px;
-    bottom: 0;
-    left: 0;
-    width: 250px;
-    background-color: #fff;
-    border-right: 1px solid #ddd;
-    padding: 1rem;
-    overflow-y: auto;
-    z-index: 1020;
-  }
-
-  /* === GAYA UTAMA HALAMAN === */
-  main {
-    margin-top: 100px;
-    margin-left: 270px;
-    padding: 1rem;
-  }
-
-  /* === GAYA KARTU BERITA === */
-  .card-news img {
-    height: 160px;
-    object-fit: cover;
-  }
-
-  .card-news {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .card-news .card-body {
-    flex-grow: 1;
-  }
-
-
-  /* Hover effect untuk kartu berita */
-  .card-news {
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    :root {
+      --primary-color: #3498db;
+      --secondary-color: #2c3e50;
+      --accent-color: #e74c3c;
+      --light-color: #ecf0f1;
+      --dark-color: #2c3e50;
+      --success-color: #2ecc71;
     }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f7fa;
+      color: #333;
+      overflow-x: hidden;
+    }
+    
+    /* === NAVBAR STYLING === */
+    .navbar-custom {
+      background-color: white;
+      height: 80px;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1030;
+      display: flex;
+      align-items: center;
+      padding: 0 1.5rem;
+      transition: all 0.3s ease;
+    }
+    
+    .navbar-custom.scrolled {
+      height: 70px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .navbar-custom .nav-item {
+      margin-right: 1rem;
+    }
+    
+    .navbar-custom .logo-brand {
+      flex: 1;
+      text-align: center;
+    }
+    
+    .navbar-custom .logo-brand img {
+      height: 86px;
+      object-fit: contain;
+      transition: all 0.3s ease;
+    }
+    
+    .navbar-custom.scrolled .logo-brand img {
+      height: 70px;
+    }
+    
+    /* === SIDEBAR STYLING === */
+    .sidebar {
+      position: fixed;
+      top: 80px;
+      bottom: 0;
+      left: 0;
+      width: 250px;
+      background-color: white;
+      border-right: 1px solid #e0e0e0;
+      padding: 1.5rem 1rem;
+      overflow-y: auto;
+      z-index: 1020;
+      transition: all 0.3s ease;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+    }
+    
+    .sidebar:hover {
+      box-shadow: 2px 0 15px rgba(0,0,0,0.1);
+    }
+    
+    .sidebar h6 {
+      color: var(--secondary-color);
+      font-weight: 600;
+      margin-top: 1rem;
+      margin-bottom: 0.75rem;
+      padding-left: 0.5rem;
+      border-left: 3px solid var(--primary-color);
+    }
+    
+    .sidebar hr {
+      margin: 1.5rem 0;
+      opacity: 0.2;
+    }
+    
+    .sidebar .btn {
+      margin-bottom: 0.75rem;
+      text-align: left;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      font-size: 0.9rem;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .sidebar .btn:hover {
+      transform: translateX(5px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .sidebar .btn i {
+      margin-right: 0.5rem;
+      width: 20px;
+      text-align: center;
+    }
+    
+    /* === MAIN CONTENT STYLING === */
+    main {
+      margin-top: 100px;
+      margin-left: 270px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+    }
+    
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .page-header h3 {
+      font-weight: 700;
+      color: var(--secondary-color);
+      position: relative;
+      padding-left: 1rem;
+    }
+    
+    .page-header h3::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 70%;
+      width: 4px;
+      background-color: var(--primary-color);
+      border-radius: 4px;
+    }
+    
+    /* === NEWS CARDS STYLING === */
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .card-news {
+      border: none;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      background-color: white;
+    }
+    
     .card-news:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      transform: translateY(-8px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
     }
+    
     .card-news a {
       text-decoration: none;
       color: inherit;
+      display: flex;
+      flex-direction: column;
+      height: 20%;
     }
-
     
-  @media (min-width: 1310px) and (max-width: 1330px) {
-    /* Posisi ulang tombol profil */
-    #profileDropdownToggle {
-      position: absolute;
-      top: 20px;
-      left: 2rem;
-    }
-  }
-  /* === RESPONSIVE: LAYAR ≤ 900px === */
-  @media (max-width: 900px) {
-    /* Posisi ulang tombol profil */
-    #profileDropdownToggle {
-      position: absolute;
-      top: 20px;
-      right: 1rem;
-    }
-  }
-
-  /* === RESPONSIVE: LAYAR ≤ 700px === */
-  @media (max-width: 700px) {
-    .sidebar {
-      display: none;
-    }
-
-    main {
-      margin-left: 0;
-    }
-
-    /* Logo di tengah */
-    .logo-brand {
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-
-    .navbar-custom .logo-brand img {
-      height: 70px;
-      object-fit: contain;
-    }
-
-    /* Tombol profil di kanan atas */
-    #profileDropdownToggle {
-      position: absolute;
-      top: 20px;
-      right: 1rem;
-    }
-  }
-
-  /* === RESPONSIVE: LAYAR ≤ 500px === */
-  @media (max-width: 500px) {
-    .sidebar {
-      display: none;
-    }
-
-    main {
-      margin-left: 0;
-    }
-
-    /* Logo lebih kecil dan sedikit bergeser */
-    .logo-brand {
-      position: absolute;
-      top: 6px;
-      left: 50%;
-      transform: translateX(-47%);
-    }
-
-    .navbar-custom .logo-brand img {
-      height: 70px;
-      object-fit: contain;
-    }
-
-    /* Tombol profil disesuaikan */
-    #profileDropdownToggle {
-      position: absolute;
-      top: 20px;
-      right: 0.1rem;
-    }
-
-    /* Ukuran dan padding menu mobile */
-    #mobileMenu {
-      font-size: 12px;
-      padding: 8px 8px;
+    .card-news img {
+      height: 180px;
+      object-fit: cover;
       width: 100%;
+      transition: transform 0.5s ease;
     }
-  }
-
-  /* === RESPONSIVE: LAYAR 785-790px === */
-  @media (min-width: 785px) and (max-width: 790px) {
-    .sidebar {
-      display: none;
+    
+    .card-news:hover img {
+      transform: scale(1.05);
     }
-
-    main {
-      margin-left: 0;
+    
+    .card-news .card-body {
+      padding: 1.25rem;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
     }
-
-    /* Logo dan profil disesuaikan */
-    .logo-brand {
+    
+    .card-news .card-title {
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      color: var(--dark-color);
+    }
+    
+    .card-news .card-text {
+      color: #666;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      flex-grow: 1;
+    }
+    
+    .card-news .card-date {
+      font-size: 0.8rem;
+      color: #999;
+      margin-top: auto;
+    }
+    
+    .edit-btn {
       position: absolute;
-      top: 6px;
-      left: 50%;
-      transform: translateX(-47%);
+      top: 10px;
+      right: 10px;
+      background-color: rgba(255,255,255,0.9);
+      width: 40px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 2;
+      opacity: 0;
+      transition: all 0.3s ease;
     }
-
-    .navbar-custom .logo-brand img {
-      height: 70px;
-      object-fit: contain;
+    
+    .card-news:hover .edit-btn {
+      opacity: 1;
     }
-
-    #profileDropdownToggle {
+    
+    .edit-btn:hover {
+      background-color: white;
+      transform: scale(1.1);
+    }
+    
+    /* === PROFILE MODAL STYLING === */
+    .profile-modal .modal-content {
+      border-radius: 15px;
+      overflow: hidden;
+      border: none;
+    }
+    
+    .profile-modal .modal-header {
+      background-color: var(--primary-color);
+      color: white;
+      border-bottom: none;
+      padding: 1.5rem;
+    }
+    
+    .profile-modal .modal-body {
+      padding: 0;
+    }
+    
+    .profile-card {
+      border: none;
+      border-radius: 0;
+      padding: 2rem;
+    }
+    
+    .profile-img-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .profile-img {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 5px solid white;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .profile-name {
+      font-size: 1.5rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 0.5rem;
+      color: var(--dark-color);
+    }
+    
+    .profile-email {
+      text-align: center;
+      color: #666;
+      margin-bottom: 1.5rem;
+    }
+    
+    .profile-contact {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      color: #666;
+    }
+    
+    .profile-bio {
+      background-color: #f9f9f9;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      color: #555;
+    }
+    
+    .profile-section-title {
+      font-weight: 600;
+      color: var(--secondary-color);
+      margin-bottom: 1rem;
+      position: relative;
+      padding-left: 0.75rem;
+    }
+    
+    .profile-section-title::before {
+      content: '';
       position: absolute;
-      top: 20px;
-      left: 2rem;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 70%;
+      width: 3px;
+      background-color: var(--primary-color);
+      border-radius: 3px;
     }
-
-    #mobileMenu {
-      font-size: 12px;
-      padding: 8px 8px;
+    
+    .profile-job-desc {
+      margin-bottom: 1.5rem;
+    }
+    
+    .profile-job-desc ul {
+      padding-left: 1.5rem;
+      margin-bottom: 0;
+    }
+    
+    .profile-job-desc li {
+      margin-bottom: 0.5rem;
+      color: #555;
+    }
+    
+    .profile-join-date {
+      background-color: #f0f0f0;
+      padding: 0.75rem;
+      border-radius: 8px;
+      text-align: center;
+      font-weight: 500;
+      color: #666;
+    }
+    
+    .edit-profile-btn {
+      display: block;
       width: 100%;
+      padding: 0.75rem;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      margin-top: 1.5rem;
     }
-  }
-
-  /* === RESPONSIVE: LAYAR 340-390px === */
-  @media (min-width: 340px) and (max-width: 390px) {
-    .sidebar {
-      display: none;
+    
+    .edit-profile-btn:hover {
+      background-color: #2980b9;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 10px rgba(0,0,0,0.1);
     }
-
-    main {
-      margin-left: 0;
+    
+    /* === BUTTON STYLING === */
+    .btn-primary {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.3s ease;
     }
-
-    /* Penyesuaian posisi dan ukuran logo */
-    .logo-brand {
-      position: absolute;
-      top: 6px;
-      left: 50%;
-      transform: translateX(-47%);
+    
+    .btn-primary:hover {
+      background-color: #2980b9;
+      border-color: #2980b9;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 10px rgba(0,0,0,0.1);
     }
-
-    .navbar-custom .logo-brand img {
-      height: 55px;
-      object-fit: contain;
+    
+    .btn-outline-dark {
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.3s ease;
     }
-
-    /* Penyesuaian tombol profil */
-    #profileDropdownToggle {
-      position: absolute;
-      top: 17px;
-      right: -0.5rem;
+    
+    .btn-outline-dark:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 10px rgba(0,0,0,0.1);
     }
-
-    #mobileMenu {
-      font-size: 12px;
-      padding: 8px 8px;
-      width: 100%;
+    
+    /* === MOBILE MENU STYLING === */
+    .mobile-menu-btn {
+      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      font-weight: 500;
     }
-  }
-
-  /* === Modal Profil === */
-  .join {
-    font-size: 14px;
-    color: #a0a0a0;
-    font-weight: bold
-  }
-  .date {
-    background-color: #ccc
-  }
-  .name {
-    font-size: 22px;
-    font-weight: bold
-  }
-
-.idd {
-    font-size: 14px;
-    font-weight: 600
-  }
-
-.idd1 {
-    font-size: 12px
-  }
-
-.number {
-    font-size: 22px;
-    font-weight: bold
-  }
-
-  
-</style>
-
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    .mobile-dropdown-menu {
+      border-radius: 8px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      border: none;
+      padding: 0.5rem;
+    }
+    
+    .mobile-dropdown-menu .dropdown-header {
+      font-weight: 600;
+      color: var(--secondary-color);
+    }
+    
+    .mobile-dropdown-menu .dropdown-item {
+      border-radius: 6px;
+      margin-bottom: 0.25rem;
+      transition: all 0.2s ease;
+    }
+    
+    .mobile-dropdown-menu .dropdown-item:hover {
+      background-color: #f8f9fa;
+      transform: translateX(5px);
+    }
+    
+    .mobile-dropdown-menu .dropdown-item i {
+      width: 20px;
+      text-align: center;
+      margin-right: 0.5rem;
+    }
+    
+    /* === PROFILE DROPDOWN STYLING === */
+    .profile-dropdown-toggle {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      padding: 0.5rem;
+      border-radius: 50px;
+    }
+    
+    .profile-dropdown-toggle:hover {
+      background-color: #f0f0f0;
+    }
+    
+    .profile-img-sm {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-right: 0.75rem;
+      border: 2px solid #eee;
+    }
+    
+    .profile-info {
+      line-height: 1.2;
+    }
+    
+    .profile-info strong {
+      display: block;
+      font-weight: 600;
+    }
+    
+    .profile-info small {
+      color: #666;
+      font-size: 0.85rem;
+    }
+    
+    /* === ANIMATIONS === */
+    .animate-fade-in {
+      animation: fadeIn 0.5s ease forwards;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+    
+    /* === RESPONSIVE STYLES === */
+    @media (max-width: 992px) {
+      .sidebar {
+        transform: translateX(-100%);
+        width: 280px;
+      }
+      
+      .sidebar.active {
+        transform: translateX(0);
+      }
+      
+      main {
+        margin-left: 0;
+      }
+      
+      .navbar-custom .logo-brand img {
+        height: 70px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .navbar-custom {
+        padding: 0 1rem;
+      }
+      
+      .navbar-custom .logo-brand img {
+        height: 60px;
+      }
+      
+      main {
+        margin-top: 90px;
+        padding: 1rem;
+      }
+      
+      .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .page-header .btn {
+        margin-top: 1rem;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .news-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .navbar-custom .logo-brand img {
+        height: 50px;
+      }
+      
+      .profile-img-sm {
+        width: 40px;
+        height: 40px;
+      }
+    }
+    
+    /* === UTILITY CLASSES === */
+    .cursor-pointer {
+      cursor: pointer;
+    }
+    
+    .shadow-soft {
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+    
+    .transition {
+      transition: all 0.3s ease;
+    }
+    
+    /* === CUSTOM SCROLLBAR === */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: #ccc;
+      border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: #aaa;
+    }
+  </style>
 </head>
 <body>
   <!-- Navbar -->
-<nav class="navbar-custom">
-  <!-- Mobile Menu -->
-<div class="dropdown d-md-none nav-item">
-  <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="mobileMenu" data-bs-toggle="dropdown">
-    <i class="bi bi-list"></i> Menu
-  </button>
-  <ul class="dropdown-menu" aria-labelledby="mobileMenu">
-    <li><h6 class="dropdown-header">Divisi Karyawan</h6></li>
-    <li><a class="dropdown-item" href="{{ route('hr.manajemen') }}"><i class="bi bi-people-fill me-1"></i> Manajemen</a></li>
-    <li><a class="dropdown-item" href="{{ route('hr.admin') }}"><i class="bi bi-person-circle me-1"></i> Administrasi</a></li>
-    <li><a class="dropdown-item" href="{{ route('hr.leader') }}"><i class="bi bi-people-fill me-1"></i> Leader</a></li>
-    <li><a class="dropdown-item" href="{{ route('operator.index') }}"><i class="bi bi-people-fill me-1"></i> Operator Gudang</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header">Menu Lainnya</h6></li>
-    @if(auth()->user()->role === 'Manajer' || auth()->user()->role === 'Admin')
-      <li><a class="dropdown-item" href="{{ route('laporan.index') }}"><i class="bi bi-journal-text me-1"></i> Daftar Resi</a></li>
-    @endif
-    @if(auth()->user()->role === 'Leader')
-      <li><a class="dropdown-item" href="{{ route('laporan.index') }}"><i class="bi bi-journal-text me-1"></i> Resi hari ini</a></li>
-    @endif
-    @if(auth()->user()->role === 'Manajer')
-      <li><a class="dropdown-item" href="{{ route('cuti.index') }}"><i class="bi bi-check-square me-1"></i> Daftar Pengajuan Cuti</a></li>
-    @endif
-    @if(auth()->user()->role === 'Operator' || auth()->user()->role === 'Admin' || auth()->user()->role === 'Leader')
-      <li><a class="dropdown-item" href="{{ route('cuti.index') }}"><i class="bi bi-file-earmark-text me-1"></i> Pengajuan Cuti</a></li>
-      <li><a class="dropdown-item" href="{{ route('slips.index') }}"><i class="bi bi-receipt me-1"></i> Slip Gaji</a></li>
-    @endif
-    <li>
-      <a class="dropdown-item" href="feedback">
-        <i class="bi bi-chat-dots me-1"></i>
-        @if(auth()->user()->role === 'Operator')
-          Evaluasi Kinerja
-        @else
-          Feedback Pegawai
+  <nav class="navbar-custom">
+    <!-- Mobile Menu Button -->
+    <div class="dropdown d-lg-none nav-item">
+      <button class="btn btn-outline-secondary mobile-menu-btn" type="button" id="mobileMenu" data-bs-toggle="dropdown">
+        <i class="bi bi-list"></i> Menu
+      </button>
+      <ul class="dropdown-menu mobile-dropdown-menu animate__animated animate__fadeIn" aria-labelledby="mobileMenu">
+        <li><h6 class="dropdown-header">Divisi Karyawan</h6></li>
+        <li><a class="dropdown-item" href="{{ route('hr.manajemen') }}"><i class="bi bi-people-fill me-1"></i> Manajemen</a></li>
+        <li><a class="dropdown-item" href="{{ route('hr.admin') }}"><i class="bi bi-person-circle me-1"></i> Administrasi</a></li>
+        <li><a class="dropdown-item" href="{{ route('hr.leader') }}"><i class="bi bi-people-fill me-1"></i> Leader</a></li>
+        <li><a class="dropdown-item" href="{{ route('operator.index') }}"><i class="bi bi-people-fill me-1"></i> Operator Gudang</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><h6 class="dropdown-header">Menu Lainnya</h6></li>
+        @if(auth()->user()->role === 'Manajer' || auth()->user()->role === 'Admin')
+          <li><a class="dropdown-item" href="{{ route('laporan.index') }}"><i class="bi bi-journal-text me-1"></i> Daftar Resi</a></li>
         @endif
-      </a>
-    </li>
-    <li><a class="dropdown-item" href="{{ route('shift.karyawan') }}"><i class="bi bi-clock-history me-1"></i> Shift & Jadwal</a></li>
-  </ul>
-</div>
-
-<!-- Profile -->
-<div id="profileDropdownToggle" class="d-flex align-items-center nav-item" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#profileModal">
-  <img src="<?= htmlspecialchars($user['photo_url'] ?: 'img/default_profile.png') ?>"
-       class="rounded-circle me-2" width="50" height="50" alt="Foto Profil" style="object-fit:cover; border-radius:50%; ">
-  <div class="d-none d-md-block">
-    <strong><?= htmlspecialchars($user['name']) ?></strong><br>
-    <small class="text-muted"><?= htmlspecialchars($user['role']) ?></small>
-  </div>
-</div>
-
-
-
-  <!-- Logo Center -->
-  <div class="logo-brand">
-    <img src="img/logo_brand.png" alt="Logo Brand">
-  </div>
-
-  <!-- Logout -->
-  <div class="ms-auto nav-item d-none d-md-block">
-    <a href="/logout" class="btn btn-outline-dark">
-      <i class="bi bi-box-arrow-right me-1"></i>
-      Logout
-    </a>
-  </div>
-</nav>
-
- <!-- Sidebar -->
-<nav class="sidebar">
-  <h6 class="fw-bold text-uppercase">Divisi Karyawan</h6>
-
-  <a href="{{ route('hr.manajemen') }}" class="btn btn-outline-primary w-100 mb-2">
-    <i class="bi bi-people-fill me-1"></i> Manajemen
-  </a>
-  <a href="{{ route('hr.admin') }}" class="btn btn-outline-primary w-100 mb-2">
-    <i class="bi bi-person-circle me-1"></i> Administrasi
-  </a>
-  <a href="{{ route('hr.leader') }}" class="btn btn-outline-primary w-100 mb-2">
-    <i class="bi bi-people-fill me-1"></i> Leader
-  </a>
-  <a href="{{ route('operator.index') }}" class="btn btn-outline-primary w-100 mb-2">
-    <i class="bi bi-people-fill me-1"></i> Operator Gudang
-  </a>
-
-  <hr>
-
-  <h6 class="fw-bold">Menu Lainnya</h6>
-
-  {{-- Manajer dan HR --}}
-  @if(auth()->user()->role === 'Manajer' || auth()->user()->role === 'Admin')
-    <a href="{{ route('laporan.index') }}" class="btn btn-outline-dark w-100 mb-2">
-      <i class="bi bi-journal-text me-1"></i> Daftar Resi
-    </a>
-  @endif
-
-  {{-- Leader dan HR kirim laporan --}}
-  @if(auth()->user()->role === 'Leader')
-    <a href="{{ route('laporan.index') }}" class="btn btn-outline-dark w-100 mb-2">
-      <i class="bi bi-journal-text me-1"></i> Resi hari ini
-    </a>
-  @endif
-
-  {{-- Manajer akses Pengajuan Cuti --}}
-  @if(auth()->user()->role === 'Manajer')
-    <a href="{{ route('cuti.index') }}" class="btn btn-outline-dark w-100 mb-2">
-      <i class="bi bi-check-square me-1"></i> Daftar Pengajuan Cuti
-    </a>
-  @endif
-
-  {{-- Operator --}}
-  @if(auth()->user()->role === 'Operator' || auth()->user()->role === 'Admin' || auth()->user()->role === 'Leader')
-    <a href="{{ route('cuti.index') }}" class="btn btn-outline-dark w-100 mb-2">
-      <i class="bi bi-file-earmark-text me-1"></i> Pengajuan Cuti
-    </a>
-  <a href="{{ route('slips.index') }}" 
-   class="btn btn-outline-dark w-100 mb-2">
-  <i class="bi bi-receipt me-1"></i> Slip Gaji
-</a>
-
-  @endif
-
-  <a href="feedback" class="btn btn-outline-dark w-100 mb-2">
-    <i class="bi bi-chat-dots me-1"></i>
-    @if(auth()->user()->role === 'Operator')
-      Evaluasi Kinerja
-    @else
-      Feedback Pegawai
-    @endif
-  </a>
-
-  <a href="{{ route('shift.karyawan') }}" class="btn btn-outline-dark w-100">
-    <i class="bi bi-clock-history me-1"></i> Shift & Jadwal
-  </a>
-
-  <a href="{{ route('reset.password.form') }}" class="btn btn-outline-dark w-100">
-    <i class="bi bi-clock-history me-1"></i> Reset Password
-  </a>
-</nav>
-
-
-
-
- <!-- Main Content -->
- 
-<main>
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h3 class="mb-0">What's New</h3>
-    @if(auth()->user()->role === 'Manajer' || auth()->user()->role === 'Admin')
-      <a href="{{ route('whats_new.create') }}" class="btn btn-primary">
-        <i class="bi bi-plus-lg me-1"></i> New
-      </a>
-    @endif
-  </div>
-  <div class="row g-3">
-    @foreach($newsItems as $idx => $item)
-      @php
-        $total = count($newsItems);
-        $col = ($idx >= $total - 2) ? 'col-md-6' : 'col-md-3';
-      @endphp
-      <div class="col-12 col-sm-6 {{ $col }}">
-        <a href="{{ route('whats_new', ['id' => $item['id']]) }}"
-           class="text-decoration-none text-reset">
-          <div class="card card-news shadow-sm h-100 position-relative">
-        <img src="{{ htmlspecialchars($item['image_url']) }}"
-             class="card-img-top"
-             alt="{{ htmlspecialchars($item['title']) }}">
-        @if(auth()->user()->role === 'Admin' || auth()->user()->role === 'Manajer')
-          <a href="{{ route('whats_new.edit', ['id' => $item['id']]) }}"
-             class="btn btn-sm btn-light position-absolute"
-             style="top: 10px; right: 10px; z-index: 2;"
-             title="Edit">
-            <i class="bi bi-pencil-square"></i>
+        @if(auth()->user()->role === 'Leader')
+          <li><a class="dropdown-item" href="{{ route('laporan.index') }}"><i class="bi bi-journal-text me-1"></i> Resi hari ini</a></li>
+        @endif
+        @if(auth()->user()->role === 'Manajer')
+          <li><a class="dropdown-item" href="{{ route('cuti.index') }}"><i class="bi bi-check-square me-1"></i> Daftar Pengajuan Cuti</a></li>
+        @endif
+        @if(auth()->user()->role === 'Operator' || auth()->user()->role === 'Admin' || auth()->user()->role === 'Leader')
+          <li><a class="dropdown-item" href="{{ route('cuti.index') }}"><i class="bi bi-file-earmark-text me-1"></i> Pengajuan Cuti</a></li>
+          <li><a class="dropdown-item" href="{{ route('slips.index') }}"><i class="bi bi-receipt me-1"></i> Slip Gaji</a></li>
+        @endif
+        <li>
+          <a class="dropdown-item" href="feedback">
+            <i class="bi bi-chat-dots me-1"></i>
+            @if(auth()->user()->role === 'Operator')
+              Evaluasi Kinerja
+            @else
+              Feedback Pegawai
+            @endif
           </a>
-        @endif
-        <div class="card-body">
-          <h6 class="fw-bold">{{ htmlspecialchars($item['title']) }}</h6>
-          <small class="text-muted">{{ htmlspecialchars($item['date']) }}</small>
-          <p class="small">{{ Str::limit($item['description'], 100) }}</p>
-        </div>
-          </div>
+        </li>
+        <li><a class="dropdown-item" href="{{ route('shift.karyawan') }}"><i class="bi bi-clock-history me-1"></i> Shift & Jadwal</a></li>
+        <li><a class="dropdown-item" href="{{ route('reset.password.form') }}"><i class="bi bi-key me-1"></i> Reset Password</a></li>
+      </ul>
+    </div>
+
+    <!-- Profile Dropdown -->
+    <div id="profileDropdownToggle" class="profile-dropdown-toggle nav-item" data-bs-toggle="modal" data-bs-target="#profileModal">
+      <img src="<?= htmlspecialchars($user['photo_url'] ?: 'img/default_profile.png') ?>" 
+           class="profile-img-sm" alt="Foto Profil">
+      <div class="profile-info d-none d-md-block">
+        <strong><?= htmlspecialchars($user['name']) ?></strong>
+        <small><?= htmlspecialchars($user['role']) ?></small>
+      </div>
+    </div>
+
+    <!-- Logo Center -->
+    <div class="logo-brand">
+      <img src="img/logo_brand.png" alt="Logo Brand" class="transition">
+    </div>
+
+    <!-- Logout Button -->
+    <div class="ms-auto nav-item d-none d-lg-block">
+      <a href="/logout" class="btn btn-outline-dark">
+        <i class="bi bi-box-arrow-right me-1"></i>
+        Logout
+      </a>
+    </div>
+  </nav>
+
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <h6 class="fw-bold text-uppercase">Divisi Karyawan</h6>
+
+    <a href="{{ route('hr.manajemen') }}" class="btn btn-outline-primary">
+      <i class="bi bi-people-fill me-1"></i> Manajemen
+    </a>
+    <a href="{{ route('hr.admin') }}" class="btn btn-outline-primary">
+      <i class="bi bi-person-circle me-1"></i> Administrasi
+    </a>
+    <a href="{{ route('hr.leader') }}" class="btn btn-outline-primary">
+      <i class="bi bi-people-fill me-1"></i> Leader
+    </a>
+    <a href="{{ route('operator.index') }}" class="btn btn-outline-primary">
+      <i class="bi bi-people-fill me-1"></i> Operator Gudang
+    </a>
+
+    <hr>
+
+    <h6 class="fw-bold">Menu Lainnya</h6>
+
+    @if(auth()->user()->role === 'Manajer' || auth()->user()->role === 'Admin')
+      <a href="{{ route('laporan.index') }}" class="btn btn-outline-dark">
+        <i class="bi bi-journal-text me-1"></i> Daftar Resi
+      </a>
+    @endif
+
+    @if(auth()->user()->role === 'Leader')
+      <a href="{{ route('laporan.index') }}" class="btn btn-outline-dark">
+        <i class="bi bi-journal-text me-1"></i> Resi hari ini
+      </a>
+    @endif
+
+    @if(auth()->user()->role === 'Manajer')
+      <a href="{{ route('cuti.index') }}" class="btn btn-outline-dark">
+        <i class="bi bi-check-square me-1"></i> Daftar Pengajuan Cuti
+      </a>
+    @endif
+
+    @if(auth()->user()->role === 'Operator' || auth()->user()->role === 'Admin' || auth()->user()->role === 'Leader')
+      <a href="{{ route('cuti.index') }}" class="btn btn-outline-dark">
+        <i class="bi bi-file-earmark-text me-1"></i> Pengajuan Cuti
+      </a>
+      <a href="{{ route('slips.index') }}" class="btn btn-outline-dark">
+        <i class="bi bi-receipt me-1"></i> Slip Gaji
+      </a>
+    @endif
+
+    <a href="feedback" class="btn btn-outline-dark">
+      <i class="bi bi-chat-dots me-1"></i>
+      @if(auth()->user()->role === 'Operator')
+        Evaluasi Kinerja
+      @else
+        Feedback Pegawai
+      @endif
+    </a>
+
+    <a href="{{ route('shift.karyawan') }}" class="btn btn-outline-dark">
+      <i class="bi bi-clock-history me-1"></i> Shift & Jadwal
+    </a>
+
+    <a href="{{ route('reset.password.form') }}" class="btn btn-outline-dark">
+      <i class="bi bi-key me-1"></i> Reset Password
+    </a>
+  </nav>
+
+  <!-- Main Content -->
+  <main>
+    <div class="page-header animate__animated animate__fadeIn">
+      <h3>What's New</h3>
+      @if(auth()->user()->role === 'Manajer' || auth()->user()->role === 'Admin')
+        <a href="{{ route('whats_new.create') }}" class="btn btn-primary">
+          <i class="bi bi-plus-lg me-1"></i> New Post
         </a>
-      </div>
-    @endforeach
-  </div>
-</main>
-
-<!-- Modal Profil -->
-  <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-
-      <!-- Modal Header -->
-      <div class="modal-header">
-        <h5 class="modal-title" id="profileModalLabel">{{ htmlspecialchars($user['name']) }}</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-
-      <!-- Modal Body (Card Content) -->
-      <div class="modal-body">
-        <div class="container p-3 d-flex justify-content-center">
-          <div class="card p-4 w-100">
-            <div class="image d-flex flex-column justify-content-center align-items-center">
-              <img src={{ htmlspecialchars($user['photo_url']) }} height="100" width="100" style="object-fit:cover; border-radius:50%; margin-bottom:1rem;">
-              <span class="name mt-3">{{ htmlspecialchars($user['name']) }}</span>
-              <span class="idd">{{ htmlspecialchars($user['email']) }}</span>
-
-              <div class="d-flex flex-row justify-content-center align-items-center gap-2">
-                <span class="idd1">{{ htmlspecialchars($user['phone']) }}</span>
-                <span>
-                  <i class="fa fa-copy"></i>
-                </span>
+      @endif
+    </div>
+    
+    <div class="news-grid">
+      @foreach($newsItems as $idx => $item)
+        <div class="animate-fade-in delay-{{ ($idx % 4) + 1 }}">
+          <div class="card card-news">
+            <a href="{{ route('whats_new', ['id' => $item['id']]) }}">
+              <div class="position-relative ">
+                <img src="{{ htmlspecialchars($item['image_url']) }}" 
+                     class="card-img-top" 
+                     alt="{{ htmlspecialchars($item['title']) }}">
+                @if(auth()->user()->role === 'Admin' || auth()->user()->role === 'Manajer')
+                  <a href="{{ route('whats_new.edit', ['id' => $item['id']]) }}" 
+                     class="edit-btn" 
+                     title="Edit">
+                    <i class="bi bi-pencil-square text-primary"></i>
+                  </a>
+                @endif
               </div>
-              <div class="d-flex mt-2">
-                <a href="edit_profil/{{ $user['id'] }}" class="btn btn-primary btn-sm">Edit Profile</a>
+              <div class="card-body">
+                <h5 class="card-title">{{ htmlspecialchars($item['title']) }}</h5>
+                <p class="card-text">{{ Str::limit($item['description'], 120) }}</p>
+                <div class="card-date">
+                  <i class="bi bi-calendar me-1"></i> {{ htmlspecialchars($item['date']) }}
+                </div>
               </div>
+            </a>
+          </div>
+        </div>
+      @endforeach
+    </div>
+  </main>
 
-              <div class="text mt-3">
-                <span>
-                  <p>{{ htmlspecialchars($user['bio']) }}</p>
-                </span>
-              </div>
-
-              <h6><b>Deskripsi Pekerjaan</b></h6>
-              <ul>
-                  @foreach(explode(', ', $user['job_descriptions']) as $jd)
-                    <li>{{ $jd }}</li>
-                  @endforeach
-                </ul>
-              <div class="px-2 rounded mt-4 date">
-                <span class="join">Joined {{ \Carbon\Carbon::parse($user['joined_at'])->format('j F Y') }}</span>
-              </div>
+  <!-- Profile Modal -->
+  <div class="modal fade profile-modal" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="profileModalLabel">Profile Details</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="profile-card">
+            <div class="profile-img-container">
+              <img src="{{ htmlspecialchars($user['photo_url']) }}" 
+                   class="profile-img" 
+                   alt="Profile Image">
             </div>
+            
+            <h4 class="profile-name">{{ htmlspecialchars($user['name']) }}</h4>
+            <div class="profile-email">{{ htmlspecialchars($user['email']) }}</div>
+            
+            <div class="profile-contact">
+              <i class="bi bi-telephone"></i>
+              <span>{{ htmlspecialchars($user['phone']) }}</span>
+            </div>
+            
+            @if($user['bio'])
+              <div class="profile-bio">
+                {{ htmlspecialchars($user['bio']) }}
+              </div>
+            @endif
+            
+            <h6 class="profile-section-title">Deskripsi Pekerjaan</h6>
+            <div class="profile-job-desc">
+              <ul>
+                @foreach(explode(', ', $user['job_descriptions']) as $jd)
+                  <li>{{ $jd }}</li>
+                @endforeach
+              </ul>
+            </div>
+            
+            <div class="profile-join-date">
+              <i class="bi bi-calendar-check"></i> Joined {{ \Carbon\Carbon::parse($user['joined_at'])->format('j F Y') }}
+            </div>
+            
+            <a href="edit_profil/{{ $user['id'] }}" class="edit-profile-btn">
+              <i class="bi bi-pencil-square me-1"></i> Edit Profile
+            </a>
           </div>
         </div>
       </div>
+    </div>
+  </div>
 
-
-
-<!-- jQuery Script -->
-<script>
-  $(document).ready(function() {
-    // Saat tombol profil diklik
-    $('#profileDropdownToggle').click(function(e) {
-      e.stopPropagation(); // Hindari event bubble
-
-      var w = $(window).width();
-
-      // Jika ukuran mobile (300 - 765 px), tampilkan dropdown
-      if (w >= 300 && w <= 765) {
-        $('#profileDropdown').slideToggle(150);
-      } 
-      // Jika desktop, redirect ke halaman profil
-    });
-
-    // Jika klik di luar dropdown, sembunyikan dropdown
-    $(document).click(function(e) {
-      if (!$(e.target).closest('#profileDropdown, #profileDropdownToggle').length) {
-        $('#profileDropdown').slideUp(150);
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      // Navbar scroll effect
+      $(window).scroll(function() {
+        if ($(this).scrollTop() > 50) {
+          $('.navbar-custom').addClass('scrolled');
+        } else {
+          $('.navbar-custom').removeClass('scrolled');
+        }
+      });
+      
+      // Animate elements on scroll
+      function animateOnScroll() {
+        $('.animate-fade-in').each(function() {
+          var elementPosition = $(this).offset().top;
+          var scrollPosition = $(window).scrollTop() + $(window).height();
+          
+          if (elementPosition < scrollPosition - 100) {
+            $(this).css('opacity', '1');
+          }
+        });
       }
+      
+      // Initial check
+      animateOnScroll();
+      
+      // Check on scroll
+      $(window).scroll(function() {
+        animateOnScroll();
+      });
+      
+      // Mobile menu toggle for sidebar
+      $('#mobileMenu').click(function() {
+        $('.sidebar').toggleClass('active');
+      });
+      
+      // Close sidebar when clicking outside
+      $(document).click(function(e) {
+        if (!$(e.target).closest('.sidebar, #mobileMenu').length) {
+          $('.sidebar').removeClass('active');
+        }
+      });
+      
+      // Prevent closing when clicking inside sidebar
+      $('.sidebar').click(function(e) {
+        e.stopPropagation();
+      });
+      
+      // Smooth hover effects
+      $('.card-news').hover(
+        function() {
+          $(this).find('.card-title').css('color', 'var(--primary-color)');
+        },
+        function() {
+          $(this).find('.card-title').css('color', 'var(--dark-color)');
+        }
+      );
+      
+      // Profile modal animation
+      $('#profileModal').on('show.bs.modal', function() {
+        $(this).find('.modal-content').addClass('animate__animated animate__zoomIn');
+      });
+      
+      $('#profileModal').on('hidden.bs.modal', function() {
+        $(this).find('.modal-content').removeClass('animate__animated animate__zoomIn');
+      });
     });
-
-    // Saat resize ke desktop atau mobile extreme, sembunyikan dropdown
-    $(window).resize(function() {
-      var w = $(window).width();
-      if (w < 400 || w > 765) {
-        $('#profileDropdown').hide();
-      }
-    });
-  });
-</script>
+  </script>
 </body>
 </html>
