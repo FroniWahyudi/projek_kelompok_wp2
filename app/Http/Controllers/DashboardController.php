@@ -79,22 +79,31 @@ class DashboardController extends Controller
         return view('index.reset_pw');
     }
 
-    public function resetPassword(Request $request)
-    {
-        $request->validate([
-    'id'       => 'required|exists:users,id',
-    'password' => 'required|min:4|confirmed',
-], [
-    'password.min'       => 'Password harus minimal 4 karakter.',
-    'password.confirmed' => 'Konfirmasi password tidak cocok.',
-]);
+  public function resetPassword(Request $request)
+{
+    $request->validate([
+        'id'       => 'required|exists:users,id',
+        'password' => 'required|min:4|confirmed',
+    ], [
+        'password.min'       => 'Password harus minimal 4 karakter.',
+        'password.confirmed' => 'Konfirmasi password tidak cocok.',
+    ]);
 
+    $user = User::findOrFail($request->id);
+    $user->password = Hash::make($request->password);
+    $user->save();
 
-        $user = User::findOrFail($request->id);
-        $user->password = Hash::make($request->password);
-        $user->save();
-
-        return redirect()->route('reset.form')->with('success', 'Password berhasil direset.');
+    // Kalau AJAX / JSON request, kirim JSON response
+    if ($request->expectsJson()) {
+        return response()->json([
+            'message' => 'Password berhasil direset.'
+        ], 200);
     }
+
+    // Kalau form HTML biasa, redirect seperti biasa
+    return redirect()
+        ->route('reset.form', ['success' => 'Password berhasil direset.']);
+}
+
     
 }

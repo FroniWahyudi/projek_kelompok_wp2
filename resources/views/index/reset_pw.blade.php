@@ -6,12 +6,22 @@
 <body>
     <h1>Reset Password</h1>
 
-    @if (session('success'))
-        <div style="color: green;">{{ session('success') }}</div>
-    @endif
+    {{-- Notifikasi via query param --}}
+    @if(request('success'))
+    <div id="success-msg" style="color: green; margin-bottom:1em;">
+        {{ request('success') }}
+    </div>
+    <script>
+        setTimeout(() => {
+            // Redirect ke URL tanpa query string:
+            window.location.replace(window.location.pathname);
+        }, 2000);
+    </script>
+@endif
+
 
     @if ($errors->any())
-        <div style="color: red;">
+        <div style="color: red; margin-bottom:1em;">
             <ul>
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
@@ -25,39 +35,34 @@
 
         <label for="id">User ID:</label>
         <input type="text" name="id" id="id" value="{{ old('id') }}" required>
-        <br>
+        <br><br>
 
         <label for="password">New Password:</label>
         <input type="password" name="password" id="password" required>
         @error('password')
             <div style="color: red">{{ $message }}</div>
         @enderror
-        <br>
+        <br><br>
 
         <label for="password_confirmation">Confirm Password:</label>
         <input type="password" name="password_confirmation" id="password_confirmation" required>
         @error('password_confirmation')
             <div style="color: red">{{ $message }}</div>
         @enderror
-        <br>
+        <br><br>
 
-        {{-- Tombol biasa untuk manual update --}}
         <button type="submit">Update Password</button>
-        {{-- Tombol auto-reset + submit --}}
         <button type="button" id="btn-auto-reset">Reset ke "admin123"</button>
     </form>
 
     <script>
-        document
-          .getElementById('btn-auto-reset')
-          .addEventListener('click', function() {
-              const pwd = 'admin123';
-              const form = document.getElementById('resetForm');
-              form.querySelector('#password').value = pwd;
-              form.querySelector('#password_confirmation').value = pwd;
-              // langsung submit setelah diisi
-              form.submit();
-          });
+        document.getElementById('btn-auto-reset').addEventListener('click', function() {
+            const pwd = 'admin123';
+            const form = document.getElementById('resetForm');
+            form.password.value = pwd;
+            form.password_confirmation.value = pwd;
+            form.submit();
+        });
     </script>
 </body>
 </html>
