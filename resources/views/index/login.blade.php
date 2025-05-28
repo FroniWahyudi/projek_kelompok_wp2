@@ -131,7 +131,7 @@
                 <input class="form-check-input" type="checkbox" value="" id="remember">
                 <label class="form-check-label" for="remember">Tampilkan password</label>
             </div>
-            <a href="#" class="text-decoration-none small">Lupa password?</a>
+            <a href="{{ route('pengajuan.reset.form') }}" class="text-decoration-none small">Lupa password?</a>
           </div>
           <button type="submit" class="btn btn-primary w-100">Masuk</button>
         </form>

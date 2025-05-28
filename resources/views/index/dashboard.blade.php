@@ -425,6 +425,10 @@ use Illuminate\Support\Carbon;
   <a href="{{ route('shift.karyawan') }}" class="btn btn-outline-dark w-100">
     <i class="bi bi-clock-history me-1"></i> Shift & Jadwal
   </a>
+
+  <a href="{{ route('reset.password.form') }}" class="btn btn-outline-dark w-100">
+    <i class="bi bi-clock-history me-1"></i> Reset Password
+  </a>
 </nav>
 
 
