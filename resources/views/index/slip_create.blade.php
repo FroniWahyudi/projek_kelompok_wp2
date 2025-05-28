@@ -163,11 +163,11 @@
         }
         /* Slide-up Animation Styles */
         .table-container {
-            transition: height 0.5s ease-out;
+            transition: height 0.3s ease-out;
             overflow: hidden;
         }
         .table-row {
-            transition: all 0.4s ease-out;
+            transition: all 0.3s ease-out;
             overflow: hidden;
         }
         .table-row.hidden-row {
@@ -521,7 +521,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-   <script>
+    <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Fungsi untuk memformat angka ke dalam format mata uang
         function formatCurrency(number) {
@@ -548,8 +548,21 @@
         let isFocused = false;
         let activeRow = null;
 
+        // Fungsi debounce untuk mengurangi pemanggilan berulang
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
         // Fungsi untuk menghitung total pendapatan, potongan, dan gaji bersih
-        function calculateTotals() {
+        const calculateTotals = debounce(function() {
             let totalEarnings = 0;
             let totalDeductions = 0;
 
@@ -626,7 +639,7 @@
             preview.deductionsBody.appendChild(deductionTotalRow);
 
             preview.netSalary.textContent = 'Rp ' + formatCurrency(netSalary);
-        }
+        }, 300);
 
         // Fungsi untuk menerapkan filter
         function applyFilters() {
@@ -691,7 +704,7 @@
 
                 setTimeout(() => {
                     isTransitioning = false;
-                }, 500);
+                }, 300); // Durasi transisi dikurangi menjadi 300ms
             }, 0);
 
             isFocused = true;
@@ -719,7 +732,7 @@
                 setTimeout(() => {
                     employeeTableContainer.style.height = 'auto';
                     isTransitioning = false;
-                }, 500);
+                }, 300); // Durasi transisi dikurangi menjadi 300ms
             }, 0);
 
             isFocused = false;
@@ -846,16 +859,6 @@
                     errorMessage += 'Nama komponen potongan tidak boleh kosong jika jumlah diisi.\n';
                 }
             });
-
-            // if (!isValid) {
-            //     e.preventDefault();
-            //     Swal.fire({
-            //         icon: 'warning',
-            //         title: 'Peringatan',
-            //         text: 'Ada kolom yang belum diisi atau tidak valid. Silakan periksa kembali.',
-            //         confirmButtonText: 'OK'
-            //     });
-            // }
         });
 
         // Filter tabel karyawan
@@ -878,7 +881,7 @@
         // Inisialisasi awal
         calculateTotals();
 
-        // Status check functionality
+        // Status check functionality dengan delay
         var checkAjaxUrl = "{{ route('slips.check.ajax') }}";
         var csrfToken = '{{ csrf_token() }}';
 
@@ -886,33 +889,35 @@
             if (period) {
                 $('#employeeTable tbody tr').each(function() {
                     var statusCell = $(this).find('td:last');
-                    statusCell.html('<span class="status-badge status-checking"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Checking</span>');
+                    statusCell.html('<span class="status-badge status-checking">Checking</span>');
                 });
 
                 $('#employeeTable tbody tr').each(function() {
                     var userId = $(this).data('id');
                     var statusCell = $(this).find('td:last');
 
-                    $.ajax({
-                        url: checkAjaxUrl,
-                        method: 'POST',
-                        data: {
-                            user_id: userId,
-                            period: period,
-                            _token: csrfToken
-                        },
-                        success: function(response) {
-                            if (response.exists) {
-                                statusCell.html('<span class="status-badge status-exists">Slip sudah dibuat</span>');
-                            } else {
-                                statusCell.html('<span class="status-badge status-not-exists">Slip belum dibuat</span>');
+                    setTimeout(function() {
+                        $.ajax({
+                            url: checkAjaxUrl,
+                            method: 'POST',
+                            data: {
+                                user_id: userId,
+                                period: period,
+                                _token: csrfToken
+                            },
+                            success: function(response) {
+                                if (response.exists) {
+                                    statusCell.html('<span class="status-badge status-exists">Slip sudah dibuat</span>');
+                                } else {
+                                    statusCell.html('<span class="status-badge status-not-exists">Slip belum dibuat</span>');
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                statusCell.html('<span class="status-badge status-error">Error</span>');
+                                console.error(error);
                             }
-                        },
-                        error: function(xhr, status, error) {
-                            statusCell.html('<span class="status-badge status-error">Error</span>');
-                            console.error(error);
-                        }
-                    });
+                        });
+                    }, 100); // Delay 100ms untuk mengurangi beban
                 });
             }
         }
@@ -927,6 +932,6 @@
             updateStatuses(initialPeriod);
         }
     });
-</script>
+    </script>
 </body>
 </html>
