@@ -163,17 +163,6 @@
       gap: 1.5rem;
     }
     
-    .last-card-wide {
-      min-width: 1035px;
-      gap: 1.5rem;
-    }
-
-    @media (max-width: 768px) {
-      .last-card-wide {
-        min-width: 100%;
-      }
-    }
-    
     .card-news {
       border: none;
       border-radius: 12px;
@@ -196,7 +185,7 @@
       color: inherit;
       display: flex;
       flex-direction: column;
-      height: 100%;
+      height: 20%;
     }
     
     .card-news img {
@@ -621,6 +610,7 @@
         @if(auth()->user()->role === 'Manajer' || auth()->user()->role === 'Admin')
           <li><a class="dropdown-item" href="{{ route('laporan.index') }}"><i class="bi bi-journal-text me-1"></i> Daftar Resi</a></li>
         @endif
+
         @if(auth()->user()->role === 'Leader')
           <li><a class="dropdown-item" href="{{ route('laporan.index') }}"><i class="bi bi-journal-text me-1"></i> Resi hari ini</a></li>
         @endif
@@ -639,6 +629,7 @@
             @else
               Feedback Pegawai
             @endif
+
           </a>
         </li>
         <li><a class="dropdown-item" href="{{ route('shift.karyawan') }}"><i class="bi bi-clock-history me-1"></i> Shift & Jadwal</a></li>
@@ -673,6 +664,7 @@
   <!-- Sidebar -->
   <nav class="sidebar">
     <h6 class="fw-bold text-uppercase">Divisi Karyawan</h6>
+
     <a href="{{ route('hr.manajemen') }}" class="btn btn-outline-primary">
       <i class="bi bi-people-fill me-1"></i> Manajemen
     </a>
@@ -685,23 +677,29 @@
     <a href="{{ route('operator.index') }}" class="btn btn-outline-primary">
       <i class="bi bi-people-fill me-1"></i> Operator Gudang
     </a>
+
     <hr>
+
     <h6 class="fw-bold">Menu Lainnya</h6>
+
     @if(auth()->user()->role === 'Manajer' || auth()->user()->role === 'Admin')
       <a href="{{ route('laporan.index') }}" class="btn btn-outline-dark">
         <i class="bi bi-journal-text me-1"></i> Daftar Resi
       </a>
     @endif
+
     @if(auth()->user()->role === 'Leader')
       <a href="{{ route('laporan.index') }}" class="btn btn-outline-dark">
         <i class="bi bi-journal-text me-1"></i> Resi hari ini
       </a>
     @endif
+
     @if(auth()->user()->role === 'Manajer')
       <a href="{{ route('cuti.index') }}" class="btn btn-outline-dark">
         <i class="bi bi-check-square me-1"></i> Daftar Pengajuan Cuti
       </a>
     @endif
+
     @if(auth()->user()->role === 'Operator' || auth()->user()->role === 'Admin' || auth()->user()->role === 'Leader')
       <a href="{{ route('cuti.index') }}" class="btn btn-outline-dark">
         <i class="bi bi-file-earmark-text me-1"></i> Pengajuan Cuti
@@ -710,6 +708,7 @@
         <i class="bi bi-receipt me-1"></i> Slip Gaji
       </a>
     @endif
+
     <a href="feedback" class="btn btn-outline-dark">
       <i class="bi bi-chat-dots me-1"></i>
       @if(auth()->user()->role === 'Operator')
@@ -718,9 +717,11 @@
         Feedback Pegawai
       @endif
     </a>
+
     <a href="{{ route('shift.karyawan') }}" class="btn btn-outline-dark">
       <i class="bi bi-clock-history me-1"></i> Shift & Jadwal
     </a>
+
     <a href="{{ route('reset.password.form') }}" class="btn btn-outline-dark">
       <i class="bi bi-key me-1"></i> Reset Password
     </a>
@@ -739,10 +740,10 @@
     
     <div class="news-grid">
       @foreach($newsItems as $idx => $item)
-        <div class="animate-fade-in delay-{{ ($idx % 4) + 1 }} {{ $idx === count($newsItems) - 1 && count($newsItems) % 3 !== 0 ? 'last-card-wide' : '' }}">
+        <div class="animate-fade-in delay-{{ ($idx % 4) + 1 }}">
           <div class="card card-news">
             <a href="{{ route('whats_new', ['id' => $item['id']]) }}">
-              <div class="position-relative">
+              <div class="position-relative ">
                 <img src="{{ htmlspecialchars($item['image_url']) }}" 
                      class="card-img-top" 
                      alt="{{ htmlspecialchars($item['title']) }}">
@@ -783,17 +784,21 @@
                    class="profile-img" 
                    alt="Profile Image">
             </div>
+            
             <h4 class="profile-name">{{ htmlspecialchars($user['name']) }}</h4>
             <div class="profile-email">{{ htmlspecialchars($user['email']) }}</div>
+            
             <div class="profile-contact">
               <i class="bi bi-telephone"></i>
               <span>{{ htmlspecialchars($user['phone']) }}</span>
             </div>
+            
             @if($user['bio'])
               <div class="profile-bio">
                 {{ htmlspecialchars($user['bio']) }}
               </div>
             @endif
+            
             <h6 class="profile-section-title">Deskripsi Pekerjaan</h6>
             <div class="profile-job-desc">
               <ul>
@@ -802,9 +807,11 @@
                 @endforeach
               </ul>
             </div>
+            
             <div class="profile-join-date">
               <i class="bi bi-calendar-check"></i> Joined {{ \Carbon\Carbon::parse($user['joined_at'])->format('j F Y') }}
             </div>
+            
             <a href="edit_profil/{{ $user['id'] }}" class="edit-profile-btn">
               <i class="bi bi-pencil-square me-1"></i> Edit Profile
             </a>
@@ -833,6 +840,7 @@
         $('.animate-fade-in').each(function() {
           var elementPosition = $(this).offset().top;
           var scrollPosition = $(window).scrollTop() + $(window).height();
+          
           if (elementPosition < scrollPosition - 100) {
             $(this).css('opacity', '1');
           }
