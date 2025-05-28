@@ -14,24 +14,24 @@ class PasswordResetController extends Controller
         return view('index.pengajuan_reset');
     }
 
-    public function storeRequest(Request $request)
-    {
-        // Logika untuk menyimpan pengajuan reset password
-        // Contoh:
-        $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'keterangan' => 'required|string',
-        ]);
+  public function storeRequest(Request $request)
+{
+    $request->validate([
+        'email' => 'required|email|exists:users,email',
+        'keterangan' => 'required|string',
+    ]);
 
-        PasswordResetRequest::create([
-            'user_id' => $request->user_id,
-            'keterangan' => $request->keterangan,
-            'status' => 'pending',
-            'expires_at' => Carbon::now()->addDays(7),
-        ]);
+    $user = User::where('email', $request->email)->first();
 
-        return redirect()->back()->with('success', 'Pengajuan reset password berhasil dikirim');
-    }
+    PasswordResetRequest::create([
+        'user_id' => $user->id,
+        'keterangan' => $request->keterangan,
+        'status' => 'pending',
+        'expires_at' => Carbon::now()->addDays(7),
+    ]);
+
+    return redirect()->back()->with('success', 'Pengajuan reset password berhasil dikirim');
+}
 
     public function showResetForm()
     {

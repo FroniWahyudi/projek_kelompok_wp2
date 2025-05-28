@@ -52,12 +52,24 @@
         button:hover {
             background-color: #0056b3;
         }
+        .nav-link {
+            cursor: pointer;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .nav-link:hover {
+            color: #0056b3;
+        }
     </style>
 </head>
 <body>
     <div class="form-container">
         <h1>Pengajuan Reset Password</h1>
-
+        <div class="container">
+            <a class="nav-link" onclick="goToLogin()"> 
+                <i class="bi bi-house-door me-1"></i> Kembali ke Login
+            </a>
+        </div>
         <!-- Pesan Sukses -->
         @if (session('success'))
             <div class="success">
@@ -107,6 +119,13 @@
             }
 
             return true;
+        }
+
+        function goToLogin() {
+            // Ganti entri riwayat saat ini dengan URL login
+            history.replaceState(null, '', "{{ route('login') }}");
+            // Arahkan ke halaman login
+            window.location.href = "{{ route('login') }}";
         }
     </script>
 </body>

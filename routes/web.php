@@ -98,9 +98,12 @@ Route::middleware('auth')->group(function () {
     Route::put('/feedback/{id}', [CrudController::class, 'feedbackUpdate'])->name('feedback.update');
 
     // Reset Password routes
-    Route::get('/pengajuan-reset', [PasswordResetController::class, 'showRequestForm'])->name('pengajuan.reset.password');
-    Route::post('/pengajuan-reset', [PasswordResetController::class, 'storeRequest'])->name('pengajuan.reset.form');
     Route::get('/reset-password', [PasswordResetController::class, 'showResetForm'])->name('reset.password.form');
     Route::post('/reset-password/{id}', [PasswordResetController::class, 'resetPassword'])->name('reset.password');
     Route::post('/reset-password', [PasswordResetController::class, 'resetPasswordManual'])->name('reset.password.manual');
 });
+
+//biar bisa akses form pengajuan reset password tanpa login
+Route::get('/pengajuan-reset', [PasswordResetController::class, 'showRequestForm'])->name('pengajuan.reset.password');
+Route::post('/pengajuan-reset', [PasswordResetController::class, 'storeRequest'])->name('pengajuan.reset.form');
+
