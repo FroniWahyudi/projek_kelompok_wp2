@@ -11,9 +11,11 @@ class ShiftController extends Controller
 {
     public function index()
     {
-        // Ambil semua shift beserta data user terkait
-        $shifts = Shift::with('user')->orderBy('date')->get();
-        $users = User::all(); // untuk dropdown pilihan user (karyawan)
+        // Ambil semua shift beserta data user terkait, termasuk photo_url
+        $shifts = Shift::with(['user' => function ($query) {
+            $query->select('id', 'name', 'photo_url','department'); // Pastikan photo_url diambil
+        }])->orderBy('date')->get();
+        $users = User::select('id', 'name', 'photo_url')->get(); // untuk dropdown pilihan user (karyawan)
 
         return view('index.shift_karyawan', compact('shifts', 'users'));
     }
@@ -32,36 +34,34 @@ class ShiftController extends Controller
                          ->with('success', 'Jadwal shift berhasil ditambahkan.');
     }
 
-  public function update(Request $request, Shift $shift)
-{
-    $request->validate([
-        'user_id' => 'required|exists:users,id', // ← perbaikan di sini
-        'date' => 'required|date',
-        'type' => 'required|in:Pagi,Sore,Overtime',
-    ]);
+    public function update(Request $request, Shift $shift)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'date'    => 'required|date',
+            'type'    => 'required|in:Pagi,Sore,Overtime',
+        ]);
 
-    $weekYear = Carbon::parse($request->date)->year . '-' . Carbon::parse($request->date)->isoWeek;
+        $weekYear = Carbon::parse($request->date)->year . '-' . Carbon::parse($request->date)->isoWeek;
 
-    $existing = Shift::where('user_id', $request->user_id)
-        ->where('week_year', $weekYear)
-        ->where('id', '!=', $shift->id)
-        ->exists();
+        $existing = Shift::where('user_id', $request->user_id)
+            ->where('week_year', $weekYear)
+            ->where('id', '!=', $shift->id)
+            ->exists();
 
-    if ($existing) {
-        return back()->with('error', 'User ini sudah punya shift minggu ini!');
+        if ($existing) {
+            return back()->with('error', 'User ini sudah punya shift minggu ini!');
+        }
+
+        $shift->update([
+            'user_id'   => $request->user_id,
+            'date'      => $request->date,
+            'type'      => $request->type,
+            'week_year' => $weekYear,
+        ]);
+
+        return redirect()->route('shifts.index')->with('success', 'Shift berhasil diperbarui!');
     }
-
-    $shift->update([
-        'user_id'   => $request->user_id,
-        'date'      => $request->date,
-        'type'      => $request->type,
-        'week_year' => $weekYear,
-    ]);
-
-    return redirect()->route('shifts.index')->with('success', 'Shift berhasil diperbarui!');
-}
-
-
 
     public function destroy(Shift $shift)
     {

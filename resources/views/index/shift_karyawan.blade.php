@@ -34,7 +34,7 @@
         .navbar-custom .nav-link {
     color: white;
     font-weight: 500;
-    font-size: 24px;
+    font-size: 18px;
 }
 
         .card {
@@ -281,10 +281,13 @@
                             @foreach ($shifts as $index => $shift)
                                 <tr data-shift="{{ $shift->type }}">
                                     <td>{{ $index + 1 }}</td>
-                                    <td>
-                                        <img src="https://ui-avatars.com/api/?name={{ urlencode($shift->user->name) }}"
-                                             class="user-avatar" alt="{{ $shift->user->name }}">
-                                    </td>
+                                   <td>
+    @if ($shift->user->photo_url)
+        <img src="{{ asset($shift->user->photo_url) }}" class="user-avatar" alt="{{ $shift->user->name }}">
+    @else
+        <img src="https://ui-avatars.com/api/?name={{ urlencode($shift->user->name) }}" class="user-avatar" alt="{{ $shift->user->name }}">
+    @endif
+</td>
                                     <td>{{ $shift->user->name }}</td>
                                     <td>{{ $shift->user->department }}</td>
                                     <td>{{ $shift->date->format('Y-m-d') }}</td>

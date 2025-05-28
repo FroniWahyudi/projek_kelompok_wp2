@@ -294,63 +294,44 @@ use Illuminate\Support\Carbon;
   <!-- Navbar -->
 <nav class="navbar-custom">
   <!-- Mobile Menu -->
-  <div class="dropdown d-md-none nav-item">
-    <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="mobileMenu" data-bs-toggle="dropdown">
-      <i class="bi bi-list"></i> Menu
-    </button>
-    <ul class="dropdown-menu" aria-labelledby="mobileMenu">
-      <li><h6 class="dropdown-header">Divisi Karyawan</h6></li>
-      <li>
-        <a class="dropdown-item" href="hr">
-          <i class="bi bi-person-circle me-1"></i>
-          HR
-        </a>
-      </li>
-      <li>
-        <a class="dropdown-item" href="manajemen">
-          <i class="bi bi-people-fill me-1"></i>
-          Manajemen
-        </a>
-      </li>
-      <li>
-        <a class="dropdown-item" href="karyawan">
-          <i class="bi bi-people-fill me-1"></i>
-          Karyawan
-        </a>
-      </li>
-      <li><hr class="dropdown-divider"></li>
-      <li><h6 class="dropdown-header">Menu Lainnya</h6></li>
-     
-      @if($role == 'Manajer')
-      <li>
-        <a class="dropdown-item" href="laporan_kerja.php">
-          <i class="bi bi-journal-text me-1"></i>
-          Laporan Kerja
-        </a>
-      </li>
-   
-      @elseif($role == 'Leader')
-      <li>
-        <a class="dropdown-item" href="laporan_kerja.php">
-          <i class="bi bi-journal-text me-1"></i>
-          Kirim Laporan Kerja
-        </a>
-      </li>
-      @endif
-      <li>
-        <a class="dropdown-item" href="feedback_pegawai.php">
-          <i class="bi bi-chat-dots me-1"></i>
+<div class="dropdown d-md-none nav-item">
+  <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="mobileMenu" data-bs-toggle="dropdown">
+    <i class="bi bi-list"></i> Menu
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="mobileMenu">
+    <li><h6 class="dropdown-header">Divisi Karyawan</h6></li>
+    <li><a class="dropdown-item" href="{{ route('hr.manajemen') }}"><i class="bi bi-people-fill me-1"></i> Manajemen</a></li>
+    <li><a class="dropdown-item" href="{{ route('hr.admin') }}"><i class="bi bi-person-circle me-1"></i> Administrasi</a></li>
+    <li><a class="dropdown-item" href="{{ route('hr.leader') }}"><i class="bi bi-people-fill me-1"></i> Leader</a></li>
+    <li><a class="dropdown-item" href="{{ route('operator.index') }}"><i class="bi bi-people-fill me-1"></i> Operator Gudang</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header">Menu Lainnya</h6></li>
+    @if(auth()->user()->role === 'Manajer' || auth()->user()->role === 'Admin')
+      <li><a class="dropdown-item" href="{{ route('laporan.index') }}"><i class="bi bi-journal-text me-1"></i> Daftar Resi</a></li>
+    @endif
+    @if(auth()->user()->role === 'Leader')
+      <li><a class="dropdown-item" href="{{ route('laporan.index') }}"><i class="bi bi-journal-text me-1"></i> Resi hari ini</a></li>
+    @endif
+    @if(auth()->user()->role === 'Manajer')
+      <li><a class="dropdown-item" href="{{ route('cuti.index') }}"><i class="bi bi-check-square me-1"></i> Daftar Pengajuan Cuti</a></li>
+    @endif
+    @if(auth()->user()->role === 'Operator' || auth()->user()->role === 'Admin' || auth()->user()->role === 'Leader')
+      <li><a class="dropdown-item" href="{{ route('cuti.index') }}"><i class="bi bi-file-earmark-text me-1"></i> Pengajuan Cuti</a></li>
+      <li><a class="dropdown-item" href="{{ route('slips.index') }}"><i class="bi bi-receipt me-1"></i> Slip Gaji</a></li>
+    @endif
+    <li>
+      <a class="dropdown-item" href="feedback">
+        <i class="bi bi-chat-dots me-1"></i>
+        @if(auth()->user()->role === 'Operator')
+          Evaluasi Kinerja
+        @else
           Feedback Pegawai
-        </a>
-      </li>
-      <li>
-        <a class="dropdown-item" href="shift_karyawan">
-          <i class="bi bi-clock-history me-1"></i>
-          Shift & Jadwal Karyawan
-        </a>
-      </li>
-    </ul>
-  </div>
+        @endif
+      </a>
+    </li>
+    <li><a class="dropdown-item" href="{{ route('shift.karyawan') }}"><i class="bi bi-clock-history me-1"></i> Shift & Jadwal</a></li>
+  </ul>
+</div>
 
 <!-- Profile -->
 <div id="profileDropdownToggle" class="d-flex align-items-center nav-item" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#profileModal">
@@ -362,32 +343,7 @@ use Illuminate\Support\Carbon;
   </div>
 </div>
 
-<!-- Dropdown Menu -->
-<div id="profileDropdown" class="position-absolute bg-white border shadow-sm rounded p-2" style="top: 80px; right: 1rem; width: 220px; display: none; z-index: 999;">
-  <strong class="d-block mb-2">Profil</strong>
-  <a href="ubah_data.php" class="d-block mb-1 text-decoration-none text-dark">
-    <i class="bi bi-pencil-square me-2"></i>Ubah Data Diri
-  </a>
-  <a href="ganti_password.php" class="d-block mb-1 text-decoration-none text-dark">
-    <i class="bi bi-key me-2"></i>Ganti Password
-  </a>
-  <a href="jabatan_divisi.php" class="d-block mb-1 text-decoration-none text-dark">
-    <i class="bi bi-diagram-3 me-2"></i>Jabatan & Divisi
-  </a>
-  <a href="sisa_cuti.php" class="d-block mb-1 text-decoration-none text-dark">
-    <i class="bi bi-calendar-check me-2"></i>Sisa Cuti
-  </a>
-  <a href="tanggal_bergabung.php" class="d-block mb-1 text-decoration-none text-dark">
-    <i class="bi bi-calendar-event me-2"></i>Tanggal Bergabung
-  </a>
-  <a href="riwayat_cuti.php" class="d-block mb-1 text-decoration-none text-dark">
-    <i class="bi bi-clock-history me-2"></i>Riwayat Cuti
-  </a>
-  <hr>
-  <a href="/logout" class="d-block text-decoration-none text-danger">
-    <i class="bi bi-box-arrow-right me-2"></i>Logout
-  </a>
-</div>
+
 
   <!-- Logo Center -->
   <div class="logo-brand">
