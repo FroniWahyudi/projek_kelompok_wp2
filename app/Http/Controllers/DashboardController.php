@@ -82,9 +82,13 @@ class DashboardController extends Controller
     public function resetPassword(Request $request)
     {
         $request->validate([
-            'id' => 'required|exists:users,id',
-            'password' => 'required|min:4|confirmed',
-        ]);
+    'id'       => 'required|exists:users,id',
+    'password' => 'required|min:4|confirmed',
+], [
+    'password.min'       => 'Password harus minimal 4 karakter.',
+    'password.confirmed' => 'Konfirmasi password tidak cocok.',
+]);
+
 
         $user = User::findOrFail($request->id);
         $user->password = Hash::make($request->password);
