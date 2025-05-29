@@ -13,25 +13,23 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #4361ee;
-            --secondary-color: #3f37c9;
-            --accent-color: #4cc9f0;
-            --light-bg: #f8f9fa;
-            --dark-text: #212529;
-            --light-text: #6c757d;
-            --success-color: #38b000;
-            --warning-color: #ff9e00;
-            --danger-color: #ef233c;
+            --background-color: #f0f4f8;
+            --card-background: #ffffff;
+            --primary-button: #007bff;
+            --text-primary: #003366;
+            --text-secondary: #4a4a4a;
+            --toggle-button: #6c757d;
+            --table-header-bg: #e3f2fd;
         }
         
         body {
-            background-color: #f5f7fb;
+            background-color: var(--background-color);
             font-family: 'Poppins', sans-serif;
-            color: var(--dark-text);
+            color: var(--text-primary);
         }
         
         .main-content {
-            background: #fff;
+            background: var(--card-background);
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             padding: 30px;
@@ -42,7 +40,7 @@
         .page-title {
             font-size: 28px;
             font-weight: 600;
-            color: var(--dark-text);
+            color: var(--text-primary);
             margin-bottom: 25px;
             position: relative;
             display: inline-block;
@@ -55,11 +53,12 @@
             left: 0;
             width: 50px;
             height: 4px;
-            background: var(--primary-color);
+            background: var(--primary-button);
             border-radius: 2px;
         }
         
         .card {
+            background-color: var(--card-background);
             border: none;
             border-radius: 12px;
             box-shadow: 0 2px 15px rgba(0, 0, 0, 0.06);
@@ -73,7 +72,7 @@
         }
         
         .card-header {
-            background: var(--primary-color);
+            background: var(--primary-button);
             color: white;
             border-bottom: none;
             padding: 15px 20px;
@@ -87,8 +86,8 @@
         
         .table th {
             font-weight: 600;
-            color: var(--dark-text);
-            background-color: var(--light-bg);
+            color: var(--text-primary);
+            background-color: var(--table-header-bg);
             padding: 12px 15px;
             border-bottom: 1px solid #dee2e6;
         }
@@ -97,6 +96,7 @@
             padding: 12px 15px;
             vertical-align: middle;
             border-bottom: 1px solid #f1f1f1;
+            color: var(--text-primary);
         }
         
         .table tr:last-child td {
@@ -104,12 +104,12 @@
         }
         
         .table tr:hover td {
-            background-color: rgba(67, 97, 238, 0.05);
+            background-color: rgba(0, 123, 255, 0.05);
         }
         
         .btn-primary {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
+            background-color: var(--primary-button);
+            border-color: var(--primary-button);
             font-weight: 500;
             padding: 8px 16px;
             border-radius: 8px;
@@ -117,18 +117,18 @@
         }
         
         .btn-primary:hover {
-            background-color: var(--secondary-color);
-            border-color: var(--secondary-color);
+            background-color: #0056b3; /* Darken #007bff */
+            border-color: #0056b3;
             transform: translateY(-2px);
         }
         
         .btn-outline-primary {
-            color: var(--primary-color);
-            border-color: var(--primary-color);
+            color: var(--primary-button);
+            border-color: var(--primary-button);
         }
         
         .btn-outline-primary:hover {
-            background-color: var(--primary-color);
+            background-color: var(--primary-button);
             color: white;
         }
         
@@ -155,17 +155,17 @@
         
         .status-published {
             background: rgba(56, 176, 0, 0.1);
-            color: var(--success-color);
+            color: #38b000;
         }
         
         .status-draft {
             background: rgba(255, 158, 0, 0.1);
-            color: var(--warning-color);
+            color: #ff9e00;
         }
         
         .status-canceled {
             background: rgba(239, 35, 60, 0.1);
-            color: var(--danger-color);
+            color: #ef233c;
         }
         
         .form-select, .form-control {
@@ -176,12 +176,12 @@
         }
         
         .form-select:focus, .form-control:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
+            border-color: var(--primary-button);
+            box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
         }
         
         .filter-section {
-            background: white;
+            background: var(--card-background);
             border-radius: 10px;
             padding: 20px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
@@ -191,13 +191,13 @@
         .filter-label {
             font-weight: 500;
             margin-bottom: 8px;
-            color: var(--dark-text);
+            color: var(--text-primary);
         }
         
         .no-data {
             text-align: center;
             padding: 40px;
-            color: var(--light-text);
+            color: var(--text-secondary);
         }
         
         .no-data i {
@@ -212,12 +212,12 @@
         }
         
         .page-item.active .page-link {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
+            background-color: var(--primary-button);
+            border-color: var(--primary-button);
         }
         
         .page-link {
-            color: var(--primary-color);
+            color: var(--primary-button);
         }
         
         @media (max-width: 768px) {

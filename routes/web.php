@@ -88,6 +88,7 @@ Route::middleware('auth')->group(function () {
     Route::post('cuti/reset', [CutiController::class, 'resetTahunan'])->name('cuti.reset');
     Route::get('cuti/sisa', [CutiController::class, 'sisaIndex'])->name('cuti.sisa.index');
     Route::put('cuti/sisa/{sisa}', [CutiController::class, 'sisaUpdate'])->name('cuti.sisa.update');
+    Route::delete('cuti/{id}/batal', [CutiController::class, 'batal'])->name('cuti.batal');
 
     // Shift routes
     Route::resource('shifts', ShiftController::class)->except(['create', 'show', 'edit']);

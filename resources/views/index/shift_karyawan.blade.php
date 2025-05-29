@@ -9,37 +9,39 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <style>
         :root {
-            --primary-color: #4361ee;
-            --secondary-color: #3f37c9;
-            --accent-color: #4cc9f0;
-            --light-bg: #f8f9fa;
-            --dark-text: #212529;
-            --success-color: #4caf50;
-            --warning-color: #ff9800;
-            --danger-color: #f44336;
+            --background-main: #f0f4f8; /* Peringkat 1: Latar belakang utama */
+            --card-background: #ffffff; /* Peringkat 2: Latar kartu */
+            --button-focus: #007bff; /* Peringkat 3: Tombol dan fokus input */
+            --gradient-start: #e3f2fd; /* Peringkat 4: Gradien sisi kiri kartu */
+            --gradient-end: #e1f5fe; /* Peringkat 4: Gradien sisi kanan kartu */
+            --primary-text: #003366; /* Peringkat 5: Teks utama, judul, logo */
+            --secondary-text: #4a4a4a; /* Peringkat 6: Teks sekunder */
+            --secondary-text-alt: #555; /* Peringkat 6: Teks sekunder alternatif */
+            --toggle-button: #6c757d; /* Peringkat 7: Tombol toggle */
         }
 
         body {
-            background-color: var(--light-bg);
+            background-color: var(--background-main);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: var(--dark-text);
+            color: var(--primary-text);
         }
 
         .navbar-custom {
-            background-color: var(--primary-color);
+            background-color: var(--button-focus);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             height: 76px;
         }
 
         .navbar-custom .nav-link {
-    color: white;
-    font-weight: 500;
-    font-size: 18px;
-}
+            color: var(--card-background);
+            font-weight: 500;
+            font-size: 18px;
+        }
 
         .card {
             border: none;
             border-radius: 10px;
+            background-color: var(--card-background);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
@@ -54,26 +56,27 @@
         }
 
         .btn-primary-custom {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-            color: white;
+            background-color: var(--button-focus);
+            border-color: var(--button-focus);
+            color: var(--card-background);
             transition: all 0.3s ease;
         }
 
         .btn-primary-custom:hover {
-            background-color: var(--secondary-color);
-            border-color: var(--secondary-color);
+            background-color: var(--toggle-button);
+            border-color: var(--toggle-button);
             transform: translateY(-2px);
+            color: var(--card-background);
         }
 
         .btn-outline-primary-custom {
-            border-color: var(--primary-color);
-            color: var(--primary-color);
+            border-color: var(--button-focus);
+            color: var(--button-focus);
         }
 
         .btn-outline-primary-custom:hover {
-            background-color: var(--primary-color);
-            color: white;
+            background-color: var(--button-focus);
+            color: var(--card-background);
         }
 
         .badge-shift {
@@ -87,18 +90,18 @@
         }
 
         .badge-pagi {
-            background-color: #e3f2fd;
-            color: #1976d2;
+            background-color: var(--gradient-start);
+            color: var(--primary-text);
         }
 
         .badge-sore {
-            background-color: #fff8e1;
-            color: #ff8f00;
+            background-color: var(--gradient-end);
+            color: var(--primary-text);
         }
 
         .badge-overtime {
-            background-color: #f3e5f5;
-            color: #8e24aa;
+            background-color: var(--gradient-start);
+            color: var(--primary-text);
         }
 
         .user-avatar {
@@ -106,7 +109,7 @@
             height: 40px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid white;
+            border: 2px solid var(--card-background);
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
@@ -117,17 +120,20 @@
             margin-bottom: 8px;
             font-size: 0.85rem;
             transition: all 0.3s ease;
+            border-color: var(--toggle-button);
+            color: var(--secondary-text);
         }
 
         .filter-group .btn.active {
-            color: black;
+            color: var(--card-background);
+            background-color: var(--button-focus);
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         .table th {
             font-weight: 600;
-            color: #6c757d;
+            color: var(--secondary-text-alt);
             font-size: 0.85rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -135,6 +141,7 @@
 
         .table td {
             vertical-align: middle;
+            color: var(--secondary-text);
         }
 
         .action-btn {
@@ -145,21 +152,26 @@
             justify-content: center;
             border-radius: 50%;
             transition: all 0.3s ease;
+            color: var(--secondary-text);
+            border-color: var(--toggle-button);
         }
 
         .action-btn:hover {
             transform: scale(1.1);
+            background-color: var(--button-focus);
+            color: var(--card-background);
         }
 
         .form-control, .form-select {
             border-radius: 8px;
             padding: 10px 15px;
             border: 1px solid #e0e0e0;
+            color: var(--secondary-text);
         }
 
         .form-control:focus, .form-select:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 0.25rem rgba(76, 201, 240, 0.25);
+            border-color: var(--button-focus);
+            box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
         }
 
         @media (max-width: 700px) {
@@ -274,20 +286,22 @@
                                 <th>Departemen</th>
                                 <th>Tanggal</th>
                                 <th>Shift</th>
-                                <th>Aksi</th>
+                                @if (auth()->user() && auth()->user()->role === 'Admin')
+                                    <th>Aksi</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($shifts as $index => $shift)
                                 <tr data-shift="{{ $shift->type }}">
                                     <td>{{ $index + 1 }}</td>
-                                   <td>
-    @if ($shift->user->photo_url)
-        <img src="{{ asset($shift->user->photo_url) }}" class="user-avatar" alt="{{ $shift->user->name }}">
-    @else
-        <img src="https://ui-avatars.com/api/?name={{ urlencode($shift->user->name) }}" class="user-avatar" alt="{{ $shift->user->name }}">
-    @endif
-</td>
+                                    <td>
+                                        @if ($shift->user->photo_url)
+                                            <img src="{{ asset($shift->user->photo_url) }}" class="user-avatar" alt="{{ $shift->user->name }}">
+                                        @else
+                                            <img src="https://ui-avatars.com/api/?name={{ urlencode($shift->user->name) }}" class="user-avatar" alt="{{ $shift->user->name }}">
+                                        @endif
+                                    </td>
                                     <td>{{ $shift->user->name }}</td>
                                     <td>{{ $shift->user->department }}</td>
                                     <td>{{ $shift->date->format('Y-m-d') }}</td>
@@ -296,12 +310,14 @@
                                             {{ $shift->type }}
                                         </span>
                                     </td>
-                                    <td>
-                                        <button class="btn btn-outline-warning action-btn"
-                                                onclick="openEditModal('{{ $shift->id }}')">
-                                            <i class="bi bi-pencil"></i>
-                                        </button>
-                                    </td>
+                                    @if (auth()->user() && auth()->user()->role === 'Admin')
+                                        <td>
+                                            <button class="btn btn-outline-warning action-btn"
+                                                    onclick="openEditModal('{{ $shift->id }}')">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                        </td>
+                                    @endif
                                 </tr>
                             @endforeach
                         </tbody>
@@ -325,12 +341,9 @@
                         <div class="modal-body">
                             <input type="hidden" name="shift_id" id="shiftId">
                             <div class="mb-3">
-                                
-   <div class="mb-3">
-    <label for="userSelect" class="form-label">Nama Karyawan</label>
-    <div id="userSelect" class="form-control" style="background-color: #f8f9fa; padding: 10px;" readonly>{{-- Nama akan diisi oleh JavaScript --}}</div>
-    <input type="hidden" name="user_id" id="userId">
-</div>
+                                <label for="userSelect" class="form-label">Nama Karyawan</label>
+                                <div id="userSelect" class="form-control" style="background-color: var(--card-background); padding: 10px;" readonly>{{-- Nama akan diisi oleh JavaScript --}}</div>
+                                <input type="hidden" name="user_id" id="userId">
                             </div>
                             <div class="mb-3">
                                 <label for="dateInput" class="form-label">Tanggal</label>
@@ -376,38 +389,38 @@
         <?php $shiftsJson = json_encode($shifts); ?>
         const shifts = <?php echo $shiftsJson; ?>;
 
-      function openEditModal(id) {
-    const shift = shifts.find(s => s.id == id);
-    if (!shift) {
-        console.error('Shift tidak ditemukan untuk ID:', id);
-        return;
-    }
-    const form = document.getElementById('shiftForm');
+        function openEditModal(id) {
+            const shift = shifts.find(s => s.id == id);
+            if (!shift) {
+                console.error('Shift tidak ditemukan untuk ID:', id);
+                return;
+            }
+            const form = document.getElementById('shiftForm');
 
-    // Set action URL untuk update
-    form.action = '/shifts/' + shift.id;
+            // Set action URL untuk update
+            form.action = '/shifts/' + shift.id;
 
-    // Hapus input _method lama jika ada
-    const oldMethod = form.querySelector('[name="_method"]');
-    if (oldMethod) oldMethod.remove();
+            // Hapus input _method lama jika ada
+            const oldMethod = form.querySelector('[name="_method"]');
+            if (oldMethod) oldMethod.remove();
 
-    // Tambah input method PUT untuk update
-    form.insertAdjacentHTML('afterbegin',
-        '<input type="hidden" name="_method" value="PUT">'
-    );
+            // Tambah input method PUT untuk update
+            form.insertAdjacentHTML('afterbegin',
+                '<input type="hidden" name="_method" value="PUT">'
+            );
 
-    // Isi form dengan data shift
-    document.getElementById('shiftId').value = shift.id;
-    document.getElementById('userSelect').textContent = shift.user.name; // Isi nama karyawan di div
-    document.getElementById('userId').value = shift.user_id; // Isi user_id di hidden input
-    document.getElementById('dateInput').value = shift.date.substr(0,10);
-    document.getElementById('typeSelect').value = shift.type;
+            // Isi form dengan data shift
+            document.getElementById('shiftId').value = shift.id;
+            document.getElementById('userSelect').textContent = shift.user.name; // Isi nama karyawan di div
+            document.getElementById('userId').value = shift.user_id; // Isi user_id di hidden input
+            document.getElementById('dateInput').value = shift.date.substr(0,10);
+            document.getElementById('typeSelect').value = shift.type;
 
-    // Tampilkan modal
-    new bootstrap.Modal(
-        document.getElementById('shiftModal')
-    ).show();
-}
+            // Tampilkan modal
+            new bootstrap.Modal(
+                document.getElementById('shiftModal')
+            ).show();
+        }
     </script>
 </body>
 </html>

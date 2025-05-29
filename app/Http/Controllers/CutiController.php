@@ -172,12 +172,71 @@ public function destroy(CutiRequest $cuti)
     }
 
     // Reject pengajuan
-    public function reject($id)
-    {
-        $cuti = CutiRequest::findOrFail($id);
+  public function reject($id)
+{
+    $cuti = CutiRequest::findOrFail($id);
+    $user = $cuti->user;
+    $lama = $cuti->lama_cuti;
+    $tahun = Carbon::parse($cuti->tanggal_mulai)->year;
+
+    DB::transaction(function () use ($cuti, $user, $lama, $tahun) {
+        // Memulihkan sisa cuti
+        SisaCuti::where('user_id', $user->id)
+            ->where('tahun', $tahun)
+            ->update([
+                'cuti_terpakai' => DB::raw("cuti_terpakai - {$lama}"),
+                'cuti_sisa'     => DB::raw("cuti_sisa + {$lama}"),
+            ]);
+
+        // Mengubah status menjadi 'Ditolak'
         $cuti->status = 'Ditolak';
         $cuti->save();
 
-        return redirect()->route('cuti.index')->with('success', 'Pengajuan cuti ditolak.');
-    }
+        // Mencatat log penolakan
+        CutiLogs::create([
+            'cuti_request_id' => $cuti->id,
+            'aksi'            => 'Ditolak',
+            'oleh_user_id'    => auth()->user()->id,
+            'keterangan'      => 'Pengajuan ditolak oleh Manajer',
+        ]);
+    });
+
+    return redirect()->route('cuti.index')->with('success', 'Pengajuan cuti ditolak dan sisa cuti dipulihkan.');
+}
+    // Reject pengajuan
+public function batal($id)
+{
+    $cuti = CutiRequest::findOrFail($id);
+    $user = auth()->user();
+
+    // Hanya pemilik pengajuan yang boleh membatalkan dan hanya jika status masih 'Menunggu'
+    abort_unless($user->id === $cuti->user_id && $cuti->status === 'Menunggu', 403);
+
+    $lama = $cuti->lama_cuti;
+    $tahun = Carbon::parse($cuti->tanggal_mulai)->year;
+
+    DB::transaction(function () use ($cuti, $user, $lama, $tahun) {
+        // Kembalikan sisa cuti
+        SisaCuti::where('user_id', $user->id)
+            ->where('tahun', $tahun)
+            ->update([
+                'cuti_terpakai' => DB::raw("cuti_terpakai - {$lama}"),
+                'cuti_sisa'     => DB::raw("cuti_sisa + {$lama}"),
+            ]);
+
+        // Ubah status menjadi 'Dibatalkan'
+        $cuti->status = 'Dibatalkan';
+        $cuti->save();
+
+        // Log pembatalan
+        CutiLogs::create([
+            'cuti_request_id' => $cuti->id,
+            'aksi'            => 'Dibatalkan',
+            'oleh_user_id'    => $user->id,
+            'keterangan'      => 'Pengajuan dibatalkan oleh pemohon',
+        ]);
+    });
+
+    return redirect()->route('cuti.index')->with('success', 'Pengajuan cuti berhasil dibatalkan dan sisa cuti dipulihkan.');
+}
 }
