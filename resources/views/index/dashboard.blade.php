@@ -107,7 +107,7 @@
       font-size: 1rem;
       position: relative;
       overflow: hidden;
-      width: 193px;
+      width: 194px;
     }
     
     .sidebar .btn:hover {
@@ -174,6 +174,7 @@
       display: flex;
       flex-direction: column;
       background-color: white;
+      position: relative; /* Menambahkan posisi relatif untuk tombol absolut */
     }
     
     .card-news:hover {
@@ -186,7 +187,7 @@
       color: inherit;
       display: flex;
       flex-direction: column;
-      height: 20%;
+      height: 100%; /* Mengubah dari 20% ke 100% untuk memastikan tautan mengisi seluruh kartu */
     }
     
     .card-news img {
@@ -226,29 +227,57 @@
       margin-top: auto;
     }
     
-    .edit-btn {
+    /* Styling untuk tombol edit dan delete */
+     .delete-btn {
       position: absolute;
       top: 10px;
-      right: 10px;
       background-color: rgba(255,255,255,0.9);
       width: 40px;
-      height: 30px;
+      height: 40px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       z-index: 2;
-      opacity: 0;
+      opacity: 0; /* Tombol disembunyikan secara default */
       transition: all 0.3s ease;
     }
-    
-    .card-news:hover .edit-btn {
-      opacity: 1;
+    .edit-btn {
+      position: absolute;
+      top: 10px;
+      background-color: rgba(255,255,255,0.9);
+      width: 40px;
+      height: 10px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 2;
+      opacity: 0; /* Tombol disembunyikan secara default */
+      transition: all 0.3s ease;
     }
-    
-    .edit-btn:hover {
-      background-color: white;
+
+    /* Posisi tombol edit */
+    .edit-btn {
+      right: 60px; /* Tombol edit di sebelah kiri tombol delete */
+    }
+
+    /* Posisi tombol delete */
+    .delete-btn {
+      right: 10px; /* Tombol delete di pojok kanan atas */
+    }
+
+    /* Menampilkan tombol saat hover */
+    .card-news:hover .edit-btn,
+    .card-news:hover .delete-btn {
+      opacity: 1; /* Tombol muncul saat card-news di-hover */
+    }
+
+    /* Efek hover pada tombol */
+    .edit-btn:hover, .delete-btn:hover {
+      /* background-color: white; */
       transform: scale(1.1);
     }
     
@@ -610,6 +639,7 @@
         <li><h6 class="dropdown-header">Menu Lainnya</h6></li>
         @if(auth()->user()->role === 'Manajer' || auth()->user()->role === 'Admin')
           <li><a class="dropdown-item" href="{{ route('laporan.index') }}"><i class="bi bi-journal-text me-1"></i> Daftar Resi</a></li>
+          <li><a class="dropdown-item" href="{{ route('reset.password.form') }}"><i class="bi bi-key me-1"></i> Reset Password</a></li>
         @endif
 
         @if(auth()->user()->role === 'Leader')
@@ -630,11 +660,10 @@
             @else
               Feedback Pegawai
             @endif
-
           </a>
         </li>
         <li><a class="dropdown-item" href="{{ route('shift.karyawan') }}"><i class="bi bi-clock-history me-1"></i> Shift & Jadwal</a></li>
-        <li><a class="dropdown-item" href="{{ route('reset.password.form') }}"><i class="bi bi-key me-1"></i> Reset Password</a></li>
+        
       </ul>
     </div>
 
@@ -684,9 +713,14 @@
     <h6 class="fw-bold">Menu Lainnya</h6>
 
     @if(auth()->user()->role === 'Manajer' || auth()->user()->role === 'Admin')
+     <a class="btn btn-outline-dark" href="{{ route('reset.password.form') }}">
+        <i class="bi bi-key me-1"></i> Reset Password
+        <span id="resetNotification" class="badge bg-danger rounded-pill" style="display: none;">!</span>
+    </a>
       <a href="{{ route('laporan.index') }}" class="btn btn-outline-dark">
         <i class="bi bi-journal-text me-1"></i> Daftar Resi
       </a>
+      
     @endif
 
     @if(auth()->user()->role === 'Leader')
@@ -723,12 +757,6 @@
       <i class="bi bi-clock-history me-1"></i> Shift & Jadwal
     </a>
 
-    
-    <a class="btn btn-outline-dark" href="{{ route('reset.password.form') }}">
-        <i class="bi bi-key me-1"></i> Reset Password
-        <span id="resetNotification" class="badge bg-danger rounded-pill" style="display: none;">!</span>
-    </a>
-
   </nav>
 
   <!-- Main Content -->
@@ -746,63 +774,42 @@
       @foreach($newsItems as $idx => $item)
         <div class="animate-fade-in delay-{{ ($idx % 4) + 1 }}">
           <div class="card card-news">
-            <a href="{{ route('whats_new', ['id' => $item['id']]) }}">
-              <div class="position-relative ">
+            <div class="position-relative">
+              <a href="{{ route('whats_new', ['id' => $item['id']]) }}">
                 <img src="{{ htmlspecialchars($item['image_url']) }}" 
                      class="card-img-top" 
                      alt="{{ htmlspecialchars($item['title']) }}">
-                @if(auth()->user()->role === 'Admin' || auth()->user()->role === 'Manajer')
-                  <div class="d-flex justify-content-between align-items-start position-absolute w-100" style="top: 10px; left: 0; right: 0; z-index:2;">
-                    <a href="{{ route('whats_new.edit', ['id' => $item['id']]) }}" 
-                       class="edit-btn ms-2" 
-                       title="Edit" style="position: static; opacity: 1;">
-                      <i class="bi bi-pencil-square text-primary"></i>
-                    </a>
-                    <form action="{{ route('whats_new.delete', ['id' => $item['id']]) }}" method="POST" class="delete-form me-2" style="position: static; opacity: 1;">
-                      @csrf
-                      @method('DELETE')
-                      <button type="submit" class="edit-btn" title="Delete" style="background-color: rgba(255,255,255,0.9); width: 40px; height: 30px; border: none; display: flex; align-items: center; justify-content: center;">
-                        <i class="bi bi-trash text-danger"></i>
-                      </button>
-                    </form>
-                  </div>
-                @endif
-              </div>
-              <div class="card-body">
+              </a>
+              @if(auth()->user()->role === 'Admin' || auth()->user()->role === 'Manajer')
+                <a href="{{ route('whats_new.edit', ['id' => $item['id']]) }}" 
+                   class="edit-btn" 
+                   title="Edit" style="height: 40px; width: 40px;">
+                  <i class="bi bi-pencil-square text-primary"></i>
+                </a>
+                <form action="{{ route('whats_new.delete', ['id' => $item['id']]) }}" 
+                      method="POST" 
+                      class="delete-form">
+                  @csrf
+                  @method('DELETE')
+                  <button type="submit" class="delete-btn" title="Delete">
+                    <i class="bi bi-trash text-danger"></i>
+                  </button>
+                </form>
+              @endif
+            </div>
+            <div class="card-body">
+              <a href="{{ route('whats_new', ['id' => $item['id']]) }}">
                 <h5 class="card-title">{{ htmlspecialchars($item['title']) }}</h5>
                 <p class="card-text">{{ Str::limit($item['description'], 120) }}</p>
                 <div class="card-date">
                   <i class="bi bi-calendar me-1"></i> {{ htmlspecialchars($item['date']) }}
                 </div>
-              </div>
-            </a>
+              </a>
+            </div>
           </div>
         </div>
       @endforeach
     </div>
-    <script>
-      // Show delete button on hover, same as edit
-      document.querySelectorAll('.card-news').forEach(function(card) {
-        card.addEventListener('mouseenter', function() {
-          card.querySelectorAll('.delete-form').forEach(function(form) {
-            form.style.opacity = '1';
-          });
-        });
-        card.addEventListener('mouseleave', function() {
-          card.querySelectorAll('.delete-form').forEach(function(form) {
-            form.style.opacity = '0';
-          });
-        });
-      });
-      // Confirm before delete
-      document.querySelectorAll('.delete-form').forEach(function(form) {
-        form.addEventListener('submit', function(e) {
-          if(!confirm('Are you sure you want to delete this post?')) {
-            e.preventDefault();
-          }
-        });
-      });
-    </script>
   </main>
 
   <!-- Profile Modal -->
@@ -926,22 +933,30 @@
       $('#profileModal').on('hidden.bs.modal', function() {
         $(this).find('.modal-content').removeClass('animate__animated animate__zoomIn');
       });
+      
+      // Konfirmasi untuk tombol delete
+      document.querySelectorAll('.delete-form').forEach(function(form) {
+        form.addEventListener('submit', function(e) {
+          if (!confirm('Are you sure you want to delete this post?')) {
+            e.preventDefault();
+          }
+        });
+      });
     });
 
-
     document.addEventListener('DOMContentLoaded', function() {
-    fetch("{{ route('check.reset.requests') }}")
+      fetch("{{ route('check.reset.requests') }}")
         .then(response => response.json())
         .then(data => {
-            const notification = document.getElementById('resetNotification');
-            if (data.exists) {
-                notification.style.display = 'inline-block';
-            } else {
-                notification.style.display = 'none';
-            }
+          const notification = document.getElementById('resetNotification');
+          if (data.exists) {
+            notification.style.display = 'inline-block';
+          } else {
+            notification.style.display = 'none';
+          }
         })
         .catch(error => console.error('Error:', error));
-});
+    });
   </script>
 </body>
 </html>
