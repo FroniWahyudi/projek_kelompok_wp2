@@ -237,13 +237,12 @@
         <h2 class="text-center mb-4" style="color: var(--primary-color); font-weight: 700;">
           <i class="fas fa-user-edit me-2"></i>Edit Profil
         </h2>
-        
-        <form action="{{ isset($user) && is_object($user) ? route('profil.update', $user->id) : '#' }}" method="POST" enctype="multipart/form-data" class="fade-in">
+        <!-- Form 1: Informasi Pribadi -->
+        <form action="{{ isset($user) && is_object($user) ? route('profil.update', $user->id) : '#' }}" method="POST" enctype="multipart/form-data" class="fade-in mb-4">
           @csrf
           @if(isset($user) && is_object($user))
             @method('PUT')
           @endif
-          
           <div class="row">
             <div class="col-lg-4">
               <div class="profile-card h-100">
@@ -259,25 +258,19 @@
                       <div class="file-upload-name" id="file-name"></div>
                     </div>
                   </div>
-                  
                   <h4 class="user-name">{{ is_object($user) && isset($user->name) ? $user->name : 'Nama Pengguna' }}</h4>
                   <p class="user-email">{{ is_object($user) && isset($user->email) ? $user->email : 'email@example.com' }}</p>
-                  
                   <div class="about-section">
                     <h5 class="about-title"><i class="fas fa-info-circle me-2"></i>Tentang Saya</h5>
                     <p class="about-text">{{ is_object($user) && isset($user->bio) ? $user->bio : 'Tidak ada deskripsi' }}</p>
                   </div>
-                  
-               
                 </div>
               </div>
             </div>
-            
             <div class="col-lg-8 mt-4 mt-lg-0">
               <div class="profile-card h-100">
                 <div class="card-body py-4">
                   <h5 class="section-title"><i class="fas fa-id-card me-2"></i>Informasi Pribadi</h5>
-                  
                   <div class="row">
                     <div class="col-md-6 mb-3">
                       <label for="name" class="form-label">Nama Lengkap</label>
@@ -286,15 +279,6 @@
                         <input type="text" class="form-control" id="name" name="name" value="{{ old('name', $user->name ?? '') }}" placeholder="Masukkan nama lengkap">
                       </div>
                     </div>
-                    
-                    <div class="col-md-6 mb-3">
-                      <label for="email" class="form-label">Email</label>
-                      <div class="input-group">
-                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                        <input type="email" class="form-control" id="email" name="email" value="{{ old('email', $user->email ?? '') }}" placeholder="Masukkan alamat email">
-                      </div>
-                    </div>
-                    
                     <div class="col-md-6 mb-3">
                       <label for="phone" class="form-label">Nomor Telepon</label>
                       <div class="input-group">
@@ -302,16 +286,13 @@
                         <input type="text" class="form-control" id="phone" name="phone" value="{{ old('phone', $user->phone ?? '') }}" placeholder="Masukkan nomor telepon">
                       </div>
                     </div>
-                    
                     <div class="col-md-6 mb-3">
-                      <label for="password" class="form-label">Password</label>
+                      <label for="alamat" class="form-label">Alamat</label>
                       <div class="input-group">
-                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                        <input type="password" class="form-control" id="password" name="password" placeholder="Masukkan password baru (kosongkan jika tidak ingin mengubah)">
+                        <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                        <input type="text" class="form-control" id="alamat" name="alamat" value="{{ old('alamat', $user->alamat ?? '') }}" placeholder="Masukkan alamat lengkap">
                       </div>
-                      <small class="text-muted">Minimal 8 karakter</small>
                     </div>
-                    
                     <div class="col-12 mb-3">
                       <label for="bio" class="form-label">Bio</label>
                       <div class="input-group">
@@ -319,15 +300,57 @@
                         <input type="text" class="form-control" id="bio" name="bio" value="{{ old('bio', $user->bio ?? '') }}" placeholder="Deskripsi singkat tentang diri Anda">
                       </div>
                     </div>
-                    
-                   
-                    
+                  </div>
+                  <div class="d-flex justify-content-between mt-4">
+                    <div class="d-flex">
+                      <button type="reset" class="btn btn-secondary me-3">
+                        <i class="fas fa-undo me-1"></i> Reset
+                      </button>
+                      <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-1"></i> Simpan Perubahan
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+        <!-- Form 2: Informasi Akun -->
+        <form action="{{ isset($user) && is_object($user) ? route('profil.update.account', $user->id) : '#' }}" method="POST" class="fade-in">
+          @csrf
+          @if(isset($user) && is_object($user))
+            @method('PUT')
+          @endif
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="profile-card h-100">
+                <div class="card-body py-4">
+                  <h5 class="section-title"><i class="fas fa-id-card me-2"></i>Informasi Akun</h5>
+                  <div class="row">
                     <div class="col-md-6 mb-3">
-                      <label for="alamat" class="form-label">Alamat</label>
+                      <label for="email" class="form-label">Email</label>
                       <div class="input-group">
-                        <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
-                        <input type="text" class="form-control" id="alamat" name="alamat" value="{{ old('alamat', $user->alamat ?? '') }}" placeholder="Masukkan alamat lengkap">
+                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                        <input type="email" class="form-control" id="email" name="email" value="{{ old('email', $user->email ?? '') }}" placeholder="Masukkan alamat email">
                       </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="password" class="form-label">Password</label>
+                      <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                        <input type="text" name="id" value="{{ old('id', $user->id ?? 'user') }}" hidden>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Masukkan password baru (kosongkan jika tidak ingin mengubah)">
+                      </div>
+                      <small class="text-muted">Minimal 8 karakter</small>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="password" class="form-label">Konfirmasi Password</label>
+                      <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                        <input type="password" class="form-control" name="password_confirmation" id="password_confirmation" placeholder="Masukkan password baru (kosongkan jika tidak ingin mengubah)">
+                      </div>
+                      <small class="text-muted">Minimal 8 karakter</small>
                     </div>
                   </div>
                   
