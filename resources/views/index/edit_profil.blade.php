@@ -190,24 +190,7 @@
       margin-top: 1.5rem;
     }
     
-    .social-link {
-      display: inline-block;
-      width: 35px;
-      height: 35px;
-      border-radius: 50%;
-      background-color: rgba(78, 115, 223, 0.1);
-      color: var(--primary-color);
-      text-align: center;
-      line-height: 35px;
-      margin-right: 0.5rem;
-      transition: all 0.3s;
-    }
     
-    .social-link:hover {
-      background-color: var(--primary-color);
-      color: white;
-      transform: translateY(-3px);
-    }
     
     @media (max-width: 768px) {
       .profile-card {
@@ -285,12 +268,7 @@
                     <p class="about-text">{{ is_object($user) && isset($user->bio) ? $user->bio : 'Tidak ada deskripsi' }}</p>
                   </div>
                   
-                  <div class="social-links">
-                    <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
-                  </div>
+               
                 </div>
               </div>
             </div>
@@ -342,13 +320,7 @@
                       </div>
                     </div>
                     
-                    <div class="col-md-6 mb-3">
-                      <label for="role" class="form-label">Peran</label>
-                      <div class="input-group">
-                        <span class="input-group-text"><i class="fas fa-briefcase"></i></span>
-                        <input type="text" class="form-control" id="role" name="role" value="{{ old('role', $user->role ?? '') }}" placeholder="Masukkan peran Anda">
-                      </div>
-                    </div>
+                   
                     
                     <div class="col-md-6 mb-3">
                       <label for="alamat" class="form-label">Alamat</label>

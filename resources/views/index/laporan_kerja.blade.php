@@ -4,11 +4,31 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Tugas Harian Resi – Naga Hytam</title>
-  <meta name="csrf-token" content="{{ csrf_token() }}"> <!-- ADDED -->
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <style>
-    /* --- Modal Overlay Styles --- */
+    body {
+      background-color: #f0f4f8;
+    }
+    .text-dark-blue {
+      color: #003366;
+    }
+    .text-gray {
+      color: #555;
+    }
+    .card-body {
+      color: #555;
+    }
+    .card-body strong {
+      color: #003366;
+    }
+    .table th {
+      color: #003366;
+    }
+    .table td {
+      color: #555;
+    }
     #resultOverlay {
       position: fixed;
       top: 0; left: 0;
@@ -61,6 +81,12 @@
       margin: 0;
       display: none;
     }
+    #resultOverlay h3 {
+      color: #003366;
+    }
+    #resultOverlay p {
+      color: #555;
+    }
     @keyframes scale-in {
       0% { transform: scale(0); opacity: 0; }
       100% { transform: scale(1); opacity: 1; }
@@ -79,18 +105,13 @@
 
 <div class="container py-4">
   <div class="d-flex align-items-center mb-4">
-    <a href="{{ route('dashboard') }}" class="me-3 text-secondary fs-4">
+    <a href="{{ route('dashboard') }}" class="me-3 text-dark-blue fs-4">
       <i class="bi bi-house-door"></i>
     </a>
-    <h2 class="m-0 flex-grow-1">Tugas Harian Resi – Naga Hytam</h2>
- 
-<!-- Tombol Buat Resi -->
-<a href="{{ route('resi.buat') }}" class="btn btn-success">
-  <i class="bi bi-plus-lg me-1"></i> Buat Resi
-</a>
-
-
-
+    <h2 class="m-0 flex-grow-1 text-dark-blue">Tugas Harian Resi – Naga Hytam</h2>
+    <a href="{{ route('resi.buat') }}" class="btn btn-primary">
+      <i class="bi bi-plus-lg me-1"></i> Buat Resi
+    </a>
   </div>
 
   <div class="row gx-4">
@@ -103,44 +124,55 @@
         <ul id="dropdownMenu" class="dropdown-menu w-100"></ul>
       </div>
 
-      <div class="card mb-4 p-3">
-        <h5 class="mb-3 text-primary">Informasi Resi</h5>
-        <p class="mb-1"><strong>Resi:</strong> <span id="infoKode">-</span></p>
-        <p class="mb-1"><strong>Tujuan:</strong> <span id="infoTujuan">-</span></p>
-        <p class="mb-1"><strong>Tanggal:</strong> <span id="infoTanggal">-</span></p>
-        <p class="mb-0"><strong>Status:</strong> <span id="infoStatus">-</span></p>
+      <div class="card mb-4">
+        <div class="card-header" style="background: linear-gradient(to right, #e3f2fd, #e1f5fe);">
+          <h5 class="mb-0 text-dark-blue">Informasi Resi</h5>
+        </div>
+        <div class="card-body">
+          <p class="mb-1"><strong>Resi:</strong> <span id="infoKode">-</span></p>
+          <p class="mb-1"><strong>Tujuan:</strong> <span id="infoTujuan">-</span></p>
+          <p class="mb-1"><strong>Tanggal:</strong> <span id="infoTanggal">-</span></p>
+          <p class="mb-0"><strong>Status:</strong> <span id="infoStatus">-</span></p>
+        </div>
       </div>
 
-      <div class="card p-3">
-        <h5 class="mb-3 text-primary">Progress Checklist</h5>
-        <div class="d-flex justify-content-between mb-1">
-          <small><span id="doneCount">0</span>/<span id="totalCount">0</span> item selesai</small>
-          <small><span id="percentDone">0%</span></small>
+      <div class="card">
+        <div class="card-header" style="background: linear-gradient(to right, #e3f2fd, #e1f5fe);">
+          <h5 class="mb-0 text-dark-blue">Progress Checklist</h5>
         </div>
-        <div class="progress mb-3" style="height:8px;">
-          <div id="progressBar" class="progress-bar bg-primary" role="progressbar" style="width:0%"></div>
+        <div class="card-body">
+          <div class="d-flex justify-content-between mb-1">
+            <small><span id="doneCount">0</span>/<span id="totalCount">0</span> item selesai</small>
+            <small><span id="percentDone">0%</span></small>
+          </div>
+          <div class="progress mb-3" style="height:8px;">
+            <div id="progressBar" class="progress-bar bg-primary" role="progressbar" style="width:0%"></div>
+          </div>
+          <button id="markAll" class="btn btn-primary w-100">
+            <i class="bi bi-check-circle me-1"></i> Tandai Selesai
+          </button>
         </div>
-        <button id="markAll" class="btn btn-primary w-100">
-          <i class="bi bi-check-circle me-1"></i> Tandai Selesai
-        </button>
       </div>
     </div>
 
     <!-- KANAN -->
     <div class="col-lg-8">
-      <div class="card p-3">
-        <h5 class="mb-3 text-primary">Checklist Item</h5>
-        <div class="table-responsive">
-          <table class="table mb-0">
-            <thead><tr><th>No</th><th>Item</th><th>Qty</th><th>Checklist</th></tr></thead>
-            <tbody id="resiTableBody"></tbody>
-          </table>
+      <div class="card">
+        <div class="card-header" style="background: linear-gradient(to right, #e3f2fd, #e1f5fe);">
+          <h5 class="mb-0 text-dark-blue">Checklist Item</h5>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table mb-0">
+              <thead><tr><th>No</th><th>Item</th><th>Qty</th><th class="text-center">Checklist</th></tr></thead>
+              <tbody id="resiTableBody"></tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-
 
 <!-- Modal Overlay -->
 <div id="resultOverlay">
@@ -153,17 +185,15 @@
 </div>
 
 <script>
-  // Set header AJAX global dengan CSRF token
   $.ajaxSetup({
     headers: {
       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
   });
 
-  // Inisialisasi data dari server
- const resiData = <?= json_encode($resis, JSON_UNESCAPED_UNICODE) ?>;
+  const resiData = <?= json_encode($resis, JSON_UNESCAPED_UNICODE) ?>;
 
-  console.log("[DEBUG] resiData:", resiData); // Debug konsol
+  console.log("[DEBUG] resiData:", resiData);
 
   function buildDropdown() {
     $("#dropdownMenu").empty();
@@ -174,8 +204,8 @@
       $("#dropdownMenu").append(`
         <li>
           <a class="dropdown-item" href="#" data-key="${key}">
-            <div><strong>${r.kode}</strong>
-              <div class="resi-info">${r.tujuan}</div>
+            <div><strong class="text-dark-blue">${r.kode}</strong>
+              <div class="resi-info text-gray">${r.tujuan}</div>
             </div>
             <span class="badge ${badgeClass}">${r.status}</span>
           </a>
@@ -259,13 +289,11 @@
       renderResi(firstKey);
     }
 
-    // Pilih resi dari dropdown
     $(document).on("click", "#dropdownMenu .dropdown-item", function(e) {
       e.preventDefault();
       renderResi($(this).data("key"));
     });
 
-    // Tandai semua checklist selesai
     $("#markAll").on("click", function() {
       const kode = $("#infoKode").text();
       if (kode !== "-") {
@@ -284,7 +312,6 @@
       }
     });
 
-    // Tambah/Hapus item di form modal
     let itemIndex = 1;
     $("#addItem").on("click", () => {
       const row = $(".item-row:first").clone();
@@ -303,7 +330,6 @@
       }
     });
 
-    // Submit pembuatan resi baru via AJAX
     $("#submitCreate").on("click", function() {
       const raw = $("#createResiForm").serializeArray();
       const data = raw.reduce((acc, { name, value }) => {
@@ -343,11 +369,9 @@
         });
     });
 
-    // Update progress saat checklist diubah
     $(document).on("change", ".checklist", updateProgress);
   });
 </script>
-
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
 </body>
