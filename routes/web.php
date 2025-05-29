@@ -43,6 +43,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/whats-new/store', [NewsController::class, 'store'])->name('whats_new.store');
     Route::get('/whats-new/edit/{id}', [NewsController::class, 'edit'])->name('whats_new.edit');
     Route::put('/whats-new/update/{id}', [NewsController::class, 'update'])->name('whats_new.update');
+    Route::delete('/whats-new/delete/{id}', [NewsController::class, 'destroy'])->name('whats_new.delete');
     Route::get('/whats-new/{id}', [NewsController::class, 'show'])->name('whats_new');
 
     // HR sections

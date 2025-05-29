@@ -752,11 +752,20 @@
                      class="card-img-top" 
                      alt="{{ htmlspecialchars($item['title']) }}">
                 @if(auth()->user()->role === 'Admin' || auth()->user()->role === 'Manajer')
-                  <a href="{{ route('whats_new.edit', ['id' => $item['id']]) }}" 
-                     class="edit-btn" 
-                     title="Edit">
-                    <i class="bi bi-pencil-square text-primary"></i>
-                  </a>
+                  <div class="d-flex justify-content-between align-items-start position-absolute w-100" style="top: 10px; left: 0; right: 0; z-index:2;">
+                    <a href="{{ route('whats_new.edit', ['id' => $item['id']]) }}" 
+                       class="edit-btn ms-2" 
+                       title="Edit" style="position: static; opacity: 1;">
+                      <i class="bi bi-pencil-square text-primary"></i>
+                    </a>
+                    <form action="{{ route('whats_new.delete', ['id' => $item['id']]) }}" method="POST" class="delete-form me-2" style="position: static; opacity: 1;">
+                      @csrf
+                      @method('DELETE')
+                      <button type="submit" class="edit-btn" title="Delete" style="background-color: rgba(255,255,255,0.9); width: 40px; height: 30px; border: none; display: flex; align-items: center; justify-content: center;">
+                        <i class="bi bi-trash text-danger"></i>
+                      </button>
+                    </form>
+                  </div>
                 @endif
               </div>
               <div class="card-body">
@@ -771,6 +780,29 @@
         </div>
       @endforeach
     </div>
+    <script>
+      // Show delete button on hover, same as edit
+      document.querySelectorAll('.card-news').forEach(function(card) {
+        card.addEventListener('mouseenter', function() {
+          card.querySelectorAll('.delete-form').forEach(function(form) {
+            form.style.opacity = '1';
+          });
+        });
+        card.addEventListener('mouseleave', function() {
+          card.querySelectorAll('.delete-form').forEach(function(form) {
+            form.style.opacity = '0';
+          });
+        });
+      });
+      // Confirm before delete
+      document.querySelectorAll('.delete-form').forEach(function(form) {
+        form.addEventListener('submit', function(e) {
+          if(!confirm('Are you sure you want to delete this post?')) {
+            e.preventDefault();
+          }
+        });
+      });
+    </script>
   </main>
 
   <!-- Profile Modal -->

@@ -71,4 +71,11 @@ class NewsController extends Controller
         $news->save();
         return redirect()->route('whats_new', $id)->with('success', 'News updated successfully.');
     }
+
+    public function destroy($id)
+    {
+        $news = News::findOrFail($id);
+        $news->delete();
+        return redirect()->route('dashboard')->with('success', 'News deleted successfully.');
+    }
 }

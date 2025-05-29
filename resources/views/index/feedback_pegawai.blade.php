@@ -52,14 +52,26 @@
               @endforeach
             </select>
           </div>
+          <!-- Search Input -->
+          <div class="w-full md:w-1/3">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Cari Nama Pegawai</label>
+            <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama..." class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all" id="live-search-input" autofocus>
+          </div>
         </div>
       </form>
     </div>
 
     <!-- Employee List -->
     <div class="grid gap-6">
+      @php
+        $search = request('search');
+      @endphp
       @foreach($pegawai as $data)
-        @if(!request('divisi') || request('divisi') == $data['divisi'])
+        @php
+          $matchDivisi = !request('divisi') || request('divisi') == $data['divisi'];
+          $matchSearch = !$search || stripos($data['name'], $search) !== false;
+        @endphp
+        @if($matchDivisi && $matchSearch)
           <div class="feedback-card bg-white rounded-xl shadow-md overflow-hidden">
             <div class="md:flex">
               <!-- Employee Photo -->
@@ -106,5 +118,24 @@
       @endforeach
     </div>
   </div>
+
+  <script>
+    // Debounce function to limit how often the form submits
+    function debounce(func, wait) {
+      let timeout;
+      return function(...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), wait);
+      };
+    }
+
+    const searchInput = document.getElementById('live-search-input');
+    if (searchInput) {
+      const form = searchInput.form;
+      searchInput.addEventListener('input', debounce(function() {
+        form.submit();
+      }, 400)); // 400ms debounce
+    }
+  </script>
 </body>
 </html>
