@@ -55,6 +55,7 @@ Route::middleware('auth')->group(function () {
     // Profile edit
     Route::get('/edit_profil/{id}', [DashboardController::class, 'edit'])->name('profil.edit');
     Route::put('/edit_profil/{id}', [DashboardController::class, 'update'])->name('profil.update');
+    Route::put('/edit_profil/account/{id}', [PasswordResetController::class, 'resetPasswordManual'])->name('profil.update.account');
 
     // Shift view
     Route::get('/shift_karyawan', [ShiftController::class, 'index'])->name('shift.karyawan');
