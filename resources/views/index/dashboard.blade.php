@@ -619,6 +619,23 @@
     ::-webkit-scrollbar-thumb:hover {
       background: #aaa;
     }
+    .notification-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: red;
+    margin-left: 5px;
+}
+.notification-dot-cuti {
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    border-radius: 50%;
+    position: absolute;
+    top: 16px;
+    right: 9px;
+}
   </style>
 </head>
 <body>
@@ -645,9 +662,16 @@
         @if(auth()->user()->role === 'Leader')
           <li><a class="dropdown-item" href="{{ route('laporan.index') }}"><i class="bi bi-journal-text me-1"></i> Resi hari ini</a></li>
         @endif
-        @if(auth()->user()->role === 'Manajer')
-          <li><a class="dropdown-item" href="{{ route('cuti.index') }}"><i class="bi bi-check-square me-1"></i> Daftar Pengajuan Cuti</a></li>
-        @endif
+      @if(auth()->user()->role === 'Manajer')
+        <li>
+          <a class="dropdown-item" href="{{ route('cuti.index') }}">
+            <i class="bi bi-check-square me-1"></i> Daftar Pengajuan Cuti
+            @if(app('App\Http\Controllers\CutiController')->hasPendingRequests())
+              <span class="notification-dot"></span>
+            @endif
+          </a>
+        </li>
+      @endif
         @if(auth()->user()->role === 'Operator' || auth()->user()->role === 'Admin' || auth()->user()->role === 'Leader')
           <li><a class="dropdown-item" href="{{ route('cuti.index') }}"><i class="bi bi-file-earmark-text me-1"></i> Pengajuan Cuti</a></li>
           <li><a class="dropdown-item" href="{{ route('slips.index') }}"><i class="bi bi-receipt me-1"></i> Slip Gaji</a></li>
@@ -711,16 +735,17 @@
     <hr>
 
     <h6 class="fw-bold">Menu Lainnya</h6>
+    @if(auth()->user()->role === 'Admin')
+      <a class="btn btn-outline-dark" href="{{ route('reset.password.form') }}">
+      <i class="bi bi-key me-1"></i> Reset Password
+      <span id="resetNotification" class="badge bg-danger rounded-pill" style="display: none;">!</span>
+      </a>
+    @endif
 
     @if(auth()->user()->role === 'Manajer' || auth()->user()->role === 'Admin')
-     <a class="btn btn-outline-dark" href="{{ route('reset.password.form') }}">
-        <i class="bi bi-key me-1"></i> Reset Password
-        <span id="resetNotification" class="badge bg-danger rounded-pill" style="display: none;">!</span>
-    </a>
       <a href="{{ route('laporan.index') }}" class="btn btn-outline-dark">
-        <i class="bi bi-journal-text me-1"></i> Daftar Resi
+      <i class="bi bi-journal-text me-1"></i> Daftar Resi
       </a>
-      
     @endif
 
     @if(auth()->user()->role === 'Leader')
@@ -729,20 +754,28 @@
       </a>
     @endif
 
-    @if(auth()->user()->role === 'Manajer')
-      <a href="{{ route('cuti.index') }}" class="btn btn-outline-dark">
-        <i class="bi bi-check-square me-1"></i> Daftar Pengajuan Cuti
-      </a>
-    @endif
-
-    @if(auth()->user()->role === 'Operator' || auth()->user()->role === 'Admin' || auth()->user()->role === 'Leader')
-      <a href="{{ route('cuti.index') }}" class="btn btn-outline-dark">
-        <i class="bi bi-file-earmark-text me-1"></i> Pengajuan Cuti
-      </a>
-      <a href="{{ route('slips.index') }}" class="btn btn-outline-dark">
+     @if(auth()->user()->role === 'Manajer')
+     
+          <a class="btn btn-outline-dark" href="{{ route('cuti.index') }}">
+            <i class="bi bi-check-square me-1"></i> Daftar Cuti
+            @if(app('App\Http\Controllers\CutiController')->hasPendingRequests())
+              <span class="notification-dot"></span>
+            @endif
+          </a>
+        
+      @endif
+@if(auth()->user()->role === 'Operator' || auth()->user()->role === 'Admin' || auth()->user()->role === 'Leader')
+    <a href="{{ route('cuti.index') }}" class="btn btn-outline-dark">
+        <i class="bi bi-check-square me-1"></i> Pengajuan Cuti
+        @if(app('App\Http\Controllers\CutiController')->hasNonPendingRequests())
+            <span class="notification-dot-cuti">
+            </span>
+        @endif
+    </a>
+    <a href="{{ route('slips.index') }}" class="btn btn-outline-dark">
         <i class="bi bi-receipt me-1"></i> Slip Gaji
-      </a>
-    @endif
+    </a>
+@endif
 
     <a href="feedback" class="btn btn-outline-dark">
       <i class="bi bi-chat-dots me-1"></i>

@@ -230,4 +230,34 @@ public function batal($id)
 
     return redirect()->route('cuti.index')->with('success', 'Pengajuan cuti berhasil dibatalkan dan sisa cuti dipulihkan.');
 }
+
+// Memeriksa apakah ada pengajuan cuti yang sedang menunggu
+public function hasPendingRequests()
+{
+    $user = auth()->user();
+    
+    $query = CutiRequest::where('status', 'Menunggu');
+    
+    // Jika bukan Manajer, hanya periksa pengajuan milik pengguna
+    if ($user->role !== 'Manajer') {
+        $query->where('user_id', $user->id);
+    }
+    
+    // Mengembalikan true jika ada pengajuan dengan status Menunggu
+    return $query->exists();
+}
+// Memeriksa apakah pengguna non-Manajer memiliki pengajuan dengan status selain Menunggu
+public function hasNonPendingRequests()
+{
+    $user = auth()->user();
+    
+    // Hanya periksa untuk pengguna dengan role selain Manajer
+    if ($user->role !== 'Manajer') {
+        return CutiRequest::where('user_id', $user->id)
+                         ->where('status', '!=', 'Menunggu')
+                         ->exists();
+    }
+    
+    return false;
+}
 }

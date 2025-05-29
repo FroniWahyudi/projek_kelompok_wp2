@@ -391,8 +391,8 @@
                                 <th>Keterangan</th>
                                 <th>Status</th>
                                 @if(
-                                    (in_array(auth()->user()->role, ['Manajer', 'Operator'])) ||
-                                    (!in_array(auth()->user()->role, ['Manajer', 'Operator']) && $cutiRequests->where('status', 'Menunggu')->count() > 0)
+                                    in_array(auth()->user()->role, ['Manajer']) ||
+                                    (auth()->user()->role === 'Operator' && $cutiRequests->where('status', 'Menunggu')->count() > 0)
                                 )
                                     <th>Aksi</th>
                                 @endif
