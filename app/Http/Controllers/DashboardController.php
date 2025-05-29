@@ -46,22 +46,13 @@ class DashboardController extends Controller
 
         $rules = [
             'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
             'phone' => 'required|string|max:20',
-            'role' => 'required|string|max:100',
             'bio' => 'required|string',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'alamat' => 'required|string|max:255',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:81920', // Maksimal 8MB
         ];
 
-        if ($request->filled('password')) {
-            $rules['password'] = 'min:4|confirmed';
-        }
-
         $validated = $request->validate($rules);
-
-        if ($request->filled('password')) {
-            $validated['password'] = Hash::make($request->password);
-        }
 
         if ($request->hasFile('photo')) {
             $file = $request->file('photo');
