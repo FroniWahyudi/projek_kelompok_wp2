@@ -722,9 +722,12 @@
       <i class="bi bi-clock-history me-1"></i> Shift & Jadwal
     </a>
 
-    <a href="{{ route('reset.password.form') }}" class="btn btn-outline-dark">
-      <i class="bi bi-key me-1"></i> Reset Password
+    
+    <a class="btn btn-outline-dark" href="{{ route('reset.password.form') }}">
+        <i class="bi bi-key me-1"></i> Reset Password
+        <span id="resetNotification" class="badge bg-danger rounded-pill" style="display: none;">!</span>
     </a>
+
   </nav>
 
   <!-- Main Content -->
@@ -891,6 +894,21 @@
         $(this).find('.modal-content').removeClass('animate__animated animate__zoomIn');
       });
     });
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+    fetch("{{ route('check.reset.requests') }}")
+        .then(response => response.json())
+        .then(data => {
+            const notification = document.getElementById('resetNotification');
+            if (data.exists) {
+                notification.style.display = 'inline-block';
+            } else {
+                notification.style.display = 'none';
+            }
+        })
+        .catch(error => console.error('Error:', error));
+});
   </script>
 </body>
 </html>

@@ -101,6 +101,8 @@
             text-align: center;
             pointer-events: none;
             color: #6c757d;
+            left: -6px;
+            top: 1px;
         }
     </style>
 </head>
@@ -151,7 +153,7 @@
                             </span>
                             <input type="email" name="email" id="email" value="{{ old('email') }}" 
                                    class="form-control ps-4" 
-                                   placeholder="  email@contoh.com" required>
+                                   placeholder="email@contoh.com" required>
                         </div>
                     </div>
                     

@@ -101,6 +101,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/reset-password', [PasswordResetController::class, 'showResetForm'])->name('reset.password.form');
     Route::post('/reset-password/{id}', [PasswordResetController::class, 'resetPassword'])->name('reset.password');
     Route::post('/reset-password', [PasswordResetController::class, 'resetPasswordManual'])->name('reset.password.manual');
+    Route::get('/check-reset-requests', [PasswordResetController::class, 'checkRequests'])->name('check.reset.requests');
 });
 
 //biar bisa akses form pengajuan reset password tanpa login

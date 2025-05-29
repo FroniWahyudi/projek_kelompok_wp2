@@ -14,24 +14,24 @@ class PasswordResetController extends Controller
         return view('index.pengajuan_reset');
     }
 
-  public function storeRequest(Request $request)
-{
-    $request->validate([
-        'email' => 'required|email|exists:users,email',
-        'keterangan' => 'required|string',
-    ]);
+    public function storeRequest(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+            'keterangan' => 'required|string',
+        ]);
 
-    $user = User::where('email', $request->email)->first();
+        $user = User::where('email', $request->email)->first();
 
-    PasswordResetRequest::create([
-        'user_id' => $user->id,
-        'keterangan' => $request->keterangan,
-        'status' => 'pending',
-        'expires_at' => Carbon::now()->addDays(7),
-    ]);
+        PasswordResetRequest::create([
+            'user_id' => $user->id,
+            'keterangan' => $request->keterangan,
+            'status' => 'pending',
+            'expires_at' => Carbon::now()->addDays(7),
+        ]);
 
-    return redirect()->back()->with('success', 'Pengajuan reset password berhasil dikirim');
-}
+        return redirect()->back()->with('success', 'Pengajuan reset password berhasil dikirim');
+    }
 
     public function showResetForm()
     {
@@ -71,4 +71,10 @@ class PasswordResetController extends Controller
 
         return redirect()->back()->with('success', 'Password berhasil direset');
     }
+
+  public function checkRequests()
+{
+    $exists = PasswordResetRequest::where('status', 'pending')->exists();
+    return response()->json(['exists' => $exists]);
+}
 }
