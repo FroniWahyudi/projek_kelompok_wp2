@@ -242,17 +242,24 @@ public function showCheckSlipForm()
 public function checkSlipAjax(Request $request)
 {
     $request->validate([
-        'user_id' => 'required|exists:users,id',
+        'user_ids' => 'required|array',
+        'user_ids.*' => 'required|exists:users,id',
         'period' => 'required|date_format:Y-m',
     ]);
 
-    $userId = $request->input('user_id');
+    $userIds = $request->input('user_ids');
     $period = $request->input('period') . '-01';
 
-    $slip = Slip::where('user_id', $userId)
-                ->where('period', $period)
-                ->first();
+    $slips = Slip::whereIn('user_id', $userIds)
+                 ->where('period', $period)
+                 ->pluck('user_id')
+                 ->toArray();
 
-    return response()->json(['exists' => $slip ? true : false]);
+    $results = [];
+    foreach ($userIds as $userId) {
+        $results[$userId] = in_array($userId, $slips);
+    }
+
+    return response()->json($results);
 }
 }

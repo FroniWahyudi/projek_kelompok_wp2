@@ -661,7 +661,7 @@
                                                             <div class="section-title">Perusahaan</div>
                                                             <div class="info-row row">
                                                                 <div class="col-5 info-label">Nama</div>
-                                                                <div class="col-7 info-value">{{ config('app.name') }}</div>
+                                                                <div class="col-7 info-value">PT Naga Hytam Sejahtera Abadi</div>
                                                             </div>
                                                             <div class="info-row row">
                                                                 <div class="col-5 info-label">Periode</div>
@@ -692,6 +692,8 @@
                                                 </div>
                                             </div>
                                         </div>
+
+
                                     </div>
                                 </div>
                             </div>
@@ -707,468 +709,478 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Fungsi untuk memformat angka ke dalam format mata uang
-        function formatCurrency(number) {
-            return 'Rp ' + number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        }
+   <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Fungsi untuk memformat angka ke dalam format mata uang
+    function formatCurrency(number) {
+        return 'Rp ' + number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
 
-        // Elemen input/tab untuk preview
-        const periodInput = document.getElementById('payslip-period');
-        const preview = {
-            period: document.getElementById('preview-period'),
-            periodDetail: document.getElementById('preview-period-detail'),
-            name: document.getElementById('preview-employee-name'),
-            id: document.getElementById('preview-employee-id'),
-            dept: document.getElementById('preview-employee-dept'),
-            earningsBody: document.getElementById('preview-earnings-body'),
-            deductionsBody: document.getElementById('preview-deductions-body'),
-            netSalary: document.getElementById('preview-net-salary')
-        };
+    // Elemen input/tab untuk preview
+    const periodInput = document.getElementById('payslip-period');
+    const preview = {
+        period: document.getElementById('preview-period'),
+        periodDetail: document.getElementById('preview-period-detail'),
+        name: document.getElementById('preview-employee-name'),
+        id: document.getElementById('preview-employee-id'),
+        dept: document.getElementById('preview-employee-dept'),
+        earningsBody: document.getElementById('preview-earnings-body'),
+        deductionsBody: document.getElementById('preview-deductions-body'),
+        netSalary: document.getElementById('preview-net-salary')
+    };
 
-        // Variabel untuk fitur slide-up
-        let isTransitioning = false;
-        const employeeTableContainer = document.getElementById('employeeTableContainer');
-        const resetEmployeeTableButton = document.getElementById('resetEmployeeTable');
-        const tableRows = document.querySelectorAll('#employeeTable .table-row');
-        const thead = employeeTableContainer.querySelector('thead');
-        let isFocused = false;
-        let activeRow = null;
+    // Variabel untuk fitur slide-up
+    let isTransitioning = false;
+    const employeeTableContainer = document.getElementById('employeeTableContainer');
+    const resetEmployeeTableButton = document.getElementById('resetEmployeeTable');
+    const tableRows = document.querySelectorAll('#employeeTable .table-row');
+    const thead = employeeTableContainer.querySelector('thead');
+    let isFocused = false;
+    let activeRow = null;
 
-        // Fungsi debounce untuk mengurangi pemanggilan berulang
-        function debounce(func, wait) {
-            let timeout;
-            return function executedFunction(...args) {
-                const later = () => {
-                    clearTimeout(timeout);
-                    func(...args);
-                };
+    // Fungsi debounce untuk mengurangi pemanggilan berulang
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
                 clearTimeout(timeout);
-                timeout = setTimeout(later, wait);
+                func(...args);
             };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    // Fungsi untuk menghitung total pendapatan, potongan, dan gaji bersih
+    const calculateTotals = debounce(function() {
+        let totalEarnings = 0;
+        let totalDeductions = 0;
+
+        document.querySelectorAll('.earning-amount').forEach(input => {
+            const amount = parseInt(input.value) || 0;
+            totalEarnings += amount;
+        });
+
+        document.querySelectorAll('.deduction-amount').forEach(input => {
+            const amount = parseInt(input.value) || 0;
+            totalDeductions += amount;
+        });
+
+        const netSalary = totalEarnings - totalDeductions;
+
+        document.getElementById('total-earnings').textContent = formatCurrency(totalEarnings);
+        document.getElementById('total-deductions').textContent = formatCurrency(totalDeductions);
+        document.getElementById('net-salary-amount').textContent = formatCurrency(netSalary);
+
+        const [y, m] = (periodInput.value || "").split("-");
+        if (y && m) {
+            const date = new Date(`${y}-${m}-01`);
+            preview.period.textContent = date.toLocaleString('id-ID', {
+                month: 'long',
+                year: 'numeric'
+            });
+            preview.periodDetail.textContent = date.toLocaleString('id-ID', {
+                month: 'long',
+                year: 'numeric'
+            });
+        } else {
+            preview.period.textContent = '-';
+            preview.periodDetail.textContent = '-';
         }
 
-        // Fungsi untuk menghitung total pendapatan, potongan, dan gaji bersih
-        const calculateTotals = debounce(function() {
-            let totalEarnings = 0;
-            let totalDeductions = 0;
+        const selectedRow = document.querySelector('#employeeTable tbody tr.table-active');
+        if (selectedRow) {
+            preview.name.textContent = selectedRow.getAttribute('data-name');
+            preview.id.textContent = selectedRow.getAttribute('data-id');
+            preview.dept.textContent = selectedRow.getAttribute('data-department');
+        } else {
+            preview.name.textContent = "-";
+            preview.id.textContent = "-";
+            preview.dept.textContent = "-";
+        }
 
-            document.querySelectorAll('.earning-amount').forEach(input => {
-                const amount = parseInt(input.value) || 0;
-                totalEarnings += amount;
-            });
-
-            document.querySelectorAll('.deduction-amount').forEach(input => {
-                const amount = parseInt(input.value) || 0;
-                totalDeductions += amount;
-            });
-
-            const netSalary = totalEarnings - totalDeductions;
-
-            document.getElementById('total-earnings').textContent = formatCurrency(totalEarnings);
-            document.getElementById('total-deductions').textContent = formatCurrency(totalDeductions);
-            document.getElementById('net-salary-amount').textContent = formatCurrency(netSalary);
-
-            const [y, m] = (periodInput.value || "").split("-");
-            if (y && m) {
-                const date = new Date(`${y}-${m}-01`);
-                preview.period.textContent = date.toLocaleString('id-ID', {
-                    month: 'long',
-                    year: 'numeric'
-                });
-                preview.periodDetail.textContent = date.toLocaleString('id-ID', {
-                    month: 'long',
-                    year: 'numeric'
-                });
-            } else {
-                preview.period.textContent = '-';
-                preview.periodDetail.textContent = '-';
-            }
-
-            const selectedRow = document.querySelector('#employeeTable tbody tr.table-active');
-            if (selectedRow) {
-                preview.name.textContent = selectedRow.getAttribute('data-name');
-                preview.id.textContent = selectedRow.getAttribute('data-id');
-                preview.dept.textContent = selectedRow.getAttribute('data-department');
-            } else {
-                preview.name.textContent = "-";
-                preview.id.textContent = "-";
-                preview.dept.textContent = "-";
-            }
-
-            preview.earningsBody.innerHTML = "";
-            document.querySelectorAll('#earnings-table tbody tr').forEach(row => {
-                const [inpName, inpAmt] = row.querySelectorAll('input');
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${inpName.value}</td>
-                    <td class="text-end income">${(parseInt(inpAmt.value) || 0).toLocaleString('id-ID')}</td>
-                `;
-                preview.earningsBody.appendChild(tr);
-            });
-            const earningTotalRow = document.createElement('tr');
-            earningTotalRow.className = 'total-row';
-            earningTotalRow.innerHTML = `
-                <td>Total</td>
-                <td class="text-end income">${totalEarnings.toLocaleString('id-ID')}</td>
+        preview.earningsBody.innerHTML = "";
+        document.querySelectorAll('#earnings-table tbody tr').forEach(row => {
+            const [inpName, inpAmt] = row.querySelectorAll('input');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${inpName.value}</td>
+                <td class="text-end income">${(parseInt(inpAmt.value) || 0).toLocaleString('id-ID')}</td>
             `;
-            preview.earningsBody.appendChild(earningTotalRow);
+            preview.earningsBody.appendChild(tr);
+        });
+        const earningTotalRow = document.createElement('tr');
+        earningTotalRow.className = 'total-row';
+        earningTotalRow.innerHTML = `
+            <td>Total</td>
+            <td class="text-end income">${totalEarnings.toLocaleString('id-ID')}</td>
+        `;
+        preview.earningsBody.appendChild(earningTotalRow);
 
-            preview.deductionsBody.innerHTML = "";
-            document.querySelectorAll('#deductions-table tbody tr').forEach(row => {
-                const [inpName, inpAmt] = row.querySelectorAll('input');
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${inpName.value}</td>
-                    <td class="text-end deduction">${(parseInt(inpAmt.value) || 0).toLocaleString('id-ID')}</td>
-                `;
-                preview.deductionsBody.appendChild(tr);
-            });
-            const deductionTotalRow = document.createElement('tr');
-            deductionTotalRow.className = 'total-row';
-            deductionTotalRow.innerHTML = `
-                <td>Total</td>
-                <td class="text-end deduction">${totalDeductions.toLocaleString('id-ID')}</td>
+        preview.deductionsBody.innerHTML = "";
+        document.querySelectorAll('#deductions-table tbody tr').forEach(row => {
+            const [inpName, inpAmt] = row.querySelectorAll('input');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${inpName.value}</td>
+                <td class="text-end deduction">${(parseInt(inpAmt.value) || 0).toLocaleString('id-ID')}</td>
             `;
-            preview.deductionsBody.appendChild(deductionTotalRow);
+            preview.deductionsBody.appendChild(tr);
+        });
+        const deductionTotalRow = document.createElement('tr');
+        deductionTotalRow.className = 'total-row';
+        deductionTotalRow.innerHTML = `
+            <td>Total</td>
+            <td class="text-end deduction">${totalDeductions.toLocaleString('id-ID')}</td>
+        `;
+        preview.deductionsBody.appendChild(deductionTotalRow);
 
-            preview.netSalary.textContent = formatCurrency(netSalary);
-        }, 300);
+        preview.netSalary.textContent = formatCurrency(netSalary);
+    }, 300);
 
-        // Fungsi untuk menerapkan filter
-        function applyFilters() {
-            const searchText = searchInput.value.toLowerCase();
-            const selectedDepartment = departmentFilter.value;
+    // Fungsi untuk memperbarui pratinjau tanpa memicu validasi
+    function updatePreviewWithoutValidation() {
+        preview.name.textContent = "-";
+        preview.id.textContent = "-";
+        preview.dept.textContent = "-";
+        calculateTotals(); // Panggil calculateTotals untuk memperbarui total tanpa validasi
+    }
 
+    // Fungsi untuk menerapkan filter
+    function applyFilters() {
+        const searchText = searchInput.value.toLowerCase();
+        const selectedDepartment = departmentFilter.value;
+
+        tableRows.forEach(row => {
+            const name = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+            const department = row.getAttribute('data-department');
+            const matchesSearch = name.includes(searchText);
+            const matchesDepartment = selectedDepartment === '' || department === selectedDepartment;
+
+            if (matchesSearch && matchesDepartment) {
+                row.classList.remove('hidden-row');
+            } else {
+                row.classList.add('hidden-row');
+            }
+        });
+    }
+
+    // Event listener untuk klik pada baris karyawan
+    const tbody = document.querySelector('#employeeTable tbody');
+    tbody.addEventListener('click', function(e) {
+        const tr = e.target.closest('tr');
+        if (tr) {
+            if (tr.classList.contains('active-row')) {
+                resetEmployeeTableView();
+            } else {
+                tbody.querySelectorAll('tr').forEach(row => {
+                    row.classList.remove('table-active');
+                    row.classList.remove('active-row');
+                });
+                tr.classList.add('table-active');
+                tr.classList.add('active-row');
+                const employeeId = tr.getAttribute('data-id');
+                document.getElementById('selected-employee-id').value = employeeId;
+                focusOnEmployeeRow(tr);
+                calculateTotals();
+            }
+        }
+    });
+
+    // Fungsi fokus pada baris
+    function focusOnEmployeeRow(activeRow) {
+        if (isTransitioning) return;
+        isTransitioning = true;
+
+        const initialHeight = employeeTableContainer.scrollHeight;
+        employeeTableContainer.style.height = initialHeight + 'px';
+
+        setTimeout(() => {
             tableRows.forEach(row => {
-                const name = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
-                const department = row.getAttribute('data-department');
-                const matchesSearch = name.includes(searchText);
-                const matchesDepartment = selectedDepartment === '' || department === selectedDepartment;
-
-                if (matchesSearch && matchesDepartment) {
-                    row.classList.remove('hidden-row');
-                } else {
+                if (row !== activeRow) {
                     row.classList.add('hidden-row');
-                }
-            });
-        }
-
-        // Event listener untuk klik pada baris karyawan
-        const tbody = document.querySelector('#employeeTable tbody');
-        tbody.addEventListener('click', function(e) {
-            const tr = e.target.closest('tr');
-            if (tr) {
-                if (tr.classList.contains('active-row')) {
-                    resetEmployeeTableView();
                 } else {
-                    tbody.querySelectorAll('tr').forEach(row => {
-                        row.classList.remove('table-active');
-                        row.classList.remove('active-row');
-                    });
-                    tr.classList.add('table-active');
-                    tr.classList.add('active-row');
-                    const employeeId = tr.getAttribute('data-id');
-                    document.getElementById('selected-employee-id').value = employeeId;
-                    focusOnEmployeeRow(tr);
-                    calculateTotals();
-                }
-            }
-        });
-
-        // Fungsi fokus pada baris
-        function focusOnEmployeeRow(activeRow) {
-            if (isTransitioning) return;
-            isTransitioning = true;
-
-            const initialHeight = employeeTableContainer.scrollHeight;
-            employeeTableContainer.style.height = initialHeight + 'px';
-
-            setTimeout(() => {
-                tableRows.forEach(row => {
-                    if (row !== activeRow) {
-                        row.classList.add('hidden-row');
-                    } else {
-                        row.classList.remove('hidden-row');
-                    }
-                });
-
-                const focusedHeight = thead.offsetHeight + activeRow.offsetHeight;
-                employeeTableContainer.style.height = focusedHeight + 'px';
-
-                setTimeout(() => {
-                    isTransitioning = false;
-                }, 300); // Durasi transisi dikurangi menjadi 300ms
-            }, 0);
-
-            isFocused = true;
-            resetEmployeeTableButton.style.display = 'inline-block';
-        }
-
-        // Fungsi reset tampilan
-        function resetEmployeeTableView() {
-            if (isTransitioning) return;
-            isTransitioning = true;
-
-            const initialHeight = employeeTableContainer.scrollHeight;
-            employeeTableContainer.style.height = initialHeight + 'px';
-
-            setTimeout(() => {
-                tableRows.forEach(row => {
                     row.classList.remove('hidden-row');
-                });
-
-                applyFilters();
-
-                const fullHeight = employeeTableContainer.scrollHeight;
-                employeeTableContainer.style.height = fullHeight + 'px';
-
-                setTimeout(() => {
-                    employeeTableContainer.style.height = 'auto';
-                    isTransitioning = false;
-                }, 300); // Durasi transisi dikurangi menjadi 300ms
-            }, 0);
-
-            isFocused = false;
-            resetEmployeeTableButton.style.display = 'none';
-            document.getElementById('selected-employee-id').value = '';
-            tbody.querySelectorAll('tr').forEach(row => {
-                row.classList.remove('active-row');
-                row.classList.remove('table-active');
+                }
             });
+
+            const focusedHeight = thead.offsetHeight + activeRow.offsetHeight;
+            employeeTableContainer.style.height = focusedHeight + 'px';
+
+            setTimeout(() => {
+                isTransitioning = false;
+            }, 300); // Durasi transisi dikurangi menjadi 300ms
+        }, 0);
+
+        isFocused = true;
+        resetEmployeeTableButton.style.display = 'inline-block';
+    }
+
+    // Fungsi reset tampilan
+    function resetEmployeeTableView() {
+        if (isTransitioning) return;
+        isTransitioning = true;
+
+        const initialHeight = employeeTableContainer.scrollHeight;
+        employeeTableContainer.style.height = initialHeight + 'px';
+
+        setTimeout(() => {
+            tableRows.forEach(row => {
+                row.classList.remove('hidden-row');
+            });
+
+            applyFilters();
+
+            const fullHeight = employeeTableContainer.scrollHeight;
+            employeeTableContainer.style.height = fullHeight + 'px';
+
+            setTimeout(() => {
+                employeeTableContainer.style.height = 'auto';
+                isTransitioning = false;
+            }, 300); // Durasi transisi 300ms
+        }, 0);
+
+        isFocused = false;
+        resetEmployeeTableButton.style.display = 'none';
+        document.getElementById('selected-employee-id').value = '';
+        tbody.querySelectorAll('tr').forEach(row => {
+            row.classList.remove('active-row');
+            row.classList.remove('table-active');
+        });
+
+        // Perbarui pratinjau tanpa memicu validasi
+        updatePreviewWithoutValidation();
+    }
+
+    // Event listeners untuk input pendapatan dan potongan
+    document.querySelectorAll('.earning-amount, .deduction-amount').forEach(input => {
+        input.addEventListener('input', calculateTotals);
+    });
+
+    // Event listener untuk tombol tambah pendapatan
+    document.querySelectorAll('.add-earning-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            new bootstrap.Tab(document.querySelector('#earnings-content')).show();
+            const tbody = document.querySelector('#earnings-table tbody');
+            const rowCount = tbody.querySelectorAll('tr').length;
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td><input type="text" class="form-control" name="earnings[${rowCount}][name]" placeholder="Nama Komponen" required></td>
+                <td><input type="number" class="form-control earning-amount" name="earnings[${rowCount}][amount]" value="0" required></td>
+                <td class="text-center">
+                    <button type="button" class="btn btn-sm btn-outline-danger delete-row-btn">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </td>
+            `;
+            tbody.appendChild(row);
+            row.querySelector('.earning-amount').addEventListener('input', calculateTotals);
             calculateTotals();
+        });
+    });
+
+    // Event listener untuk tombol tambah potongan
+    document.querySelectorAll('.add-deduction-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            new bootstrap.Tab(document.querySelector('#deductions-content')).show();
+            const tbody = document.querySelector('#deductions-table tbody');
+            const rowCount = tbody.querySelectorAll('tr').length;
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td><input type="text" class="form-control" name="deductions[${rowCount}][name]" placeholder="Nama Komponen"></td>
+                <td><input type="number" class="form-control deduction-amount" name="deductions[${rowCount}][amount]" value="0"></td>
+                <td class="text-center">
+                    <button type="button" class="btn btn-sm btn-outline-danger delete-row-btn">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </td>
+            `;
+            tbody.appendChild(row);
+            row.querySelector('.deduction-amount').addEventListener('input', calculateTotals);
+            calculateTotals();
+        });
+    });
+
+    // Event listener untuk menghapus baris
+    document.querySelectorAll('#earnings-table tbody, #deductions-table tbody').forEach(tbody => {
+        tbody.addEventListener('click', function(e) {
+            if (e.target.closest('.delete-row-btn')) {
+                e.target.closest('tr').remove();
+                calculateTotals();
+            }
+        });
+    });
+
+    // Preview change listeners
+    periodInput?.addEventListener('change', calculateTotals);
+    document.querySelector('button[data-bs-target="#preview-content"]')?.addEventListener('shown.bs.tab', calculateTotals);
+
+    // Validasi form submit
+    const form = document.getElementById('payslip-form');
+    form.addEventListener('submit', function(e) {
+        let isValid = true;
+        let errorMessage = '';
+
+        if (!periodInput.value) {
+            isValid = false;
+            errorMessage += 'Periode harus diisi.\n';
         }
 
-        // Event listeners untuk input pendapatan dan potongan
-        document.querySelectorAll('.earning-amount, .deduction-amount').forEach(input => {
-            input.addEventListener('input', calculateTotals);
-        });
+        const selectedEmployeeId = document.getElementById('selected-employee-id').value;
+        if (!selectedEmployeeId) {
+            isValid = false;
+            errorMessage += 'Karyawan harus dipilih.\n';
+        }
 
-        // Event listener untuk tombol tambah pendapatan
-        document.querySelectorAll('.add-earning-btn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                new bootstrap.Tab(document.querySelector('#earnings-content')).show();
-                const tbody = document.querySelector('#earnings-table tbody');
-                const rowCount = tbody.querySelectorAll('tr').length;
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td><input type="text" class="form-control" name="earnings[${rowCount}][name]" placeholder="Nama Komponen" required></td>
-                    <td><input type="number" class="form-control earning-amount" name="earnings[${rowCount}][amount]" value="0" required></td>
-                    <td class="text-center">
-                        <button type="button" class="btn btn-sm btn-outline-danger delete-row-btn">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </td>
-                `;
-                tbody.appendChild(row);
-                row.querySelector('.earning-amount').addEventListener('input', calculateTotals);
-                calculateTotals();
-            });
-        });
-
-        // Event listener untuk tombol tambah potongan
-        document.querySelectorAll('.add-deduction-btn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                new bootstrap.Tab(document.querySelector('#deductions-content')).show();
-                const tbody = document.querySelector('#deductions-table tbody');
-                const rowCount = tbody.querySelectorAll('tr').length;
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td><input type="text" class="form-control" name="deductions[${rowCount}][name]" placeholder="Nama Komponen"></td>
-                    <td><input type="number" class="form-control deduction-amount" name="deductions[${rowCount}][amount]" value="0"></td>
-                    <td class="text-center">
-                        <button type="button" class="btn btn-sm btn-outline-danger delete-row-btn">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </td>
-                `;
-                tbody.appendChild(row);
-                row.querySelector('.deduction-amount').addEventListener('input', calculateTotals);
-                calculateTotals();
-            });
-        });
-
-        // Event listener untuk menghapus baris
-        document.querySelectorAll('#earnings-table tbody, #deductions-table tbody').forEach(tbody => {
-            tbody.addEventListener('click', function(e) {
-                if (e.target.closest('.delete-row-btn')) {
-                    e.target.closest('tr').remove();
-                    calculateTotals();
-                }
-            });
-        });
-
-        // Preview change listeners
-        periodInput?.addEventListener('change', calculateTotals);
-        document.querySelector('button[data-bs-target="#preview-content"]')?.addEventListener('shown.bs.tab', calculateTotals);
-
-        // Validasi form submit
-        const form = document.getElementById('payslip-form');
-        form.addEventListener('submit', function(e) {
-            let isValid = true;
-            let errorMessage = '';
-
-            if (!periodInput.value) {
-                isValid = false;
-                errorMessage += 'Periode harus diisi.\n';
-            }
-
-            const selectedEmployeeId = document.getElementById('selected-employee-id').value;
-            if (!selectedEmployeeId) {
-                isValid = false;
-                errorMessage += 'Karyawan harus dipilih.\n';
-            }
-
-            const earningsRows = document.querySelectorAll('#earnings-table tbody tr');
-            if (earningsRows.length === 0) {
-                isValid = false;
-                errorMessage += 'Harus ada setidaknya satu komponen pendapatan.\n';
-            } else {
-                earningsRows.forEach((row, index) => {
-                    const nameInput = row.querySelector(`input[name="earnings[${index}][name]"]`);
-                    const amountInput = row.querySelector(`input[name="earnings[${index}][amount]"]`);
-                    if (!nameInput.value.trim()) {
-                        isValid = false;
-                        errorMessage += 'Nama komponen pendapatan tidak boleh kosong.\n';
-                    }
-                    if (!amountInput.value || parseInt(amountInput.value) <= 0) {
-                        isValid = false;
-                        errorMessage += 'Jumlah pendapatan harus lebih dari 0.\n';
-                    }
-                });
-            }
-
-            const deductionsRows = document.querySelectorAll('#deductions-table tbody tr');
-            deductionsRows.forEach((row, index) => {
-                const nameInput = row.querySelector(`input[name="deductions[${index}][name]"]`);
-                const amountInput = row.querySelector(`input[name="deductions[${index}][amount]"]`);
-                if (nameInput.value.trim() && (!amountInput.value || parseInt(amountInput.value) < 0)) {
+        const earningsRows = document.querySelectorAll('#earnings-table tbody tr');
+        if (earningsRows.length === 0) {
+            isValid = false;
+            errorMessage += 'Harus ada setidaknya satu komponen pendapatan.\n';
+        } else {
+            earningsRows.forEach((row, index) => {
+                const nameInput = row.querySelector(`input[name="earnings[${index}][name]"]`);
+                const amountInput = row.querySelector(`input[name="earnings[${index}][amount]"]`);
+                if (!nameInput.value.trim()) {
                     isValid = false;
-                    errorMessage += 'Jumlah potongan harus 0 atau lebih jika nama diisi.\n';
+                    errorMessage += 'Nama komponen pendapatan tidak boleh kosong.\n';
                 }
-                if (amountInput.value && !nameInput.value.trim()) {
+                if (!amountInput.value || parseInt(amountInput.value) <= 0) {
                     isValid = false;
-                    errorMessage += 'Nama komponen potongan tidak boleh kosong jika jumlah diisi.\n';
+                    errorMessage += 'Jumlah pendapatan harus lebih dari 0.\n';
                 }
             });
+        }
 
-            if (!isValid) {
-                e.preventDefault();
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Form tidak valid',
-                    text: errorMessage,
-                    confirmButtonColor: '#007bff',
-                });
+        const deductionsRows = document.querySelectorAll('#deductions-table tbody tr');
+        deductionsRows.forEach((row, index) => {
+            const nameInput = row.querySelector(`input[name="deductions[${index}][name]"]`);
+            const amountInput = row.querySelector(`input[name="deductions[${index}][amount]"]`);
+            if (nameInput.value.trim() && (!amountInput.value || parseInt(amountInput.value) < 0)) {
+                isValid = false;
+                errorMessage += 'Jumlah potongan harus 0 atau lebih jika nama diisi.\n';
+            }
+            if (amountInput.value && !nameInput.value.trim()) {
+                isValid = false;
+                errorMessage += 'Nama komponen potongan tidak boleh kosong jika jumlah diisi.\n';
             }
         });
 
-        // Filter tabel karyawan
-        const searchInput = document.getElementById('search-input');
-        const departmentFilter = document.getElementById('department-filter');
+        if (!isValid) {
+            e.preventDefault();
+            Swal.fire({
+                icon: 'error',
+                title: 'Form tidak valid',
+                text: errorMessage,
+                confirmButtonColor: '#007bff',
+            });
+        }
+    });
 
-        // Event listener untuk filter dan reset
-        searchInput.addEventListener('input', function() {
-            if (!isFocused) {
-                applyFilters();
-            }
+    // Filter tabel karyawan
+    const searchInput = document.getElementById('search-input');
+    const departmentFilter = document.getElementById('department-filter');
+
+    // Event listener untuk filter dan reset
+    searchInput.addEventListener('input', function() {
+        if (!isFocused) {
+            applyFilters();
+        }
+    });
+    departmentFilter.addEventListener('change', function() {
+        if (!isFocused) {
+            applyFilters();
+        }
+    });
+    resetEmployeeTableButton.addEventListener('click', function(e) {
+        e.preventDefault(); // Cegah aksi default yang mungkin memicu validasi
+        resetEmployeeTableView();
+    });
+
+    // Inisialisasi awal
+    calculateTotals();
+
+    // Status check functionality dengan delay
+    var checkAjaxUrl = "{{ route('slips.check.ajax') }}";
+    var csrfToken = '{{ csrf_token() }}';
+
+    function updateStatuses(period) {
+        if (!period) return;
+
+        // Set all status cells to "Checking"
+        $('#employeeTable tbody tr').each(function() {
+            var statusCell = $(this).find('td:last');
+            statusCell.html('<span class="status-badge status-checking">Checking</span>');
         });
-        departmentFilter.addEventListener('change', function() {
-            if (!isFocused) {
-                applyFilters();
-            }
-        });
-        resetEmployeeTableButton.addEventListener('click', resetEmployeeTableView);
 
-        // Inisialisasi awal
-        calculateTotals();
+        // Collect all user IDs
+        var userIds = $('#employeeTable tbody tr').map(function() {
+            return $(this).data('id');
+        }).get();
 
-        // Status check functionality dengan delay
-        var checkAjaxUrl = "{{ route('slips.check.ajax') }}";
-        var csrfToken = '{{ csrf_token() }}';
-
-        function updateStatuses(period) {
-            if (period) {
-                $('#employeeTable tbody tr').each(function() {
-                    var statusCell = $(this).find('td:last');
-                    statusCell.html('<span class="status-badge status-checking">Checking</span>');
-                });
-
-                var totalRows = $('#employeeTable tbody tr').length;
-                var completed = 0;
-
+        // AJAX request to check slip status
+        $.ajax({
+            url: checkAjaxUrl,
+            method: 'POST',
+            data: {
+                user_ids: userIds,
+                period: period,
+                _token: csrfToken
+            },
+            success: function(response) {
                 $('#employeeTable tbody tr').each(function() {
                     var userId = $(this).data('id');
                     var statusCell = $(this).find('td:last');
-                    var row = $(this);
-
-                    setTimeout(function() {
-                        $.ajax({
-                            url: checkAjaxUrl,
-                            method: 'POST',
-                            data: {
-                                user_id: userId,
-                                period: period,
-                                _token: csrfToken
-                            },
-                            success: function(response) {
-                                if (response.exists) {
-                                    statusCell.html('<span class="status-badge status-exists">Slip sudah dibuat</span>');
-                                } else {
-                                    statusCell.html('<span class="status-badge status-not-exists">Slip belum dibuat</span>');
-                                }
-                            },
-                            error: function(xhr, status, error) {
-                                statusCell.html('<span class="status-badge status-error">Error</span>');
-                                console.error(error);
-                            },
-                            complete: function() {
-                                completed++;
-                                // When all AJAX calls are done, sort the rows
-                                if (completed === totalRows) {
-                                    sortEmployeeRowsByStatus();
-                                }
-                            }
-                        });
-                    }, 100); // Delay 100ms untuk mengurangi beban
+                    if (response[userId]) {
+                        statusCell.html('<span class="status-badge status-exists">Slip sudah dibuat</span>');
+                    } else {
+                        statusCell.html('<span class="status-badge status-not-exists">Slip belum dibuat</span>');
+                    }
                 });
+                sortEmployeeRowsByStatus();
+            },
+            error: function(xhr, status, error) {
+                $('#employeeTable tbody tr').each(function() {
+                    var statusCell = $(this).find('td:last');
+                    statusCell.html('<span class="status-badge status-error">Error</span>');
+                });
+                console.error(error);
             }
-        }
-
-        // Function to sort employee rows by status
-        function sortEmployeeRowsByStatus() {
-            var rows = $('#employeeTable tbody tr').get();
-            rows.sort(function(a, b) {
-                var statusA = $(a).find('td:last .status-badge').text().trim();
-                var statusB = $(b).find('td:last .status-badge').text().trim();
-                // If status is 'Slip sudah dibuat', sort it last
-                if (statusA === 'Slip sudah dibuat' && statusB !== 'Slip sudah dibuat') {
-                    return 1;
-                } else if (statusA !== 'Slip sudah dibuat' && statusB === 'Slip sudah dibuat') {
-                    return -1;
-                } else {
-                    // Otherwise, keep original order
-                    return 0;
-                }
-            });
-            $.each(rows, function(idx, row) {
-                $('#employeeTable tbody').append(row);
-            });
-        }
-
-        $('#payslip-period').on('change', function() {
-            var period = $(this).val();
-            updateStatuses(period);
         });
+    }
 
-        var initialPeriod = $('#payslip-period').val();
-        if (initialPeriod) {
-            updateStatuses(initialPeriod);
-        }
+    // Function to sort employee rows by status
+    function sortEmployeeRowsByStatus() {
+        var rows = $('#employeeTable tbody tr').get();
+        rows.sort(function(a, b) {
+            var statusA = $(a).find('td:last .status-badge').text().trim();
+            var statusB = $(b).find('td:last .status-badge').text().trim();
+            // If status is 'Slip sudah dibuat', sort it last
+            if (statusA === 'Slip sudah dibuat' && statusB !== 'Slip sudah dibuat') {
+                return 1;
+            } else if (statusA !== 'Slip sudah dibuat' && statusB === 'Slip sudah dibuat') {
+                return -1;
+            } else {
+                // Otherwise, keep original order
+                return 0;
+            }
+        });
+        $.each(rows, function(idx, row) {
+            $('#employeeTable tbody').append(row);
+        });
+    }
+
+    $('#payslip-period').on('change', function() {
+        var period = $(this).val();
+        updateStatuses(period);
     });
-    </script>
+
+    var initialPeriod = $('#payslip-period').val();
+    if (initialPeriod) {
+        updateStatuses(initialPeriod);
+    }
+});
+</script>
 </body>
 </html>
