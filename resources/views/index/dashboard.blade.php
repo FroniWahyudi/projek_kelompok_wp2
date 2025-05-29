@@ -104,9 +104,10 @@
       padding: 0.5rem 1rem;
       border-radius: 8px;
       transition: all 0.2s ease;
-      font-size: 0.9rem;
+      font-size: 1rem;
       position: relative;
       overflow: hidden;
+      width: 193px;
     }
     
     .sidebar .btn:hover {
