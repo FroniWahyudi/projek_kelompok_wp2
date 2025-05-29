@@ -100,7 +100,7 @@
     
     .sidebar .btn {
       margin-bottom: 0.75rem;
-      text-align: left;
+      text-align: center;
       padding: 0.5rem 1rem;
       border-radius: 8px;
       transition: all 0.2s ease;
