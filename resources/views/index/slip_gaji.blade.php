@@ -259,7 +259,7 @@
                                 </a>
                                 <h1 class="page-title d-inline-block ms-2">{{ $title ?? 'Pengelolaan Slip Gaji' }}</h1>
                             </div>
-                            @if(auth()->user()->role != 'Operator')
+                            @if(auth()->user()->role === 'Admin' || auth()->user()->role === 'Manager')
                                 <a href="{{ route('slip_create') }}" class="btn btn-primary">
                                     <i class="bi bi-plus-lg me-1"></i> Buat Slip Baru
                                 </a>

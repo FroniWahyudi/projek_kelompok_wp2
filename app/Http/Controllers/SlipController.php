@@ -51,7 +51,7 @@ class SlipController extends Controller
                  ->orderByDesc('year')
                  ->pluck('year');
     $slips = Slip::with('user')->orderByDesc('period')->get();
-    $users = User::select('id', 'name', 'department', 'photo_url')->get(); // Pilih kolom yang diperlukan
+    $users = User::where('role',"!=","Manajer")->select('id', 'name', 'department', 'photo_url')->get(); // Pilih kolom yang diperlukan
     $departments = User::select('department')
                        ->distinct()
                        ->pluck('department'); // Ambil daftar department unik

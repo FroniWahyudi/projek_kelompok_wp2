@@ -892,9 +892,13 @@
                     statusCell.html('<span class="status-badge status-checking">Checking</span>');
                 });
 
+                var totalRows = $('#employeeTable tbody tr').length;
+                var completed = 0;
+
                 $('#employeeTable tbody tr').each(function() {
                     var userId = $(this).data('id');
                     var statusCell = $(this).find('td:last');
+                    var row = $(this);
 
                     setTimeout(function() {
                         $.ajax({
@@ -915,11 +919,39 @@
                             error: function(xhr, status, error) {
                                 statusCell.html('<span class="status-badge status-error">Error</span>');
                                 console.error(error);
+                            },
+                            complete: function() {
+                                completed++;
+                                // When all AJAX calls are done, sort the rows
+                                if (completed === totalRows) {
+                                    sortEmployeeRowsByStatus();
+                                }
                             }
                         });
                     }, 100); // Delay 100ms untuk mengurangi beban
                 });
             }
+        }
+
+        // Function to sort employee rows by status
+        function sortEmployeeRowsByStatus() {
+            var rows = $('#employeeTable tbody tr').get();
+            rows.sort(function(a, b) {
+                var statusA = $(a).find('td:last .status-badge').text().trim();
+                var statusB = $(b).find('td:last .status-badge').text().trim();
+                // If status is 'Slip sudah dibuat', sort it last
+                if (statusA === 'Slip sudah dibuat' && statusB !== 'Slip sudah dibuat') {
+                    return 1;
+                } else if (statusA !== 'Slip sudah dibuat' && statusB === 'Slip sudah dibuat') {
+                    return -1;
+                } else {
+                    // Otherwise, keep original order
+                    return 0;
+                }
+            });
+            $.each(rows, function(idx, row) {
+                $('#employeeTable tbody').append(row);
+            });
         }
 
         $('#payslip-period').on('change', function() {
