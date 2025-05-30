@@ -208,7 +208,8 @@
                 <i class="bi bi-arrow-left"></i> Kembali
             </a>
         </div>
-        <div class="preview-container">
+
+        <div class="preview-container w-100">
             <div class="preview-header">
                 <div class="company-logo">
                     <img src="{{ asset('img/logo_brand.png') }}" alt="Logo {{ config('app.name') }}">
@@ -218,15 +219,34 @@
                     <span class="period-badge">{{ $slip->period->formatLocalized('%B %Y') }}</span>
                 </div>
             </div>
-            <div class="mb-4">
-                <div class="section-title">Informasi Karyawan</div>
-                <div class="info-row">
-                    <div class="info-label">Nama</div>
-                    <div class="info-value">{{ $slip->user->name }}</div>
+            <div class="mb-4" style="display: flex; gap: 32px;">
+                <!-- Informasi Karyawan (Kiri) -->
+                <div style="flex:1;">
+                    <div class="section-title">Informasi Karyawan</div>
+                    <div class="info-row">
+                        <div class="info-label">Nama</div>
+                        <div class="info-value">{{ $slip->user->name }}</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">ID</div>
+                        <div class="info-value">{{ $slip->user->id }}</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Departemen</div>
+                        <div class="info-value">{{ $slip->user->department }}</div>
+                    </div>
                 </div>
-                <div class="info-row">
-                    <div class="info-label">ID</div>
-                    <div class="info-value">{{ $slip->user->id }}</div>
+                <!-- Perusahaan (Kanan) -->
+                <div style="flex:1;">
+                    <div class="section-title">Perusahaan</div>
+                    <div class="info-row">
+                        <div class="info-label">Nama</div>
+                        <div class="info-value">PT Naga Hytam Sejahtera Abadi</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Periode</div>
+                        <div class="info-value">{{ $slip->period->formatLocalized('%B %Y') }}</div>
+                    </div>
                 </div>
             </div>
             <div class="table-container mb-4">
@@ -290,6 +310,8 @@
                 Jika ada pertanyaan mengenai slip gaji ini, silakan hubungi Departemen SDM.
             </p>
         </div>
+
+
         <div class="footer-actions">
             <button class="btn-print" onclick="downloadPDF()">
                 <i class="bi bi-printer"></i> Cetak / Save as PDF
