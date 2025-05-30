@@ -112,35 +112,27 @@ class CrudController extends Controller
                ->with('success', 'Data berhasil diperbarui.');
     }
 
-    public function usersDestroy($id)
-    {
-        $user = User::findOrFail($id);
+   public function usersDestroy($id)
+{
+    $user = User::findOrFail($id);
 
-        // Pastikan user yang dihapus adalah Operator
-        if ($user->role !== 'Operator') {
-            return back()->with('error', 'Hanya operator yang dapat dihapus.');
-        }
-
-        // Hapus foto jika ada
-        if ($user->photo_url) {
-            Storage::delete(str_replace('/storage/', 'public/', $user->photo_url));
-        }
-
-        // Hapus data terkait
-        SisaCuti::where('user_id', $id)->delete();
-        CutiRequest::where('user_id', $id)->delete();
-        CutiLogs::where('oleh_user_id', $id)->delete();
-        Payroll::where('user_id', $id)->delete();
-        Shift::where('user_id', $id)->delete();
-        Feedback::where('user_id', $id)->orWhere('disetujui_oleh', $id)->delete();
-
-        // Hapus user
-        $user->delete();
-
-        return redirect()
-               ->route('operator.index')
-               ->with('success', 'Operator berhasil dihapus.');
+    // Pastikan user yang dihapus adalah Operator
+    if ($user->role !== 'Operator') {
+        return back()->with('error', 'Hanya operator yang dapat dihapus.');
     }
+
+    // Hapus foto jika ada
+    if ($user->photo_url) {
+        Storage::delete(str_replace('/storage/', 'public/', $user->photo_url));
+    }
+
+    // Hapus user dari tabel users
+    $user->delete();
+
+    return redirect()
+           ->route('operator.index')
+           ->with('success', 'Operator berhasil dihapus.');
+}
 
     // === SISA CUTI ===
 

@@ -69,9 +69,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/buat-resi', [ResiController::class, 'store'])->name('resi.store');
 
     // Operator CRUD
-    Route::get('/operator', [CrudController::class, 'usersIndex'])->name('operator.index');
-    Route::get('/operator/{id}/edit', [CrudController::class, 'usersEdit'])->name('operator.edit');
-    Route::put('/operator/{id}', [CrudController::class, 'usersUpdate'])->name('operator.update');
+ Route::get('/operator', [CrudController::class, 'usersIndex'])->name('operator.index');
+Route::get('/operator/{id}/edit', [CrudController::class, 'usersEdit'])->name('operator.edit');
+Route::put('/operator/{id}', [CrudController::class, 'usersUpdate'])->name('operator.update');
+Route::delete('/operator/{id}', [CrudController::class, 'usersDestroy'])->name('operator.destroy');
+Route::get('/operator/create', [CrudController::class, 'showCreateOperatorForm'])->name('operator.create');
+Route::post('/operator', [CrudController::class, 'createOperatorBaru'])->name('operator.store');
 
     // Slips routes
     Route::resource('slips', SlipController::class)->except(['show']);

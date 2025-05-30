@@ -12,6 +12,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
     <style>
         html, body {
             height: 100%;
@@ -268,6 +269,11 @@
                             <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal{{ $op->id }}">Detail</button>
                             @if(Auth::user() && Auth::user()->role === 'Admin')
                                 <a href="{{ route('operator.edit', $op->id) }}" class="btn btn-warning btn-sm btn-edit ms-2" data-bs-toggle="modal" data-bs-target="#editModal{{ $op->id }}" title="Edit Profil Operator">Edit</a>
+                                <form action="{{ route('operator.destroy', $op->id) }}" method="POST" class="delete-form" style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                                </form>
                             @endif
                         </div>
                     </div>
@@ -404,6 +410,7 @@
             <small>© {{ date('Y') }} PT Naga Hytam Sejahtera Abadi.</small>
         </footer>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
             document.addEventListener('DOMContentLoaded', () => {
                 const input = document.getElementById('searchInput');
@@ -472,6 +479,26 @@
                         successMessage.style.display = 'none';
                     }, 3000); // Sembunyikan setelah 3 detik
                 }
+            });
+
+            document.querySelectorAll('.delete-form').forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    Swal.fire({
+                        title: 'Apakah Anda yakin?',
+                        text: 'Operator ini akan dihapus permanen!',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Ya, hapus!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
             });
         </script>
     </body>

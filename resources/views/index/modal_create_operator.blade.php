@@ -94,11 +94,39 @@
 
             <div class="mb-3">
                 <label class="form-label">Email</label>
-                <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}" required>
+                <div class="input-group" style="width: 57%;">
+                    <input 
+                        type="text" 
+                        name="email_prefix" 
+                        id="email_prefix"
+                        class="form-control @error('email') is-invalid @enderror"
+                        value="{{ old('email') ? explode('@', old('email'))[0] : '' }}"
+                        required
+                        autocomplete="off"
+                        placeholder="username"
+                    >
+                    <span class="input-group-text">@nagahytam.co.id</span>
+                </div>
+                <input type="hidden" name="email" id="email_full" value="{{ old('email') }}">
                 @error('email')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
+            <script>
+                // Email auto append domain
+                document.addEventListener('DOMContentLoaded', function() {
+                    const prefixInput = document.getElementById('email_prefix');
+                    const fullInput = document.getElementById('email_full');
+                    const domain = '@nagahytam.co.id';
+
+                    function updateFullEmail() {
+                        fullInput.value = prefixInput.value ? prefixInput.value + domain : '';
+                    }
+
+                    prefixInput.addEventListener('input', updateFullEmail);
+                    updateFullEmail();
+                });
+            </script>
 
             <div class="mb-3">
                 <label class="form-label">Password</label>
@@ -150,7 +178,14 @@
 
             <div class="mb-3">
                 <label class="form-label">Department</label>
-                <input type="text" name="department" class="form-control @error('department') is-invalid @enderror" value="{{ old('department') }}">
+                <select name="department" class="form-control @error('department') is-invalid @enderror">
+                    <option value="">-- Pilih Department --</option>
+                    <option value="HR" {{ old('department') == 'HR' ? 'selected' : '' }}>HR</option>
+                    <option value="Manajemen" {{ old('department') == 'Manajemen' ? 'selected' : '' }}>Manajemen</option>
+                    <option value="Administasi" {{ old('department') == 'Administasi' ? 'selected' : '' }}>Administasi</option>
+                    <option value="Gudang" {{ old('department') == 'Gudang' ? 'selected' : '' }}>Gudang</option>
+                    <option value="Operasional" {{ old('department') == 'Operasional' ? 'selected' : '' }}>Operasional</option>
+                </select>
                 @error('department')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
