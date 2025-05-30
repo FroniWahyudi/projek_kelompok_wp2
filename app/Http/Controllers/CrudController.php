@@ -53,7 +53,27 @@ public function usersUpdate(Request $request, $id)
 {
     $user = User::findOrFail($id);
 
-    // Ambil hanya field-field yang ada di form
+    // Validasi input
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'nullable|email|max:255|unique:users,email,' . $id,
+        'role' => 'nullable|string|max:255',
+        'password' => 'nullable|string|min:8',
+        'phone' => 'nullable|string|max:20',
+        'bio' => 'nullable|string',
+        'alamat' => 'nullable|string|max:255',
+        'joined_at' => 'nullable|date',
+        'education' => 'nullable|string|max:255',
+        'department' => 'nullable|string|max:255',
+        'level' => 'nullable|string|max:255',
+        'job_descriptions' => 'nullable|string',
+        'skills' => 'nullable|string|max:255',
+        'achievements' => 'nullable|string',
+        'divisi' => 'nullable|string',
+        'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Maksimal 2MB
+    ]);
+
+    // Ambil hanya field yang diizinkan
     $data = $request->only([
         'name',
         'email',
@@ -68,22 +88,26 @@ public function usersUpdate(Request $request, $id)
         'job_descriptions',
         'skills',
         'achievements',
-        'divisi',  // ← Tambahkan ini
+        'divisi',
     ]);
 
     // Jika ada file 'photo', simpan di storage dan set ke data
     if ($request->hasFile('photo')) {
-        $file     = $request->file('photo');
-        $path     = $file->store('photos', 'public');
+        // Hapus foto lama jika ada
+        if ($user->photo_url) {
+            \Illuminate\Support\Facades\Storage::delete(str_replace('/storage/', 'public/', $user->photo_url));
+        }
+        $file = $request->file('photo');
+        $path = $file->store('photos', 'public');
         $data['photo_url'] = '/storage/' . $path;
     }
 
     // Jika password diisi, hash dan masukkan ke data
     if ($request->filled('password')) {
-        $data['password'] = Hash::make($request->password);
+        $data['password'] = \Illuminate\Support\Facades\Hash::make($request->password);
     }
 
-    // Update model dengan semua data, termasuk photo_url kalau ada
+    // Update model dengan data
     $user->update($data);
 
     return redirect()

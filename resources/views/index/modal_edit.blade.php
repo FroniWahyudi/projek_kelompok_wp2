@@ -1,4 +1,3 @@
-<!-- Internal CSS untuk Photo Upload -->
 <style>
     /* Container photo upload */
     .photo-upload {
@@ -43,15 +42,15 @@
         width: 90%;
         font-size: 0.8rem;
         padding: 0.25rem;
-        margin-left: 12px; /* Hilangkan margin top */
+        margin-left: 12px;
     }
 
     /* Override agar tidak tergulung oleh scroll modal-body */
     .photo-upload {
         position: sticky;
         top: 0rem;
-        right: -0.5rem; /* Sesuaikan jika perlu, atau hapus jika sticky sudah cukup */
-        float: right; /* Biar tetap berada di sisi kanan konten */
+        right: -0.5rem;
+        float: right;
         margin-left: -17rem;
         height: 340px;
         width: 270px;
@@ -71,95 +70,140 @@
     </div>
 
     <form id="formEditUser" method="POST" action="{{ route('operator.update', $user['id']) }}" enctype="multipart/form-data">
-        <div class="modal-body position-relative" style="max-height:70vh; overflow-y:auto; padding-right: 10px;">
-            @csrf
-            @method('PUT')
+        @csrf
+        @method('PUT')
 
-            <!-- PHOTO UPLOAD (tanpa inline CSS lagi) -->
-            <div class="photo-upload">
-                <label class="form-label">Photo</label>
-                <div class="preview-wrapper text-center">
-                    <img id="photoPreview" src="{{ $user['photo_url'] ?? asset('images/default-user.png') }}" alt="Preview Foto">
-                </div>
-                <input type="file" name="photo" class="form-control form-control-sm" accept="image/*">
+        <!-- PHOTO UPLOAD -->
+        <div class="photo-upload">
+            <label class="form-label">Photo</label>
+            <div class="preview-wrapper text-center">
+                <img id="photoPreview" src="{{ $user['photo_url'] ?? asset('images/default-user.png') }}" alt="Preview Foto">
             </div>
+            <input type="file" name="photo" class="form-control form-control-sm" accept="image/*">
+        </div>
 
-            <!-- FORM UTAMA -->
+        <!-- FORM UTAMA -->
+        <div class="modal-body position-relative" style="max-height:70vh; overflow-y:auto; padding-right: 10px;">
             <input type="hidden" name="id" value="{{ $user['id'] }}">
 
             <div class="mb-3">
                 <label class="form-label">Nama</label>
                 <input type="text" name="name" class="form-control" value="{{ old('name', $user['name']) }}" required>
+                @error('name')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Email</label>
                 <input type="email" name="email" class="form-control" value="{{ old('email', $user['email']) }}">
+                @error('email')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Role</label>
                 <input type="text" name="role" class="form-control" value="{{ old('role', $user['role']) }}">
+                @error('role')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Password (kosongkan jika tidak mau diubah)</label>
                 <input type="password" name="password" class="form-control" placeholder="••••••••">
+                @error('password')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Phone</label>
                 <input type="text" name="phone" class="form-control" value="{{ old('phone', $user['phone'] ?? '') }}">
+                @error('phone')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Bio</label>
                 <textarea name="bio" class="form-control" rows="3">{{ old('bio', $user['bio'] ?? '') }}</textarea>
+                @error('bio')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Alamat</label>
                 <input type="text" name="alamat" class="form-control" value="{{ old('alamat', $user['alamat'] ?? '') }}">
+                @error('alamat')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Joined At</label>
                 <input type="date" name="joined_at" class="form-control" value="{{ old('joined_at', $user['joined_at'] ?? '') }}">
+                @error('joined_at')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Education</label>
                 <input type="text" name="education" class="form-control" value="{{ old('education', $user['education'] ?? '') }}">
+                @error('education')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Department</label>
                 <input type="text" name="department" class="form-control" value="{{ old('department', $user['department'] ?? '') }}">
+                @error('department')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Level</label>
                 <input type="text" name="level" class="form-control" value="{{ old('level', $user['level'] ?? '') }}">
+                @error('level')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Job Descriptions</label>
                 <textarea name="job_descriptions" class="form-control" rows="2">{{ old('job_descriptions', $user['job_descriptions'] ?? '') }}</textarea>
+                @error('job_descriptions')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Skills</label>
                 <input type="text" name="skills" class="form-control" value="{{ old('skills', $user['skills'] ?? '') }}">
+                @error('skills')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Achievements</label>
                 <textarea name="achievements" class="form-control" rows="2">{{ old('achievements', $user['achievements'] ?? '') }}</textarea>
+                @error('achievements')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Divisi</label>
                 <textarea name="divisi" class="form-control" rows="2">{{ old('divisi', $user['divisi'] ?? '') }}</textarea>
+                @error('divisi')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
         </div>
 
@@ -183,31 +227,5 @@
             previewImg.src = e.target.result;
         };
         reader.readAsDataURL(file);
-    });
-
-    // AJAX submit tetap bisa; FormData sudah otomatis mendukung file
-    document.getElementById('formEditUser').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const form = e.target;
-        const data = new FormData(form);
-        fetch(form.action, {
-            method: 'POST',
-            headers: { 'X-Requested-With': 'XMLHttpRequest' },
-            body: data
-        })
-        .then(res => res.json())
-        .then(json => {
-            if (json.success) {
-                const modalEl = document.querySelector('.modal.show');
-                bootstrap.Modal.getInstance(modalEl).hide();
-                location.reload();
-            } else {
-                alert('Gagal menyimpan perubahan');
-            }
-        })
-        .catch(err => {
-            console.error(err);
-            alert('Error saat menyimpan');
-        });
     });
 </script>
