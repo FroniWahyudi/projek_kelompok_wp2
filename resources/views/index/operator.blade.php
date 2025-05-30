@@ -163,6 +163,31 @@
                 display: none;
             }
         }
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 87px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #0d6efd;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1050;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .fab:hover {
+            background-color: #005cbf;
+            transform: scale(1.1);
+        }
+        .fab i {
+            font-size: 1.5rem;
+        }
     </style>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
@@ -359,6 +384,20 @@
                 </div>
             @endforelse
         </div>
+
+        <!-- Floating Action Button for Adding Operator -->
+        @if(Auth::user() && Auth::user()->role === 'Admin')
+            <button type="button" class="fab" data-bs-toggle="modal" data-bs-target="#createOperatorModal" title="Tambah Operator">
+                <i class="bi bi-plus-lg"></i>
+            </button>
+            <!-- Modal Create Operator -->
+            <div class="modal fade" id="createOperatorModal" tabindex="-1" aria-labelledby="createOperatorModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                    @include('index.modal_create_operator')
+                </div>
+            </div>
+        @endif
+
         @unless(request()->has('ajax'))
         </main>
         <footer class="footer">
@@ -368,7 +407,7 @@
         <script>
             document.addEventListener('DOMContentLoaded', () => {
                 const input = document.getElementById('searchInput');
-const list = document.getElementById('operator-list');
+                const list = document.getElementById('operator-list');
                 if (!input || !list) return;
 
                 let timeout = null;

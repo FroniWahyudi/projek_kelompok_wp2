@@ -13,7 +13,7 @@ return new class extends Migration
     $table->foreignId('user_id')
           ->constrained()
           ->onDelete('cascade');
-    $table->integer('tahun');
+    $table->integer('tahun')->default(date('Y'));
     $table->integer('total_cuti')->default(0); // ✅ Tambahkan ini
     $table->integer('cuti_sisa')->default(0);
     $table->integer('cuti_terpakai')->default(0);

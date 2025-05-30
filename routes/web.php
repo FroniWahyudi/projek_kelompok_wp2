@@ -113,3 +113,5 @@ Route::post('/pengajuan-reset', [PasswordResetController::class, 'storeRequest']
 Route::post('/cuti/mark-as-read', [CutiController::class, 'markAsRead'])
     ->name('cuti.markAsRead');
 
+Route::get('/operator/create', [CrudController::class, 'showCreateOperatorForm'])->name('operator.create');
+Route::post('/operator', [CrudController::class, 'createOperatorBaru'])->name('operator.store');

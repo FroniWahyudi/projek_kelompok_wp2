@@ -303,4 +303,75 @@ public function usersUpdate(Request $request, $id)
 
         return redirect()->route('feedback.index')->with('success', 'Feedback berhasil dikirim.');
     }
+
+    public function showCreateOperatorForm()
+{
+    return view('index.modal_create_operator');
+}
+
+public function createOperatorBaru(Request $request)
+{
+    // Validasi input
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|max:255|unique:users,email',
+        'password' => 'required|string|min:8',
+        'phone' => 'nullable|string|max:20',
+        'bio' => 'nullable|string',
+        'alamat' => 'nullable|string|max:255',
+        'joined_at' => 'nullable|date',
+        'education' => 'nullable|string|max:255',
+        'department' => 'nullable|string|max:255',
+        'level' => 'nullable|string|max:255',
+        'job_descriptions' => 'nullable|string',
+        'skills' => 'nullable|string|max:255',
+        'achievements' => 'nullable|string',
+        'divisi' => 'nullable|string',
+        'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
+
+    // Siapkan data untuk dibuat
+    $data = $request->only([
+        'name',
+        'email',
+        'phone',
+        'bio',
+        'alamat',
+        'joined_at',
+        'education',
+        'department',
+        'level',
+        'job_descriptions',
+        'skills',
+        'achievements',
+        'divisi',
+    ]);
+
+    // Set role sebagai Operator
+    $data['role'] = 'Operator';
+    
+    // Hash password
+    $data['password'] = Hash::make($request->password);
+
+    // Handle upload foto jika ada
+    if ($request->hasFile('photo')) {
+        $file = $request->file('photo');
+        $path = $file->store('photos', 'public');
+        $data['photo_url'] = '/storage/' . $path;
+    }
+
+    // Buat user baru
+    $user = User::create($data);
+
+    // Buat entri sisa cuti default untuk user baru
+    SisaCuti::create([
+        'user_id' => $user->id,
+        'total_cuti' => 12, // Misalnya default 12 hari
+        'cuti_terpakai' => 0
+    ]);
+
+    return redirect()
+        ->route('operator.index')
+        ->with('success', 'Operator baru berhasil ditambahkan.');
+}
 }
