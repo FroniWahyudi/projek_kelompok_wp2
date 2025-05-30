@@ -159,9 +159,13 @@
     
     /* === NEWS CARDS STYLING === */
     .news-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      display: flex;
+      flex-wrap: wrap;
       gap: 1.5rem;
+    }
+    
+    .news-grid > * {
+      flex: 1 1 280px;
     }
     
     .card-news {
@@ -174,7 +178,7 @@
       display: flex;
       flex-direction: column;
       background-color: white;
-      position: relative; /* Menambahkan posisi relatif untuk tombol absolut */
+      position: relative;
     }
     
     .card-news:hover {
@@ -187,7 +191,7 @@
       color: inherit;
       display: flex;
       flex-direction: column;
-      height: 100%; /* Mengubah dari 20% ke 100% untuk memastikan tautan mengisi seluruh kartu */
+      height: 100%;
     }
     
     .card-news img {
@@ -228,7 +232,7 @@
     }
     
     /* Styling untuk tombol edit dan delete */
-     .delete-btn {
+    .delete-btn {
       position: absolute;
       top: 10px;
       background-color: rgba(255,255,255,0.9);
@@ -240,7 +244,7 @@
       justify-content: center;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       z-index: 2;
-      opacity: 0; /* Tombol disembunyikan secara default */
+      opacity: 0;
       transition: all 0.3s ease;
     }
     .edit-btn {
@@ -248,36 +252,31 @@
       top: 10px;
       background-color: rgba(255,255,255,0.9);
       width: 40px;
-      height: 10px;
+      height: 40px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       z-index: 2;
-      opacity: 0; /* Tombol disembunyikan secara default */
+      opacity: 0;
       transition: all 0.3s ease;
     }
 
-    /* Posisi tombol edit */
     .edit-btn {
-      right: 60px; /* Tombol edit di sebelah kiri tombol delete */
+      right: 60px;
     }
 
-    /* Posisi tombol delete */
     .delete-btn {
-      right: 10px; /* Tombol delete di pojok kanan atas */
+      right: 10px;
     }
 
-    /* Menampilkan tombol saat hover */
     .card-news:hover .edit-btn,
     .card-news:hover .delete-btn {
-      opacity: 1; /* Tombol muncul saat card-news di-hover */
+      opacity: 1;
     }
 
-    /* Efek hover pada tombol */
     .edit-btn:hover, .delete-btn:hover {
-      /* background-color: white; */
       transform: scale(1.1);
     }
     
@@ -574,8 +573,8 @@
     }
     
     @media (max-width: 576px) {
-      .news-grid {
-        grid-template-columns: 1fr;
+      .news-grid > * {
+        flex: 1 1 100%;
       }
       
       .navbar-custom .logo-brand img {
@@ -1010,7 +1009,6 @@
     
     if (cutiButton) {
         cutiButton.addEventListener('click', function() {
-            // Kirim request ke server untuk menandai sebagai dilihat
             fetch("{{ route('cuti.markAsRead') }}", {
                 method: 'POST',
                 headers: {
