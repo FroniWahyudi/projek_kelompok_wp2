@@ -7,6 +7,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
     :root {
       --primary-color: #3498db;
@@ -979,12 +980,24 @@
         $(this).find('.modal-content').removeClass('animate__animated animate__zoomIn');
       });
       
-      // Konfirmasi untuk tombol delete
+      // Konfirmasi untuk tombol delete dengan SweetAlert2
       document.querySelectorAll('.delete-form').forEach(function(form) {
         form.addEventListener('submit', function(e) {
-          if (!confirm('Are you sure you want to delete this post?')) {
-            e.preventDefault();
-          }
+          e.preventDefault();
+          Swal.fire({
+            title: 'Apakah Anda yakin?',
+            text: "Anda tidak akan dapat mengembalikan ini!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              form.submit();
+            }
+          });
         });
       });
     });
