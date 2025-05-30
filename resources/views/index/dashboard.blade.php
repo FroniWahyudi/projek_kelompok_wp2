@@ -638,7 +638,7 @@
     background-color: red;
     border-radius: 50%;
     position: absolute;
-    top: 363px;
+    top: 469px;
     z-index: 100;
     left: 200px;
 }
@@ -646,7 +646,7 @@
     position: absolute;
     top: 362px;
     left: 196px;
-    z-index: 10;
+    z-index: 10px;
 }
   </style>
 </head>

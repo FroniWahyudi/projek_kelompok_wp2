@@ -230,15 +230,26 @@
                 justify-content: flex-end;
             }
         }
+        .mp-4 i {
+            width: 10px;
+        }
+        .breadcrumb-house-icon {
+            font-size: 2rem; /* Atur ukuran sesuai kebutuhan */
+            vertical-align: middle;
+        }
     </style>
 </head>
 <body>
     <div class="container py-4">
         <!-- Breadcrumb Navigation -->
         <nav aria-label="breadcrumb" class="mb-4">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('dashboard') }}" class="text-decoration-none"><i class="bi bi-house-door"></i></a></li>
-                <li class="breadcrumb-item active" aria-current="page">Pengajuan Cuti</li>
+            <ol class="breadcrumb align-items-center" style="font-size: 1.25rem;">
+                <li class="breadcrumb-item d-flex align-items-center">
+                    <a href="{{ route('dashboard') }}" class="text-decoration-none d-flex align-items-center">
+                        <i class="bi bi-house-door breadcrumb-house-icon"></i>
+                        <span class="ms-2 fw-bold" style="font-size: 1.4rem; margin-top: 6px;">Home</span>
+                    </a>
+                </li>
             </ol>
         </nav>
 
@@ -391,8 +402,8 @@
                                 <th>Keterangan</th>
                                 <th>Status</th>
                                 @if(
-                                    in_array(auth()->user()->role, ['Manajer']) ||
-                                    (auth()->user()->role === 'Operator' && $cutiRequests->where('status', 'Menunggu')->count() > 0)
+                                    (in_array(auth()->user()->role, ['Manajer'])) ||
+                                    (!in_array(auth()->user()->role, ['Manajer']) && $cutiRequests->where('status', 'Menunggu')->count() > 0)
                                 )
                                     <th>Aksi</th>
                                 @endif
