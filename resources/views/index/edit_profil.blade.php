@@ -270,7 +270,8 @@
             <div class="col-lg-8 mt-4 mt-lg-0">
               <div class="profile-card h-100">
                 <div class="card-body py-4">
-                  <h5 class="section-title"><i class="fas fa-id-card me-2"></i>Informasi Pribadi</h5>
+                  <h5 class="section-title"><i class="fas fa-id-card me-2"></i>Informasi Pribadi  <a href="{{ url('/') }}" class="btn btn-secondary" style="margin-left:263px;"><i class="fas fa-home me-1"></i> Home</a></h5>
+                 
                   <div class="row">
                     <div class="col-md-6 mb-3">
                       <label for="name" class="form-label">Nama Lengkap</label>
@@ -355,7 +356,7 @@
                   </div>
                   
                   <div class="d-flex justify-content-between mt-4">
-                    <a href="{{ url('/') }}" class="btn btn-secondary"><i class="fas fa-home me-1"></i> Home</a>
+                    
                     <div class="d-flex">
                       <button type="reset" class="btn btn-secondary me-3">
                         <i class="fas fa-undo me-1"></i> Reset
