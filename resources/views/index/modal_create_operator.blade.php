@@ -190,7 +190,12 @@
 
             <div class="mb-3">
                 <label class="form-label">Divisi</label>
-                <textarea name="divisi" class="form-control @error('divisi') is-invalid @enderror" rows="2">{{ old('divisi') }}</textarea>
+                <select name="divisi" class="form-control @error('divisi') is-invalid @enderror" required>
+                    <option value="">-- Pilih Divisi --</option>
+                    <option value="inbound" {{ old('divisi') == 'inbound' ? 'selected' : '' }}>Inbound</option>
+                    <option value="outbound" {{ old('divisi') == 'outbound' ? 'selected' : '' }}>Outbound</option>
+                    <option value="storage" {{ old('divisi') == 'storage' ? 'selected' : '' }}>Storage</option>
+                </select>
                 @error('divisi')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
