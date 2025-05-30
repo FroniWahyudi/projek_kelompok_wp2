@@ -89,7 +89,7 @@ class CutiController extends Controller
                 ]);
         });
 
-        return redirect()->route('cuti.index')->with('success', 'Pengajuan cuti berhasil dibuat dan sisa cuti terupdate.');
+        return redirect()->route('cuti.index')->with('success', 'Pengajuan cuti berhasil dibuat.');
     }
 
     // Hapus pengajuan + rollback sisa cuti
@@ -108,7 +108,7 @@ public function destroy(CutiRequest $cuti)
 
     return redirect()
         ->route('cuti.index')
-        ->with('success', 'Pengajuan cuti dan log terkait berhasil dihapus.');
+        ->with('success', 'Riwayat cuti berhasil dihapus.');
 }
 
 
@@ -201,7 +201,7 @@ public function destroy(CutiRequest $cuti)
         ]);
     });
 
-    return redirect()->route('cuti.index')->with('success', 'Pengajuan cuti ditolak dan sisa cuti dipulihkan.');
+    return redirect()->route('cuti.index')->with('success', 'Pengajuan cuti ditolak.');
 }
     // Reject pengajuan
 public function batal($id)
@@ -228,7 +228,7 @@ public function batal($id)
         $cuti->delete();
     });
 
-    return redirect()->route('cuti.index')->with('success', 'Pengajuan cuti berhasil dibatalkan dan sisa cuti dipulihkan.');
+    return redirect()->route('cuti.index')->with('success', 'Pengajuan cuti berhasil dibatalkan.');
 }
 
 // Memeriksa apakah ada pengajuan cuti yang sedang menunggu
@@ -251,13 +251,29 @@ public function hasNonPendingRequests()
 {
     $user = auth()->user();
     
-    // Hanya periksa untuk pengguna dengan role selain Manajer
     if ($user->role !== 'Manajer') {
         return CutiRequest::where('user_id', $user->id)
-                         ->where('status', '!=', 'Menunggu')
-                         ->exists();
+            ->where('status', '!=', 'Menunggu')
+            ->where('dilihat', false) // Hanya yang belum dilihat
+            ->exists();
     }
     
     return false;
+}
+
+public function markAsRead()
+{
+    $user = auth()->user();
+    
+    // Hanya untuk non-Manajer
+    if ($user->role !== 'Manajer') {
+        // Update semua cuti non-pending menjadi status 'dilihat'
+        CutiRequest::where('user_id', $user->id)
+            ->where('status', '!=', 'Menunggu')
+            ->where('dilihat', false)
+            ->update(['dilihat' => true]);
+    }
+    
+    return response()->json(['success' => true]);
 }
 }

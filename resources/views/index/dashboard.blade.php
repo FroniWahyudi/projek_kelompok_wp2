@@ -642,6 +642,12 @@
     z-index: 100;
     left: 200px;
 }
+#resetNotification {
+    position: absolute;
+    top: 362px;
+    left: 196px;
+    z-index: 10;
+}
   </style>
 </head>
 <body>
@@ -742,9 +748,9 @@
 
     <h6 class="fw-bold">Menu Lainnya</h6>
     @if(auth()->user()->role === 'Admin')
+    <span id="resetNotification" class="badge bg-danger rounded-pill">!</span>
       <a class="btn btn-outline-dark" href="{{ route('reset.password.form') }}">
       <i class="bi bi-key me-1"></i> Reset Password
-      <span id="resetNotification" class="badge bg-danger rounded-pill" style="display: none;">!</span>
       </a>
     @endif
 
@@ -768,16 +774,17 @@
         <i class="bi bi-check-square me-1"></i> Daftar Cuti
       </a>
     @endif
-    
+
 @if(auth()->user()->role === 'Operator' || auth()->user()->role === 'Admin' || auth()->user()->role === 'Leader')
- @if(app('App\Http\Controllers\CutiController')->hasNonPendingRequests())
-            <span class="notification-dot-cuti">
-            </span>
-        @endif
-    <a href="{{ route('cuti.index') }}" class="btn btn-outline-dark">
-        <i class="bi bi-check-square me-1"></i> Pengajuan Cuti
-       
-    </a>
+@if(app('App\Http\Controllers\CutiController')->hasNonPendingRequests())
+    <span id="cutiNotificationDot" class="notification-dot-cuti"></span>
+@endif
+
+<a href="{{ route('cuti.index') }}" 
+   class="btn btn-outline-dark"
+   id="cutiButton">
+    <i class="bi bi-check-square me-1"></i> Pengajuan Cuti
+</a>
     <a href="{{ route('slips.index') }}" class="btn btn-outline-dark">
         <i class="bi bi-receipt me-1"></i> Slip Gaji
     </a>
@@ -996,6 +1003,30 @@
         })
         .catch(error => console.error('Error:', error));
     });
+
+    document.addEventListener('DOMContentLoaded', function() {
+    const cutiButton = document.getElementById('cutiButton');
+    const notificationDot = document.getElementById('cutiNotificationDot');
+    
+    if (cutiButton) {
+        cutiButton.addEventListener('click', function() {
+            // Kirim request ke server untuk menandai sebagai dilihat
+            fetch("{{ route('cuti.markAsRead') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && notificationDot) {
+                    notificationDot.style.display = 'none';
+                }
+            });
+        });
+    }
+});
   </script>
 </body>
 </html>

@@ -454,16 +454,7 @@
                                                     <i class="bi bi-x-circle"></i>
                                                 </button>
                                             </form>
-                                            <form action="{{ route('cuti.destroy', $r->id) }}"
-                                                  method="POST"
-                                                  class="confirmable d-inline"
-                                                  data-message="Hapus pengajuan cuti ini?">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button class="btn btn-sm btn-danger">
-                                                    <i class="bi bi-trash"></i>
-                                                </button>
-                                            </form>
+                                            <!-- Tombol hapus disembunyikan saat status 'Menunggu' -->
                                         </td>
                                     @endif
                                     @if(in_array(auth()->user()->role, ['Manajer']) && ($r->status === 'Disetujui' || $r->status === 'Ditolak'))

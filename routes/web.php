@@ -110,4 +110,6 @@ Route::middleware('auth')->group(function () {
 //biar bisa akses form pengajuan reset password tanpa login
 Route::get('/pengajuan-reset', [PasswordResetController::class, 'showRequestForm'])->name('pengajuan.reset.password');
 Route::post('/pengajuan-reset', [PasswordResetController::class, 'storeRequest'])->name('pengajuan.reset.form');
+Route::post('/cuti/mark-as-read', [CutiController::class, 'markAsRead'])
+    ->name('cuti.markAsRead');
 
