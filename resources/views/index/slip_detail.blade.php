@@ -161,43 +161,6 @@
             margin-top: 10px;
         }
 
-        /* @page {
-            size: A4;
-            margin: 0;
-        }
-        @media print {
-            body * {
-                visibility: hidden;
-            }
-            .preview-container,
-            .preview-container * {
-                visibility: visible;
-            }
-            .preview-container {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 210mm;
-                height: auto; 
-            }
-            .btn-print {
-                display: none !important;
-            }
-            .footer-actions {
-                display: none !important;
-            }
-            .footer-notes {
-                visibility: visible; 
-                position: relative;
-                bottom: 0;
-                width: 100%;
-                padding-top: 10px;
-            }
-        }
-        html, body {
-            margin: 0;
-            padding: 0;
-        } */
     </style>
 </head>
 <body>
