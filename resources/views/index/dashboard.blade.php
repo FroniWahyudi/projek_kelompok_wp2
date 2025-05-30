@@ -646,7 +646,7 @@
     position: absolute;
     top: 362px;
     left: 196px;
-    z-index: 10px;
+    z-index: 10;
 }
   </style>
 </head>
