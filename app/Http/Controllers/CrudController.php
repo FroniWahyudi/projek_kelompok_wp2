@@ -390,11 +390,12 @@ class CrudController extends Controller
         $user = User::create($data);
 
         // Buat entri sisa cuti default untuk user baru
-        SisaCuti::create([
-            'user_id' => $user->id,
-            'total_cuti' => 12,
-            'cuti_terpakai' => 0
-        ]);
+       SisaCuti::create([
+    'user_id' => $user->id,
+    'total_cuti' => 12,
+    'cuti_terpakai' => 0,
+    'tahun' => now()->year // Menggunakan tahun saat ini, misalnya 2025
+]);
 
         return redirect()
             ->route('operator.index')
