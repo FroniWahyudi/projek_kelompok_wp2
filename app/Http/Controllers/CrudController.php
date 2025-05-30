@@ -1,5 +1,4 @@
-<?php
-
+<?php  
 namespace App\Http\Controllers;
 
 use App\Models\User;
@@ -14,34 +13,32 @@ use App\Models\Feedback;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class CrudController extends Controller
 {
     // === OPERATOR (Users) ===
 
-public function usersIndex(Request $request)
-{
-    $search = $request->get('search');
+    public function usersIndex(Request $request)
+    {
+        $search = $request->get('search');
 
-    $users = User::where('role', 'Operator')
-        ->when($search, fn($q) => 
-            $q->where(function($q2) use ($search) {
-                $q2->where('name',   'like', "%{$search}%")
-                    ->orWhere('divisi','like', "%{$search}%");
-            })
-        )
-        ->orderBy('name')
-        ->get();
+        $users = User::where('role', 'Operator')
+            ->when($search, fn($q) => 
+                $q->where(function($q2) use ($search) {
+                    $q2->where('name',   'like', "%{$search}%")
+                        ->orWhere('divisi','like', "%{$search}%");
+                })
+            )
+            ->orderBy('name')
+            ->get();
 
-    if ($request->ajax()) {
-        return view('operator', ['Operator' => $users])->render();
+        if ($request->ajax()) {
+            return view('operator', ['Operator' => $users])->render();
+        }
+
+        return view('index.operator', ['Operator' => $users]);
     }
-
-    return view('index.operator', ['Operator' => $users]);
-}
-
-
-
 
     public function usersEdit($id)
     {
@@ -49,72 +46,101 @@ public function usersIndex(Request $request)
         return view('index.modal_edit', compact('user'));
     }
 
-public function usersUpdate(Request $request, $id)
-{
-    $user = User::findOrFail($id);
+    public function usersUpdate(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
 
-    // Validasi input
-    $validated = $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'nullable|email|max:255|unique:users,email,' . $id,
-        'role' => 'nullable|string|max:255',
-        'password' => 'nullable|string|min:8',
-        'phone' => 'nullable|string|max:20',
-        'bio' => 'nullable|string',
-        'alamat' => 'nullable|string|max:255',
-        'joined_at' => 'nullable|date',
-        'education' => 'nullable|string|max:255',
-        'department' => 'nullable|string|max:255',
-        'level' => 'nullable|string|max:255',
-        'job_descriptions' => 'nullable|string',
-        'skills' => 'nullable|string|max:255',
-        'achievements' => 'nullable|string',
-        'divisi' => 'nullable|string',
-        'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Maksimal 2MB
-    ]);
+        // Validasi input
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'nullable|email|max:255|unique:users,email,' . $id,
+            'role' => 'nullable|string|max:255',
+            'password' => 'nullable|string|min:8',
+            'phone' => 'nullable|string|max:20',
+            'bio' => 'nullable|string',
+            'alamat' => 'nullable|string|max:255',
+            'joined_at' => 'nullable|date',
+            'education' => 'nullable|string|max:255',
+            'department' => 'nullable|string|max:255',
+            'level' => 'nullable|string|max:255',
+            'job_descriptions' => 'nullable|string',
+            'skills' => 'nullable|string|max:255',
+            'achievements' => 'nullable|string',
+            'divisi' => 'nullable|string',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
 
-    // Ambil hanya field yang diizinkan
-    $data = $request->only([
-        'name',
-        'email',
-        'role',
-        'phone',
-        'bio',
-        'alamat',
-        'joined_at',
-        'education',
-        'department',
-        'level',
-        'job_descriptions',
-        'skills',
-        'achievements',
-        'divisi',
-    ]);
+        // Ambil hanya field yang diizinkan
+        $data = $request->only([
+            'name',
+            'email',
+            'role',
+            'phone',
+            'bio',
+            'alamat',
+            'joined_at',
+            'education',
+            'department',
+            'level',
+            'job_descriptions',
+            'skills',
+            'achievements',
+            'divisi',
+        ]);
 
-    // Jika ada file 'photo', simpan di storage dan set ke data
-    if ($request->hasFile('photo')) {
-        // Hapus foto lama jika ada
-        if ($user->photo_url) {
-            \Illuminate\Support\Facades\Storage::delete(str_replace('/storage/', 'public/', $user->photo_url));
+        // Jika ada file 'photo', simpan di storage dan set ke data
+        if ($request->hasFile('photo')) {
+            // Hapus foto lama jika ada
+            if ($user->photo_url) {
+                Storage::delete(str_replace('/storage/', 'public/', $user->photo_url));
+            }
+            $file = $request->file('photo');
+            $path = $file->store('photos', 'public');
+            $data['photo_url'] = '/storage/' . $path;
         }
-        $file = $request->file('photo');
-        $path = $file->store('photos', 'public');
-        $data['photo_url'] = '/storage/' . $path;
+
+        // Jika password diisi, hash dan masukkan ke data
+        if ($request->filled('password')) {
+            $data['password'] = Hash::make($request->password);
+        }
+
+        // Update model dengan data
+        $user->update($data);
+
+        return redirect()
+               ->route('operator.index')
+               ->with('success', 'Data berhasil diperbarui.');
     }
 
-    // Jika password diisi, hash dan masukkan ke data
-    if ($request->filled('password')) {
-        $data['password'] = \Illuminate\Support\Facades\Hash::make($request->password);
+    public function usersDestroy($id)
+    {
+        $user = User::findOrFail($id);
+
+        // Pastikan user yang dihapus adalah Operator
+        if ($user->role !== 'Operator') {
+            return back()->with('error', 'Hanya operator yang dapat dihapus.');
+        }
+
+        // Hapus foto jika ada
+        if ($user->photo_url) {
+            Storage::delete(str_replace('/storage/', 'public/', $user->photo_url));
+        }
+
+        // Hapus data terkait
+        SisaCuti::where('user_id', $id)->delete();
+        CutiRequest::where('user_id', $id)->delete();
+        CutiLogs::where('oleh_user_id', $id)->delete();
+        Payroll::where('user_id', $id)->delete();
+        Shift::where('user_id', $id)->delete();
+        Feedback::where('user_id', $id)->orWhere('disetujui_oleh', $id)->delete();
+
+        // Hapus user
+        $user->delete();
+
+        return redirect()
+               ->route('operator.index')
+               ->with('success', 'Operator berhasil dihapus.');
     }
-
-    // Update model dengan data
-    $user->update($data);
-
-    return redirect()
-           ->route('operator.index')
-           ->with('success', 'Data berhasil diperbarui.');
-}
-
 
     // === SISA CUTI ===
 
@@ -298,80 +324,80 @@ public function usersUpdate(Request $request, $id)
             'user_id' => $request->user_id,
             'feedback_text' => $request->feedback_text,
             'tanggal_pengajuan' => Carbon::now()->toDateString(),
-            'disetujui_oleh' => auth()->id() // Set user yang mengirim feedback
+            'disetujui_oleh' => auth()->id()
         ]);
 
         return redirect()->route('feedback.index')->with('success', 'Feedback berhasil dikirim.');
     }
 
     public function showCreateOperatorForm()
-{
-    return view('index.modal_create_operator');
-}
-
-public function createOperatorBaru(Request $request)
-{
-    // Validasi input
-    $validated = $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|email|max:255|unique:users,email',
-        'password' => 'required|string|min:8',
-        'phone' => 'nullable|string|max:20',
-        'bio' => 'nullable|string',
-        'alamat' => 'nullable|string|max:255',
-        'joined_at' => 'nullable|date',
-        'education' => 'nullable|string|max:255',
-        'department' => 'nullable|string|max:255',
-        'level' => 'nullable|string|max:255',
-        'job_descriptions' => 'nullable|string',
-        'skills' => 'nullable|string|max:255',
-        'achievements' => 'nullable|string',
-        'divisi' => 'nullable|string',
-        'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-    ]);
-
-    // Siapkan data untuk dibuat
-    $data = $request->only([
-        'name',
-        'email',
-        'phone',
-        'bio',
-        'alamat',
-        'joined_at',
-        'education',
-        'department',
-        'level',
-        'job_descriptions',
-        'skills',
-        'achievements',
-        'divisi',
-    ]);
-
-    // Set role sebagai Operator
-    $data['role'] = 'Operator';
-    
-    // Hash password
-    $data['password'] = Hash::make($request->password);
-
-    // Handle upload foto jika ada
-    if ($request->hasFile('photo')) {
-        $file = $request->file('photo');
-        $path = $file->store('photos', 'public');
-        $data['photo_url'] = '/storage/' . $path;
+    {
+        return view('index.modal_create_operator');
     }
 
-    // Buat user baru
-    $user = User::create($data);
+    public function createOperatorBaru(Request $request)
+    {
+        // Validasi input
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email',
+            'password' => 'required|string|min:8',
+            'phone' => 'nullable|string|max:20',
+            'bio' => 'nullable|string',
+            'alamat' => 'nullable|string|max:255',
+            'joined_at' => 'nullable|date',
+            'education' => 'nullable|string|max:255',
+            'department' => 'nullable|string|max:255',
+            'level' => 'nullable|string|max:255',
+            'job_descriptions' => 'nullable|string',
+            'skills' => 'nullable|string|max:255',
+            'achievements' => 'nullable|string',
+            'divisi' => 'nullable|string',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
 
-    // Buat entri sisa cuti default untuk user baru
-    SisaCuti::create([
-        'user_id' => $user->id,
-        'total_cuti' => 12, // Misalnya default 12 hari
-        'cuti_terpakai' => 0
-    ]);
+        // Siapkan data untuk dibuat
+        $data = $request->only([
+            'name',
+            'email',
+            'phone',
+            'bio',
+            'alamat',
+            'joined_at',
+            'education',
+            'department',
+            'level',
+            'job_descriptions',
+            'skills',
+            'achievements',
+            'divisi',
+        ]);
 
-    return redirect()
-        ->route('operator.index')
-        ->with('success', 'Operator baru berhasil ditambahkan.');
-}
+        // Set role sebagai Operator
+        $data['role'] = 'Operator';
+        
+        // Hash password
+        $data['password'] = Hash::make($request->password);
+
+        // Handle upload foto jika ada
+        if ($request->hasFile('photo')) {
+            $file = $request->file('photo');
+            $path = $file->store('photos', 'public');
+            $data['photo_url'] = '/storage/' . $path;
+        }
+
+        // Buat user baru
+        $user = User::create($data);
+
+        // Buat entri sisa cuti default untuk user baru
+        SisaCuti::create([
+            'user_id' => $user->id,
+            'total_cuti' => 12,
+            'cuti_terpakai' => 0
+        ]);
+
+        return redirect()
+            ->route('operator.index')
+            ->with('success', 'Operator baru berhasil ditambahkan.');
+    }
 }
