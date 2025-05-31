@@ -336,9 +336,15 @@
                                 </div>
                             </div>
                             @if (session('error'))
-                                <div class="alert alert-danger mb-4">
+                                <div class="alert alert-danger mb-4" id="notif-alert">
                                     {{ session('error') }}
                                 </div>
+                                <script>
+                                    setTimeout(function() {
+                                        var notif = document.getElementById('notif-alert');
+                                        if (notif) notif.style.display = 'none';
+                                    }, 2500);
+                                </script>
                             @endif
                             <div class="card">
                                 <div class="card-header">

@@ -101,7 +101,7 @@
         </div>
 
         <!-- Manual Password Reset Section -->
-        <div class="bg-white shadow-md rounded-lg p-6">
+        <!-- <div class="bg-white shadow-md rounded-lg p-6">
             <h2 class="text-xl font-semibold text-gray-700 mb-4">Reset Password Manual</h2>
             <form id="resetForm" method="POST" action="{{ route('reset.password.manual') }}" class="space-y-4">
                 @csrf
@@ -139,7 +139,7 @@
                     </button>
                 </div>
             </form>
-        </div>
+        </div> -->
     </div>
 
     <script>
