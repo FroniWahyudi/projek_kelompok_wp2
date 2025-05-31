@@ -109,7 +109,7 @@
       <i class="bi bi-house-door"></i>
     </a>
     <h2 class="m-0 flex-grow-1 text-dark-blue">Tugas Harian Resi – Naga Hytam</h2>
-    @if(auth()->user() && auth()->user()->role === 'admin')
+    @if(auth()->user() && auth()->user()->role === 'Admin')
       <a href="{{ route('resi.buat') }}" class="btn btn-primary">
       <i class="bi bi-plus-lg me-1"></i> Buat Resi
       </a>
@@ -224,7 +224,14 @@
     $("#infoKode").text(d.kode);
     $("#infoTujuan").text(d.tujuan);
     $("#infoTanggal").text(d.tanggal);
-    $("#infoStatus").text(d.status);
+    $("#infoStatus")
+      .text(d.status)
+      .removeClass("badge bg-success bg-warning text-dark")
+      .addClass(
+        d.status === "Selesai"
+          ? "badge bg-success"
+          : "badge bg-warning text-dark"
+      );
 
     const tbody = $("#resiTableBody").empty();
 
