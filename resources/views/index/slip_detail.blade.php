@@ -8,12 +8,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         body {
-            background-color: #f5f7fb;
+            background-color: #f0f4f8;
             font-family: Arial, Helvetica, sans-serif;
             margin: 0;
         }
         .main-content {
-            background: #fff;
+            background: #ffffff;
             border-radius: 10px;
             box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
             padding: 25px;
@@ -24,18 +24,17 @@
         .page-title {
             font-size: 24px;
             font-weight: 600;
-            color: #212529;
+            color: #003366;
             margin-bottom: 20px;
         }
         .preview-container {
             max-width: 1539px;
             max-height: 1000mm;
-            background: #fff;
+            background: #ffffff;
             border-radius: 10px;
             box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
             padding: 20px;
             box-sizing: border-box;
-            /* margin-top: 39px; */
         }
         .preview-header {
             display: flex;
@@ -53,23 +52,23 @@
         .slip-title {
             font-size: 20px;
             font-weight: 600;
-            color: #212529;
+            color: #003366;
             text-transform: uppercase;
             margin-bottom: 5px;
         }
         .period-badge {
-            background: #e9ecef;
+            background: #e3f2fd;
             padding: 5px 15px;
             border-radius: 20px;
             font-size: 14px;
-            color: #495057;
+            color: #003366;
         }
         .section-title {
             font-size: 15px;
             font-weight: 600;
-            color: #495057;
+            color: #003366;
             border-bottom: 1px solid #e9ecef;
-            padding-bottom: 5 punishments;
+            padding-bottom: 5px;
             margin-bottom: 15px;
         }
         .info-row {
@@ -80,7 +79,7 @@
         }
         .info-label {
             font-weight: 500;
-            color: #6c757d;
+            color: #4a4a4a;
             width: 40%;
         }
         .info-value {
@@ -105,13 +104,14 @@
             padding: 6px 8px;
             border: 1px solid #dee2e6;
             text-align: left;
+        
         }
         .table th {
-            background-color: #f8f9fa;
+            background-color: #e3f2fd;
             font-weight: 600;
         }
         th {
-            background-color: #f8f9fa;
+            background-color: #e3f2fd;
             font-weight: 600;
         }
         .table .text-end {
@@ -119,13 +119,13 @@
         }
         .total-row {
             font-weight: 700;
-            background: #f8f9fa;
+            background: #cce5ff;
         }
         .income {
             color: #198754;
         }
         .deduction {
-            color: #dc3545;
+            color: red;
         }
         .footer-actions {
             display: flex;
@@ -134,7 +134,7 @@
             gap: 10px;
         }
         .btn-secondary, .btn-print {
-            background-color: #6c757d;
+            background-color: #007bff;
             color: #fff;
             padding: 10px 20px;
             border: none;
@@ -148,7 +148,7 @@
         }
         .btn-secondary:hover,
         .btn-print:hover {
-            background-color: #5a6268;
+            background-color: #0056b3;
         }
         .btn-secondary i,
         .btn-print i {
@@ -156,11 +156,10 @@
         }
         .footer-notes {
             text-align: center;
-            color: #6c757d;
+            color: #4a4a4a;
             font-size: 11px;
             margin-top: 10px;
         }
-
     </style>
 </head>
 <body>
@@ -184,7 +183,7 @@
             </div>
             <div class="mb-4" style="display: flex; gap: 32px;">
                 <!-- Informasi Karyawan (Kiri) -->
-                <div style="flex:1;">
+                <div style="flex:1; background: linear-gradient(to bottom);">
                     <div class="section-title">Informasi Karyawan</div>
                     <div class="info-row">
                         <div class="info-label">Nama</div>
@@ -263,8 +262,8 @@
             <div>
                 <table class="table">
                     <tr>
-                        <td style="border-right:none; background-color:lightgray; font-weight:bold;"> Gaji Bersih</td>
-                        <td style="border-left:none; text-align:end; background-color:lightgray; font-weight:bold;">{{ number_format($slip->net_salary, 0, ',', '.') }}</td>
+                        <td style="border-right:none; background-color:#cce5ff; font-weight:bold; color:#003366;"> Gaji Bersih</td>
+                        <td style="border-left:none; text-align:end; background-color:#cce5ff; font-weight:bold; color:#003366;">{{ number_format($slip->net_salary, 0, ',', '.') }}</td>
                     </tr>
                 </table>
             </div>
@@ -274,14 +273,13 @@
             </p>
         </div>
 
-
         <div class="footer-actions">
             <button class="btn-print" onclick="downloadPDF()">
                 <i class="bi bi-printer"></i> Cetak / Save as PDF
             </button>
         </div>
     </div>
-   <script>
+    <script>
  const slipId = "{{ $slip->id }}";
 const slipPeriod = "{{ $slip->period->format('Y-m') }}";
 function downloadPDF() {
