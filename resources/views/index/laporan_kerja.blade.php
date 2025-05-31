@@ -109,9 +109,11 @@
       <i class="bi bi-house-door"></i>
     </a>
     <h2 class="m-0 flex-grow-1 text-dark-blue">Tugas Harian Resi – Naga Hytam</h2>
-    <a href="{{ route('resi.buat') }}" class="btn btn-primary">
+    @if(auth()->user() && auth()->user()->role === 'admin')
+      <a href="{{ route('resi.buat') }}" class="btn btn-primary">
       <i class="bi bi-plus-lg me-1"></i> Buat Resi
-    </a>
+      </a>
+    @endif
   </div>
 
   <div class="row gx-4">
