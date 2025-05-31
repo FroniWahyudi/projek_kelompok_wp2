@@ -16,7 +16,9 @@ class SlipController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        $query = Slip::with('user');
+        $query = Slip::with(['user' => function ($query) {
+            $query->select('id', 'name', 'id_karyawan', 'department', 'photo_url');
+        }]);
 
         if ($user->role == 'Operator') {
             $query->where('user_id', $user->id);
@@ -35,7 +37,7 @@ class SlipController extends Controller
             ->distinct()
             ->orderByDesc('year')
             ->pluck('year');
-        $users = User::all();
+        $users = User::all(['id', 'name', 'id_karyawan']);
         $nextId = Slip::count() + 1;
         $mode = 'index';
 
@@ -48,9 +50,11 @@ class SlipController extends Controller
             ->distinct()
             ->orderByDesc('year')
             ->pluck('year');
-        $slips = Slip::with('user')->orderByDesc('period')->get();
+        $slips = Slip::with(['user' => function ($query) {
+            $query->select('id', 'name', 'id_karyawan', 'department', 'photo_url');
+        }])->orderByDesc('period')->get();
         $users = User::where('role', '!=', 'Manajer')
-            ->select('id', 'name', 'department', 'photo_url')
+            ->select('id', 'name', 'id_karyawan', 'department', 'photo_url')
             ->get();
         $departments = User::select('department')
             ->distinct()
@@ -143,7 +147,7 @@ class SlipController extends Controller
             ->distinct()
             ->orderByDesc('year')
             ->pluck('year');
-        $users = User::all();
+        $users = User::all(['id', 'name', 'id_karyawan']);
         $nextId = Slip::count() + 1;
         $mode = 'edit';
 
@@ -228,14 +232,18 @@ class SlipController extends Controller
 
     public function show(Slip $slip)
     {
-        $slip->load('user', 'earnings', 'deductions');
+        $slip->load(['user' => function ($query) {
+            $query->select('id', 'name', 'id_karyawan', 'department', 'photo_url');
+        }, 'earnings', 'deductions']);
         return view('index.slip_detail', compact('slip'));
     }
 
     public function downloadPdf($id)
     {
         $slip = Slip::findOrFail($id);
-        $slip->load('user', 'earnings', 'deductions');
+        $slip->load(['user' => function ($query) {
+            $query->select('id', 'name', 'id_karyawan', 'department', 'photo_url');
+        }, 'earnings', 'deductions']);
 
         $options = [
             'isHtml5ParserEnabled'    => true,
@@ -265,7 +273,7 @@ class SlipController extends Controller
             ->where('period', $period)
             ->first();
 
-        $users = User::all(['id', 'name']);
+        $users = User::all(['id', 'name', 'id_karyawan']);
 
         if ($slip) {
             return view('index.cek_slip', [
@@ -282,7 +290,7 @@ class SlipController extends Controller
 
     public function showCheckSlipForm()
     {
-        $users = User::all(['id', 'name']);
+        $users = User::all(['id', 'name', 'id_karyawan']);
         return view('index.cek_slip', compact('users'));
     }
 

@@ -191,7 +191,7 @@
                     </div>
                     <div class="info-row">
                         <div class="info-label">ID</div>
-                        <div class="info-value">{{ $slip->user->id }}</div>
+                        <div class="info-value">{{ $slip->user->id_karyawan }}</div>
                     </div>
                     <div class="info-row">
                         <div class="info-label">Departemen</div>
@@ -320,7 +320,7 @@ function downloadPDF() {
 
     // Konfigurasi html2pdf
     const opt = {
-        margin: [0, 0, 20, 5], // [atas, kanan, bawah, kiri] dalam mm
+        margin: [-5, 0, 20, 5], // [atas, kanan, bawah, kiri] dalam mm
         filename: `slip-gaji-${slipId}-${slipPeriod}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2, useCORS: true },

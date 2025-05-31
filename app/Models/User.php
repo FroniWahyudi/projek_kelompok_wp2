@@ -16,6 +16,7 @@ class User extends Authenticatable
     protected $table = "users";
 
     protected $fillable = [
+        'id_karyawan', // ditambahkan sesuai permintaan
         'name', 'role', 'email', 'phone', 'password',
         'photo_url', 'bio', 'alamat', 'joined_at',
         'education', 'department', 'level',

@@ -432,7 +432,7 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         @foreach ($users as $user)
-                                                                            <tr class="table-row" data-department="{{ $user->department }}" data-id="{{ $user->id }}" data-name="{{ $user->name }}">
+                                                                            <tr class="table-row" data-department="{{ $user->department }}" data-id="{{ $user->id }}" data-id-karyawan="{{ $user->id_karyawan }}" data-name="{{ $user->name }}">
                                                                                 <td>
                                                                                     <img src="{{ $user->photo_url ? asset($user->photo_url) : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) }}"
                                                                                          class="employee-avatar"
@@ -659,7 +659,7 @@
                                                                 <div class="col-7 info-value" id="preview-employee-name">-</div>
                                                             </div>
                                                             <div class="info-row row">
-                                                                <div class="col-5 info-label">ID</div>
+                                                                <div class="col-5 info-label">ID Karyawan</div>
                                                                 <div class="col-7 info-value" id="preview-employee-id">-</div>
                                                             </div>
                                                             <div class="info-row row">
@@ -702,8 +702,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
-
                                     </div>
                                 </div>
                             </div>
@@ -719,7 +717,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-   <script>
+    <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Fungsi untuk memformat angka ke dalam format mata uang
     function formatCurrency(number) {
@@ -801,7 +799,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const selectedRow = document.querySelector('#employeeTable tbody tr.table-active');
         if (selectedRow) {
             preview.name.textContent = selectedRow.getAttribute('data-name');
-            preview.id.textContent = selectedRow.getAttribute('data-id');
+            preview.id.textContent = selectedRow.getAttribute('data-id-karyawan'); // Gunakan id_karyawan untuk tampilan
             preview.dept.textContent = selectedRow.getAttribute('data-department');
         } else {
             preview.name.textContent = "-";
@@ -1191,6 +1189,6 @@ document.addEventListener('DOMContentLoaded', function() {
         updateStatuses(initialPeriod);
     }
 });
-</script>
+    </script>
 </body>
 </html>

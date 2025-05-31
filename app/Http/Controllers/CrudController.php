@@ -1,4 +1,5 @@
-<?php  
+<?php
+
 namespace App\Http\Controllers;
 
 use App\Models\User;
@@ -24,10 +25,10 @@ class CrudController extends Controller
         $search = $request->get('search');
 
         $users = User::where('role', 'Operator')
-            ->when($search, fn($q) => 
-                $q->where(function($q2) use ($search) {
-                    $q2->where('name',   'like', "%{$search}%")
-                        ->orWhere('divisi','like', "%{$search}%");
+            ->when($search, fn($q) =>
+                $q->where(function ($q2) use ($search) {
+                    $q2->where('name', 'like', "%{$search}%")
+                        ->orWhere('divisi', 'like', "%{$search}%");
                 })
             )
             ->orderBy('name')
@@ -108,31 +109,31 @@ class CrudController extends Controller
         $user->update($data);
 
         return redirect()
-               ->route('operator.index')
-               ->with('success', 'Data berhasil diperbarui.');
+            ->route('operator.index')
+            ->with('success', 'Data berhasil diperbarui.');
     }
 
-   public function usersDestroy($id)
-{
-    $user = User::findOrFail($id);
+    public function usersDestroy($id)
+    {
+        $user = User::findOrFail($id);
 
-    // Pastikan user yang dihapus adalah Operator
-    if ($user->role !== 'Operator') {
-        return back()->with('error', 'Hanya operator yang dapat dihapus.');
+        // Pastikan user yang dihapus adalah Operator
+        if ($user->role !== 'Operator') {
+            return back()->with('error', 'Hanya operator yang dapat dihapus.');
+        }
+
+        // Hapus foto jika ada
+        if ($user->photo_url) {
+            Storage::delete(str_replace('/storage/', 'public/', $user->photo_url));
+        }
+
+        // Hapus user dari tabel users
+        $user->delete();
+
+        return redirect()
+            ->route('operator.index')
+            ->with('success', 'Operator berhasil dihapus.');
     }
-
-    // Hapus foto jika ada
-    if ($user->photo_url) {
-        Storage::delete(str_replace('/storage/', 'public/', $user->photo_url));
-    }
-
-    // Hapus user dari tabel users
-    $user->delete();
-
-    return redirect()
-           ->route('operator.index')
-           ->with('success', 'Operator berhasil dihapus.');
-}
 
     // === SISA CUTI ===
 
@@ -145,8 +146,8 @@ class CrudController extends Controller
     public function sisaCutiUpdate(Request $request, $id)
     {
         $item = SisaCuti::findOrFail($id);
-        $item->update($request->only(['total_cuti','cuti_terpakai']));
-        return back()->with('success','Sisa cuti berhasil diupdate');
+        $item->update($request->only(['total_cuti', 'cuti_terpakai']));
+        return back()->with('success', 'Sisa cuti berhasil diupdate');
     }
 
     // === CUTI REQUESTS ===
@@ -165,10 +166,10 @@ class CrudController extends Controller
     public function cutiRequestsStore(Request $request)
     {
         CutiRequest::create($request->only([
-            'user_id','tanggal_pengajuan','tanggal_mulai',
-            'tanggal_selesai','lama_cuti','alasan'
+            'user_id', 'tanggal_pengajuan', 'tanggal_mulai',
+            'tanggal_selesai', 'lama_cuti', 'alasan'
         ]));
-        return redirect()->route('cuti_requests.index')->with('success','Permintaan cuti dibuat');
+        return redirect()->route('cuti_requests.index')->with('success', 'Permintaan cuti dibuat');
     }
 
     public function cutiRequestsShow($id)
@@ -185,13 +186,13 @@ class CrudController extends Controller
             'disetujui_oleh' => $request->disetujui_oleh,
             'tanggal_disetujui' => now()
         ]);
-        return back()->with('success','Status cuti diperbarui');
+        return back()->with('success', 'Status cuti diperbarui');
     }
 
     public function cutiRequestsDestroy($id)
     {
         CutiRequest::destroy($id);
-        return back()->with('success','Permintaan cuti dihapus');
+        return back()->with('success', 'Permintaan cuti dihapus');
     }
 
     // === CUTI LOGS ===
@@ -199,7 +200,7 @@ class CrudController extends Controller
     public function cutiLogsIndex($reqId)
     {
         $logs = CutiLogs::where('cuti_request_id', $reqId)->orderBy('waktu')->get();
-        return view('cuti_logs.index', compact('logs','reqId'));
+        return view('cuti_logs.index', compact('logs', 'reqId'));
     }
 
     public function cutiLogsStore(Request $request, $reqId)
@@ -210,7 +211,7 @@ class CrudController extends Controller
             'oleh_user_id' => $request->oleh_user_id,
             'keterangan' => $request->keterangan
         ]);
-        return back()->with('success','Log cuti ditambahkan');
+        return back()->with('success', 'Log cuti ditambahkan');
     }
 
     // === LAPORAN KERJA ===
@@ -228,8 +229,8 @@ class CrudController extends Controller
 
     public function laporanStore(Request $request)
     {
-        LaporanKerja::create($request->only(['tanggal','nama','divisi','deskripsi']));
-        return redirect()->route('laporan_kerja.index')->with('success','Laporan kerja dibuat');
+        LaporanKerja::create($request->only(['tanggal', 'nama', 'divisi', 'deskripsi']));
+        return redirect()->route('laporan_kerja.index')->with('success', 'Laporan kerja dibuat');
     }
 
     // === NEWS ===
@@ -247,8 +248,8 @@ class CrudController extends Controller
 
     public function newsStore(Request $request)
     {
-        News::create($request->only(['title','date','image_url','description','link']));
-        return redirect()->route('news.index')->with('success','Berita dibuat');
+        News::create($request->only(['title', 'date', 'image_url', 'description', 'link']));
+        return redirect()->route('news.index')->with('success', 'Berita dibuat');
     }
 
     // === PAYROLLS ===
@@ -256,16 +257,16 @@ class CrudController extends Controller
     public function payrollsByUser($userId)
     {
         $list = Payroll::where('user_id', $userId)->get();
-        return view('payrolls.index', compact('list','userId'));
+        return view('payrolls.index', compact('list', 'userId'));
     }
 
     public function payrollsStore(Request $request, $userId)
     {
         Payroll::create(array_merge(
             ['user_id' => $userId],
-            $request->only(['periode','gaji_pokok','tunjangan','potongan','total_gaji'])
+            $request->only(['periode', 'gaji_pokok', 'tunjangan', 'potongan', 'total_gaji'])
         ));
-        return back()->with('success','Payroll ditambahkan');
+        return back()->with('success', 'Payroll ditambahkan');
     }
 
     // === SHIFTS KARYAWAN ===
@@ -273,19 +274,20 @@ class CrudController extends Controller
     public function shiftsByUser($userId)
     {
         $shifts = Shift::where('user_id', $userId)->get();
-        return view('shifts.index', compact('shifts','userId')); 
+        return view('shifts.index', compact('shifts', 'userId'));
     }
 
     public function shiftsStore(Request $request, $userId)
     {
         Shift::create(array_merge(
             ['user_id' => $userId],
-            $request->only(['tanggal','shift'])
+            $request->only(['tanggal', 'shift'])
         ));
-        return back()->with('success','Shift ditambahkan');
+        return back()->with('success', 'Shift ditambahkan');
     }
 
     // === Feedback ===
+
     public function feedbackIndex()
     {
         if (auth()->user()->role !== 'Operator') {
@@ -367,7 +369,7 @@ class CrudController extends Controller
 
         // Set role sebagai Operator
         $data['role'] = 'Operator';
-        
+
         // Hash password
         $data['password'] = Hash::make($request->password);
 
@@ -378,16 +380,27 @@ class CrudController extends Controller
             $data['photo_url'] = '/storage/' . $path;
         }
 
+        // Generate id_karyawan
+        $joined_at = $request->joined_at ?? now();
+        $year = Carbon::parse($joined_at)->format('Y');
+        $prefix = 'nhsa';
+        // Hitung jumlah karyawan yang sudah ada untuk tahun ini
+        $count = User::where('id_karyawan', 'like', $prefix . $year . '%')->count() + 1;
+        // Buat nomor urut dengan format 3 digit (misalnya, 001)
+        $nomorUrut = str_pad($count, 3, '0', STR_PAD_LEFT);
+        // Gabungkan untuk membentuk id_karyawan
+        $data['id_karyawan'] = $prefix . $year . $nomorUrut;
+
         // Buat user baru
         $user = User::create($data);
 
         // Buat entri sisa cuti default untuk user baru
-       SisaCuti::create([
-    'user_id' => $user->id,
-    'total_cuti' => 12,
-    'cuti_terpakai' => 0,
-    'tahun' => now()->year // Menggunakan tahun saat ini, misalnya 2025
-]);
+        SisaCuti::create([
+            'user_id' => $user->id,
+            'total_cuti' => 12,
+            'cuti_terpakai' => 0,
+            'tahun' => now()->year // Menggunakan tahun saat ini, misalnya 2025
+        ]);
 
         return redirect()
             ->route('operator.index')
