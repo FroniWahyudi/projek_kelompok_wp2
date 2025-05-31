@@ -181,7 +181,7 @@
                     <span class="period-badge">{{ $slip->period->formatLocalized('%B %Y') }}</span>
                 </div>
             </div>
-            <div class="mb-4" style="display: flex; gap: 32px;">
+            <div class="mb-4" style="display: flex; gap: 32px; margin-bottom: 20px;">
                 <!-- Informasi Karyawan (Kiri) -->
                 <div style="flex:1; background: linear-gradient(to bottom);">
                     <div class="section-title">Informasi Karyawan</div>
