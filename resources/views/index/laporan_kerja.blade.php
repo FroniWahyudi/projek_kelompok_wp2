@@ -7,6 +7,7 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
     body {
       background-color: #f0f4f8;
@@ -98,19 +99,25 @@
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
+    .print-only {
+      display: none;
+    }
   </style>
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
 <body>
 
 <div class="container py-4">
-  <div class="d-flex align-items-center mb-4">
+  <div class="print-only text-center mb-3">
+    <h2>Receipt - <span id="printKode"></span></h2>
+  </div>
+  <div class="d-flex align-items-center mb-4 d-print-none">
     <a href="{{ route('dashboard') }}" class="me-3 text-dark-blue fs-4">
-      <i class="bi bi-house-door"></i>
+      <i class="bi bi-house-door d-print-none"></i>
     </a>
-    <h2 class="m-0 flex-grow-1 text-dark-blue">Tugas Harian Resi – Naga Hytam</h2>
+    <h2 class="m-0 flex-grow-1 text-dark-blue d-print-none">Tugas Harian Resi – Naga Hytam</h2>
     @if(auth()->user() && auth()->user()->role === 'Admin')
-      <a href="{{ route('resi.buat') }}" class="btn btn-primary">
+      <a href="{{ route('resi.buat') }}" class="btn btn-primary d-print-none">
       <i class="bi bi-plus-lg me-1"></i> Buat Resi
       </a>
     @endif
@@ -119,7 +126,7 @@
   <div class="row gx-4">
     <!-- KIRI -->
     <div class="col-lg-4 mb-4">
-      <div class="dropdown mb-4">
+      <div class="dropdown mb-4 d-print-none">
         <button id="dropdownResiBtn" class="btn btn-outline-secondary dropdown-toggle w-100 text-start" data-bs-toggle="dropdown">
           Pilih resi dari daftar
         </button>
@@ -139,20 +146,25 @@
       </div>
 
       <div class="card">
-        <div class="card-header" style="background: linear-gradient(to right, #e3f2fd, #e1f5fe);">
+        <div class="card-header d-print-none" style="background: linear-gradient(to right, #e3f2fd, #e1f5fe);">
           <h5 class="mb-0 text-dark-blue">Progress Checklist</h5>
         </div>
-        <div class="card-body">
+        <div class="card-body d-print-none">
           <div class="d-flex justify-content-between mb-1">
             <small><span id="doneCount">0</span>/<span id="totalCount">0</span> item selesai</small>
             <small><span id="percentDone">0%</span></small>
           </div>
-          <div class="progress mb-3" style="height:8px;">
+          <div class="progress mb-3 d-print-none" style="height:8px;">
             <div id="progressBar" class="progress-bar bg-primary" role="progressbar" style="width:0%"></div>
           </div>
-          <button id="markAll" class="btn btn-primary w-100">
-            <i class="bi bi-check-circle me-1"></i> Tandai Selesai
-          </button>
+          <div class="d-flex gap-2 d-print-none">
+            <button id="markAll" class="btn btn-primary flex-grow-1">
+              <i class="bi bi-check-circle me-1"></i> Tandai Selesai
+            </button>
+            <button id="printResi" class="btn btn-secondary">
+              <i class="bi bi-printer"></i> Cetak / Save as PDF
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -177,7 +189,7 @@
 </div>
 
 <!-- Modal Overlay -->
-<div id="resultOverlay">
+<div id="resultOverlay" class="d-print-none">
   <div class="box">
     <div class="spinner" id="spinner"></div>
     <div class="checkmark" id="checkmark"></div>
@@ -232,6 +244,7 @@
           ? "badge bg-success"
           : "badge bg-warning text-dark"
       );
+    $("#printKode").text(d.kode);
 
     const tbody = $("#resiTableBody").empty();
 
@@ -291,6 +304,79 @@
     setTimeout(() => $("#resultOverlay").fadeOut(200), delay);
   }
 
+  function downloadPDF() {
+    if (typeof html2pdf === 'undefined') {
+      alert('Pustaka html2pdf gagal dimuat. Pastikan koneksi internet stabil atau coba lagi nanti.');
+      return;
+    }
+
+    const element = document.querySelector('.container');
+
+    if (!element) {
+      alert('Elemen .container tidak ditemukan. Pastikan elemen tersebut ada di halaman.');
+      return;
+    }
+
+    // Cari semua elemen dengan class d-print-none
+    const elementsToHide = document.querySelectorAll('.d-print-none');
+    const originalDisplayStyles = [];
+
+    // Sembunyikan elemen dengan d-print-none
+    elementsToHide.forEach((el, index) => {
+      if (el) {
+        originalDisplayStyles[index] = el.style.display;
+        el.style.display = 'none';
+      } else {
+        originalDisplayStyles[index] = null;
+      }
+    });
+
+    // Tampilkan elemen print-only
+    const printOnlyElements = document.querySelectorAll('.print-only');
+    printOnlyElements.forEach((el) => {
+      if (el) {
+        el.style.display = 'block';
+      }
+    });
+
+    const opt = {
+      margin: [10, 5, 10, 5],
+      filename: `resi-${$("#infoKode").text()}.pdf`,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' },
+      pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+    };
+
+    html2pdf().set(opt).from(element).save().then(() => {
+      // Kembalikan elemen d-print-none ke tampilan semula
+      elementsToHide.forEach((el, index) => {
+        if (el && originalDisplayStyles[index] !== null) {
+          el.style.display = originalDisplayStyles[index] || '';
+        }
+      });
+      // Sembunyikan kembali elemen print-only
+      printOnlyElements.forEach((el) => {
+        if (el) {
+          el.style.display = 'none';
+        }
+      });
+    }).catch(err => {
+      console.error('Gagal membuat PDF:', err);
+      alert('Terjadi kesalahan saat membuat PDF. Silakan coba lagi.');
+      elementsToHide.forEach((el, index) => {
+        if (el && originalDisplayStyles[index] !== null) {
+          el.style.display = originalDisplayStyles[index] || '';
+        }
+      });
+      printOnlyElements.forEach((el) => {
+        if (el) {
+          el.style.display = 'none';
+        }
+      });
+    });
+  }
+
   $(function() {
     buildDropdown();
     const firstKey = Object.keys(resiData)[0];
@@ -319,6 +405,10 @@
         })
         .fail(() => alert("Gagal memperbarui status."));
       }
+    });
+
+    $("#printResi").on("click", function() {
+      downloadPDF();
     });
 
     let itemIndex = 1;
