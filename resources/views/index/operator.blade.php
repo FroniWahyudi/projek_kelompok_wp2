@@ -120,23 +120,28 @@
         }
         .fab {
             position: fixed;
-            bottom: 87px;
+            bottom: 30px;
             right: 30px;
             width: 60px;
             height: 60px;
             border-radius: 50%;
-            background-color: #0d6efd;
+            background: linear-gradient(135deg, #0d6efd, #00c8c8);
+            border: none;
             color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1050;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            z-index: 1050;
-            transition: all 0.3s ease;
-            cursor: pointer;
         }
-        .fab:hover { background-color: #005cbf; transform: scale(1.1); }
-        .fab i { font-size: 1.5rem; }
+        .fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(13, 110, 253, 0.4);
+            background: linear-gradient(135deg, #0b5ed7, #00a8a8);
+        }
+        .fab:active { transform: scale(0.95); }
         .ms-2 { margin-left: 0rem !important; width: 50px; }
         .navbar-nav .nav-link:hover,
         .navbar-nav .nav-link.active { color: #0d6efd !important; }

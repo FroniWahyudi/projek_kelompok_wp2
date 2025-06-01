@@ -127,6 +127,12 @@
 .form-control {
     width: 57%;
 }
+
+.navbar-expand-lg .navbar-collapse {
+  display: flex !important;
+  flex-basis: auto;
+  margin-right: -15px;
+}
     </style>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
@@ -308,24 +314,34 @@
         document.addEventListener('DOMContentLoaded', () => {
             // Delete confirmation
             document.querySelectorAll('.delete-form').forEach(form => {
-                form.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    Swal.fire({
-                        title: 'Apakah Anda yakin?',
-                        text: 'Leader ini akan dihapus permanen!',
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#d33',
-                        cancelButtonColor: '#3085d6',
-                        confirmButtonText: 'Ya, hapus!',
-                        cancelButtonText: 'Batal'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            form.submit();
-                        }
-                    });
-                });
+          form.addEventListener('submit', function(e) {
+              e.preventDefault();
+              Swal.fire({
+            title: 'Apakah Anda yakin?',
+            text: 'Leader ini akan dihapus permanen!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal'
+              }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();
+            }
+              });
+          });
             });
+
+            // Auto-hide alert after 2 seconds
+            setTimeout(() => {
+          document.querySelectorAll('.alert').forEach(alert => {
+              // Bootstrap 5: fade out and remove
+              alert.classList.remove('show');
+              alert.classList.add('hide');
+              setTimeout(() => alert.remove(), 500);
+          });
+            }, 2500);
         });
     </script>
 </body>
