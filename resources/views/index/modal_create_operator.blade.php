@@ -65,14 +65,14 @@
 
 <div class="modal-content">
     <div class="modal-header">
-        <h5 class="modal-title">Tambah Operator Baru</h5>
+        <h5 class="modal-title">Tambah Pengguna Baru</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
     </div>
 
-    <form id="formCreateOperator" method="POST" action="{{ route('operator.store') }}" enctype="multipart/form-data">
+    <form id="formCreateUser" method="POST" action="{{ route('users.store') }}" enctype="multipart/form-data">
         @csrf
 
-        <!-- PHOTO UPLOAD - Fixed dengan class selector -->
+        <!-- PHOTO UPLOAD -->
         <div class="photo-upload-create">
             <label class="form-label">Photo <span class="text-danger">*</span></label>
             <div class="preview-wrapper-create text-center">
@@ -80,7 +80,7 @@
             </div>
             <input type="file" name="photo" class="form-control form-control-sm photo-input-create @error('photo') is-invalid @enderror" accept="image/*" required>
             @error('photo')
-            <div class="text-danger">{{ $message }}</div>
+                <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
 
@@ -117,7 +117,20 @@
                 @enderror
             </div>
 
-            <input type="hidden" name="role" value="Operator">
+            <!-- ROLE SELECTION -->
+            <div class="mb-3">
+                <label class="form-label">Role <span class="text-danger">*</span></label>
+                <select name="role" class="form-control role-select @error('role') is-invalid @enderror" required>
+                    <option value="">-- Pilih Role --</option>
+                    <option value="Admin" {{ old('role') == 'Admin' ? 'selected' : '' }}>Admin</option>
+                    <option value="Manager" {{ old('role') == 'Manager' ? 'selected' : '' }}>Manager</option>
+                    <option value="Leader" {{ old('role') == 'Leader' ? 'selected' : '' }}>Leader</option>
+                    <option value="Operator" {{ old('role') == 'Operator' ? 'selected' : '' }}>Operator</option>
+                </select>
+                @error('role')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
 
             <div class="mb-3">
                 <label class="form-label">Password</label>
@@ -153,7 +166,13 @@
 
             <div class="mb-3">
                 <label class="form-label">Joined At</label>
-                <input type="date" name="joined_at" class="form-control @error('joined_at') is-invalid @enderror" value="{{ old('joined_at') }}" required>
+                <input 
+                    type="date" 
+                    name="joined_at" 
+                    class="form-control @error('joined_at') is-invalid @enderror" 
+                    value="{{ old('joined_at', \Carbon\Carbon::now()->format('Y-m-d')) }}" 
+                    required
+                >
                 @error('joined_at')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -169,18 +188,23 @@
 
             <div class="mb-3">
                 <label class="form-label">Department</label>
-                <select name="department" class="form-control @error('department') is-invalid @enderror" readonly disabled>
-                    <option value="Gudang" selected>Gudang</option>
+                <select name="department" class="form-control @error('department') is-invalid @enderror" required>
+                    <option value="">-- Pilih Department --</option>
+                    <option value="Gudang" {{ old('department') == 'Gudang' ? 'selected' : '' }}>Gudang</option>
+                    <option value="Operasional" {{ old('department') == 'Operasional' ? 'selected' : '' }}>Operasional</option>
                 </select>
-                <input type="hidden" name="department" value="Gudang">
                 @error('department')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
 
+            <!-- LEVEL FIELD - DINAMIS BERDASARKAN ROLE -->
             <div class="mb-3">
                 <label class="form-label">Level</label>
-                <input type="text" name="level" class="form-control @error('level') is-invalid @enderror" value="junior" readonly>
+                <select name="level" class="form-control level-select @error('level') is-invalid @enderror" required>
+                    <option value="">-- Pilih Level --</option>
+                    <!-- Options akan diisi dinamis berdasarkan role -->
+                </select>
                 @error('level')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -232,11 +256,10 @@
 </div>
 
 <script>
-    // ===== FIXED: Menggunakan Event Delegation untuk mengatasi masalah ID tidak unik =====
+    // Menggunakan Event Delegation untuk mengatasi masalah ID tidak unik
     
-    // Photo Preview Handler - Menggunakan event delegation
+    // Photo Preview Handler
     document.addEventListener('change', function(e) {
-        // Cek apakah yang di-click adalah input photo untuk create modal
         if (e.target.matches('.photo-input-create')) {
             console.log('Photo input changed in create modal');
             
@@ -252,7 +275,6 @@
                 return;
             }
             
-            // Cari preview image dalam modal yang sama
             const modal = e.target.closest('.modal-content');
             const previewImg = modal.querySelector('.photo-preview-create');
             
@@ -271,9 +293,55 @@
             };
             reader.readAsDataURL(file);
         }
+
+        // ROLE CHANGE HANDLER
+        if (e.target.matches('.role-select')) {
+            const modal = e.target.closest('.modal-content');
+            const levelSelect = modal.querySelector('.level-select');
+            const selectedRole = e.target.value;
+            
+            console.log('Role changed to:', selectedRole);
+            
+            // Clear existing options
+            levelSelect.innerHTML = '<option value="">-- Pilih Level --</option>';
+            
+            // Add options based on role
+            if (selectedRole === 'Admin') {
+                levelSelect.innerHTML += `
+                    <option value="super_admin">Super Admin</option>
+                    <option value="admin">Admin</option>
+                `;
+            } else if (selectedRole === 'Manager') {
+                levelSelect.innerHTML += `
+                    <option value="senior_manager">Senior Manager</option>
+                    <option value="manager">Manager</option>
+                `;
+            } else if (selectedRole === 'Leader') {
+                levelSelect.innerHTML += `
+                    <option value="senior">Senior</option>
+                    <option value="lead">Lead</option>
+                    <option value="supervisor">Supervisor</option>
+                `;
+            } else if (selectedRole === 'Operator') {
+                levelSelect.innerHTML += `
+                    <option value="junior">Junior</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="senior">Senior</option>
+                `;
+            }
+            
+            // Set old value if exists
+            const oldLevel = '{{ old("level") }}';
+            if (oldLevel) {
+                const option = levelSelect.querySelector(`option[value="${oldLevel}"]`);
+                if (option) {
+                    option.selected = true;
+                }
+            }
+        }
     });
 
-    // Email Handler - Menggunakan event delegation
+    // Email Handler
     document.addEventListener('input', function(e) {
         if (e.target.matches('.email-prefix-input')) {
             const modal = e.target.closest('.modal-content');
@@ -287,12 +355,14 @@
         }
     });
 
-    // Form Submit Handler - Menggunakan event delegation
+    // Form Submit Handler
     document.addEventListener('submit', function(e) {
-        if (e.target.matches('#formCreateOperator')) {
+        if (e.target.matches('#formCreateUser')) {
             const modal = e.target.closest('.modal-content');
             const prefixInput = modal.querySelector('.email-prefix-input');
             const fullInput = modal.querySelector('.email-full-input');
+            const roleSelect = modal.querySelector('.role-select');
+            const levelSelect = modal.querySelector('.level-select');
             
             // Validasi email prefix
             if (!prefixInput.value.trim()) {
@@ -310,24 +380,65 @@
                 return false;
             }
             
-            console.log('Form submitted with email:', fullInput.value);
+            // Validasi role
+            if (!roleSelect.value) {
+                e.preventDefault();
+                alert('Role is required.');
+                roleSelect.classList.add('is-invalid');
+                roleSelect.focus();
+                return false;
+            }
+            
+            // Validasi level
+            if (!levelSelect.value) {
+                e.preventDefault();
+                alert('Level is required.');
+                levelSelect.classList.add('is-invalid');
+                levelSelect.focus();
+                return false;
+            }
+            
+            console.log('Form submitted with:', {
+                email: fullInput.value,
+                role: roleSelect.value,
+                level: levelSelect.value
+            });
         }
     });
 
-    // Initialization ketika modal dibuka (optional - untuk debugging)
+    // Initialization ketika modal dibuka
     $(document).on('shown.bs.modal', '.modal', function() {
         console.log('Modal opened, initializing...');
         
-        // Update email field jika ada value lama
         const modal = this;
         const prefixInput = modal.querySelector('.email-prefix-input');
         const fullInput = modal.querySelector('.email-full-input');
+        const roleSelect = modal.querySelector('.role-select');
+        const levelSelect = modal.querySelector('.level-select');
         
+        // Update email field jika ada value lama
         if (prefixInput && fullInput && prefixInput.value) {
             const domain = '@nagahytam.co.id';
             fullInput.value = prefixInput.value + domain;
             console.log('Initialized email:', fullInput.value);
         }
+        
+        // Initialize level options based on role
+        if (roleSelect && levelSelect && roleSelect.value) {
+            const changeEvent = new Event('change', { bubbles: true });
+            roleSelect.dispatchEvent(changeEvent);
+        }
+    });
+
+    // Initialize level options on page load if old values exist
+    document.addEventListener('DOMContentLoaded', function() {
+        const roleSelects = document.querySelectorAll('.role-select');
+        roleSelects.forEach(function(roleSelect) {
+            if (roleSelect.value) {
+                const changeEvent = new Event('change', { bubbles: true });
+                roleSelect.dispatchEvent(changeEvent);
+            }
+        });
     });
 
     // Debug function - untuk testing (hapus di production)
@@ -337,6 +448,8 @@
         console.log('Photo previews found:', document.querySelectorAll('.photo-preview-create').length);
         console.log('Email prefix inputs found:', document.querySelectorAll('.email-prefix-input').length);
         console.log('Email full inputs found:', document.querySelectorAll('.email-full-input').length);
+        console.log('Role selects found:', document.querySelectorAll('.role-select').length);
+        console.log('Level selects found:', document.querySelectorAll('.level-select').length);
     }
     
     // Uncomment untuk debugging

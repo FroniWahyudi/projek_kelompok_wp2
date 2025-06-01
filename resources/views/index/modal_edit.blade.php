@@ -86,21 +86,21 @@
     .email-username {
         flex: 1;
     }
+
     .input-group {
-    display: flex
-;
-    align-items: center;
-    width: 57%;
-}
+        display: flex;
+        align-items: center;
+        width: 57%;
+    }
 </style>
 
 <div class="modal-content">
     <div class="modal-header">
-        <h5 class="modal-title">Edit User: {{ $user['name'] }}</h5>
+        <h5 class="modal-title">Edit User: {{ $user->name }}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
     </div>
 
-    <form id="formEditUser{{ $user['id'] }}" method="POST" action="{{ route('operator.update', $user['id']) }}" enctype="multipart/form-data">
+    <form id="formEditUser{{ $user->id }}" method="POST" action="{{ route('operator.update', $user->id) }}" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -108,18 +108,19 @@
         <div class="photo-upload-edit">
             <label class="form-label">Photo</label>
             <div class="preview-wrapper-edit text-center">
-                <img id="photoPreviewEdit{{ $user['id'] }}" class="photo-preview-edit" src="{{ $user['photo_url'] ?? asset('images/default-user.png') }}" alt="Preview Foto">
+                <img id="photoPreviewEdit{{ $user->id }}" class="photo-preview-edit" src="{{ $user->photo_url ? $user->photo_url : asset('images/default-user.png') }}" alt="Preview Foto">
             </div>
-            <input type="file" name="photo" class="form-control form-control-sm photo-input-edit" data-user-id="{{ $user['id'] }}" accept="image/*">
+            <input type="file" name="photo" class="form-control form-control-sm photo-input-edit @error('photo') is-invalid @enderror" data-user-id="{{ $user->id }}" accept="image/*">
+            @error('photo')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
         </div>
 
         <!-- FORM UTAMA -->
         <div class="modal-body position-relative" style="max-height:70vh; overflow-y:auto; padding-right: 10px;">
-            <input type="hidden" name="id" value="{{ $user['id'] }}">
-
             <div class="mb-3">
                 <label class="form-label">Nama</label>
-                <input type="text" name="name" class="form-control" value="{{ old('name', $user['name']) }}" required>
+                <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name', $user->name) }}" required>
                 @error('name')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -131,17 +132,17 @@
                     <input 
                         type="text" 
                         name="email_username" 
-                        class="form-control email-username" 
-                        value="{{ old('email_username', explode('@', $user['email'])[0] ?? '') }}" 
+                        class="form-control email-username @error('email') is-invalid @enderror @error('email_username') is-invalid @enderror" 
+                        value="{{ old('email_username', explode('@', $user->email)[0]) }}" 
                         placeholder="username"
                         pattern="[a-zA-Z0-9._-]+"
                         title="Hanya boleh menggunakan huruf, angka, titik, underscore, dan dash"
                         required
-                        id="emailUsername{{ $user['id'] }}"
+                        id="emailUsername{{ $user->id }}"
                     >
                     <span class="input-group-text">@nagahytam.co.id</span>
                 </div>
-                <input type="hidden" name="email" id="fullEmail{{ $user['id'] }}" value="{{ old('email', $user['email']) }}">
+                <input type="hidden" name="email" id="fullEmail{{ $user->id }}" value="{{ old('email', $user->email) }}">
                 <small class="form-text text-muted">Hanya username yang dapat diubah, domain tetap @nagahytam.co.id</small>
                 @error('email')
                     <div class="text-danger">{{ $message }}</div>
@@ -152,16 +153,8 @@
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Role</label>
-                <input type="text" name="role" class="form-control" value="{{ old('role', $user['role']) }}">
-                @error('role')
-                    <div class="text-danger">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Password (kosongkan jika tidak mau diubah)</label>
-                <input type="password" name="password" class="form-control" placeholder="••••••••">
+                <label class="form-label">Password (kosongkan jika tidak diubah)</label>
+                <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="••••••••">
                 @error('password')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -169,7 +162,7 @@
 
             <div class="mb-3">
                 <label class="form-label">Phone</label>
-                <input type="text" name="phone" class="form-control" value="{{ old('phone', $user['phone'] ?? '') }}">
+                <input type="text" name="phone" class="form-control @error('phone') is-invalid @enderror" value="{{ old('phone', $user->phone ?? '') }}">
                 @error('phone')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -177,7 +170,7 @@
 
             <div class="mb-3">
                 <label class="form-label">Bio</label>
-                <textarea name="bio" class="form-control" rows="3">{{ old('bio', $user['bio'] ?? '') }}</textarea>
+                <textarea name="bio" class="form-control @error('bio') is-invalid @enderror" rows="3">{{ old('bio', $user->bio ?? '') }}</textarea>
                 @error('bio')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -185,7 +178,7 @@
 
             <div class="mb-3">
                 <label class="form-label">Alamat</label>
-                <input type="text" name="alamat" class="form-control" value="{{ old('alamat', $user['alamat'] ?? '') }}">
+                <input type="text" name="alamat" class="form-control @error('alamat') is-invalid @enderror" value="{{ old('alamat', $user->alamat ?? '') }}">
                 @error('alamat')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -193,7 +186,7 @@
 
             <div class="mb-3">
                 <label class="form-label">Joined At</label>
-                <input type="date" name="joined_at" class="form-control" value="{{ old('joined_at', $user['joined_at'] ?? '') }}">
+                <input type="date" name="joined_at" class="form-control @error('joined_at') is-invalid @enderror" value="{{ old('joined_at', $user->joined_at ? \Carbon\Carbon::parse($user->joined_at)->format('Y-m-d') : '') }}">
                 @error('joined_at')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -201,7 +194,7 @@
 
             <div class="mb-3">
                 <label class="form-label">Education</label>
-                <input type="text" name="education" class="form-control" value="{{ old('education', $user['education'] ?? '') }}">
+                <input type="text" name="education" class="form-control @error('education') is-invalid @enderror" value="{{ old('education', $user->education ?? '') }}">
                 @error('education')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -209,7 +202,7 @@
 
             <div class="mb-3">
                 <label class="form-label">Department</label>
-                <input type="text" name="department" class="form-control" value="{{ old('department', $user['department'] ?? '') }}">
+                <input type="text" name="department" class="form-control @error('department') is-invalid @enderror" value="{{ old('department', $user->department ?? '') }}">
                 @error('department')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -217,15 +210,23 @@
 
             <div class="mb-3">
                 <label class="form-label">Level</label>
-                <input type="text" name="level" class="form-control" value="{{ old('level', $user['level'] ?? '') }}">
+                <input type="text" name="level" class="form-control @error('level') is-invalid @enderror" value="{{ old('level', $user->level ?? '') }}">
                 @error('level')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
 
             <div class="mb-3">
+                <label class="form-label">Divisi</label>
+                <input type="text" name="divisi" class="form-control @error('divisi') is-invalid @enderror" value="{{ old('divisi', $user->divisi ?? '') }}">
+                @error('divisi')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="mb-3">
                 <label class="form-label">Job Descriptions</label>
-                <textarea name="job_descriptions" class="form-control" rows="2">{{ old('job_descriptions', $user['job_descriptions'] ?? '') }}</textarea>
+                <textarea name="job_descriptions" class="form-control @error('job_descriptions') is-invalid @enderror" rows="2">{{ old('job_descriptions', $user->job_descriptions ?? '') }}</textarea>
                 @error('job_descriptions')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -233,7 +234,7 @@
 
             <div class="mb-3">
                 <label class="form-label">Skills</label>
-                <input type="text" name="skills" class="form-control" value="{{ old('skills', $user['skills'] ?? '') }}">
+                <input type="text" name="skills" class="form-control @error('skills') is-invalid @enderror" value="{{ old('skills', $user->skills ?? '') }}">
                 @error('skills')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -241,16 +242,8 @@
 
             <div class="mb-3">
                 <label class="form-label">Achievements</label>
-                <textarea name="achievements" class="form-control" rows="2">{{ old('achievements', $user['achievements'] ?? '') }}</textarea>
+                <textarea name="achievements" class="form-control @error('achievements') is-invalid @enderror" rows="2">{{ old('achievements', $user->achievements ?? '') }}</textarea>
                 @error('achievements')
-                    <div class="text-danger">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Divisi</label>
-                <textarea name="divisi" class="form-control" rows="2">{{ old('divisi', $user['divisi'] ?? '') }}</textarea>
-                @error('divisi')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
@@ -267,7 +260,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Setup photo preview untuk semua modal edit
     function setupAllPhotoPreview() {
-        // Ambil semua input file dengan class photo-input-edit
         const fileInputs = document.querySelectorAll('.photo-input-edit');
         
         fileInputs.forEach(function(fileInput) {
@@ -279,17 +271,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
-            // Hapus event listener lama jika ada
             fileInput.removeEventListener('change', handleFileChange);
-            
-            // Tambah event listener baru
             fileInput.addEventListener('change', function() {
                 handleFileChange(this, previewImg, userId);
             });
         });
     }
     
-    // Function untuk handle perubahan file
     function handleFileChange(fileInput, previewImg, userId) {
         const file = fileInput.files[0];
         
@@ -301,7 +289,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!file.type.startsWith('image/')) {
             console.error('File yang dipilih bukan gambar untuk user ID:', userId);
             alert('Mohon pilih file gambar yang valid!');
-            fileInput.value = ''; // Reset input
+            fileInput.value = '';
             return;
         }
 
@@ -317,7 +305,6 @@ document.addEventListener('DOMContentLoaded', function() {
         reader.readAsDataURL(file);
     }
 
-    // Setup email username handler untuk semua modal edit
     function setupEmailUsernameHandler() {
         const emailInputs = document.querySelectorAll('input[name="email_username"]');
         
@@ -330,18 +317,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
-            // Update full email saat username berubah
             emailInput.addEventListener('input', function() {
                 const username = this.value.trim();
-                // Validasi karakter username
                 const validPattern = /^[a-zA-Z0-9._-]*$/;
                 
                 if (!validPattern.test(username)) {
-                    // Hapus karakter yang tidak valid
                     this.value = username.replace(/[^a-zA-Z0-9._-]/g, '');
                 }
                 
-                // Update full email
                 const cleanUsername = this.value.trim();
                 if (cleanUsername) {
                     fullEmailInput.value = cleanUsername + '@nagahytam.co.id';
@@ -350,7 +333,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
             
-            // Set initial full email value
             const initialUsername = emailInput.value.trim();
             if (initialUsername) {
                 fullEmailInput.value = initialUsername + '@nagahytam.co.id';
@@ -358,7 +340,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Setup form submission handler
     function setupFormSubmissionHandler() {
         const forms = document.querySelectorAll('form[id^="formEditUser"]');
         
@@ -370,7 +351,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (emailUsernameInput && fullEmailInput) {
                     const username = emailUsernameInput.value.trim();
                     
-                    // Validasi username tidak boleh kosong
                     if (!username) {
                         e.preventDefault();
                         alert('Username email tidak boleh kosong!');
@@ -378,7 +358,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         return false;
                     }
                     
-                    // Validasi format username
                     const validPattern = /^[a-zA-Z0-9._-]+$/;
                     if (!validPattern.test(username)) {
                         e.preventDefault();
@@ -387,19 +366,16 @@ document.addEventListener('DOMContentLoaded', function() {
                         return false;
                     }
                     
-                    // Update full email sebelum submit
                     fullEmailInput.value = username + '@nagahytam.co.id';
                 }
             });
         });
     }
 
-    // Jalankan semua setup saat DOM dimuat
     setupAllPhotoPreview();
     setupEmailUsernameHandler();
     setupFormSubmissionHandler();
 
-    // Setup ulang ketika modal ditampilkan (untuk modal yang dimuat dinamis)
     document.addEventListener('shown.bs.modal', function(e) {
         if (e.target.id && e.target.id.includes('editModal')) {
             console.log('Modal edit ditampilkan, setup ulang semua handler');
@@ -407,7 +383,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 setupAllPhotoPreview();
                 setupEmailUsernameHandler();
                 setupFormSubmissionHandler();
-            }, 100); // Delay sedikit untuk memastikan DOM sudah siap
+            }, 100);
         }
     });
 });

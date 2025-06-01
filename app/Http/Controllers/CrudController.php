@@ -18,44 +18,117 @@ use Illuminate\Support\Facades\Storage;
 
 class CrudController extends Controller
 {
-    // === OPERATOR (Users) ===
+    // === USERS BY ROLE (CRUD for all roles) ===
 
-    public function usersIndex(Request $request)
+    // Method untuk menampilkan users berdasarkan role
+    public function usersByRole(Request $request, $role)
     {
         $search = $request->get('search');
+        $validRoles = ['Admin', 'Manager', 'Leader', 'Operator'];
+        
+        if (!in_array($role, $validRoles)) {
+            abort(404, 'Role not found');
+        }
 
-        $users = User::where('role', 'Operator')
+        $users = User::where('role', $role)
             ->when($search, fn($q) =>
                 $q->where(function ($q2) use ($search) {
                     $q2->where('name', 'like', "%{$search}%")
-                        ->orWhere('divisi', 'like', "%{$search}%");
+                        ->orWhere('divisi', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
                 })
             )
             ->orderBy('name')
             ->get();
 
+        // Untuk AJAX request
         if ($request->ajax()) {
-            return view('operator', ['Operator' => $users])->render();
+            $viewName = strtolower($role);
+            return view($viewName, ['users' => $users])->render();
         }
 
-        return view('index.operator', ['Operator' => $users]);
+        // Return view berdasarkan role
+        $viewName = 'index.' . strtolower($role);
+        return view($viewName, ['users' => $users]);
     }
 
+    // Method khusus untuk backward compatibility
+    public function usersIndex(Request $request)
+    {
+        return $this->usersByRole($request, 'Operator');
+    }
+
+    public function managerIndex(Request $request)
+    {
+        return $this->usersByRole($request, 'Manager');
+    }
+
+    public function leaderIndex(Request $request)
+    {
+        return $this->usersByRole($request, 'Leader');
+    }
+
+    public function adminIndex(Request $request)
+    {
+        return $this->usersByRole($request, 'Admin');
+    }
+
+    // === GENERAL EDIT METHODS ===
+
+    // Method general untuk edit user berdasarkan role
+    public function editUser($role, $id)
+    {
+        $validRoles = ['Admin', 'Manager', 'Leader', 'Operator'];
+        
+        if (!in_array($role, $validRoles)) {
+            abort(404, 'Role not found');
+        }
+
+        $user = User::where('role', $role)->findOrFail($id);
+        
+        // Return view berdasarkan role
+        $viewName = 'index.modal_edit_' . strtolower($role);
+        return view($viewName, compact('user'));
+    }
+
+    // Method specific untuk backward compatibility
     public function usersEdit($id)
     {
-        $user = User::findOrFail($id);
-        return view('index.modal_edit', compact('user'));
+        return $this->editUser('Operator', $id);
     }
 
-    public function usersUpdate(Request $request, $id)
+    public function leaderEdit($id)
     {
-        $user = User::findOrFail($id);
+        return $this->editUser('Leader', $id);
+    }
+
+    public function managerEdit($id)
+    {
+        return $this->editUser('Manager', $id);
+    }
+
+    public function adminEdit($id)
+    {
+        return $this->editUser('Admin', $id);
+    }
+
+    // === GENERAL UPDATE METHODS ===
+
+    // Method general untuk update user berdasarkan role
+    public function updateUser(Request $request, $role, $id)
+    {
+        $validRoles = ['Admin', 'Manager', 'Leader', 'Operator'];
+        
+        if (!in_array($role, $validRoles)) {
+            abort(404, 'Role not found');
+        }
+
+        $user = User::where('role', $role)->findOrFail($id);
 
         // Validasi input
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'nullable|email|max:255|unique:users,email,' . $id,
-            'role' => 'nullable|string|max:255',
             'password' => 'nullable|string|min:8',
             'phone' => 'nullable|string|max:20',
             'bio' => 'nullable|string',
@@ -69,13 +142,12 @@ class CrudController extends Controller
             'achievements' => 'nullable|string',
             'divisi' => 'nullable|string',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'email_username' => 'nullable|string|regex:/^[a-zA-Z0-9._-]+$/',
         ]);
 
         // Ambil hanya field yang diizinkan
         $data = $request->only([
             'name',
-            'email',
-            'role',
             'phone',
             'bio',
             'alamat',
@@ -89,7 +161,17 @@ class CrudController extends Controller
             'divisi',
         ]);
 
-        // Jika ada file 'photo', simpan di storage dan set ke data
+        // Handle email dari username
+        if ($request->filled('email_username')) {
+            $data['email'] = $request->email_username . '@nagahytam.co.id';
+        } elseif ($request->filled('email')) {
+            $data['email'] = $request->email;
+        }
+
+        // Role tetap sesuai dengan parameter (tidak bisa diubah melalui method ini)
+        $data['role'] = $role;
+
+        // Handle upload foto
         if ($request->hasFile('photo')) {
             // Hapus foto lama jika ada
             if ($user->photo_url) {
@@ -100,26 +182,59 @@ class CrudController extends Controller
             $data['photo_url'] = '/storage/' . $path;
         }
 
-        // Jika password diisi, hash dan masukkan ke data
+        // Hash password jika diisi
         if ($request->filled('password')) {
             $data['password'] = Hash::make($request->password);
         }
 
-        // Update model dengan data
+        // Update user
         $user->update($data);
 
+        // Redirect berdasarkan role
+        $redirectRoute = $this->getRedirectRoute($role);
+        
         return redirect()
-            ->route('operator.index')
-            ->with('success', 'Data berhasil diperbarui.');
+            ->route($redirectRoute)
+            ->with('success', "Data {$role} berhasil diperbarui.");
     }
 
-    public function usersDestroy($id)
+    // Method specific untuk backward compatibility
+    public function usersUpdate(Request $request, $id)
     {
-        $user = User::findOrFail($id);
+        return $this->updateUser($request, 'Operator', $id);
+    }
 
-        // Pastikan user yang dihapus adalah Operator
-        if ($user->role !== 'Operator') {
-            return back()->with('error', 'Hanya operator yang dapat dihapus.');
+    public function leaderUpdate(Request $request, $id)
+    {
+        return $this->updateUser($request, 'Leader', $id);
+    }
+
+    public function managerUpdate(Request $request, $id)
+    {
+        return $this->updateUser($request, 'Manager', $id);
+    }
+
+    public function adminUpdate(Request $request, $id)
+    {
+        return $this->updateUser($request, 'Admin', $id);
+    }
+
+    // === GENERAL DELETE METHODS ===
+
+    // Method general untuk delete user berdasarkan role
+    public function destroyUser($role, $id)
+    {
+        $validRoles = ['Admin', 'Manager', 'Leader', 'Operator'];
+        
+        if (!in_array($role, $validRoles)) {
+            abort(404, 'Role not found');
+        }
+
+        $user = User::where('role', $role)->findOrFail($id);
+
+        // Cegah hapus Admin terakhir
+        if ($role === 'Admin' && User::where('role', 'Admin')->count() <= 1) {
+            return back()->with('error', 'Tidak dapat menghapus Admin terakhir.');
         }
 
         // Hapus foto jika ada
@@ -127,12 +242,216 @@ class CrudController extends Controller
             Storage::delete(str_replace('/storage/', 'public/', $user->photo_url));
         }
 
-        // Hapus user dari tabel users
+        // Hapus user
         $user->delete();
 
+        // Redirect berdasarkan role
+        $redirectRoute = $this->getRedirectRoute($role);
+
         return redirect()
-            ->route('operator.index')
-            ->with('success', 'Operator berhasil dihapus.');
+            ->route($redirectRoute)
+            ->with('success', "{$role} berhasil dihapus.");
+    }
+
+    // Method specific untuk backward compatibility
+    public function usersDestroy($id)
+    {
+        return $this->destroyUser('Operator', $id);
+    }
+
+    public function leaderDestroy($id)
+    {
+        return $this->destroyUser('Leader', $id);
+    }
+
+    public function managerDestroy($id)
+    {
+        return $this->destroyUser('Manager', $id);
+    }
+
+    public function adminDestroy($id)
+    {
+        return $this->destroyUser('Admin', $id);
+    }
+
+    // === CREATE USER METHODS ===
+
+    // Method untuk create user dengan role tertentu
+    public function createUser(Request $request, $role = null)
+    {
+        // Jika role tidak diberikan sebagai parameter, ambil dari request
+        if (!$role) {
+            $role = $request->input('role', 'Operator');
+        }
+
+        $validRoles = ['Admin', 'Manager', 'Leader', 'Operator'];
+        
+        if (!in_array($role, $validRoles)) {
+            return back()->withErrors(['role' => 'Role tidak valid.']);
+        }
+
+        // Validasi input
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email',
+            'password' => 'required|string|min:8',
+            'phone' => 'nullable|string|max:20',
+            'bio' => 'nullable|string',
+            'alamat' => 'nullable|string|max:255',
+            'joined_at' => 'nullable|date',
+            'education' => 'nullable|string|max:255',
+            'department' => 'nullable|string|max:255',
+            'level' => 'nullable|string|max:255',
+            'job_descriptions' => 'nullable|string',
+            'skills' => 'nullable|string|max:255',
+            'achievements' => 'nullable|string',
+            'divisi' => 'nullable|string',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'email_username' => 'nullable|string|regex:/^[a-zA-Z0-9._-]+$/',
+        ]);
+
+        // Siapkan data untuk dibuat
+        $data = $request->only([
+            'name',
+            'phone',
+            'bio',
+            'alamat',
+            'joined_at',
+            'education',
+            'department',
+            'level',
+            'job_descriptions',
+            'skills',
+            'achievements',
+            'divisi',
+        ]);
+
+        // Handle email dari username
+        if ($request->filled('email_username')) {
+            $data['email'] = $request->email_username . '@nagahytam.co.id';
+        } else {
+            $data['email'] = $request->email;
+        }
+
+        // Set role
+        $data['role'] = $role;
+
+        // Hash password
+        $data['password'] = Hash::make($request->password);
+
+        // Handle upload foto jika ada
+        if ($request->hasFile('photo')) {
+            $file = $request->file('photo');
+            $path = $file->store('photos', 'public');
+            $data['photo_url'] = '/storage/' . $path;
+        }
+
+        // Generate id_karyawan
+        $joined_at = $request->joined_at ?? now();
+        $year = Carbon::parse($joined_at)->format('Y');
+        $prefix = 'nhsa';
+        $count = User::where('id_karyawan', 'like', $prefix . $year . '%')->count() + 1;
+        $nomorUrut = str_pad($count, 3, '0', STR_PAD_LEFT);
+        $data['id_karyawan'] = $prefix . $year . $nomorUrut;
+
+        // Buat user baru
+        $user = User::create($data);
+
+        // Buat entri sisa cuti default untuk user baru (khusus untuk role yang memerlukan cuti)
+        if (in_array($user->role, ['Manager', 'Leader', 'Operator'])) {
+            SisaCuti::create([
+                'user_id' => $user->id,
+                'total_cuti' => 12,
+                'cuti_terpakai' => 0,
+                'tahun' => now()->year
+            ]);
+        }
+
+        // Redirect berdasarkan role
+        $redirectRoute = $this->getRedirectRoute($user->role);
+
+        return redirect()
+            ->route($redirectRoute)
+            ->with('success', "{$user->role} baru berhasil ditambahkan.");
+    }
+
+    // Method khusus untuk create dengan role spesifik
+    public function createAdmin(Request $request)
+    {
+        return $this->createUser($request, 'Admin');
+    }
+
+    public function createManager(Request $request)
+    {
+        return $this->createUser($request, 'Manager');
+    }
+
+    public function createLeader(Request $request)
+    {
+        return $this->createUser($request, 'Leader');
+    }
+
+    public function createOperator(Request $request)
+    {
+        return $this->createUser($request, 'Operator');
+    }
+
+    // Method khusus untuk create operator (backward compatibility)
+    public function createOperatorBaru(Request $request)
+    {
+        return $this->createOperator($request);
+    }
+
+    // Method untuk show form create berdasarkan role
+    public function showCreateForm($role = 'Operator')
+    {
+        $validRoles = ['Admin', 'Manager', 'Leader', 'Operator'];
+        
+        if (!in_array($role, $validRoles)) {
+            abort(404, 'Role not found');
+        }
+
+        return view('index.modal_create_user', compact('role'));
+    }
+
+    // === HELPER METHODS ===
+
+    // Helper method untuk mendapatkan route redirect berdasarkan role
+    private function getRedirectRoute($role)
+    {
+        return match($role) {
+            'Admin' => 'admin.index',
+            'Manager' => 'manager.index',
+            'Leader' => 'leader.index',
+            'Operator' => 'operator.index',
+            default => 'dashboard'
+        };
+    }
+
+    // Method untuk mendapatkan semua users (untuk keperluan admin)
+    public function getAllUsers(Request $request)
+    {
+        $search = $request->get('search');
+        $role_filter = $request->get('role');
+
+        $query = User::query();
+
+        if ($role_filter && $role_filter !== 'all') {
+            $query->where('role', $role_filter);
+        }
+
+        $users = $query->when($search, fn($q) =>
+                $q->where(function ($q2) use ($search) {
+                    $q2->where('name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%")
+                        ->orWhere('divisi', 'like', "%{$search}%");
+                })
+            )
+            ->orderBy('role')
+            ->orderBy('name')
+            ->get();
+
+        return view('index.all_users', compact('users', 'role_filter'));
     }
 
     // === SISA CUTI ===
@@ -322,88 +641,5 @@ class CrudController extends Controller
         ]);
 
         return redirect()->route('feedback.index')->with('success', 'Feedback berhasil dikirim.');
-    }
-
-    public function showCreateOperatorForm()
-    {
-        return view('index.modal_create_operator');
-    }
-
-    public function createOperatorBaru(Request $request)
-    {
-        // Validasi input
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users,email',
-            'password' => 'required|string|min:8',
-            'phone' => 'nullable|string|max:20',
-            'bio' => 'nullable|string',
-            'alamat' => 'nullable|string|max:255',
-            'joined_at' => 'nullable|date',
-            'education' => 'nullable|string|max:255',
-            'department' => 'nullable|string|max:255',
-            'level' => 'nullable|string|max:255',
-            'job_descriptions' => 'nullable|string',
-            'skills' => 'nullable|string|max:255',
-            'achievements' => 'nullable|string',
-            'divisi' => 'nullable|string',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
-
-        // Siapkan data untuk dibuat
-        $data = $request->only([
-            'name',
-            'email',
-            'phone',
-            'bio',
-            'alamat',
-            'joined_at',
-            'education',
-            'department',
-            'level',
-            'job_descriptions',
-            'skills',
-            'achievements',
-            'divisi',
-        ]);
-
-        // Set role sebagai Operator
-        $data['role'] = 'Operator';
-
-        // Hash password
-        $data['password'] = Hash::make($request->password);
-
-        // Handle upload foto jika ada
-        if ($request->hasFile('photo')) {
-            $file = $request->file('photo');
-            $path = $file->store('photos', 'public');
-            $data['photo_url'] = '/storage/' . $path;
-        }
-
-        // Generate id_karyawan
-        $joined_at = $request->joined_at ?? now();
-        $year = Carbon::parse($joined_at)->format('Y');
-        $prefix = 'nhsa';
-        // Hitung jumlah karyawan yang sudah ada untuk tahun ini
-        $count = User::where('id_karyawan', 'like', $prefix . $year . '%')->count() + 1;
-        // Buat nomor urut dengan format 3 digit (misalnya, 001)
-        $nomorUrut = str_pad($count, 3, '0', STR_PAD_LEFT);
-        // Gabungkan untuk membentuk id_karyawan
-        $data['id_karyawan'] = $prefix . $year . $nomorUrut;
-
-        // Buat user baru
-        $user = User::create($data);
-
-        // Buat entri sisa cuti default untuk user baru
-        SisaCuti::create([
-            'user_id' => $user->id,
-            'total_cuti' => 12,
-            'cuti_terpakai' => 0,
-            'tahun' => now()->year // Menggunakan tahun saat ini, misalnya 2025
-        ]);
-
-        return redirect()
-            ->route('operator.index')
-            ->with('success', 'Operator baru berhasil ditambahkan.');
     }
 }

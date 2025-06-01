@@ -29,6 +29,8 @@ Route::get('/', function () {
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
+    Route::get('/pengajuan-reset', [PasswordResetController::class, 'showRequestForm'])->name('pengajuan.reset.password');
+    Route::post('/pengajuan-reset', [PasswordResetController::class, 'storeRequest'])->name('pengajuan.reset.form');
 });
 
 // Authenticated routes
@@ -38,7 +40,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard_profil', [DashboardController::class, 'profil'])->name('dashboard.profil');
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    // News detail
+    // News routes
     Route::get('/whats-new/create', [NewsController::class, 'create'])->name('whats_new.create');
     Route::post('/whats-new/store', [NewsController::class, 'store'])->name('whats_new.store');
     Route::get('/whats-new/edit/{id}', [NewsController::class, 'edit'])->name('whats_new.edit');
@@ -68,13 +70,23 @@ Route::middleware('auth')->group(function () {
     Route::get('/buat-resi', [ResiController::class, 'create'])->name('resi.buat');
     Route::post('/buat-resi', [ResiController::class, 'store'])->name('resi.store');
 
-    // Operator CRUD
- Route::get('/operator', [CrudController::class, 'usersIndex'])->name('operator.index');
-Route::get('/operator/{id}/edit', [CrudController::class, 'usersEdit'])->name('operator.edit');
-Route::put('/operator/{id}', [CrudController::class, 'usersUpdate'])->name('operator.update');
-Route::delete('/operator/{id}', [CrudController::class, 'usersDestroy'])->name('operator.destroy');
-Route::get('/operator/create', [CrudController::class, 'showCreateOperatorForm'])->name('operator.create');
-Route::post('/operator', [CrudController::class, 'createOperatorBaru'])->name('operator.store');
+    // Operator CRUD Routes
+    Route::get('/operator', [CrudController::class, 'usersIndex'])->name('operator.index');
+    Route::get('/operator/create', [CrudController::class, 'showCreateForm'])->name('operator.create');
+    Route::post('/operator', [CrudController::class, 'createOperatorBaru'])->name('operator.store');
+    Route::get('/operator/{id}/edit', [CrudController::class, 'usersEdit'])->name('operator.edit');
+    Route::put('/operator/{id}', [CrudController::class, 'usersUpdate'])->name('operator.update');
+    Route::delete('/operator/{id}', [CrudController::class, 'usersDestroy'])->name('operator.destroy');
+
+    // Leader Routes
+    Route::prefix('leader')->name('leader.')->group(function () {
+        Route::get('/', [CrudController::class, 'leaderIndex'])->name('index');
+        Route::get('/create', [CrudController::class, 'showCreateForm'])->name('create');
+        Route::post('/store', [CrudController::class, 'createLeader'])->name('store');
+        Route::get('/{id}/edit', [CrudController::class, 'leaderEdit'])->name('edit');
+        Route::put('/{id}', [CrudController::class, 'leaderUpdate'])->name('update');
+        Route::delete('/{id}', [CrudController::class, 'leaderDestroy'])->name('destroy');
+    });
 
     // Slips routes
     Route::resource('slips', SlipController::class)->except(['show']);
@@ -93,6 +105,7 @@ Route::post('/operator', [CrudController::class, 'createOperatorBaru'])->name('o
     Route::get('cuti/sisa', [CutiController::class, 'sisaIndex'])->name('cuti.sisa.index');
     Route::put('cuti/sisa/{sisa}', [CutiController::class, 'sisaUpdate'])->name('cuti.sisa.update');
     Route::delete('cuti/{id}/batal', [CutiController::class, 'batal'])->name('cuti.batal');
+    Route::post('/cuti/mark-as-read', [CutiController::class, 'markAsRead'])->name('cuti.markAsRead');
 
     // Shift routes
     Route::resource('shifts', ShiftController::class)->except(['create', 'show', 'edit']);
@@ -108,13 +121,11 @@ Route::post('/operator', [CrudController::class, 'createOperatorBaru'])->name('o
     Route::post('/reset-password/{id}', [PasswordResetController::class, 'resetPassword'])->name('reset.password');
     Route::post('/reset-password', [PasswordResetController::class, 'resetPasswordManual'])->name('reset.password.manual');
     Route::get('/check-reset-requests', [PasswordResetController::class, 'checkRequests'])->name('check.reset.requests');
+
+    // General user management by role (must be last to avoid conflicts)
+    Route::get('/{role}', [CrudController::class, 'usersByRole'])->name('users.by.role');
+    Route::get('/{role}/{id}/edit', [CrudController::class, 'editUser'])->name('users.edit');
+    Route::put('/{role}/{id}', [CrudController::class, 'updateUser'])->name('users.update');
+    Route::delete('/{role}/{id}', [CrudController::class, 'destroyUser'])->name('users.destroy');
+    Route::post('/users', [CrudController::class, 'createUser'])->name('users.store');
 });
-
-//biar bisa akses form pengajuan reset password tanpa login
-Route::get('/pengajuan-reset', [PasswordResetController::class, 'showRequestForm'])->name('pengajuan.reset.password');
-Route::post('/pengajuan-reset', [PasswordResetController::class, 'storeRequest'])->name('pengajuan.reset.form');
-Route::post('/cuti/mark-as-read', [CutiController::class, 'markAsRead'])
-    ->name('cuti.markAsRead');
-
-Route::get('/operator/create', [CrudController::class, 'showCreateOperatorForm'])->name('operator.create');
-Route::post('/operator', [CrudController::class, 'createOperatorBaru'])->name('operator.store');

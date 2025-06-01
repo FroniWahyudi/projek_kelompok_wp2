@@ -198,7 +198,7 @@
 @endunless
 
 <div class="row g-4" id="operator-list">
-    @forelse($Operator as $op)
+    @forelse($users as $op)
         <div class="col-md-6">
             <div class="manager-card" data-divisi="{{ strtolower($op->divisi) }}">
                 <img src="{{ $op->photo_url ? asset($op->photo_url) : asset('images/default-user.png') }}" alt="{{ $op->name }}" class="profile-photo">
