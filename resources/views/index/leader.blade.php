@@ -112,7 +112,7 @@
             color: #868e96;
             margin-top: auto;
         }
-        .form-control { width: 100%; }
+        .form-control { width: 57%; }
         .admin-action-btns { gap: 10px; }
         .admin-action-btns .btn-edit, .admin-action-btns .btn-danger {
             min-width: 70px;
@@ -121,18 +121,20 @@
         }
         
         .gx-4 {
-    margin-top: 30px;
-}
+            margin-top: 30px;
+        }
 
-.form-control {
-    width: 57%;
-}
+        .navbar-collapse-two-leaders {
+            display: flex !important;
+            flex-basis: auto;
+            margin-right: 0px;
+        }
 
-.navbar-expand-lg .navbar-collapse {
-  display: flex !important;
-  flex-basis: auto;
-  margin-right: -15px;
-}
+        .navbar-collapse-default {
+            display: flex !important;
+            flex-basis: auto;
+            margin-right: -15px;
+        }
     </style>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
@@ -147,7 +149,7 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse justify-content-end" id="navMenu">
+            <div class="collapse navbar-collapse justify-content-end @if($leaderCount == 2) navbar-collapse-two-leaders @else navbar-collapse-default @endif" id="navMenu">
                 <ul class="navbar-nav">
                     <li class="nav-item"><a class="nav-link" href="{{ url('dashboard') }}">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url('manajemen') }}">Manajer</a></li>
@@ -245,11 +247,11 @@
                                         <li>-</li>
                                     @endif
                                 </ul>
-                                <h6><strong>Keahlian</strong></h6>
+                                <h6><strong>Keadhlian</strong></h6>
                                 <div class="mb-3">
                                     @if($user->skills)
                                         @foreach(explode(', ', $user->skills) as $s)
-                                            <span class="badge bg-secondary me-1">{{ $s }}</span>
+                                            <span class="badge bg-success me-2">{{ $s }}</span>
                                         @endforeach
                                     @else
                                         <span>-</span>
@@ -296,7 +298,7 @@
             <!-- Create Leader Modal -->
             <div class="modal fade" id="createLeaderModal" tabindex="-1" aria-labelledby="createLeaderModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg modal-dialog-scrollable">
-                    @include('index.modal_create_operator')
+                    @include('index.modal_create_operator', ['role' => 'Leader'])
                 </div>
             </div>
         @endif
@@ -314,33 +316,32 @@
         document.addEventListener('DOMContentLoaded', () => {
             // Delete confirmation
             document.querySelectorAll('.delete-form').forEach(form => {
-          form.addEventListener('submit', function(e) {
-              e.preventDefault();
-              Swal.fire({
-            title: 'Apakah Anda yakin?',
-            text: 'Leader ini akan dihapus permanen!',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Ya, hapus!',
-            cancelButtonText: 'Batal'
-              }).then((result) => {
-            if (result.isConfirmed) {
-                form.submit();
-            }
-              });
-          });
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    Swal.fire({
+                        title: 'Apakah Anda yakin?',
+                        text: 'Leader ini akan dihapus permanen!',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Ya, hapus!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
             });
 
             // Auto-hide alert after 2 seconds
             setTimeout(() => {
-          document.querySelectorAll('.alert').forEach(alert => {
-              // Bootstrap 5: fade out and remove
-              alert.classList.remove('show');
-              alert.classList.add('hide');
-              setTimeout(() => alert.remove(), 500);
-          });
+                document.querySelectorAll('.alert').forEach(alert => {
+                    alert.classList.remove('show');
+                    alert.classList.add('hide');
+                    setTimeout(() => alert.remove(), 500);
+                });
             }, 2500);
         });
     </script>

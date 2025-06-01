@@ -63,10 +63,23 @@ class CrudController extends Controller
         return $this->usersByRole($request, 'Manager');
     }
 
-    public function leaderIndex(Request $request)
-    {
-        return $this->usersByRole($request, 'Leader');
-    }
+   public function leaderIndex(Request $request)
+{
+    $leaderCount = $this->hitungLeader(); // Panggil method hitungLeader
+    $users = User::where('role', 'Leader')
+        ->when($request->get('search'), fn($q) =>
+            $q->where(function ($q2) use ($request) {
+                $search = $request->get('search');
+                $q2->where('name', 'like', "%{$search}%")
+                    ->orWhere('divisi', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
+            })
+        )
+        ->orderBy('name')
+        ->get();
+
+    return view('index.leader', compact('users', 'leaderCount'));
+}
 
     public function adminIndex(Request $request)
     {
@@ -642,4 +655,9 @@ class CrudController extends Controller
 
         return redirect()->route('feedback.index')->with('success', 'Feedback berhasil dikirim.');
     }
+
+    public function hitungLeader()
+{
+    return User::where('role', 'Leader')->count();
+}
 }
