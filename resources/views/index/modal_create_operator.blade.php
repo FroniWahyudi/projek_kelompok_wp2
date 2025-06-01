@@ -122,7 +122,6 @@
                 <label class="form-label">Role <span class="text-danger">*</span></label>
                 <select name="role" class="form-control role-select @error('role') is-invalid @enderror" required>
                     <option value="">-- Pilih Role --</option>
-                    <option value="Admin" {{ old('role') == 'Admin' ? 'selected' : '' }}>Admin</option>
                     <option value="Leader" {{ old('role') == 'Leader' ? 'selected' : '' }}>Leader</option>
                     <option value="Operator" {{ old('role') == 'Operator' ? 'selected' : '' }}>Operator</option>
                 </select>

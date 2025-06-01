@@ -191,14 +191,21 @@
                 {{ session('success') }}
             </div>
         @endif
+
         @if ($errors->any())
-            <div class="alert alert-danger">
+            <div class="alert alert-danger" id="errorMessage">
                 <ul>
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
                 </ul>
             </div>
+            <script>
+                setTimeout(function() {
+                    var err = document.getElementById('errorMessage');
+                    if (err) err.style.display = 'none';
+                }, 2000);
+            </script>
         @endif
 @endunless
 
