@@ -221,34 +221,58 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+   document.addEventListener('DOMContentLoaded', function() {
+    // Fungsi untuk mengatur pratinjau gambar
+    function setupPhotoPreview() {
         const fileInput = document.querySelector('#formEditUser input[name="photo"]');
         const previewImg = document.getElementById('photoPreviewEdit');
 
-        if (fileInput && previewImg) {
-            console.log('Edit modal: File input and preview image found:', fileInput, previewImg);
-            fileInput.addEventListener('change', function() {
-                const file = this.files[0];
-                if (!file) {
-                    console.log('Edit modal: No file selected');
-                    return;
-                }
-                if (!file.type.startsWith('image/')) {
-                    console.error('Edit modal: Selected file is not an image');
-                    return;
-                }
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    console.log('Edit modal: Setting image src to:', e.target.result);
-                    previewImg.src = e.target.result;
-                };
-                reader.onerror = function(e) {
-                    console.error('Edit modal: Error reading file:', e);
-                };
-                reader.readAsDataURL(file);
+        if (!fileInput || !previewImg) {
+            console.error('Edit modal: File input atau preview image tidak ditemukan', {
+                fileInput: fileInput,
+                previewImg: previewImg
             });
-        } else {
-            console.error('Edit modal: File input or preview image element not found');
+            return;
         }
-    });
+
+        console.log('Edit modal: File input dan preview image ditemukan:', fileInput, previewImg);
+
+        fileInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (!file) {
+                console.log('Edit modal: Tidak ada file yang dipilih');
+                return;
+            }
+
+            if (!file.type.startsWith('image/')) {
+                console.error('Edit modal: File yang dipilih bukan gambar');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                console.log('Edit modal: Mengatur src gambar ke:', e.target.result);
+                previewImg.src = e.target.result;
+            };
+            reader.onerror = function(e) {
+                console.error('Edit modal: Gagal membaca file:', e);
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    // Panggil fungsi setup saat DOM dimuat
+    setupPhotoPreview();
+
+    // Jika modal dimuat secara dinamis, panggil setup saat modal ditampilkan
+    const editModal = document.querySelector('#formEditUser').closest('.modal');
+    if (editModal) {
+        editModal.addEventListener('shown.bs.modal', function() {
+            console.log('Edit modal: Modal ditampilkan, mengatur ulang pratinjau');
+            setupPhotoPreview();
+        });
+    } else {
+        console.warn('Edit modal: Elemen modal tidak ditemukan');
+    }
+});
 </script>
