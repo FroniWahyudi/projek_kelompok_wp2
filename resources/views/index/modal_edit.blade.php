@@ -61,6 +61,37 @@
         overflow: hidden;
         width: 750px;
     }
+
+    /* Style untuk email input group */
+    .input-group {
+        display: flex;
+        align-items: center;
+    }
+
+    .input-group .form-control {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        border-right: none;
+    }
+
+    .input-group-text {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        background-color: #f8f9fa;
+        border-left: none;
+        color: #6c757d;
+        font-weight: 500;
+    }
+
+    .email-username {
+        flex: 1;
+    }
+    .input-group {
+    display: flex
+;
+    align-items: center;
+    width: 57%;
+}
 </style>
 
 <div class="modal-content">
@@ -96,14 +127,26 @@
 
             <div class="mb-3">
                 <label class="form-label">Email</label>
-                <input 
-                    type="email" 
-                    name="email" 
-                    class="form-control" 
-                    value="{{ old('email', $user['email']) }}" 
-                    required
-                >
+                <div class="input-group">
+                    <input 
+                        type="text" 
+                        name="email_username" 
+                        class="form-control email-username" 
+                        value="{{ old('email_username', explode('@', $user['email'])[0] ?? '') }}" 
+                        placeholder="username"
+                        pattern="[a-zA-Z0-9._-]+"
+                        title="Hanya boleh menggunakan huruf, angka, titik, underscore, dan dash"
+                        required
+                        id="emailUsername{{ $user['id'] }}"
+                    >
+                    <span class="input-group-text">@nagahytam.co.id</span>
+                </div>
+                <input type="hidden" name="email" id="fullEmail{{ $user['id'] }}" value="{{ old('email', $user['email']) }}">
+                <small class="form-text text-muted">Hanya username yang dapat diubah, domain tetap @nagahytam.co.id</small>
                 @error('email')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+                @error('email_username')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
@@ -274,14 +317,97 @@ document.addEventListener('DOMContentLoaded', function() {
         reader.readAsDataURL(file);
     }
 
-    // Jalankan setup saat DOM dimuat
+    // Setup email username handler untuk semua modal edit
+    function setupEmailUsernameHandler() {
+        const emailInputs = document.querySelectorAll('input[name="email_username"]');
+        
+        emailInputs.forEach(function(emailInput) {
+            const userId = emailInput.id.replace('emailUsername', '');
+            const fullEmailInput = document.getElementById('fullEmail' + userId);
+            
+            if (!fullEmailInput) {
+                console.error('Full email input tidak ditemukan untuk user ID:', userId);
+                return;
+            }
+            
+            // Update full email saat username berubah
+            emailInput.addEventListener('input', function() {
+                const username = this.value.trim();
+                // Validasi karakter username
+                const validPattern = /^[a-zA-Z0-9._-]*$/;
+                
+                if (!validPattern.test(username)) {
+                    // Hapus karakter yang tidak valid
+                    this.value = username.replace(/[^a-zA-Z0-9._-]/g, '');
+                }
+                
+                // Update full email
+                const cleanUsername = this.value.trim();
+                if (cleanUsername) {
+                    fullEmailInput.value = cleanUsername + '@nagahytam.co.id';
+                } else {
+                    fullEmailInput.value = '@nagahytam.co.id';
+                }
+            });
+            
+            // Set initial full email value
+            const initialUsername = emailInput.value.trim();
+            if (initialUsername) {
+                fullEmailInput.value = initialUsername + '@nagahytam.co.id';
+            }
+        });
+    }
+
+    // Setup form submission handler
+    function setupFormSubmissionHandler() {
+        const forms = document.querySelectorAll('form[id^="formEditUser"]');
+        
+        forms.forEach(function(form) {
+            form.addEventListener('submit', function(e) {
+                const emailUsernameInput = form.querySelector('input[name="email_username"]');
+                const fullEmailInput = form.querySelector('input[name="email"]');
+                
+                if (emailUsernameInput && fullEmailInput) {
+                    const username = emailUsernameInput.value.trim();
+                    
+                    // Validasi username tidak boleh kosong
+                    if (!username) {
+                        e.preventDefault();
+                        alert('Username email tidak boleh kosong!');
+                        emailUsernameInput.focus();
+                        return false;
+                    }
+                    
+                    // Validasi format username
+                    const validPattern = /^[a-zA-Z0-9._-]+$/;
+                    if (!validPattern.test(username)) {
+                        e.preventDefault();
+                        alert('Username email hanya boleh menggunakan huruf, angka, titik (.), underscore (_), dan dash (-)!');
+                        emailUsernameInput.focus();
+                        return false;
+                    }
+                    
+                    // Update full email sebelum submit
+                    fullEmailInput.value = username + '@nagahytam.co.id';
+                }
+            });
+        });
+    }
+
+    // Jalankan semua setup saat DOM dimuat
     setupAllPhotoPreview();
+    setupEmailUsernameHandler();
+    setupFormSubmissionHandler();
 
     // Setup ulang ketika modal ditampilkan (untuk modal yang dimuat dinamis)
     document.addEventListener('shown.bs.modal', function(e) {
         if (e.target.id && e.target.id.includes('editModal')) {
-            console.log('Modal edit ditampilkan, setup ulang preview');
-            setTimeout(setupAllPhotoPreview, 100); // Delay sedikit untuk memastikan DOM sudah siap
+            console.log('Modal edit ditampilkan, setup ulang semua handler');
+            setTimeout(function() {
+                setupAllPhotoPreview();
+                setupEmailUsernameHandler();
+                setupFormSubmissionHandler();
+            }, 100); // Delay sedikit untuk memastikan DOM sudah siap
         }
     });
 });
