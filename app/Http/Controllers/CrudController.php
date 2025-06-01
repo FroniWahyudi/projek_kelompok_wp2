@@ -362,7 +362,7 @@ class CrudController extends Controller
         // Generate id_karyawan
         $joined_at = $request->joined_at ?? now();
         $year = Carbon::parse($joined_at)->format('Y');
-        $prefix = 'nhsa';
+        $prefix = 'NHSA';
         $count = User::where('id_karyawan', 'like', $prefix . $year . '%')->count() + 1;
         $nomorUrut = str_pad($count, 3, '0', STR_PAD_LEFT);
         $data['id_karyawan'] = $prefix . $year . $nomorUrut;
