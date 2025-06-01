@@ -96,7 +96,7 @@
 
 <div class="modal-content">
     <div class="modal-header">
-        <h5 class="modal-title">Edit User: {{ $user->name }}</h5>
+        <h5 class="modal-title">Edit User: {{ is_object($user) && isset($user->name) ? $user->name : '' }}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
     </div>
 
@@ -108,7 +108,11 @@
         <div class="photo-upload-edit">
             <label class="form-label">Photo</label>
             <div class="preview-wrapper-edit text-center">
-                <img id="photoPreviewEdit{{ $user->id }}" class="photo-preview-edit" src="{{ $user->photo_url ? $user->photo_url : asset('images/default-user.png') }}" alt="Preview Foto">
+                <img 
+                    id="photoPreviewEdit{{ is_object($user) && isset($user->id) ? $user->id : '' }}" 
+                    class="photo-preview-edit" 
+                    src="{{ (is_object($user) && isset($user->photo_url) && $user->photo_url) ? $user->photo_url : asset('images/default-user.png') }}" 
+                    alt="Preview Foto">
             </div>
             <input type="file" name="photo" class="form-control form-control-sm photo-input-edit @error('photo') is-invalid @enderror" data-user-id="{{ $user->id }}" accept="image/*">
             @error('photo')
@@ -120,7 +124,7 @@
         <div class="modal-body position-relative" style="max-height:70vh; overflow-y:auto; padding-right: 10px;">
             <div class="mb-3">
                 <label class="form-label">Nama</label>
-                <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name', $user->name) }}" required>
+                <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name', (is_object($user) && isset($user->name)) ? $user->name : '') }}" required>
                 @error('name')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -133,12 +137,12 @@
                         type="text" 
                         name="email_username" 
                         class="form-control email-username @error('email') is-invalid @enderror @error('email_username') is-invalid @enderror" 
-                        value="{{ old('email_username', explode('@', $user->email)[0]) }}" 
+                        value="{{ old('email_username', (is_object($user) && isset($user->email) && strpos($user->email, '@') !== false) ? explode('@', $user->email)[0] : '') }}" 
                         placeholder="username"
                         pattern="[a-zA-Z0-9._-]+"
                         title="Hanya boleh menggunakan huruf, angka, titik, underscore, dan dash"
                         required
-                        id="emailUsername{{ $user->id }}"
+                        id="emailUsername{{ is_object($user) && isset($user->id) ? $user->id : '' }}"
                     >
                     <span class="input-group-text">@nagahytam.co.id</span>
                 </div>
