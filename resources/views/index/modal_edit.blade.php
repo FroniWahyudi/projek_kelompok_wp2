@@ -1,6 +1,6 @@
 <style>
     /* Container photo upload */
-    .photo-upload {
+    .photo-upload-edit {
         position: absolute;
         top: 1rem;
         right: 9.5rem;
@@ -15,7 +15,7 @@
     }
 
     /* Label */
-    .photo-upload .form-label {
+    .photo-upload-edit .form-label {
         display: block;
         font-size: 0.9rem;
         font-weight: 600;
@@ -24,12 +24,12 @@
     }
 
     /* Wrapper preview */
-    .photo-upload .preview-wrapper {
+    .photo-upload-edit .preview-wrapper-edit {
         margin-bottom: 3rem;
     }
 
     /* Gambar preview */
-    .photo-upload #photoPreview {
+    .photo-upload-edit #photoPreviewEdit {
         width: 208px;
         height: 200px;
         object-fit: cover;
@@ -38,7 +38,7 @@
     }
 
     /* File input: full-width dalam container dan rata kiri */
-    .photo-upload .form-control-sm {
+    .photo-upload-edit .form-control-sm {
         width: 90%;
         font-size: 0.8rem;
         padding: 0.25rem;
@@ -46,10 +46,10 @@
     }
 
     /* Override agar tidak tergulung oleh scroll modal-body */
-    .photo-upload {
+    .photo-upload-edit {
         position: sticky;
-        top: 0rem;
-        right: -0.5rem;
+        top: 5rem;
+        right: 1.5rem;
         float: right;
         margin-left: -17rem;
         height: 340px;
@@ -74,10 +74,10 @@
         @method('PUT')
 
         <!-- PHOTO UPLOAD -->
-        <div class="photo-upload">
+        <div class="photo-upload-edit">
             <label class="form-label">Photo</label>
-            <div class="preview-wrapper text-center">
-                <img id="photoPreview" src="{{ $user['photo_url'] ?? asset('images/default-user.png') }}" alt="Preview Foto">
+            <div class="preview-wrapper-edit text-center">
+                <img id="photoPreviewEdit" src="{{ $user['photo_url'] ?? asset('images/default-user.png') }}" alt="Preview Foto">
             </div>
             <input type="file" name="photo" class="form-control form-control-sm" accept="image/*">
         </div>
@@ -96,7 +96,13 @@
 
             <div class="mb-3">
                 <label class="form-label">Email</label>
-                <input type="email" name="email" class="form-control" value="{{ old('email', $user['email']) }}">
+                <input 
+                    type="email" 
+                    name="email" 
+                    class="form-control" 
+                    value="{{ old('email', $user['email']) }}" 
+                    required
+                >
                 @error('email')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -215,17 +221,34 @@
 </div>
 
 <script>
-    // Preview photo sebelum submit
-    const fileInput = document.querySelector('input[name="photo"]');
-    const previewImg = document.getElementById('photoPreview');
+    document.addEventListener('DOMContentLoaded', function() {
+        const fileInput = document.querySelector('#formEditUser input[name="photo"]');
+        const previewImg = document.getElementById('photoPreviewEdit');
 
-    fileInput.addEventListener('change', function() {
-        const file = this.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            previewImg.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
+        if (fileInput && previewImg) {
+            console.log('Edit modal: File input and preview image found:', fileInput, previewImg);
+            fileInput.addEventListener('change', function() {
+                const file = this.files[0];
+                if (!file) {
+                    console.log('Edit modal: No file selected');
+                    return;
+                }
+                if (!file.type.startsWith('image/')) {
+                    console.error('Edit modal: Selected file is not an image');
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    console.log('Edit modal: Setting image src to:', e.target.result);
+                    previewImg.src = e.target.result;
+                };
+                reader.onerror = function(e) {
+                    console.error('Edit modal: Error reading file:', e);
+                };
+                reader.readAsDataURL(file);
+            });
+        } else {
+            console.error('Edit modal: File input or preview image element not found');
+        }
     });
 </script>

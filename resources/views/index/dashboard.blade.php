@@ -56,7 +56,7 @@
     }
     
     .navbar-custom .logo-brand img {
-      height: 69px;
+      height: 64px;
       object-fit: contain;
       transition: all 0.3s ease;
     }

@@ -14,10 +14,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
     <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-        }
+        html, body { height: 100%; margin: 0; }
         body {
             display: flex;
             flex-direction: column;
@@ -26,10 +23,7 @@
             color: #6c757d;
             background: #f8f9fa;
         }
-        main {
-            flex: 1;
-            padding-top: 70px;
-        }
+        main { flex: 1; padding-top: 70px; }
         .navbar-custom {
             background: #fff;
             border-bottom: 1px solid #dee2e6;
@@ -54,14 +48,8 @@
             border-radius: 50%;
             display: inline-block;
         }
-        .navbar-nav .nav-link {
-            margin-left: 1.5rem;
-            color: #6c757d;
-        }
-        .navbar-nav .nav-link.active {
-            color: #0d6efd;
-            font-weight: 500;
-        }
+        .navbar-nav .nav-link { margin-left: 1.5rem; color: #6c757d; }
+        .navbar-nav .nav-link.active { color: #0d6efd; font-weight: 500; }
         .manager-card {
             background: #fff;
             border: 1px solid #dee2e6;
@@ -75,9 +63,7 @@
             transition: transform .2s;
             min-height: 250px;
         }
-        .manager-card:hover {
-            transform: translateY(-5px);
-        }
+        .manager-card:hover { transform: translateY(-5px); }
         .profile-photo {
             width: 120px;
             height: 120px;
@@ -98,40 +84,19 @@
             color: #00c8c8;
             font-weight: 500;
         }
-        .manager-info p {
-            margin: .5rem 0;
-            line-height: 1.5;
-        }
+        .manager-info p { margin: .5rem 0; line-height: 1.5; }
         .footer {
             background: #fff;
             border-top: 1px solid #dee2e6;
             padding: 1rem 0;
             text-align: center;
         }
-        .form-control {
-            display: block;
-            width: 373px;
-            margin-left: 37px;
-        }
-        .main-container {
-            margin-top: 25px;
-        }
-        .navbar-expand-lg .navbar-collapse {
-            margin-right: 21px;
-        }
-        button.active {
-            background-color: #0d6efd;
-            color: white;
-        }
-        #operator-list {
-            min-height: 400px;
-            transition: all 0.3s ease;
-            margin-top: 0;
-        }
-        .mb-3 {
-            margin-bottom: 0 !important;
-        }
-        /* Animasi untuk pesan sukses */
+        .form-control { display: block; width: 373px; margin-left: 37px; }
+        .main-container { margin-top: 25px; }
+        .navbar-expand-lg .navbar-collapse { margin-right: 21px; }
+        button.active { background-color: #0d6efd; color: white; }
+        #operator-list { min-height: 400px; transition: all 0.3s ease; margin-top: 0; }
+        .mb-3 { margin-bottom: 0 !important; }
         .success-message {
             display: none;
             position: fixed;
@@ -146,25 +111,13 @@
             animation: slideIn 0.5s ease-in-out, fadeOut 0.5s ease-in-out 2.5s forwards;
         }
         @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
         @keyframes fadeOut {
-            from {
-                opacity: 1;
-            }
-            to {
-                opacity: 0;
-                display: none;
-            }
+            from { opacity: 1; }
+            to { opacity: 0; display: none; }
         }
-        /* Floating Action Button */
         .fab {
             position: fixed;
             bottom: 87px;
@@ -182,325 +135,322 @@
             transition: all 0.3s ease;
             cursor: pointer;
         }
-        .fab:hover {
-            background-color: #005cbf;
-            transform: scale(1.1);
-        }
-        .fab i {
-            font-size: 1.5rem;
-        }
+        .fab:hover { background-color: #005cbf; transform: scale(1.1); }
+        .fab i { font-size: 1.5rem; }
+        .ms-2 { margin-left: 0rem !important; width: 50px; }
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active { color: #0d6efd !important; }
     </style>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body>
-    @unless(request()->has('ajax'))
-        <nav class="navbar navbar-expand-lg navbar-custom">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="{{ url('dashboard') }}"><span class="dot"></span>Divisi Operator</a>
-                <div class="d-flex ms-3">
-                    <input
-                        class="form-control me-2"
-                        type="search"
-                        placeholder="Cari nama operator..."
-                        aria-label="Cari"
-                        id="searchInput"
-                        value="{{ request('search') }}"
-                    />
-                </div>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse justify-content-end" id="navMenu">
-                    <ul class="navbar-nav">
-                        <li class="nav-item"><a class="nav-link" href="{{ url('dashboard') }}">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('manajemen') }}">Manajer</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('admin') }}">Admin</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('leader') }}">Leader</a></li>
-                        <li class="nav-item"><a class="nav-link active" href="{{ url('operator') }}">Operator</a></li>
-                    </ul>
-                </div>
+@unless(request()->has('ajax'))
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url('dashboard') }}">
+                <span class="dot"></span>Divisi Operator
+            </a>
+            <div class="d-flex ms-3">
+                <input
+                    class="form-control me-2"
+                    type="search"
+                    placeholder="Cari nama operator..."
+                    aria-label="Cari"
+                    id="searchInput"
+                    value="{{ request('search') }}"
+                />
             </div>
-        </nav>
-        <main class="container py-5 main-container">
-            <div class="mb-3">
-                <button id="btnAll" class="btn btn-outline-secondary">Semua</button>
-                <button id="btnFilterInbound" class="btn btn-outline-primary">Inbound</button>
-                <button id="btnFilterOutbound" class="btn btn-outline-success">Outbound</button>
-                <button id="btnFilterStorage" class="btn btn-outline-warning">Storage</button>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navMenu">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="{{ url('dashboard') }}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url('manajemen') }}">Manajer</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url('admin') }}">Admin</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url('leader') }}">Leader</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="{{ url('operator') }}">Operator</a></li>
+                </ul>
             </div>
-            <!-- Pesan sukses dengan animasi -->
-            @if (session('success'))
-                <div class="success-message" id="successMessage">
-                    {{ session('success') }}
-                </div>
-            @endif
-            <!-- Pesan error -->
-            @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-        @endunless
+        </div>
+    </nav>
+    <main class="container py-5 main-container">
+        <div class="mb-3">
+            <button id="btnAll" class="btn btn-outline-secondary">Semua</button>
+            <button id="btnFilterInbound" class="btn btn-outline-primary">Inbound</button>
+            <button id="btnFilterOutbound" class="btn btn-outline-success">Outbound</button>
+            <button id="btnFilterStorage" class="btn btn-outline-warning">Storage</button>
+        </div>
+        @if (session('success'))
+            <div class="success-message" id="successMessage">
+                {{ session('success') }}
+            </div>
+        @endif
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+@endunless
 
-        <div class="row g-4" id="operator-list">
-            @forelse($Operator as $op)
-                <div class="col-md-6">
-                    <div class="manager-card" data-divisi="{{ strtolower($op->divisi) }}">
-                        <img src="{{ $op->photo_url ? asset($op->photo_url) : asset('images/default-user.png') }}" alt="{{ $op->name }}" class="profile-photo">
-                        <div class="manager-info">
-                            <h5>{{ $op->name }}</h5>
-                            <div class="role">{{ $op->role }} 
-                                <span class="badge
-                                    @if(strtolower($op->level) === 'junior') bg-success 
-                                    @elseif(strtolower($op->level) === 'mid-level') bg-primary 
-                                    @elseif(strtolower($op->level) === 'senior') bg-warning text-dark 
-                                    @else bg-info text-dark 
-                                    @endif ms-2">
-                                    {{ $op->level }}
-                                </span>
-                            </div>
-                            <p>{{ $op->email }}</p>
-                            <p>{{ $op->divisi }}</p>
-                            <p>{{ Str::limit($op->bio, 100) }}</p>
-                            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal{{ $op->id }}">Detail</button>
-                            @if(Auth::user() && Auth::user()->role === 'Admin')
-                                <a href="{{ route('operator.edit', $op->id) }}" class="btn btn-warning btn-sm btn-edit ms-2" data-bs-toggle="modal" data-bs-target="#editModal{{ $op->id }}" title="Edit Profil Operator">Edit</a>
-                                <form action="{{ route('operator.destroy', $op->id) }}" method="POST" class="delete-form" style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
-                                </form>
-                            @endif
-                        </div>
+<div class="row g-4" id="operator-list">
+    @forelse($Operator as $op)
+        <div class="col-md-6">
+            <div class="manager-card" data-divisi="{{ strtolower($op->divisi) }}">
+                <img src="{{ $op->photo_url ? asset($op->photo_url) : asset('images/default-user.png') }}" alt="{{ $op->name }}" class="profile-photo">
+                <div class="manager-info">
+                    <h5>{{ $op->name }}</h5>
+                    <div class="role">
+                        {{ $op->role }}
+                        <span class="badge
+                            @if(strtolower($op->level) === 'junior') bg-success 
+                            @elseif(strtolower($op->level) === 'mid-level') bg-primary 
+                            @elseif(strtolower($op->level) === 'senior') bg-warning text-dark 
+                            @else bg-info text-dark 
+                            @endif ms-2">
+                            {{ $op->level }}
+                        </span>
                     </div>
+                    <p>{{ $op->email }}</p>
+                    <p>{{ $op->divisi }}</p>
+                    <p>{{ Str::limit($op->bio, 100) }}</p>
+                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal{{ $op->id }}">Detail</button>
+                    @if(Auth::user() && Auth::user()->role === 'Admin')
+                        <a href="{{ route('operator.edit', $op->id) }}" class="btn btn-warning btn-sm btn-edit ms-2" data-bs-toggle="modal" data-bs-target="#editModal{{ $op->id }}" title="Edit Profil Operator">Edit</a>
+                        <form action="{{ route('operator.destroy', $op->id) }}" method="POST" class="delete-form" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                        </form>
+                    @endif
                 </div>
-                <!-- Modal Detail -->
-                <div class="modal fade" id="detailModal{{ $op->id }}" tabindex="-1" aria-hidden="true">
-                    <div class="modal-dialog modal-lg modal-dialog-scrollable">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">{{ $op->name }} — Detail Profil</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+        </div>
+        <!-- Modal Detail -->
+        <div class="modal fade" id="detailModal{{ $op->id }}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">{{ $op->name }} — Detail Profil</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="d-flex align-items-center mb-4">
+                            <img src="{{ $op->photo_url ? asset($op->photo_url) : asset('images/default-user.png') }}" class="profile-photo me-3" alt="">
+                            <div>
+                                <h6 class="mb-1">{{ $op->name }}</h6>
+                                <small class="role">
+                                    {{ $op->role }}
+                                    <span class="badge
+                                        @if(strtolower($op->level) === 'junior') bg-success 
+                                        @elseif(strtolower($op->level) === 'mid-level') bg-primary 
+                                        @elseif(strtolower($op->level) === 'senior') bg-warning text-dark 
+                                        @else bg-info text-dark 
+                                        @endif ms-2">
+                                        {{ $op->level }}
+                                    </span>
+                                </small>
+                                <p class="mt-2 mb-1"><i class="bi bi-envelope me-1"></i> {{ $op->email }}</p>
+                                <p class="mb-0"><i class="bi bi-telephone me-1"></i> {{ $op->phone }}</p>
                             </div>
-                            <div class="modal-body">
-                                <div class="d-flex align-items-center mb-4">
-                                    <img src="{{ $op->photo_url ? asset($op->photo_url) : asset('images/default-user.png') }}" class="profile-photo me-3" alt="">
-                                    <div>
-                                        <h6 class="mb-1">{{ $op->name }}</h6>
-                                        <small class="role">
-                                            {{ $op->role }}
-                                            <span class="badge
-                                                @if(strtolower($op->level) === 'junior') bg-success 
-                                                @elseif(strtolower($op->level) === 'mid-level') bg-primary 
-                                                @elseif(strtolower($op->level) === 'senior') bg-warning text-dark 
-                                                @else bg-info text-dark 
-                                                @endif ms-2">
-                                                {{ $op->level }}
-                                            </span>
-                                        </small>
-                                        <p class="mt-2 mb-1"><i class="bi bi-envelope me-1"></i> {{ $op->email }}</p>
-                                        <p class="mb-0"><i class="bi bi-telephone me-1"></i> {{ $op->phone }}</p>
-                                    </div>
-                                </div>
-                                <h6 class="mt-4"><strong>Informasi Pribadi</strong></h6>
-                                <div class="row g-3 mb-4">
-                                    <div class="col-sm-6">
-                                        <p class="mb-1"><strong>Alamat:</strong></p>
-                                        <p class="mb-0">{{ $op->alamat }}</p>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <p class="mb-1"><strong>Joined:</strong></p>
-                                        <p class="mb-0">{{ $op->joined_at ? \Carbon\Carbon::parse($op->joined_at)->format('d M Y') : '-' }}</p>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <p class="mb-1"><strong>Pendidikan:</strong></p>
-                                        <p class="mb-0">{{ $op->education ?? '-' }}</p>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <p class="mb-1"><strong>Departemen:</strong></p>
-                                        <p class="mb-0">{{ $op->department ?? '-' }}</p>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <p class="mb-1"><strong>Divisi:</strong></p>
-                                        <p class="mb-0">{{ $op->divisi ?? '-' }}</p>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <p class="mb-1"><strong>Keahlian:</strong></p>
-                                        <p class="mb-0">
-                                            @if($op->skills)
-                                                @foreach(explode(', ', $op->skills) as $s)
-                                                    <span class="badge bg-secondary me-1 mb-1">{{ $s }}</span>
-                                                @endforeach
-                                            @else
-                                                -
-                                            @endif
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="row g-4 mb-4">
-                                    <div class="col-lg-6">
-                                        <h6><strong>Bio</strong></h6>
-                                        <p class="mb-0">{{ $op->bio ?? '-' }}</p>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <h6><strong>Pencapaian</strong></h6>
-                                        <ul class="mb-0">
-                                            @if($op->achievements)
-                                                @foreach(explode(', ', $op->achievements) as $a)
-                                                    <li>{{ $a }}</li>
-                                                @endforeach
-                                            @else
-                                                <li>-</li>
-                                            @endif
-                                        </ul>
-                                    </div>
-                                </div>
-                                <h6 class="mt-3"><strong>Deskripsi Pekerjaan</strong></h6>
-                                <ul class="mb-4">
-                                    @if($op->job_descriptions)
-                                        @foreach(explode(', ', $op->job_descriptions) as $jd)
-                                            <li>{{ $jd }}</li>
+                        </div>
+                        <h6 class="mt-4"><strong>Informasi Pribadi</strong></h6>
+                        <div class="row g-3 mb-4">
+                            <div class="col-sm-6">
+                                <p class="mb-1"><strong>Alamat:</strong></p>
+                                <p class="mb-0">{{ $op->alamat }}</p>
+                            </div>
+                            <div class="col-sm-6">
+                                <p class="mb-1"><strong>Joined:</strong></p>
+                                <p class="mb-0">{{ $op->joined_at ? \Carbon\Carbon::parse($op->joined_at)->format('d M Y') : '-' }}</p>
+                            </div>
+                            <div class="col-sm-6">
+                                <p class="mb-1"><strong>Pendidikan:</strong></p>
+                                <p class="mb-0">{{ $op->education ?? '-' }}</p>
+                            </div>
+                            <div class="col-sm-6">
+                                <p class="mb-1"><strong>Departemen:</strong></p>
+                                <p class="mb-0">{{ $op->department ?? '-' }}</p>
+                            </div>
+                            <div class="col-sm-6">
+                                <p class="mb-1"><strong>Divisi:</strong></p>
+                                <p class="mb-0">{{ $op->divisi ?? '-' }}</p>
+                            </div>
+                            <div class="col-sm-6">
+                                <p class="mb-1"><strong>Keahlian:</strong></p>
+                                <p class="mb-0">
+                                    @if($op->skills)
+                                        @foreach(explode(', ', $op->skills) as $s)
+                                            <span class="badge bg-secondary me-1 mb-1">{{ $s }}</span>
+                                        @endforeach
+                                    @else
+                                        -
+                                    @endif
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row g-4 mb-4">
+                            <div class="col-lg-6">
+                                <h6><strong>Bio</strong></h6>
+                                <p class="mb-0">{{ $op->bio ?? '-' }}</p>
+                            </div>
+                            <div class="col-lg-6">
+                                <h6><strong>Pencapaian</strong></h6>
+                                <ul class="mb-0">
+                                    @if($op->achievements)
+                                        @foreach(explode(', ', $op->achievements) as $a)
+                                            <li>{{ $a }}</li>
                                         @endforeach
                                     @else
                                         <li>-</li>
                                     @endif
                                 </ul>
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Tutup</button>
-                            </div>
                         </div>
+                        <h6 class="mt-3"><strong>Deskripsi Pekerjaan</strong></h6>
+                        <ul class="mb-4">
+                            @if($op->job_descriptions)
+                                @foreach(explode(', ', $op->job_descriptions) as $jd)
+                                    <li>{{ $jd }}</li>
+                                @endforeach
+                            @else
+                                <li>-</li>
+                            @endif
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Tutup</button>
                     </div>
                 </div>
-                <!-- Modal Edit -->
-                @if(Auth::user() && Auth::user()->role === 'Admin')
-                    <div class="modal fade" id="editModal{{ $op->id }}" tabindex="-1" aria-hidden="true">
-                        <div class="modal-dialog modal-lg modal-dialog-scrollable">
-                            @include('index.modal_edit', ['user' => $op])
-                        </div>
-                    </div>
-                @endif
-            @empty
-                <div class="col-12">
-                    <div class="alert alert-warning text-center">Tidak ada operator ditemukan.</div>
-                </div>
-            @endforelse
+            </div>
         </div>
-
-        <!-- Floating Action Button for Adding Operator -->
+        <!-- Modal Edit -->
         @if(Auth::user() && Auth::user()->role === 'Admin')
-            <button type="button" class="fab" data-bs-toggle="modal" data-bs-target="#createOperatorModal" title="Tambah Operator">
-                <i class="bi bi-plus-lg"></i>
-            </button>
-            <!-- Modal Create Operator -->
-            <div class="modal fade" id="createOperatorModal" tabindex="-1" aria-labelledby="createOperatorModalLabel" aria-hidden="true">
+            <div class="modal fade" id="editModal{{ $op->id }}" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog modal-lg modal-dialog-scrollable">
-                    @include('index.modal_create_operator')
+                    @include('index.modal_edit', ['user' => $op])
                 </div>
             </div>
         @endif
+    @empty
+        <div class="col-12">
+            <div class="alert alert-warning text-center">Tidak ada operator ditemukan.</div>
+        </div>
+    @endforelse
+</div>
 
-        @unless(request()->has('ajax'))
-        </main>
-        <footer class="footer">
-            <small>© {{ date('Y') }} PT Naga Hytam Sejahtera Abadi.</small>
-        </footer>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                const input = document.getElementById('searchInput');
-                const list = document.getElementById('operator-list');
-                if (!input || !list) return;
+@if(Auth::user() && Auth::user()->role === 'Admin')
+    <button type="button" class="fab" data-bs-toggle="modal" data-bs-target="#createOperatorModal" title="Tambah Operator">
+        <i class="bi bi-plus-lg"></i>
+    </button>
+    <div class="modal fade" id="createOperatorModal" tabindex="-1" aria-labelledby="createOperatorModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            @include('index.modal_create_operator')
+        </div>
+    </div>
+@endif
 
-                let timeout = null;
+@unless(request()->has('ajax'))
+    </main>
+    <footer class="footer">
+        <small>© {{ date('Y') }} PT Naga Hytam Sejahtera Abadi.</small>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const input = document.getElementById('searchInput');
+            const list = document.getElementById('operator-list');
+            if (!input || !list) return;
 
-                const buttons = {
-                    all: document.getElementById('btnAll'),
-                    inbound: document.getElementById('btnFilterInbound'),
-                    outbound: document.getElementById('btnFilterOutbound'),
-                    storage: document.getElementById('btnFilterStorage')
-                };
+            let timeout = null;
 
-                function setActiveButton(activeBtn) {
-                    Object.values(buttons).forEach(btn => btn.classList.remove('active'));
-                    if (activeBtn) activeBtn.classList.add('active');
-                }
+            const buttons = {
+                all: document.getElementById('btnAll'),
+                inbound: document.getElementById('btnFilterInbound'),
+                outbound: document.getElementById('btnFilterOutbound'),
+                storage: document.getElementById('btnFilterStorage')
+            };
 
-                function filterBy(divisi) {
-                    const cards = document.querySelectorAll('#operator-list .manager-card');
-                    cards.forEach(card => {
-                        const d = card.dataset.divisi || '';
-                        card.parentElement.style.display = (divisi === 'all' || d.includes(divisi)) ? '' : 'none';
-                    });
-                }
+            function setActiveButton(activeBtn) {
+                Object.values(buttons).forEach(btn => btn.classList.remove('active'));
+                if (activeBtn) activeBtn.classList.add('active');
+            }
 
-                input.addEventListener('input', () => {
-                    clearTimeout(timeout);
-                    timeout = setTimeout(() => {
-                        fetch(`{{ url('operator') }}?search=${encodeURIComponent(input.value)}&ajax=1`)
-                            .then(res => res.text())
-                            .then(html => {
-                                list.innerHTML = html;
-                                setActiveButton(null);
-                            })
-                            .catch(err => console.error('Search error:', err));
-                    }, 300);
+            function filterBy(divisi) {
+                const cards = document.querySelectorAll('#operator-list .manager-card');
+                cards.forEach(card => {
+                    const d = card.dataset.divisi || '';
+                    card.parentElement.style.display = (divisi === 'all' || d.includes(divisi)) ? '' : 'none';
                 });
+            }
 
-                buttons.all.addEventListener('click', () => {
-                    setActiveButton(buttons.all);
-                    filterBy('all');
-                });
-                buttons.inbound.addEventListener('click', () => {
-                    setActiveButton(buttons.inbound);
-                    filterBy('inbound');
-                });
-                buttons.outbound.addEventListener('click', () => {
-                    setActiveButton(buttons.outbound);
-                    filterBy('outbound');
-                });
-                buttons.storage.addEventListener('click', () => {
-                    setActiveButton(buttons.storage);
-                    filterBy('storage');
-                });
+            input.addEventListener('input', () => {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => {
+                    fetch(`{{ url('operator') }}?search=${encodeURIComponent(input.value)}&ajax=1`)
+                        .then(res => res.text())
+                        .then(html => {
+                            list.innerHTML = html;
+                            setActiveButton(null);
+                        })
+                        .catch(err => console.error('Search error:', err));
+                }, 300);
+            });
 
+            buttons.all.addEventListener('click', () => {
                 setActiveButton(buttons.all);
-
-                // Animasi untuk pesan sukses
-                const successMessage = document.getElementById('successMessage');
-                if (successMessage) {
-                    successMessage.style.display = 'block';
-                    setTimeout(() => {
-                        successMessage.style.display = 'none';
-                    }, 3000); // Sembunyikan setelah 3 detik
-                }
+                filterBy('all');
+            });
+            buttons.inbound.addEventListener('click', () => {
+                setActiveButton(buttons.inbound);
+                filterBy('inbound');
+            });
+            buttons.outbound.addEventListener('click', () => {
+                setActiveButton(buttons.outbound);
+                filterBy('outbound');
+            });
+            buttons.storage.addEventListener('click', () => {
+                setActiveButton(buttons.storage);
+                filterBy('storage');
             });
 
-            document.querySelectorAll('.delete-form').forEach(form => {
-                form.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    Swal.fire({
-                        title: 'Apakah Anda yakin?',
-                        text: 'Operator ini akan dihapus permanen!',
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#d33',
-                        cancelButtonColor: '#3085d6',
-                        confirmButtonText: 'Ya, hapus!',
-                        cancelButtonText: 'Batal'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            form.submit();
-                        }
-                    });
+            setActiveButton(buttons.all);
+
+            // Animasi untuk pesan sukses
+            const successMessage = document.getElementById('successMessage');
+            if (successMessage) {
+                successMessage.style.display = 'block';
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                }, 3000);
+            }
+        });
+
+        document.querySelectorAll('.delete-form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                Swal.fire({
+                    title: 'Apakah Anda yakin?',
+                    text: 'Operator ini akan dihapus permanen!',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Ya, hapus!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
                 });
             });
-        </script>
-    </body>
+        });
+    </script>
+</body>
 </html>
 @endunless

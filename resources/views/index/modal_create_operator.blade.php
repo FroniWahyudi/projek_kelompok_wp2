@@ -1,7 +1,6 @@
-<!-- resources/views/index/operator_create.blade.php -->
 <style>
     /* Container photo upload */
-    .photo-upload {
+    .photo-upload-create {
         position: absolute;
         top: 1rem;
         right: 9.5rem;
@@ -16,7 +15,7 @@
     }
 
     /* Label */
-    .photo-upload .form-label {
+    .photo-upload-create .form-label {
         display: block;
         font-size: 0.9rem;
         font-weight: 600;
@@ -25,12 +24,12 @@
     }
 
     /* Wrapper preview */
-    .photo-upload .preview-wrapper {
+    .photo-upload-create .preview-wrapper-create {
         margin-bottom: 3rem;
     }
 
     /* Gambar preview */
-    .photo-upload #photoPreview {
+    .photo-upload-create #photoPreviewCreate {
         width: 208px;
         height: 200px;
         object-fit: cover;
@@ -39,7 +38,7 @@
     }
 
     /* File input: full-width dalam container dan rata kiri */
-    .photo-upload .form-control-sm {
+    .photo-upload-create .form-control-sm {
         width: 90%;
         font-size: 0.8rem;
         padding: 0.25rem;
@@ -47,10 +46,10 @@
     }
 
     /* Override agar tidak tergulung oleh scroll modal-body */
-    .photo-upload {
+    .photo-upload-create {
         position: sticky;
-        top: 0rem;
-        right: -0.5rem;
+        top: 5rem;
+        right: 1.5rem;
         float: right;
         margin-left: -17rem;
         height: 340px;
@@ -74,12 +73,15 @@
         @csrf
 
         <!-- PHOTO UPLOAD -->
-        <div class="photo-upload">
-            <label class="form-label">Photo</label>
-            <div class="preview-wrapper text-center">
-                <img id="photoPreview" src="{{ asset('images/default-user.png') }}" alt="Preview Foto">
+        <div class="photo-upload-create">
+            <label class="form-label">Photo <span class="text-danger">*</span></label>
+            <div class="preview-wrapper-create text-center">
+            <img id="photoPreviewCreate" src="{{ asset('images/default-user.png') }}" alt="Preview Foto">
             </div>
-            <input type="file" name="photo" class="form-control form-control-sm" accept="image/*">
+            <input type="file" name="photo" class="form-control form-control-sm @error('photo') is-invalid @enderror" accept="image/*" required>
+            @error('photo')
+            <div class="text-danger">{{ $message }}</div>
+            @enderror
         </div>
 
         <!-- FORM UTAMA -->
@@ -99,7 +101,7 @@
                         type="text" 
                         name="email_prefix" 
                         id="email_prefix"
-                        class="form-control @error('email') is-invalid @enderror"
+                        class="form-control @error('email') is-invalid @enderror @error('email_prefix') is-invalid @enderror"
                         value="{{ old('email') ? explode('@', old('email'))[0] : '' }}"
                         required
                         autocomplete="off"
@@ -107,26 +109,16 @@
                     >
                     <span class="input-group-text">@nagahytam.co.id</span>
                 </div>
-                <input type="hidden" name="email" id="email_full" value="{{ old('email') }}">
+                <input type="hidden" name="email" id="email_full" value="{{ old('email') }}" required>
                 @error('email')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
+                @error('email_prefix')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
-            <script>
-                // Email auto append domain
-                document.addEventListener('DOMContentLoaded', function() {
-                    const prefixInput = document.getElementById('email_prefix');
-                    const fullInput = document.getElementById('email_full');
-                    const domain = '@nagahytam.co.id';
 
-                    function updateFullEmail() {
-                        fullInput.value = prefixInput.value ? prefixInput.value + domain : '';
-                    }
-
-                    prefixInput.addEventListener('input', updateFullEmail);
-                    updateFullEmail();
-                });
-            </script>
+            <input type="hidden" name="role" value="Operator">
 
             <div class="mb-3">
                 <label class="form-label">Password</label>
@@ -138,7 +130,7 @@
 
             <div class="mb-3">
                 <label class="form-label">Phone</label>
-                <input type="text" name="phone" class="form-control @error('phone') is-invalid @enderror" value="{{ old('phone') }}">
+                <input type="text" name="phone" class="form-control @error('phone') is-invalid @enderror" value="{{ old('phone') }}" required>
                 @error('phone')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -146,7 +138,7 @@
 
             <div class="mb-3">
                 <label class="form-label">Bio</label>
-                <textarea name="bio" class="form-control @error('bio') is-invalid @enderror" rows="3">{{ old('bio') }}</textarea>
+                <textarea name="bio" class="form-control @error('bio') is-invalid @enderror" rows="3" required>{{ old('bio') }}</textarea>
                 @error('bio')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -154,7 +146,7 @@
 
             <div class="mb-3">
                 <label class="form-label">Alamat</label>
-                <input type="text" name="alamat" class="form-control @error('alamat') is-invalid @enderror" value="{{ old('alamat') }}">
+                <input type="text" name="alamat" class="form-control @error('alamat') is-invalid @enderror" value="{{ old('alamat') }}" required>
                 @error('alamat')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -162,7 +154,7 @@
 
             <div class="mb-3">
                 <label class="form-label">Joined At</label>
-                <input type="date" name="joined_at" class="form-control @error('joined_at') is-invalid @enderror" value="{{ old('joined_at') }}">
+                <input type="date" name="joined_at" class="form-control @error('joined_at') is-invalid @enderror" value="{{ old('joined_at') }}" required>
                 @error('joined_at')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -178,14 +170,10 @@
 
             <div class="mb-3">
                 <label class="form-label">Department</label>
-                <select name="department" class="form-control @error('department') is-invalid @enderror">
-                    <option value="">-- Pilih Department --</option>
-                    <option value="HR" {{ old('department') == 'HR' ? 'selected' : '' }}>HR</option>
-                    <option value="Manajemen" {{ old('department') == 'Manajemen' ? 'selected' : '' }}>Manajemen</option>
-                    <option value="Administasi" {{ old('department') == 'Administasi' ? 'selected' : '' }}>Administasi</option>
-                    <option value="Gudang" {{ old('department') == 'Gudang' ? 'selected' : '' }}>Gudang</option>
-                    <option value="Operasional" {{ old('department') == 'Operasional' ? 'selected' : '' }}>Operasional</option>
+                <select name="department" class="form-control @error('department') is-invalid @enderror" readonly disabled>
+                    <option value="Gudang" selected>Gudang</option>
                 </select>
+                <input type="hidden" name="department" value="Gudang">
                 @error('department')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -193,7 +181,7 @@
 
             <div class="mb-3">
                 <label class="form-label">Level</label>
-                <input type="text" name="level" class="form-control @error('level') is-invalid @enderror" value="{{ old('level') }}">
+                <input type="text" name="level" class="form-control @error('level') is-invalid @enderror" value="junior" readonly>
                 @error('level')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -209,7 +197,7 @@
 
             <div class="mb-3">
                 <label class="form-label">Skills</label>
-                <input type="text" name="skills" class="form-control @error('skills') is-invalid @enderror" value="{{ old('skills') }}">
+                <input name="skills" class="form-control @error('skills') is-invalid @enderror" value="{{ old('skills') }}">
                 @error('skills')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -245,17 +233,67 @@
 </div>
 
 <script>
-    // Preview photo sebelum submit
-    const fileInput = document.querySelector('input[name="photo"]');
-    const previewImg = document.getElementById('photoPreview');
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('formCreateOperator');
+        const prefixInput = document.getElementById('email_prefix');
+        const fullInput = document.getElementById('email_full');
+        const fileInput = document.querySelector('#formCreateOperator input[name="photo"]');
+        const previewImg = document.getElementById('photoPreviewCreate');
+        const domain = '@nagahytam.co.id';
 
-    fileInput.addEventListener('change', function() {
-        const file = this.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            previewImg.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
+        // Email handling
+        if (prefixInput && fullInput) {
+            function updateFullEmail() {
+                fullInput.value = prefixInput.value ? prefixInput.value + domain : '';
+                console.log('Updated email_full:', fullInput.value);
+            }
+
+            prefixInput.addEventListener('input', updateFullEmail);
+            updateFullEmail();
+
+            form.addEventListener('submit', function(event) {
+                if (!prefixInput.value.trim()) {
+                    event.preventDefault();
+                    alert('Email prefix is required.');
+                    prefixInput.classList.add('is-invalid');
+                    return false;
+                }
+                if (!fullInput.value) {
+                    event.preventDefault();
+                    alert('Email is required.');
+                    fullInput.classList.add('is-invalid');
+                    return false;
+                }
+            });
+        } else {
+            console.error('Email prefix or full input not found');
+        }
+
+        // Photo preview
+        if (fileInput && previewImg) {
+            console.log('Create modal: File input and preview image found:', fileInput, previewImg);
+            fileInput.addEventListener('change', function() {
+                const file = this.files[0];
+                if (!file) {
+                    console.log('Create modal: No file selected');
+                    return;
+                }
+                if (!file.type.startsWith('image/')) {
+                    console.error('Create modal: Selected file is not an image');
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    console.log('Create modal: Setting image src to:', e.target.result);
+                    previewImg.src = e.target.result;
+                };
+                reader.onerror = function(e) {
+                    console.error('Create modal: Error reading file:', e);
+                };
+                reader.readAsDataURL(file);
+            });
+        } else {
+            console.error('Create modal: File input or preview image element not found');
+        }
     });
 </script>
