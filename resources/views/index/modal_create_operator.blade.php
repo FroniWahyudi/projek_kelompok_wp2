@@ -28,8 +28,8 @@
         margin-bottom: 3rem;
     }
 
-    /* Gambar preview */
-    .photo-upload-create #photoPreviewCreate {
+    /* Gambar preview - Gunakan class bukan ID */
+    .photo-upload-create .photo-preview-create {
         width: 208px;
         height: 200px;
         object-fit: cover;
@@ -72,13 +72,13 @@
     <form id="formCreateOperator" method="POST" action="{{ route('operator.store') }}" enctype="multipart/form-data">
         @csrf
 
-        <!-- PHOTO UPLOAD -->
+        <!-- PHOTO UPLOAD - Fixed dengan class selector -->
         <div class="photo-upload-create">
             <label class="form-label">Photo <span class="text-danger">*</span></label>
             <div class="preview-wrapper-create text-center">
-            <img id="photoPreviewCreate" src="{{ asset('images/default-user.png') }}" alt="Preview Foto">
+                <img class="photo-preview-create" src="{{ asset('images/default-user.png') }}" alt="Preview Foto">
             </div>
-            <input type="file" name="photo" class="form-control form-control-sm @error('photo') is-invalid @enderror" accept="image/*" required>
+            <input type="file" name="photo" class="form-control form-control-sm photo-input-create @error('photo') is-invalid @enderror" accept="image/*" required>
             @error('photo')
             <div class="text-danger">{{ $message }}</div>
             @enderror
@@ -100,8 +100,7 @@
                     <input 
                         type="text" 
                         name="email_prefix" 
-                        id="email_prefix"
-                        class="form-control @error('email') is-invalid @enderror @error('email_prefix') is-invalid @enderror"
+                        class="email-prefix-input form-control @error('email') is-invalid @enderror @error('email_prefix') is-invalid @enderror"
                         value="{{ old('email') ? explode('@', old('email'))[0] : '' }}"
                         required
                         autocomplete="off"
@@ -109,7 +108,7 @@
                     >
                     <span class="input-group-text">@nagahytam.co.id</span>
                 </div>
-                <input type="hidden" name="email" id="email_full" value="{{ old('email') }}" required>
+                <input type="hidden" name="email" class="email-full-input" value="{{ old('email') }}" required>
                 @error('email')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -233,67 +232,113 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const form = document.getElementById('formCreateOperator');
-        const prefixInput = document.getElementById('email_prefix');
-        const fullInput = document.getElementById('email_full');
-        const fileInput = document.querySelector('#formCreateOperator input[name="photo"]');
-        const previewImg = document.getElementById('photoPreviewCreate');
-        const domain = '@nagahytam.co.id';
-
-        // Email handling
-        if (prefixInput && fullInput) {
-            function updateFullEmail() {
-                fullInput.value = prefixInput.value ? prefixInput.value + domain : '';
-                console.log('Updated email_full:', fullInput.value);
+    // ===== FIXED: Menggunakan Event Delegation untuk mengatasi masalah ID tidak unik =====
+    
+    // Photo Preview Handler - Menggunakan event delegation
+    document.addEventListener('change', function(e) {
+        // Cek apakah yang di-click adalah input photo untuk create modal
+        if (e.target.matches('.photo-input-create')) {
+            console.log('Photo input changed in create modal');
+            
+            const file = e.target.files[0];
+            if (!file) {
+                console.log('No file selected');
+                return;
             }
-
-            prefixInput.addEventListener('input', updateFullEmail);
-            updateFullEmail();
-
-            form.addEventListener('submit', function(event) {
-                if (!prefixInput.value.trim()) {
-                    event.preventDefault();
-                    alert('Email prefix is required.');
-                    prefixInput.classList.add('is-invalid');
-                    return false;
-                }
-                if (!fullInput.value) {
-                    event.preventDefault();
-                    alert('Email is required.');
-                    fullInput.classList.add('is-invalid');
-                    return false;
-                }
-            });
-        } else {
-            console.error('Email prefix or full input not found');
-        }
-
-        // Photo preview
-        if (fileInput && previewImg) {
-            console.log('Create modal: File input and preview image found:', fileInput, previewImg);
-            fileInput.addEventListener('change', function() {
-                const file = this.files[0];
-                if (!file) {
-                    console.log('Create modal: No file selected');
-                    return;
-                }
-                if (!file.type.startsWith('image/')) {
-                    console.error('Create modal: Selected file is not an image');
-                    return;
-                }
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    console.log('Create modal: Setting image src to:', e.target.result);
-                    previewImg.src = e.target.result;
-                };
-                reader.onerror = function(e) {
-                    console.error('Create modal: Error reading file:', e);
-                };
-                reader.readAsDataURL(file);
-            });
-        } else {
-            console.error('Create modal: File input or preview image element not found');
+            
+            if (!file.type.startsWith('image/')) {
+                console.error('Selected file is not an image');
+                alert('Please select a valid image file');
+                return;
+            }
+            
+            // Cari preview image dalam modal yang sama
+            const modal = e.target.closest('.modal-content');
+            const previewImg = modal.querySelector('.photo-preview-create');
+            
+            if (!previewImg) {
+                console.error('Preview image not found in modal');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                console.log('Setting image preview');
+                previewImg.src = event.target.result;
+            };
+            reader.onerror = function(error) {
+                console.error('Error reading file:', error);
+            };
+            reader.readAsDataURL(file);
         }
     });
+
+    // Email Handler - Menggunakan event delegation
+    document.addEventListener('input', function(e) {
+        if (e.target.matches('.email-prefix-input')) {
+            const modal = e.target.closest('.modal-content');
+            const fullInput = modal.querySelector('.email-full-input');
+            const domain = '@nagahytam.co.id';
+            
+            if (fullInput) {
+                fullInput.value = e.target.value ? e.target.value + domain : '';
+                console.log('Updated email_full:', fullInput.value);
+            }
+        }
+    });
+
+    // Form Submit Handler - Menggunakan event delegation
+    document.addEventListener('submit', function(e) {
+        if (e.target.matches('#formCreateOperator')) {
+            const modal = e.target.closest('.modal-content');
+            const prefixInput = modal.querySelector('.email-prefix-input');
+            const fullInput = modal.querySelector('.email-full-input');
+            
+            // Validasi email prefix
+            if (!prefixInput.value.trim()) {
+                e.preventDefault();
+                alert('Email prefix is required.');
+                prefixInput.classList.add('is-invalid');
+                prefixInput.focus();
+                return false;
+            }
+            
+            // Validasi full email
+            if (!fullInput.value) {
+                e.preventDefault();
+                alert('Email is required.');
+                return false;
+            }
+            
+            console.log('Form submitted with email:', fullInput.value);
+        }
+    });
+
+    // Initialization ketika modal dibuka (optional - untuk debugging)
+    $(document).on('shown.bs.modal', '.modal', function() {
+        console.log('Modal opened, initializing...');
+        
+        // Update email field jika ada value lama
+        const modal = this;
+        const prefixInput = modal.querySelector('.email-prefix-input');
+        const fullInput = modal.querySelector('.email-full-input');
+        
+        if (prefixInput && fullInput && prefixInput.value) {
+            const domain = '@nagahytam.co.id';
+            fullInput.value = prefixInput.value + domain;
+            console.log('Initialized email:', fullInput.value);
+        }
+    });
+
+    // Debug function - untuk testing (hapus di production)
+    function debugCreateModal() {
+        console.log('=== Debug Create Modal ===');
+        console.log('Photo inputs found:', document.querySelectorAll('.photo-input-create').length);
+        console.log('Photo previews found:', document.querySelectorAll('.photo-preview-create').length);
+        console.log('Email prefix inputs found:', document.querySelectorAll('.email-prefix-input').length);
+        console.log('Email full inputs found:', document.querySelectorAll('.email-full-input').length);
+    }
+    
+    // Uncomment untuk debugging
+    // debugCreateModal();
 </script>
