@@ -13,18 +13,31 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --background-color: #f5f7fa;
+            --background-color: #f0f4f8;
             --card-background: #ffffff;
-            --primary-button: #1e40af;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
-            --toggle-button: #6b7280;
-            --table-header-bg: #eff6ff;
+            --primary-button: #007bff;
+            --text-primary: #003366;
+            --text-secondary: #4a4a4a;
+            --toggle-button: #6c757d;
+            --table-header-bg: #e3f2fd;
             --shadow-light: 0 4px 6px rgba(0, 0, 0, 0.05);
             --shadow-medium: 0 10px 15px rgba(0, 0, 0, 0.07);
             --shadow-hover: 0 15px 25px rgba(0, 0, 0, 0.1);
             --border-radius: 16px;
             --transition: all 0.2s ease-in-out;
+            /* Variables untuk home section tetap tidak berubah */
+            --background-main: #f0f4f8;
+            --button-focus: #007bff;
+            --gradient-start: #e3f2fd;
+            --gradient-end: #e1f5fe;
+            --primary-text-home: #003366;
+            --secondary-text-home: #4a4a4a;
+            --muted-text: #6c757d;
+            --home-button-bg: #ffffff;
+            --home-button-hover: #f8f9fa;
+            --home-button-border: #dee2e6;
+            --notification-bg: #d4edda;
+            --notification-text: #155724;
         }
 
         body {
@@ -36,35 +49,44 @@
             padding: 0;
         }
 
-        /* Fixed Home Button */
+        /* Home Button Styling */
         .home-button {
             position: fixed;
-            top: 24px;
-            left: 24px;
+            top: 20px;
+            left: 20px;
             z-index: 1050;
-            background: var(--card-background);
-            border: 2px solid var(--primary-button);
-            color: var(--primary-button);
-            padding: 12px 20px;
-            border-radius: 40px;
+            background-color: var(--home-button-bg);
+            color: var(--button-focus);
+            padding: 12px 15px;
+            border-radius: 50px;
             text-decoration: none;
-            font-weight: 500;
-            box-shadow: var(--shadow-light);
-            transition: var(--transition);
+            font-weight: 600;
+            font-size: 14px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border: 2px solid var(--home-button-border);
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
+            min-width: 100px;
+            justify-content: center;
         }
 
         .home-button:hover {
-            background: var(--primary-button);
-            color: white;
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-hover);
+            background-color: var(--button-focus);
+            color: var(--card-background);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 123, 255, 0.25);
+            text-decoration: none;
         }
 
         .home-button i {
-            font-size: 18px;
+            font-size: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        .home-button:hover i {
+            transform: scale(1.1);
         }
 
         .main-content {
@@ -166,7 +188,7 @@
 
         .form-select:focus, .form-control:focus {
             border-color: var(--primary-button);
-            box-shadow: 0 0 0 0.2rem rgba(30, 64, 175, 0.2);
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.2);
             background: white;
         }
 
@@ -231,7 +253,7 @@
         .table th {
             font-weight: 600;
             color: var(--text-primary);
-            background: linear-gradient(135deg, #f9fafb 0%, #e5e7eb 100%);
+            background: var(--table-header-bg);
             padding: 18px 22px;
             border-bottom: 2px solid #d1d5db;
             font-size: 14px;
@@ -251,7 +273,7 @@
         }
 
         .table tr:hover td {
-            background: linear-gradient(135deg, rgba(30, 64, 175, 0.05) 0%, rgba(30, 64, 175, 0.1) 100%);
+            background: linear-gradient(135deg, rgba(0, 123, 255, 0.05) 0%, rgba(0, 123, 255, 0.1) 100%);
         }
 
         .employee-info {
@@ -429,10 +451,11 @@
 
         @media (max-width: 768px) {
             .home-button {
-                top: 16px;
-                left: 16px;
-                padding: 10px 14px;
-                font-size: 14px;
+                top: 15px;
+                left: 15px;
+                padding: 10px 16px;
+                font-size: 13px;
+                min-width: 90px;
             }
 
             .main-content {
@@ -604,58 +627,58 @@
                                         <th class="text-center">Aksi</th>
                                     </tr>
                                 </thead>
-<tbody class="table-loading">
-    @if($slips->count() > 0)
-        @foreach($slips as $slip)
-            <tr> <!-- Hapus style="animation-delay: ..." -->
-                <td class="text-center">
-                    <span class="slip-id">#{{ $slip->id }}</span>
-                </td>
-                <td>
-                    <div class="employee-info">
-                        <div class="avatar-sm">
-                            <i class="bi bi-person-fill"></i>
-                        </div>
-                        <span class="employee-name">{{ $slip->user->name ?? 'N/A' }}</span>
-                    </div>
-                </td>
-                <td>
-                    <span class="period-text">{{ $slip->period ? $slip->period->formatLocalized('%B %Y') : 'N/A' }}</span>
-                </td>
-                <td>
-                    <span class="salary-amount">{{ 'Rp ' . number_format($slip->net_salary ?? 0, 0, ',', '.') }}</span>
-                </td>
-                <td class="text-center">
-                    <div class="d-flex justify-content-center flex-wrap">
-                        <a href="{{ route('slips.show', $slip->id) }}" class="btn btn-sm btn-outline-info btn-action" data-bs-toggle="tooltip" title="Lihat Detail">
-                            <i class="bi bi-eye"></i>
-                        </a>
-                        @if(auth()->user()->role != 'Operator')
-                            <a href="{{ route('slips.edit', $slip->id) }}" class="btn btn-sm btn-outline-primary btn-action" data-bs-toggle="tooltip" title="Edit">
-                                <i class="bi bi-pencil"></i>
-                            </a>
-                            <form action="{{ route('slips.destroy', $slip->id) }}" method="POST" class="d-inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-outline-secondary btn-action" data-bs-toggle="tooltip" title="Hapus">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </form>
-                        @endif
-                    </div>
-                </td>
-            </tr>
-        @endforeach
-    @else
-        <tr>
-            <td colspan="5" class="no-data">
-                <i class="bi bi-file-earmark-excel"></i>
-                <h5 class="mt-3">Tidak ada data slip gaji</h5>
-                <p class="text-muted">Silakan buat slip gaji baru atau sesuaikan filter pencarian Anda</p>
-            </td>
-        </tr>
-    @endif
-</tbody>
+                                <tbody class="table-loading">
+                                    @if($slips->count() > 0)
+                                        @foreach($slips as $slip)
+                                            <tr>
+                                                <td class="text-center">
+                                                    <span class="slip-id">#{{ $slip->id }}</span>
+                                                </td>
+                                                <td>
+                                                    <div class="employee-info">
+                                                        <div class="avatar-sm">
+                                                            <i class="bi bi-person-fill"></i>
+                                                        </div>
+                                                        <span class="employee-name">{{ $slip->user->name ?? 'N/A' }}</span>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span class="period-text">{{ $slip->period ? $slip->period->formatLocalized('%B %Y') : 'N/A' }}</span>
+                                                </td>
+                                                <td>
+                                                    <span class="salary-amount">{{ 'Rp ' . number_format($slip->net_salary ?? 0, 0, ',', '.') }}</span>
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="d-flex justify-content-center flex-wrap">
+                                                        <a href="{{ route('slips.show', $slip->id) }}" class="btn btn-sm btn-outline-info btn-action" data-bs-toggle="tooltip" title="Lihat Detail">
+                                                            <i class="bi bi-eye"></i>
+                                                        </a>
+                                                        @if(auth()->user()->role != 'Operator')
+                                                            <a href="{{ route('slips.edit', $slip->id) }}" class="btn btn-sm btn-outline-primary btn-action" data-bs-toggle="tooltip" title="Edit">
+                                                                <i class="bi bi-pencil"></i>
+                                                            </a>
+                                                            <form action="{{ route('slips.destroy', $slip->id) }}" method="POST" class="d-inline">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="btn btn-sm btn-outline-secondary btn-action" data-bs-toggle="tooltip" title="Hapus">
+                                                                    <i class="bi bi-trash"></i>
+                                                                </button>
+                                                            </form>
+                                                        @endif
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @else
+                                        <tr>
+                                            <td colspan="5" class="no-data">
+                                                <i class="bi bi-file-earmark-excel"></i>
+                                                <h5 class="mt-3">Tidak ada data slip gaji</h5>
+                                                <p class="text-muted">Silakan buat slip gaji baru atau sesuaikan filter pencarian Anda</p>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                </tbody>
                             </table>
                         </div>
                     </div>
