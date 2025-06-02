@@ -236,7 +236,7 @@
                         <form action="{{ route('operator.destroy', $op->id) }}" method="POST" class="delete-form" style="display:inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                            <button type="submit" class="btn btn-danger btn-sm delete-btn">Hapus</button>
                         </form>
                     @endif
                 </div>
@@ -374,7 +374,36 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        // Function untuk menginisialisasi event listener delete
+        function initializeDeleteConfirmation() {
+            // Menggunakan event delegation untuk handle delete buttons
+            document.addEventListener('click', function(e) {
+                if (e.target && e.target.classList.contains('delete-btn')) {
+                    e.preventDefault();
+                    
+                    const form = e.target.closest('.delete-form');
+                    if (form) {
+                        Swal.fire({
+                            title: 'Apakah Anda yakin?',
+                            text: 'Operator ini akan dihapus permanen!',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#d33',
+                            cancelButtonColor: '#3085d6',
+                            confirmButtonText: 'Ya, hapus!',
+                            cancelButtonText: 'Batal'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                form.submit();
+                            }
+                        });
+                    }
+                }
+            });
+        }
+
+        // Function untuk menginisialisasi semua event listeners
+        function initializeEventListeners() {
             const input = document.getElementById('searchInput');
             const list = document.getElementById('operator-list');
             if (!input || !list) return;
@@ -389,7 +418,9 @@
             };
 
             function setActiveButton(activeBtn) {
-                Object.values(buttons).forEach(btn => btn.classList.remove('active'));
+                Object.values(buttons).forEach(btn => {
+                    if (btn) btn.classList.remove('active');
+                });
                 if (activeBtn) activeBtn.classList.add('active');
             }
 
@@ -401,6 +432,7 @@
                 });
             }
 
+            // Search functionality
             input.addEventListener('input', () => {
                 clearTimeout(timeout);
                 timeout = setTimeout(() => {
@@ -409,31 +441,43 @@
                         .then(html => {
                             list.innerHTML = html;
                             setActiveButton(null);
+                            // Re-initialize Bootstrap modals setelah konten diupdate
+                            initializeBootstrapModals();
                         })
                         .catch(err => console.error('Search error:', err));
                 }, 300);
             });
 
-            buttons.all.addEventListener('click', () => {
-                setActiveButton(buttons.all);
-                filterBy('all');
-            });
-            buttons.inbound.addEventListener('click', () => {
-                setActiveButton(buttons.inbound);
-                filterBy('inbound');
-            });
-            buttons.outbound.addEventListener('click', () => {
-                setActiveButton(buttons.outbound);
-                filterBy('outbound');
-            });
-            buttons.storage.addEventListener('click', () => {
-                setActiveButton(buttons.storage);
-                filterBy('storage');
-            });
+            // Filter buttons
+            if (buttons.all) {
+                buttons.all.addEventListener('click', () => {
+                    setActiveButton(buttons.all);
+                    filterBy('all');
+                });
+            }
+            if (buttons.inbound) {
+                buttons.inbound.addEventListener('click', () => {
+                    setActiveButton(buttons.inbound);
+                    filterBy('inbound');
+                });
+            }
+            if (buttons.outbound) {
+                buttons.outbound.addEventListener('click', () => {
+                    setActiveButton(buttons.outbound);
+                    filterBy('outbound');
+                });
+            }
+            if (buttons.storage) {
+                buttons.storage.addEventListener('click', () => {
+                    setActiveButton(buttons.storage);
+                    filterBy('storage');
+                });
+            }
 
+            // Set default active button
             setActiveButton(buttons.all);
 
-            // Animasi untuk pesan sukses
+            // Success message animation
             const successMessage = document.getElementById('successMessage');
             if (successMessage) {
                 successMessage.style.display = 'block';
@@ -441,26 +485,28 @@
                     successMessage.style.display = 'none';
                 }, 3000);
             }
-        });
+        }
 
-        document.querySelectorAll('.delete-form').forEach(form => {
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                Swal.fire({
-                    title: 'Apakah Anda yakin?',
-                    text: 'Operator ini akan dihapus permanen!',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Ya, hapus!',
-                    cancelButtonText: 'Batal'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        form.submit();
-                    }
-                });
+        // Function untuk menginisialisasi Bootstrap modals
+        function initializeBootstrapModals() {
+            // Re-initialize semua modal Bootstrap
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modalEl => {
+                // Dispose existing modal instance jika ada
+                const existingModal = bootstrap.Modal.getInstance(modalEl);
+                if (existingModal) {
+                    existingModal.dispose();
+                }
+                // Create new modal instance
+                new bootstrap.Modal(modalEl);
             });
+        }
+
+        // Initialize semua functionality saat DOM ready
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeEventListeners();
+            initializeDeleteConfirmation();
+            initializeBootstrapModals();
         });
     </script>
 </body>
