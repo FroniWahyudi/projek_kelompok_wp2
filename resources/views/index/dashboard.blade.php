@@ -653,8 +653,8 @@
 
 .notification-dot-slip {
     position: absolute;
-    top: 418px;
-    right: 25px;
+    top: 414px;
+    right: 35px;
     width: 14px;
     height: 14px;
     background-color: red;

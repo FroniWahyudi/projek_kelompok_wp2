@@ -190,7 +190,13 @@
       margin-top: 1.5rem;
     }
     
-    
+    /* Home button positioning */
+    .home-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 1000;
+    }
     
     @media (max-width: 768px) {
       .profile-card {
@@ -200,6 +206,13 @@
       .user-avatar {
         width: 100px;
         height: 100px;
+      }
+      
+      .home-button {
+        position: relative;
+        top: auto;
+        left: auto;
+        margin-bottom: 1rem;
       }
     }
     
@@ -231,6 +244,11 @@
   </style>
 </head>
 <body>
+  <!-- Home Button - positioned at top left -->
+  <a href="{{ url('/') }}" class="btn btn-secondary home-button">
+    <i class="fas fa-home me-1"></i> Home
+  </a>
+
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-lg-10">
@@ -244,33 +262,11 @@
             @method('PUT')
           @endif
           <div class="row">
-            <div class="col-lg-4">
-              <div class="profile-card h-100">
-                <div class="card-body text-center py-4">
-                  <div class="user-avatar-wrapper position-relative d-inline-block">
-                    <img src="{{ is_object($user) && isset($user->photo_url) ? asset($user->photo_url) : 'https://ui-avatars.com/api/?name=' . urlencode(is_object($user) && isset($user->name) ? $user->name : 'User') . '&background=4e73df&color=fff&size=120' }}" 
-                         alt="User Avatar" class="user-avatar mb-3" id="avatar-preview">
-                    <div class="file-upload">
-                      <label for="photo-upload" class="file-upload-btn">
-                        <i class="fas fa-camera me-1"></i> Ganti Foto
-                      </label>
-                      <input type="file" name="photo" id="photo-upload" class="file-upload-input" accept="image/*">
-                      <div class="file-upload-name" id="file-name"></div>
-                    </div>
-                  </div>
-                  <h4 class="user-name">{{ is_object($user) && isset($user->name) ? $user->name : 'Nama Pengguna' }}</h4>
-                  <p class="user-email">{{ is_object($user) && isset($user->email) ? $user->email : 'email@example.com' }}</p>
-                  <div class="about-section">
-                    <h5 class="about-title"><i class="fas fa-info-circle me-2"></i>Tentang Saya</h5>
-                    <p class="about-text">{{ is_object($user) && isset($user->bio) ? $user->bio : 'Tidak ada deskripsi' }}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-8 mt-4 mt-lg-0">
+            <!-- Left side: Personal Information Form -->
+            <div class="col-lg-8 mb-4 mb-lg-0">
               <div class="profile-card h-100">
                 <div class="card-body py-4">
-                  <h5 class="section-title"><i class="fas fa-id-card me-2"></i>Informasi Pribadi  <a href="{{ url('/') }}" class="btn btn-secondary" style="margin-left:263px; margin-top:-49px;"><i class="fas fa-home me-1"></i> Home</a></h5>
+                  <h5 class="section-title"><i class="fas fa-id-card me-2"></i>Informasi Pribadi</h5>
                  
                   <div class="row">
                     <div class="col-md-6 mb-3">
@@ -294,7 +290,7 @@
                         <input type="text" class="form-control" id="alamat" name="alamat" value="{{ old('alamat', $user->alamat ?? '') }}" placeholder="Masukkan alamat lengkap">
                       </div>
                     </div>
-                    <div class="col-12 mb-3">
+                    <div class="col-md-6 mb-3">
                       <label for="bio" class="form-label">Bio</label>
                       <div class="input-group">
                         <span class="input-group-text"><i class="fas fa-pen"></i></span>
@@ -315,8 +311,34 @@
                 </div>
               </div>
             </div>
+            
+            <!-- Right side: Profile Card with Photo -->
+            <div class="col-lg-4">
+              <div class="profile-card h-100">
+                <div class="card-body text-center py-4">
+                  <div class="user-avatar-wrapper position-relative d-inline-block">
+                    <img src="{{ is_object($user) && isset($user->photo_url) ? asset($user->photo_url) : 'https://ui-avatars.com/api/?name=' . urlencode(is_object($user) && isset($user->name) ? $user->name : 'User') . '&background=4e73df&color=fff&size=120' }}" 
+                         alt="User Avatar" class="user-avatar mb-3" id="avatar-preview">
+                    <div class="file-upload">
+                      <label for="photo-upload" class="file-upload-btn">
+                        <i class="fas fa-camera me-1"></i> Ganti Foto
+                      </label>
+                      <input type="file" name="photo" id="photo-upload" class="file-upload-input" accept="image/*">
+                      <div class="file-upload-name" id="file-name"></div>
+                    </div>
+                  </div>
+                  <h4 class="user-name">{{ is_object($user) && isset($user->name) ? $user->name : 'Nama Pengguna' }}</h4>
+                  <p class="user-email">{{ is_object($user) && isset($user->email) ? $user->email : 'email@example.com' }}</p>
+                  <div class="about-section">
+                    <h5 class="about-title"><i class="fas fa-info-circle me-2"></i>Tentang Saya</h5>
+                    <p class="about-text">{{ is_object($user) && isset($user->bio) ? $user->bio : 'Tidak ada deskripsi' }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </form>
+        
         <!-- Form 2: Informasi Akun -->
         <form action="{{ isset($user) && is_object($user) ? route('profil.update.account', $user->id) : '#' }}" method="POST" class="fade-in">
           @csrf
@@ -356,7 +378,6 @@
                   </div>
                   
                   <div class="d-flex justify-content-between mt-4">
-                    
                     <div class="d-flex">
                       <button type="reset" class="btn btn-secondary me-3">
                         <i class="fas fa-undo me-1"></i> Reset

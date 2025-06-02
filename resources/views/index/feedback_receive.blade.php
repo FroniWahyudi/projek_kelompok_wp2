@@ -6,6 +6,7 @@
   <title>Feedback Pegawai</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     .gradient-bg {
       background: #f0f4f8;
@@ -38,14 +39,14 @@
 </head>
 <body class="gradient-bg min-vh-100">
   <div class="container py-4 py-md-5">
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4">
+    <a href="dashboard" class="mt-3 mt-md-0 btn btn-primary hover-scale" style="margin-bottom:10px;">
+      <i class="fas fa-home mr-2"></i> Home
+    </a>
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-4">
       <div>
         <h1 class="h2 fw-bold" style="color: #003366;">Feedback</h1>
         <p style="color: #4a4a4a;">Daftar feedback yang diberikan kepada {{ auth()->user()->name }}</p>
       </div>
-      <a href="dashboard" class="mt-3 mt-md-0 btn btn-primary hover-scale">
-        <i class="bi bi-house-door me-2"></i> Home
-      </a>
     </div>
 
     <div class="feedback-card rounded-3 shadow">
