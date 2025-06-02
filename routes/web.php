@@ -50,11 +50,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/whats-new/{id}', [NewsController::class, 'show'])->name('whats_new');
 
     // HR sections
-    Route::get('/admin', [HrDashboardController::class, 'hr_index'])->name('hr.admin');
-    Route::get('/leader', [HrDashboardController::class, 'leader_index'])->name('hr.leader');
     Route::get('/manajemen', [HrDashboardController::class, 'manajemen_index'])->name('hr.manajemen');
-    Route::post('/karyawan/update_sisa_cuti', [HrDashboardController::class, 'updateSisaCuti'])->name('karyawan.update_sisa_cuti');
-
+    
     // Admin CRUD Routes
     Route::prefix('admin')->name('admin.')->group(function () { 
         Route::get('/', [CrudController::class, 'adminIndex'])->name('index');
@@ -82,13 +79,14 @@ Route::middleware('auth')->group(function () {
     Route::post('/buat-resi', [ResiController::class, 'store'])->name('resi.store');
 
     // Operator CRUD Routes
-    Route::get('/operator', [CrudController::class, 'usersIndex'])->name('operator.index');
-    Route::get('/operator/create', [CrudController::class, 'showCreateForm'])->name('operator.create');
-    Route::post('/operator', [CrudController::class, 'createOperatorBaru'])->name('operator.store');
-    Route::get('/operator/{id}/edit', [CrudController::class, 'usersEdit'])->name('operator.edit');
-    Route::put('/operator/{id}', [CrudController::class, 'usersUpdate'])->name('operator.update');
-    Route::delete('/operator/{id}', [CrudController::class, 'usersDestroy'])->name('operator.destroy');
-
+    Route::prefix('operator')->name('operator.')->group(function () {
+        Route::get('/', [CrudController::class, 'usersIndex'])->name('index');
+        Route::get('/create', [CrudController::class, 'showCreateForm'])->name('create');
+        Route::post('/', [CrudController::class, 'createOperatorBaru'])->name('store');
+        Route::get('/{id}/edit', [CrudController::class, 'usersEdit'])->name('edit');
+        Route::put('/{id}', [CrudController::class, 'usersUpdate'])->name('update');
+        Route::delete('/{id}', [CrudController::class, 'usersDestroy'])->name('destroy');
+    });
     // Leader Routes
     Route::prefix('leader')->name('leader.')->group(function () {
         Route::get('/', [CrudController::class, 'leaderIndex'])->name('index');
