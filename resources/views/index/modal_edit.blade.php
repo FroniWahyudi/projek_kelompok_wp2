@@ -130,7 +130,8 @@
                 @enderror
             </div>
 
-            <div class="mb-3">
+            <div class="mb-3" style="
+    margin-bottom: 7px !important;">
                 <label class="form-label">Email</label>
                 <div class="input-group">
                     <input 
@@ -147,7 +148,7 @@
                     <span class="input-group-text">@nagahytam.co.id</span>
                 </div>
                 <input type="hidden" name="email" id="fullEmail{{ $user->id }}" value="{{ old('email', $user->email) }}">
-                <small class="form-text text-muted">Hanya username yang dapat diubah, domain tetap @nagahytam.co.id</small>
+               
                 @error('email')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
