@@ -662,25 +662,51 @@
         icon.className = 'bi bi-arrow-repeat animate-spin';
         text.textContent = 'Mengirim...';
         
-        setTimeout(() => {
-          button.disabled = false;
-          icon.className = 'bi bi-check-circle';
-          text.textContent = 'Terkirim!';
-          
-          // Show notification
-          const notification = document.getElementById('notification');
-          notification.classList.add('show');
-          setTimeout(() => {
-            notification.classList.remove('show');
-          }, 5000);
-          
-          textarea.value = '';
-          
-          setTimeout(() => {
-            icon.className = 'bi bi-send';
-            text.textContent = 'Kirim Feedback';
-          }, 2000);
-        }, 1500);
+        // Create form data and send it
+        const formData = new FormData(this);
+        fetch(this.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            button.disabled = false;
+            icon.className = 'bi bi-check-circle';
+            text.textContent = 'Terkirim!';
+            
+            // Show notification
+            const notification = document.getElementById('notification');
+            notification.classList.add('show');
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 5000);
+            
+            textarea.value = '';
+            
+            setTimeout(() => {
+                icon.className = 'bi bi-send';
+                text.textContent = 'Kirim Feedback';
+            }, 2000);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            button.disabled = false;
+            icon.className = 'bi bi-x-circle';
+            text.textContent = 'Gagal! Coba lagi';
+            
+            setTimeout(() => {
+                icon.className = 'bi bi-send';
+                text.textContent = 'Kirim Feedback';
+            }, 2000);
+        });
       });
     });
 

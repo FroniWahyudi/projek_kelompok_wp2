@@ -433,7 +433,7 @@ class CrudController extends Controller
     }
 
     public function feedbackStore(Request $request)
-    {
+    {   
         $request->validate([
             'user_id' => 'required|exists:users,id',
             'feedback_text' => 'required|string|max:1000',
@@ -446,7 +446,7 @@ class CrudController extends Controller
             'disetujui_oleh' => auth()->id()
         ]);
 
-        return redirect()->route('feedback.index')->with('success', 'Feedback berhasil dikirim.');
+        return response()->json(['message' => 'Feedback berhasil dikirim.']);
     }
 
 
