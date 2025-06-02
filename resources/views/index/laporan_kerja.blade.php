@@ -287,6 +287,7 @@
     $("#percentDone").text(pct + "%");
     $("#progressBar").css("width", pct + "%");
     $("#markAll").prop("disabled", done !== all);
+    $("#printResi").prop("disabled", done !== all);
   }
 
   function showSuccess(title, desc, delay = 1800) {
@@ -310,71 +311,104 @@
       return;
     }
 
-    const element = document.querySelector('.container');
+    // Create a new div for the PDF content
+    const pdfContent = document.createElement('div');
+    pdfContent.style.background = '#fff';
+    pdfContent.style.padding = '20px';
+    pdfContent.style.maxWidth = '800px';
+    pdfContent.style.margin = '0 auto';
+    
+    // Get the current receipt data
+    const kode = $("#infoKode").text();
+    const tujuan = $("#infoTujuan").text();
+    const tanggal = $("#infoTanggal").text();
+    const status = $("#infoStatus").text();
+    
+    // Create receipt header
+    pdfContent.innerHTML = `
+      <div style="text-align: center; margin-bottom: 30px;">
+        <h2 style="color: #003366; margin-bottom: 10px;">Receipt - ${kode}</h2>
+        <hr style="border-top: 2px solid #003366;">
+      </div>
+      <div style="margin-bottom: 30px;">
+        <p><strong>Resi:</strong> ${kode}</p>
+        <p><strong>Tujuan:</strong> ${tujuan}</p>
+        <p><strong>Tanggal:</strong> ${tanggal}</p>
+        <p><strong>Status:</strong> ${status}</p>
+      </div>
+    `;
 
-    if (!element) {
-      alert('Elemen .container tidak ditemukan. Pastikan elemen tersebut ada di halaman.');
-      return;
-    }
+    // Create table for items
+    const table = document.createElement('table');
+    table.style.width = '100%';
+    table.style.borderCollapse = 'collapse';
+    table.style.marginTop = '20px';
+    
+    // Add table header
+    table.innerHTML = `
+      <thead>
+        <tr style="background: #f0f4f8;">
+          <th style="border: 1px solid #ddd; padding: 12px; text-align: left;">No</th>
+          <th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Item</th>
+          <th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Qty</th>
+        </tr>
+      </thead>
+      <tbody>
+    `;
 
-    // Cari semua elemen dengan class d-print-none
-    const elementsToHide = document.querySelectorAll('.d-print-none');
-    const originalDisplayStyles = [];
+    // Add table rows
+    const items = $("#resiTableBody tr").map(function() {
+      return {
+        no: $(this).find('td:eq(0)').text(),
+        item: $(this).find('td:eq(1)').text(),
+        qty: $(this).find('td:eq(2)').text()
+      };
+    }).get();
 
-    // Sembunyikan elemen dengan d-print-none
-    elementsToHide.forEach((el, index) => {
-      if (el) {
-        originalDisplayStyles[index] = el.style.display;
-        el.style.display = 'none';
-      } else {
-        originalDisplayStyles[index] = null;
-      }
+    items.forEach(item => {
+      table.querySelector('tbody').innerHTML += `
+        <tr>
+          <td style="border: 1px solid #ddd; padding: 12px;">${item.no}</td>
+          <td style="border: 1px solid #ddd; padding: 12px;">${item.item}</td>
+          <td style="border: 1px solid #ddd; padding: 12px;">${item.qty}</td>
+        </tr>
+      `;
     });
 
-    // Tampilkan elemen print-only
-    const printOnlyElements = document.querySelectorAll('.print-only');
-    printOnlyElements.forEach((el) => {
-      if (el) {
-        el.style.display = 'block';
-      }
-    });
+    pdfContent.appendChild(table);
+    document.body.appendChild(pdfContent);
 
+    // Configure PDF options
     const opt = {
-      margin: [10, 5, 10, 5],
-      filename: `resi-${$("#infoKode").text()}.pdf`,
+      margin: [15, 15, 15, 15],
+      filename: `resi-${kode}.pdf`,
       image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' },
-      pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+      html2canvas: { 
+        scale: 1,
+        useCORS: true,
+        logging: false
+      },
+      jsPDF: { 
+        unit: 'mm', 
+        format: 'a4', 
+        orientation: 'portrait'
+      }
     };
 
-    html2pdf().set(opt).from(element).save().then(() => {
-      // Kembalikan elemen d-print-none ke tampilan semula
-      elementsToHide.forEach((el, index) => {
-        if (el && originalDisplayStyles[index] !== null) {
-          el.style.display = originalDisplayStyles[index] || '';
-        }
+    // Generate PDF
+    html2pdf()
+      .from(pdfContent)
+      .set(opt)
+      .save()
+      .then(() => {
+        document.body.removeChild(pdfContent);
+        showSuccess("Berhasil!", "PDF telah diunduh.");
+      })
+      .catch(err => {
+        console.error('Gagal membuat PDF:', err);
+        document.body.removeChild(pdfContent);
+        alert('Terjadi kesalahan saat membuat PDF. Silakan coba lagi.');
       });
-      // Sembunyikan kembali elemen print-only
-      printOnlyElements.forEach((el) => {
-        if (el) {
-          el.style.display = 'none';
-        }
-      });
-    }).catch(err => {
-      console.error('Gagal membuat PDF:', err);
-      alert('Terjadi kesalahan saat membuat PDF. Silakan coba lagi.');
-      elementsToHide.forEach((el, index) => {
-        if (el && originalDisplayStyles[index] !== null) {
-          el.style.display = originalDisplayStyles[index] || '';
-        }
-      });
-      printOnlyElements.forEach((el) => {
-        if (el) {
-          el.style.display = 'none';
-        }
-      });
-    });
   }
 
   $(function() {
