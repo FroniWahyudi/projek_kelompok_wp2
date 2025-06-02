@@ -568,6 +568,8 @@
         `);
       }
 
+      $("#printResi").prop("disabled", true);
+
       if (d.status === 'Selesai') {
         const total = d.items.length;
         $("#doneCount").text(total);
@@ -575,6 +577,7 @@
         $("#percentDone").text("100%");
         $("#progressBar").css("width", "100%");
         $("#markAll").prop("disabled", true);
+        $("#printResi").prop("disabled", false);
       } else {
         updateProgress();
       }
@@ -589,7 +592,7 @@
       $("#percentDone").text(pct + "%");
       $("#progressBar").css("width", pct + "%");
       $("#markAll").prop("disabled", done !== all);
-      $("#printResi").prop("disabled", done !== all);
+      //$("#printResi").prop("disabled", done !== all);
     }
 
     function showSuccess(title, desc, delay = 1800) {
