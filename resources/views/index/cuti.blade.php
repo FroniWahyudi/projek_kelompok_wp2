@@ -7,6 +7,7 @@
     <!-- Bootstrap CSS & Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --primary-bg: #f0f4f8;
@@ -245,9 +246,8 @@
         <nav aria-label="breadcrumb" class="mb-4">
             <ol class="breadcrumb align-items-center" style="font-size: 1.25rem;">
                 <li class="breadcrumb-item d-flex align-items-center">
-                    <a href="{{ route('dashboard') }}" class="text-decoration-none d-flex align-items-center">
-                        <i class="bi bi-house-door breadcrumb-house-icon"></i>
-                        <span class="ms-2 fw-bold" style="font-size: 1.4rem; margin-top: 6px;">Home</span>
+                    <a href="{{ url('dashboard') }}" class="flex items-center text-blue-600 hover:text-blue-800 transition-colors" style="text-decoration: none;">
+                        <i class="fas fa-home mr-2"></i> Home
                     </a>
                 </li>
             </ol>

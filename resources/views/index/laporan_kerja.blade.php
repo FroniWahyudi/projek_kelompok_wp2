@@ -7,6 +7,7 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
     body {
@@ -112,8 +113,8 @@
     <h2>Receipt - <span id="printKode"></span></h2>
   </div>
   <div class="d-flex align-items-center mb-4 d-print-none">
-    <a href="{{ route('dashboard') }}" class="me-3 text-dark-blue fs-4">
-      <i class="bi bi-house-door d-print-none"></i>
+    <a href="{{ url('dashboard') }}" class="flex items-center text-blue-600 hover:text-blue-800 transition-colors me-3" style="text-decoration: none;">
+      <i class="fas fa-home mr-2"></i> Home
     </a>
     <h2 class="m-0 flex-grow-1 text-dark-blue d-print-none">Tugas Harian Resi – Naga Hytam</h2>
     @if(auth()->user() && auth()->user()->role === 'Admin')

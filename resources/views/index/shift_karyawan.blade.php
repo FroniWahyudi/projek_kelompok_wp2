@@ -7,6 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --background-main: #f0f4f8; /* Peringkat 1: Latar belakang utama */
@@ -246,16 +247,11 @@
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-custom mb-4">
-        <div class="container">
-            <a class="nav-link" href="{{ route('dashboard') }}">
-                <i class="bi bi-house-door me-1"></i> Home
-            </a>
-        </div>
-    </nav>
-
     <div class="container py-4">
         <div class="d-flex justify-content-between align-items-center mb-4 animate__animated animate__fadeIn">
+            <a href="{{ url('dashboard') }}" class="flex items-center text-blue-600 hover:text-blue-800 transition-colors" style="text-decoration: none;">
+                <i class="fas fa-home mr-2"></i> Home
+            </a>
             <h2 class="mb-0"><i class="bi bi-calendar-check me-2"></i>Shift & Jadwal Karyawan</h2>
         </div>
 
@@ -302,7 +298,12 @@
                                             <img src="https://ui-avatars.com/api/?name={{ urlencode($shift->user->name) }}" class="user-avatar" alt="{{ $shift->user->name }}">
                                         @endif
                                     </td>
-                                    <td>{{ $shift->user->name }}</td>
+                                    <td>
+                                    {{ $shift->user->name }}
+                                    @if ($shift->user->name === auth()->user()->name)
+                                        <span class="badge bg-success text-white">Anda</span>
+                                    @endif          
+                                    </td>
                                     <td>{{ $shift->user->department }}</td>
                                     <td>{{ $shift->date->format('Y-m-d') }}</td>
                                     <td>

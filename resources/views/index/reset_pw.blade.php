@@ -21,10 +21,10 @@
     <div class="container mx-auto px-4 py-8 max-w-4xl">
         <!-- Header Section -->
         <div class="flex justify-between items-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-800">Password Reset</h1>
             <a href="{{ url('dashboard') }}" class="flex items-center text-blue-600 hover:text-blue-800 transition-colors">
-                <i class="fas fa-home mr-2"></i> Back to Home
+                <i class="fas fa-home mr-2"></i> Home
             </a>
+            <h1 class="text-3xl font-bold text-gray-800">Password Reset</h1>
         </div>
 
         <!-- Success Message -->

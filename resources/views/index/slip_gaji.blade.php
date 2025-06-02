@@ -254,8 +254,8 @@
                     <div id="payslips-view">
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <div>
-                                <a href="{{ route('dashboard') }}" class="btn btn-primary me-2">
-                                    <i class="bi bi-house-door-fill me-1"></i> Home
+                                <a href="{{ url('dashboard') }}" class="flex items-center text-blue-600 hover:text-blue-800 transition-colors" style="text-decoration: none;">
+                                    <i class="fas fa-home mr-2"></i> Home
                                 </a>
                                 <h1 class="page-title d-inline-block ms-2">{{ $title ?? 'Pengelolaan Slip Gaji' }}</h1>
                             </div>
