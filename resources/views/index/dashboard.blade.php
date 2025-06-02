@@ -639,7 +639,7 @@
     background-color: red;
     border-radius: 50%;
     position: absolute;
-    top: 469px;
+    top: 362px;
     z-index: 100;
     left: 200px;
 }
