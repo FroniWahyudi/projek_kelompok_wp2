@@ -1,11 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Support\Facades\Auth;
 use App\Models\News;
 use App\Models\User;
+use App\Models\Slip;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -15,31 +18,37 @@ class DashboardController extends Controller
         $role = $user->role;
         $newsItems = News::orderBy('created_at', 'desc')->get();
 
-        return view('index.dashboard', compact('user', 'role', 'newsItems'));
+        // Cek apakah ada slip gaji yang belum dibaca untuk pengguna saat ini
+        $hasUnreadSlip = false;
+        if (in_array($role, ['Operator', 'Admin', 'Leader'])) {
+            $currentPeriod = Carbon::now()->format('Y-m') . '-01';
+            $hasUnreadSlip = Slip::where('user_id', $user->id)
+                ->where('period', $currentPeriod)
+                ->where('is_read', false)
+                ->exists();
+        }
+
+        return view('index.dashboard', compact('user', 'role', 'newsItems', 'hasUnreadSlip'));
     }
 
     public function profil()
     {
         $user = Auth::user();
-
         return view('index.dashboard_profil', compact('user'));
     }
 
     public function edit($id)
     {
         $user = User::findOrFail($id);
-
         if (Auth::id() !== $user->id) {
             abort(403);
         }
-
         return view('index.edit_profil', compact('user'));
     }
 
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
-
         if (Auth::id() !== $user->id) {
             abort(403);
         }
@@ -49,7 +58,7 @@ class DashboardController extends Controller
             'phone' => 'required|string|max:20',
             'bio' => 'required|string',
             'alamat' => 'required|string|max:255',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:81920', // Maksimal 8MB
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:81920',
         ];
 
         $validated = $request->validate($rules);
@@ -70,31 +79,26 @@ class DashboardController extends Controller
         return view('index.reset_pw');
     }
 
-  public function resetPassword(Request $request)
-{
-    $request->validate([
-        'id'       => 'required|exists:users,id',
-        'password' => 'required|min:4|confirmed',
-    ], [
-        'password.min'       => 'Password harus minimal 4 karakter.',
-        'password.confirmed' => 'Konfirmasi password tidak cocok.',
-    ]);
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:users,id',
+            'password' => 'required|min:4|confirmed',
+        ], [
+            'password.min' => 'Password harus minimal 4 karakter.',
+            'password.confirmed' => 'Konfirmasi password tidak cocok.',
+        ]);
 
-    $user = User::findOrFail($request->id);
-    $user->password = Hash::make($request->password);
-    $user->save();
+        $user = User::findOrFail($request->id);
+        $user->password = Hash::make($request->password);
+        $user->save();
 
-    // Kalau AJAX / JSON request, kirim JSON response
-    if ($request->expectsJson()) {
-        return response()->json([
-            'message' => 'Password berhasil direset.'
-        ], 200);
+        if ($request->expectsJson()) {
+            return response()->json([
+                'message' => 'Password berhasil direset.'
+            ], 200);
+        }
+
+        return redirect()->route('reset.form', ['success' => 'Password berhasil direset.']);
     }
-
-    // Kalau form HTML biasa, redirect seperti biasa
-    return redirect()
-        ->route('reset.form', ['success' => 'Password berhasil direset.']);
-}
-
-    
 }

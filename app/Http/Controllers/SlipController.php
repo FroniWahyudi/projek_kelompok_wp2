@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Dompdf\Options;
+use Carbon\Carbon;
 
 class SlipController extends Controller
 {
@@ -22,6 +22,9 @@ class SlipController extends Controller
 
         if ($user->role == 'Operator') {
             $query->where('user_id', $user->id);
+            
+            // Mark as read when operator visits slip page
+            $this->markUserSlipsAsRead($user->id); // Changed to new method
         }
 
         if ($month = $request->month) {
@@ -41,7 +44,13 @@ class SlipController extends Controller
         $nextId = Slip::count() + 1;
         $mode = 'index';
 
-        return view('index.slip_gaji', compact('slips', 'years', 'users', 'nextId', 'mode'));
+        // Check for latest period notification (after marking as read)
+        $hasLatestPeriodSlip = false;
+        if ($user->role == 'Operator') {
+            $hasLatestPeriodSlip = $this->checkLatestPeriodSlip($request)->original['has_unread_slip'];
+        }
+
+        return view('index.slip_gaji', compact('slips', 'years', 'users', 'nextId', 'mode', 'hasLatestPeriodSlip'));
     }
 
     public function create()
@@ -90,7 +99,7 @@ class SlipController extends Controller
             'earnings.*.amount.numeric'       => 'Jumlah pendapatan harus berupa angka.',
             'earnings.*.amount.min'           => 'Jumlah pendapatan tidak boleh negatif.',
             'deductions.*.name.required_with' => 'Nama potongan harus diisi.',
-            'deductions.*.amount.required_with'=> 'Jumlah potongan harus diisi.',
+            'deductions.*.amount.required_with' => 'Jumlah potongan harus diisi.',
             'deductions.*.amount.numeric'     => 'Jumlah potongan harus berupa angka.',
             'deductions.*.amount.min'         => 'Jumlah potongan tidak boleh negatif.',
         ]);
@@ -121,6 +130,8 @@ class SlipController extends Controller
             'period'      => $data['period'] . '-01',
             'net_salary'  => $netSalary,
             'status'      => 'Draft',
+            'is_read'     => false,
+            'read_at'     => null,
         ]);
 
         foreach ($data['earnings'] as $e) {
@@ -177,7 +188,7 @@ class SlipController extends Controller
             'earnings.*.amount.numeric'       => 'Jumlah pendapatan harus berupa angka.',
             'earnings.*.amount.min'           => 'Jumlah pendapatan tidak boleh negatif.',
             'deductions.*.name.required_with' => 'Nama potongan harus diisi.',
-            'deductions.*.amount.required_with'=> 'Jumlah potongan harus diisi.',
+            'deductions.*.amount.required_with' => 'Jumlah potongan harus diisi.',
             'deductions.*.amount.numeric'     => 'Jumlah potongan harus berupa angka.',
             'deductions.*.amount.min'         => 'Jumlah potongan tidak boleh negatif.',
         ]);
@@ -201,6 +212,8 @@ class SlipController extends Controller
             'user_id'    => $data['user_id'],
             'period'     => $data['period'] . '-01',
             'net_salary' => $netSalary,
+            'is_read'    => false,
+            'read_at'    => null,
         ]);
 
         $slip->earnings()->delete();
@@ -235,6 +248,10 @@ class SlipController extends Controller
         $slip->load(['user' => function ($query) {
             $query->select('id', 'name', 'id_karyawan', 'department', 'photo_url');
         }, 'earnings', 'deductions']);
+
+        // Mark as read when user views the slip detail
+        $this->markSpecificSlipAsRead($slip->id);
+
         return view('index.slip_detail', compact('slip'));
     }
 
@@ -244,6 +261,9 @@ class SlipController extends Controller
         $slip->load(['user' => function ($query) {
             $query->select('id', 'name', 'id_karyawan', 'department', 'photo_url');
         }, 'earnings', 'deductions']);
+
+        // Mark as read when user downloads the slip
+        $this->markSpecificSlipAsRead($slip->id);
 
         $options = [
             'isHtml5ParserEnabled'    => true,
@@ -316,5 +336,193 @@ class SlipController extends Controller
         }
 
         return response()->json($results);
+    }
+
+    /**
+     * Check if user has unread slip for current month/year period
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function checkLatestPeriodSlip(Request $request)
+    {
+        $userId = $request->input('user_id') ?: Auth::id();
+        $currentPeriod = Carbon::now()->format('Y-m') . '-01';
+
+        $slip = Slip::where('user_id', $userId)
+            ->where('period', $currentPeriod)
+            ->where('is_read', false)
+            ->first();
+
+        return response()->json([
+            'has_unread_slip' => $slip ? true : false,
+            'period' => Carbon::now()->format('Y-m'),
+            'user_id' => $userId
+        ]);
+    }
+
+    /**
+     * Mark slip as read for specific user and current period
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function markAsRead(Request $request)
+    {
+        $userId = $request->input('user_id') ?: Auth::id();
+        $currentPeriod = Carbon::now()->format('Y-m') . '-01';
+
+        $updated = Slip::where('user_id', $userId)
+            ->where('period', $currentPeriod)
+            ->where('is_read', false)
+            ->update([
+                'is_read' => true,
+                'read_at' => Carbon::now()
+            ]);
+
+        return response()->json([
+            'success' => $updated > 0,
+            'message' => $updated > 0 ? 'Slip gaji periode ini berhasil ditandai sebagai dibaca.' : 'Tidak ada slip gaji yang belum dibaca untuk periode ini.',
+            'timestamp' => Carbon::now()
+        ]);
+    }
+
+    /**
+     * Mark all slips as read for a specific user and current period
+     *
+     * @param int $userId
+     * @return bool
+     */
+    protected function markUserSlipsAsRead($userId)
+    {
+        $currentPeriod = Carbon::now()->format('Y-m') . '-01';
+
+        $updated = Slip::where('user_id', $userId)
+            ->where('period', $currentPeriod)
+            ->where('is_read', false)
+            ->update([
+                'is_read' => true,
+                'read_at' => Carbon::now()
+            ]);
+
+        return $updated > 0;
+    }
+
+    /**
+     * Mark specific slip as read
+     *
+     * @param int $slipId
+     * @return bool
+     */
+    public function markSpecificSlipAsRead($slipId)
+    {
+        $slip = Slip::find($slipId);
+        
+        if (!$slip || $slip->is_read) {
+            return false;
+        }
+
+        // Only allow user to mark their own slip as read (for operators)
+        if (Auth::user()->role == 'Operator' && $slip->user_id != Auth::id()) {
+            return false;
+        }
+
+        $slip->update([
+            'is_read' => true,
+            'read_at' => Carbon::now()
+        ]);
+
+        return true;
+    }
+
+    /**
+     * Get notification status for multiple users
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getNotificationStatus(Request $request)
+    {
+        $request->validate([
+            'user_ids' => 'nullable|array',
+            'user_ids.*' => 'exists:users,id',
+        ]);
+
+        $userIds = $request->input('user_ids', [Auth::id()]);
+        $currentPeriod = Carbon::now()->format('Y-m') . '-01';
+
+        $usersWithUnreadSlips = Slip::whereIn('user_id', $userIds)
+            ->where('period', $currentPeriod)
+            ->where('is_read', false)
+            ->pluck('user_id')
+            ->toArray();
+
+        $results = [];
+        foreach ($userIds as $userId) {
+            $results[$userId] = in_array($userId, $usersWithUnreadSlips);
+        }
+
+        return response()->json([
+            'notifications' => $results,
+            'period' => Carbon::now()->format('Y-m'),
+            'current_period_full' => $currentPeriod
+        ]);
+    }
+
+    /**
+     * Get notification count for dashboard
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getNotificationCount()
+    {
+        $user = Auth::user();
+        $currentPeriod = Carbon::now()->format('Y-m') . '-01';
+
+        if ($user->role == 'Operator') {
+            $count = Slip::where('user_id', $user->id)
+                ->where('period', $currentPeriod)
+                ->where('is_read', false)
+                ->count();
+        } else {
+            $count = Slip::where('period', $currentPeriod)
+                ->where('is_read', false)
+                ->count();
+        }
+
+        return response()->json([
+            'notification_count' => $count,
+            'period' => Carbon::now()->format('Y-m'),
+            'user_role' => $user->role
+        ]);
+    }
+
+    /**
+     * Get all unread slips for current user or all users (based on role)
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getUnreadSlips()
+    {
+        $user = Auth::user();
+        $currentPeriod = Carbon::now()->format('Y-m') . '-01';
+
+        $query = Slip::with(['user' => function ($q) {
+            $q->select('id', 'name', 'id_karyawan', 'department');
+        }])
+        ->where('period', $currentPeriod)
+        ->where('is_read', false);
+
+        if ($user->role == 'Operator') {
+            $query->where('user_id', $user->id);
+        }
+
+        $unreadSlips = $query->get();
+
+        return response()->json([
+            'unread_slips' => $unreadSlips,
+            'count' => $unreadSlips->count(),
+            'period' => Carbon::now()->format('Y-m')
+        ]);
     }
 }

@@ -19,6 +19,7 @@ use App\Http\Controllers\PasswordResetController;
 |--------------------------------------------------------------------------
 */
 
+// Redirect root based on auth status
 Route::get('/', function () {
     return Auth::check()
         ? redirect()->route('dashboard')
@@ -50,12 +51,12 @@ Route::middleware('auth')->group(function () {
 
     // HR sections
     Route::get('/admin', [HrDashboardController::class, 'hr_index'])->name('hr.admin');
-       Route::get('/', [CrudController::class, 'adminIndex'])->name('index');
     Route::get('/leader', [HrDashboardController::class, 'leader_index'])->name('hr.leader');
     Route::get('/manajemen', [HrDashboardController::class, 'manajemen_index'])->name('hr.manajemen');
     Route::post('/karyawan/update_sisa_cuti', [HrDashboardController::class, 'updateSisaCuti'])->name('karyawan.update_sisa_cuti');
 
-     Route::prefix('admin')->name('admin.')->group(function () { 
+    // Admin CRUD Routes
+    Route::prefix('admin')->name('admin.')->group(function () { 
         Route::get('/', [CrudController::class, 'adminIndex'])->name('index');
         Route::get('/create', [CrudController::class, 'showCreateForm'])->name('create');
         Route::post('/store', [CrudController::class, 'createAdmin'])->name('store');
@@ -106,6 +107,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/slips/check', [SlipController::class, 'showCheckSlipForm'])->name('slips.check.form');
     Route::post('/slips/check', [SlipController::class, 'checkSlip'])->name('slips.check');
     Route::post('/slips/check-ajax', [SlipController::class, 'checkSlipAjax'])->name('slips.check.ajax');
+
+    // Slip notification routes
+    Route::prefix('slips/notifications')->name('slips.')->group(function () {
+        Route::get('/check-latest', [SlipController::class, 'checkLatestPeriodSlip'])->name('checkLatestPeriodSlip');
+        Route::post('/mark-as-read', [SlipController::class, 'markAsRead'])->name('markAsRead');
+        Route::post('/status', [SlipController::class, 'getNotificationStatus'])->name('notifications.status');
+        Route::get('/count', [SlipController::class, 'getNotificationCount'])->name('notifications.count');
+        Route::get('/unread', [SlipController::class, 'getUnreadSlips'])->name('notifications.unread');
+    });
 
     // Cuti routes
     Route::resource('cuti', CutiController::class);

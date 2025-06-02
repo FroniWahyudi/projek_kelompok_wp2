@@ -62,7 +62,7 @@
     }
     
     .navbar-custom.scrolled .logo-brand img {
-      height: 60px;
+      height: 70px;
     }
     
     /* === SIDEBAR STYLING === */
@@ -619,7 +619,7 @@
     ::-webkit-scrollbar-thumb:hover {
       background: #aaa;
     }
-  .notification-dot-manajer {
+  .notification-dot {
     display: inline-block;
     width: 15px;
     height: 15px;
@@ -632,13 +632,13 @@
     left: 197px;
 }
 
-.notification-dot-operator {
+.notification-dot-cuti {
     width: 15px;
     height: 15px;
     background-color: red;
     border-radius: 50%;
     position: absolute;
-    top: 362px;
+    top: 469px;
     z-index: 100;
     left: 200px;
 }
@@ -647,6 +647,23 @@
     top: 362px;
     left: 196px;
     z-index: 10;
+}
+
+
+.notification-dot-slip {
+    position: absolute;
+    top: 418px;
+    right: 25px;
+    width: 14px;
+    height: 14px;
+    background-color: red;
+    border-radius: 50%;
+    display: none;
+    z-index: 100;
+}
+.notification-dot-slip.active {
+  display: inline-block;
+  animation: pulse 1.5s infinite;
 }
   </style>
 </head>
@@ -679,14 +696,23 @@
           <a class="dropdown-item" href="{{ route('cuti.index') }}">
             <i class="bi bi-check-square me-1"></i> Daftar Pengajuan Cuti
             @if(app('App\Http\Controllers\CutiController')->hasPendingRequests())
-              <span class="notification-dot-manajer"></span>
+              <span class="notification-dot"></span>
             @endif
           </a>
         </li>
       @endif
         @if(auth()->user()->role === 'Operator' || auth()->user()->role === 'Admin' || auth()->user()->role === 'Leader')
           <li><a class="dropdown-item" href="{{ route('cuti.index') }}"><i class="bi bi-file-earmark-text me-1"></i> Pengajuan Cuti</a></li>
-          <li><a class="dropdown-item" href="{{ route('slips.index') }}"><i class="bi bi-receipt me-1"></i> Slip Gaji</a></li>
+          @if(auth()->user()->role === 'Operator' || auth()->user()->role === 'Admin' || auth()->user()->role === 'Leader')
+  <li>
+    <a class="dropdown-item position-relative" href="{{ route('slips.index') }}">
+      <i class="bi bi-receipt me-1"></i> Slip Gaji
+    
+        <span id="slipNotificationDotMobile" class="notification-dot-slip active"></span>
+   
+    </a>
+  </li>
+@endif
         @endif
         <li>
           <a class="dropdown-item" href="feedback">
@@ -768,7 +794,7 @@
 
     @if(auth()->user()->role === 'Manajer')
      @if(app('App\Http\Controllers\CutiController')->hasPendingRequests())
-          <span class="notification-dot-manajer"></span>
+          <span class="notification-dot"></span>
         @endif
       <a class="btn btn-outline-dark position-relative" href="{{ route('cuti.index') }}">
         <i class="bi bi-check-square me-1"></i> Daftar Cuti
@@ -777,7 +803,7 @@
 
 @if(auth()->user()->role === 'Operator' || auth()->user()->role === 'Admin' || auth()->user()->role === 'Leader')
 @if(app('App\Http\Controllers\CutiController')->hasNonPendingRequests())
-    <span id="cutiNotificationDot" class="notification-dot-operator"></span>
+    <span id="cutiNotificationDot" class="notification-dot-cuti"></span>
 @endif
 
 <a href="{{ route('cuti.index') }}" 
@@ -785,9 +811,14 @@
    id="cutiButton">
     <i class="bi bi-check-square me-1"></i> Pengajuan Cuti
 </a>
-    <a href="{{ route('slips.index') }}" class="btn btn-outline-dark">
-        <i class="bi bi-receipt me-1"></i> Slip Gaji
-    </a>
+   @if(auth()->user()->role === 'Operator' || auth()->user()->role === 'Admin' || auth()->user()->role === 'Leader')
+   <span id="slipNotificationDot" class="notification-dot-slip active"></span>
+  <a href="{{ route('slips.index') }}" class="btn btn-outline-dark position-relative" id="slipButton">
+    <i class="bi bi-receipt me-1"></i> Slip Gaji
+    @if($hasUnreadSlip)
+    @endif
+  </a>
+@endif
 @endif
 
     <a href="feedback" class="btn btn-outline-dark">
@@ -845,8 +876,8 @@
             </div>
             <div class="card-body">
               <a href="{{ route('whats_new', ['id' => $item['id']]) }}">
-                <h5 class="card-title">{{ $item['title'] }}</h5>
-                <p class="card-text">{!! Str::limit($item['description'], 120) !!}</p>
+                <h5 class="card-title">{{ htmlspecialchars($item['title']) }}</h5>
+                <p class="card-text">{{ Str::limit($item['description'], 120) }}</p>
                 <div class="card-date">
                   <i class="bi bi-calendar me-1"></i> {{ htmlspecialchars($item['date']) }}
                 </div>
@@ -1038,6 +1069,91 @@
         });
     }
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const slipButton = document.querySelector('a[href="<?php echo route('slips.index'); ?>"]');
+    const slipNotificationDot = document.getElementById('slipNotificationDot');
+    const slipNotificationDotMobile = document.getElementById('slipNotificationDotMobile');
+    
+    if (slipButton) {
+        slipButton.addEventListener('click', function() {
+            fetch("{{ route('slips.markAsRead') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && slipNotificationDot) {
+                    slipNotificationDot.classList.remove('active');
+                }
+                if (data.success && slipNotificationDotMobile) {
+                    slipNotificationDotMobile.classList.remove('active');
+                }
+            })
+            .catch(error => console.error('Error marking slip as read:', error));
+        });
+    }
+});
+
   </script>
+   <script>
+       // Mengatur konfigurasi aplikasi dari Blade
+        window.appConfig = {
+            slipsMarkAsReadUrl: "{{ route('slips.markAsRead') }}",
+            slipsCheckLatestPeriodUrl: "{{ route('slips.checkLatestPeriodSlip') }}",
+            csrfToken: "{{ csrf_token() }}",
+            userRole: "{{ auth()->user()->role ?? '' }}"
+        };
+
+        // Logika untuk notifikasi slip gaji
+        const slipButton = document.getElementById('slipButton');
+        const slipNotificationDot = document.getElementById('slipNotificationDot');
+        const slipNotificationDotMobile = document.getElementById('slipNotificationDotMobile');
+
+        if (slipButton) {
+            slipButton.addEventListener('click', function() {
+                fetch(window.appConfig.slipsMarkAsReadUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': window.appConfig.csrfToken
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && slipNotificationDot) {
+                        slipNotificationDot.classList.remove('active');
+                    }
+                    if (data.success && slipNotificationDotMobile) {
+                        slipNotificationDotMobile.classList.remove('active');
+                    }
+                })
+                .catch(error => console.error('Gagal menandai slip sebagai dibaca:', error));
+            });
+        }
+
+        // Memeriksa status notifikasi slip gaji saat halaman dimuat
+        const allowedRoles = ['Operator', 'Admin', 'Leader'];
+        if (allowedRoles.includes(window.appConfig.userRole)) {
+            fetch(window.appConfig.slipsCheckLatestPeriodUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.has_unread_slip && slipNotificationDot) {
+                        slipNotificationDot.classList.add('active');
+                    } else if (slipNotificationDot) {
+                        slipNotificationDot.classList.remove('active');
+                    }
+                    if (data.has_unread_slip && slipNotificationDotMobile) {
+                        slipNotificationDotMobile.classList.add('active');
+                    } else if (slipNotificationDotMobile) {
+                        slipNotificationDotMobile.classList.remove('active');
+                    }
+                })
+                .catch(error => console.error('Gagal memeriksa notifikasi slip:', error));
+        }
+    </script>
 </body>
 </html>

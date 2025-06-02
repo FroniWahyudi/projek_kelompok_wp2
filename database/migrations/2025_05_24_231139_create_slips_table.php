@@ -23,7 +23,16 @@ return new class extends Migration {
             $table->decimal('net_salary', 15, 2)->nullable();
             $table->enum('status', ['Draft', 'Terbit', 'Batal'])
                   ->default('Draft');
+            
+            // Field untuk tracking status baca slip
+            $table->boolean('is_read')->default(false);
+            $table->timestamp('read_at')->nullable();
+            
             $table->timestamps();
+            
+            // Index untuk performance query yang sering digunakan
+            $table->index(['user_id', 'is_read']);
+            $table->index(['period', 'is_read']);
         });
     }
 
