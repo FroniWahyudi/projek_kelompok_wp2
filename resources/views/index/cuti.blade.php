@@ -127,10 +127,12 @@
             background-color: #007bff;
             color: white;
             border-bottom: none;
+            justify-content: center
         }
         
         .modal-footer {
             border-top: none;
+            justify-content: center;
         }
         
         .form-control:focus {
@@ -325,6 +327,26 @@
                 font-size: 0.85rem;
             }
         }
+        .modal-body {
+    position: relative;
+    flex: 1 1 auto;
+    padding: var(--bs-modal-padding);
+    left: 106px;
+}
+.modal-content {
+    position: relative;
+    display: flex
+;
+    flex-direction: column;
+    width: 85%;
+    color: var(--bs-modal-color);
+    pointer-events: auto;
+    background-color: var(--bs-modal-bg);
+    background-clip: padding-box;
+    border: var(--bs-modal-border-width) solid var(--bs-modal-border-color);
+    border-radius: var(--bs-modal-border-radius);
+    outline: 0;
+}
     </style>
 </head>
 <body>
@@ -373,7 +395,7 @@
                 <div class="modal-content">
                     <div class="modal-header text-white">
                         <h5 class="modal-title"><i class="bi bi-check-circle-fill me-2"></i>Berhasil</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                 
                     </div>
                     <div class="modal-body">
                         {{ session('success') }}
@@ -391,7 +413,7 @@
                 <div class="modal-content border-danger">
                     <div class="modal-header bg-danger text-white">
                         <h5 class="modal-title"><i class="bi bi-exclamation-triangle-fill me-2"></i>Terjadi Kesalahan</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                   
                     </div>
                     <div class="modal-body">
                         {{ session('error') }}
@@ -426,7 +448,7 @@
                 <div class="modal-content border-danger">
                     <div class="modal-header bg-danger text-white">
                         <h5 class="modal-title" id="confirmDeleteLabel"><i class="bi bi-trash-fill me-2"></i>Konfirmasi Hapus</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                      
                     </div>
                     <div class="modal-body">
                         Apakah Anda yakin ingin menghapus pengajuan ini?
@@ -592,7 +614,7 @@
                         @csrf
                         <div class="modal-header">
                             <h5 class="modal-title"><i class="bi bi-calendar-plus me-2"></i>Form Pengajuan Cuti</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                   
                         </div>
                         <div class="modal-body">
                             <div class="mb-3">
@@ -636,9 +658,9 @@
         <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content border-primary">
-                    <div class="modal-header bg-primary text-white">
+                    <div class="modal-header bg-primary text-white text-center">
                         <h5 class="modal-title" id="confirmModalLabel"><i class="bi bi-question-circle-fill me-2"></i>Konfirmasi</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                       
                     </div>
                     <div class="modal-body">
                         <p id="confirmModalMessage">Pesan konfirmasi di sini</p>
