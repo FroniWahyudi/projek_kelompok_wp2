@@ -431,7 +431,7 @@
             <h5 class="mb-0">Informasi Resi</h5>
           </div>
           <div class="card-body">
-            <p class="mb-1"><strong>Resi:</strong> <span id="infoKode">-</span></p>
+            <p class="mb-1 d-print-none"><strong>Resi:</strong> <span id="infoKode">-</span></p>
             <p class="mb-1"><strong>Tujuan:</strong> <span id="infoTujuan">-</span></p>
             <p class="mb-1"><strong>Tanggal:</strong> <span id="infoTanggal">-</span></p>
             <p class="mb-0"><strong>Status:</strong> <span id="infoStatus" class="badge badge-warning">-</span></p>
@@ -633,7 +633,7 @@
           <hr style="border-top: 2px solid #003366;">
         </div>
         <div style="margin-bottom: 30px;">
-          <p><strong>Resi:</strong> ${kode}</p>
+         
           <p><strong>Tujuan:</strong> ${tujuan}</p>
           <p><strong>Tanggal:</strong> ${tanggal}</p>
           <p><strong>Status:</strong> ${status}</p>
