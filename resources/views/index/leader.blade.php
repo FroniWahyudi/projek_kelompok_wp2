@@ -135,6 +135,108 @@
             flex-basis: auto;
             margin-right: -15px;
         }
+
+        /* Floating Notification Styles */
+        .floating-alert {
+            position: fixed;
+            top: 90px;
+            right: 20px;
+            z-index: 1060;
+            min-width: 300px;
+            max-width: 400px;
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            animation: slideInRight 0.4s ease-out;
+            backdrop-filter: blur(10px);
+        }
+
+        .floating-alert.alert-success {
+            background: linear-gradient(135deg, rgba(25, 135, 84, 0.95), rgba(40, 167, 69, 0.95));
+            color: white;
+            border-left: 4px solid #20c997;
+        }
+
+        .floating-alert.alert-danger {
+            background: linear-gradient(135deg, rgba(220, 53, 69, 0.95), rgba(248, 81, 73, 0.95));
+            color: white;
+            border-left: 4px solid #dc3545;
+        }
+
+        .floating-alert .btn-close {
+            color: white;
+            opacity: 0.8;
+            font-size: 1.2rem;
+        }
+
+        .floating-alert .btn-close:hover {
+            opacity: 1;
+        }
+
+        .floating-alert .alert-icon {
+            font-size: 1.5rem;
+            margin-right: 12px;
+            vertical-align: middle;
+        }
+
+        .floating-alert .alert-content {
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOutRight {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        .floating-alert.hiding {
+            animation: slideOutRight 0.3s ease-in forwards;
+        }
+
+        /* Progress bar for auto-hide */
+        .floating-alert::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 0 0 12px 12px;
+            animation: progressBar 3s linear forwards;
+        }
+
+        @keyframes progressBar {
+            from { width: 100%; }
+            to { width: 0%; }
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .floating-alert {
+                right: 10px;
+                left: 10px;
+                min-width: auto;
+                max-width: none;
+            }
+        }
     </style>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
@@ -163,17 +265,23 @@
 
     <!-- Content -->
     <main class="container py-5">
-        <!-- Success/Error Messages -->
+        <!-- Floating Success/Error Messages -->
         @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <div class="alert alert-success floating-alert alert-dismissible fade show" role="alert">
+                <div class="alert-content">
+                    <i class="bi bi-check-circle-fill alert-icon"></i>
+                    <span>{{ session('success') }}</span>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
         @if(session('error'))
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                {{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <div class="alert alert-danger floating-alert alert-dismissible fade show" role="alert">
+                <div class="alert-content">
+                    <i class="bi bi-exclamation-triangle-fill alert-icon"></i>
+                    <span>{{ session('error') }}</span>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
 
@@ -335,14 +443,89 @@
                 });
             });
 
-            // Auto-hide alert after 2 seconds
-            setTimeout(() => {
-                document.querySelectorAll('.alert').forEach(alert => {
-                    alert.classList.remove('show');
-                    alert.classList.add('hide');
-                    setTimeout(() => alert.remove(), 500);
+            // Enhanced floating alert auto-hide with smooth animation
+            const floatingAlerts = document.querySelectorAll('.floating-alert');
+            
+            floatingAlerts.forEach(alert => {
+                // Auto-hide after 3 seconds with smooth animation
+                const autoHideTimer = setTimeout(() => {
+                    hideAlert(alert);
+                }, 3000);
+
+                // Clear timer if user manually closes the alert
+                const closeBtn = alert.querySelector('.btn-close');
+                if (closeBtn) {
+                    closeBtn.addEventListener('click', () => {
+                        clearTimeout(autoHideTimer);
+                        hideAlert(alert);
+                    });
+                }
+
+                // Pause auto-hide on hover
+                alert.addEventListener('mouseenter', () => {
+                    clearTimeout(autoHideTimer);
+                    // Remove progress bar animation
+                    alert.style.setProperty('--pause-animation', 'paused');
                 });
-            }, 2500);
+
+                // Resume auto-hide when mouse leaves (with remaining time)
+                alert.addEventListener('mouseleave', () => {
+                    setTimeout(() => {
+                        hideAlert(alert);
+                    }, 1000);
+                });
+            });
+
+            function hideAlert(alert) {
+                alert.classList.add('hiding');
+                setTimeout(() => {
+                    if (alert.parentNode) {
+                        alert.remove();
+                    }
+                }, 300);
+            }
+
+            // Function to create dynamic floating notifications (for use with AJAX calls)
+            window.showFloatingAlert = function(message, type = 'success') {
+                const alertContainer = document.createElement('div');
+                const iconClass = type === 'success' ? 'bi-check-circle-fill' : 'bi-exclamation-triangle-fill';
+                
+                alertContainer.className = `alert alert-${type} floating-alert alert-dismissible fade show`;
+                alertContainer.setAttribute('role', 'alert');
+                
+                alertContainer.innerHTML = `
+                    <div class="alert-content">
+                        <i class="${iconClass} alert-icon"></i>
+                        <span>${message}</span>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                `;
+                
+                document.body.appendChild(alertContainer);
+                
+                // Auto-hide
+                const autoHideTimer = setTimeout(() => {
+                    hideAlert(alertContainer);
+                }, 3000);
+
+                // Manual close
+                const closeBtn = alertContainer.querySelector('.btn-close');
+                closeBtn.addEventListener('click', () => {
+                    clearTimeout(autoHideTimer);
+                    hideAlert(alertContainer);
+                });
+
+                // Hover effects
+                alertContainer.addEventListener('mouseenter', () => {
+                    clearTimeout(autoHideTimer);
+                });
+
+                alertContainer.addEventListener('mouseleave', () => {
+                    setTimeout(() => {
+                        hideAlert(alertContainer);
+                    }, 1000);
+                });
+            };
         });
     </script>
 </body>
