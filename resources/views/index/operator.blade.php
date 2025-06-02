@@ -142,7 +142,7 @@
             background: linear-gradient(135deg, #0b5ed7, #00a8a8);
         }
         .fab:active { transform: scale(0.95); }
-        .ms-2 { margin-left: 0rem !important; width: 50px; }
+        .ms-2 { margin-left: 0rem !important;}
         .navbar-nav .nav-link:hover,
         .navbar-nav .nav-link.active { color: #0d6efd !important; }
     </style>
