@@ -8,14 +8,72 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
   <style>
     .gradient-bg {
-      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      background: #f0f4f8;
     }
     .feedback-card {
       transition: all 0.3s ease;
+      background: #ffffff;
+      border: 1px solid #e3f2fd;
     }
     .feedback-card:hover {
       transform: translateY(-2px);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+      box-shadow: 0 10px 20px rgba(0,123,255,0.1);
+      border-color: #007bff;
+    }
+    .card-gradient-section {
+      background: linear-gradient(135deg, #e3f2fd 0%, #e1f5fe 100%);
+    }
+    .text-primary {
+      color: #003366 !important;
+    }
+    .text-secondary {
+      color: #4a4a4a !important;
+    }
+    .text-muted {
+      color: #6c757d !important;
+    }
+    .bg-primary {
+      background-color: #007bff !important;
+    }
+    .bg-primary:hover {
+      background-color: #0056b3 !important;
+    }
+    .border-primary {
+      border-color: #007bff !important;
+    }
+    .focus-ring-primary:focus {
+      outline: none;
+      border-color: #007bff;
+    }
+    .badge-primary {
+      background-color: #e3f2fd;
+      color: #003366;
+    }
+    .badge-secondary {
+      background-color: #e1f5fe;
+      color: #003366;
+    }
+    .home-link {
+      color: #007bff;
+    }
+    .home-link:hover {
+      color: #0056b3;
+    }
+    .header-card {
+      background: #ffffff;
+      border: 1px solid #e3f2fd;
+    }
+    .filter-card {
+      background: #ffffff;
+      border: 1px solid #e3f2fd;
+    }
+    .select-input {
+      border-color: #e3f2fd;
+      color: #4a4a4a;
+    }
+    .select-input:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 0 2px rgba(0,123,255,0.1);
     }
   </style>
 </head>
@@ -23,24 +81,24 @@
   <div class="container mx-auto px-4 py-8">
     <!-- Header Section -->
     <div class="flex justify-between items-center mb-8">
-      <a href="dashboard" class="flex items-center text-indigo-600 hover:text-indigo-800 transition-colors">
+      <a href="dashboard" class="flex items-center home-link hover:text-blue-800 transition-colors">
         <i class="bi bi-house-door text-xl mr-2"></i>
         <span class="font-medium">Home</span>
       </a>
-      <div class="bg-white rounded-lg shadow-md px-4 py-2">
-        <h1 class="text-2xl font-bold text-gray-800">
-          <span class="text-indigo-600">Daftar Pegawai</span> & Feedback
+      <div class="header-card rounded-lg shadow-md px-4 py-2">
+        <h1 class="text-2xl font-bold text-primary">
+          <span class="text-primary">Daftar Pegawai</span> & Feedback
         </h1>
       </div>
     </div>
 
     <!-- Filter Section -->
-    <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+    <div class="filter-card rounded-xl shadow-md p-6 mb-8">
       <form method="get" action="{{ url()->current() }}">
         <div class="flex flex-col md:flex-row gap-4">
           <div class="w-full md:w-1/3">
-            <label class="block text-sm font-medium text-gray-700 mb-1">Filter Divisi</label>
-            <select name="divisi" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all" onchange="this.form.submit()">
+            <label class="block text-sm font-medium text-secondary mb-1">Filter Divisi</label>
+            <select name="divisi" class="select-input w-full px-4 py-2 rounded-lg border focus-ring-primary transition-all" onchange="this.form.submit()">
               <option value="">-- Semua Divisi --</option>
               @php
                 $listdivisi = ['inbound', 'outbound', 'storage'];
@@ -54,8 +112,8 @@
           </div>
           <!-- Search Input -->
           <div class="w-full md:w-1/3">
-            <label class="block text-sm font-medium text-gray-700 mb-1">Cari Nama Pegawai</label>
-            <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama..." class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all" id="live-search-input" autofocus>
+            <label class="block text-sm font-medium text-secondary mb-1">Cari Nama Pegawai</label>
+            <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama..." class="select-input w-full px-4 py-2 rounded-lg border focus-ring-primary transition-all" id="live-search-input" autofocus>
           </div>
         </div>
       </form>
@@ -72,27 +130,27 @@
           $matchSearch = !$search || stripos($data['name'], $search) !== false;
         @endphp
         @if($matchDivisi && $matchSearch)
-          <div class="feedback-card bg-white rounded-xl shadow-md overflow-hidden">
+          <div class="feedback-card rounded-xl shadow-md overflow-hidden">
             <div class="md:flex">
               <!-- Employee Photo -->
               <div class="md:w-1/6 p-4 flex justify-center">
-                <img src="{{ $data['photo_url'] }}" alt="Foto" class="rounded-full h-24 w-24 object-cover border-4 border-indigo-100">
+                <img src="{{ $data['photo_url'] }}" alt="Foto" class="rounded-full h-24 w-24 object-cover border-4" style="border-color: #e3f2fd;">
               </div>
               
               <!-- Employee Details -->
               <div class="md:w-3/6 p-4">
                 <div class="flex flex-col space-y-2">
-                  <h3 class="text-xl font-semibold text-gray-800">{{ $data['name'] }}</h3>
+                  <h3 class="text-xl font-semibold text-primary">{{ $data['name'] }}</h3>
                   <div class="flex items-center">
-                    <span class="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                    <span class="badge-primary text-xs font-medium px-2.5 py-0.5 rounded-full">
                       {{ $data['role'] }}
                     </span>
-                    <span class="mx-2 text-gray-400">|</span>
-                    <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                    <span class="mx-2 text-muted">|</span>
+                    <span class="badge-secondary text-xs font-medium px-2.5 py-0.5 rounded-full">
                       {{ ucfirst($data['divisi']) }}
                     </span>
                   </div>
-                  <div class="flex items-center text-gray-600">
+                  <div class="flex items-center text-muted">
                     <i class="bi bi-calendar-event mr-2"></i>
                     <span>Bergabung: {{ $data['joined_at'] }}</span>
                   </div>
@@ -100,14 +158,14 @@
               </div>
               
               <!-- Feedback Form -->
-              <div class="md:w-2/6 p-4 bg-gray-50">
+              <div class="md:w-2/6 p-4 card-gradient-section">
                 <form method="post" action="{{ url('feedback') }}">
                   @csrf
                   <input type="hidden" name="user_id" value="{{ $data['id'] }}">
                   <div class="mb-3">
-                    <textarea name="feedback_text" class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" rows="2" placeholder="Tulis feedback..." required></textarea>
+                    <textarea name="feedback_text" class="w-full px-3 py-2 text-secondary border rounded-lg focus-ring-primary" style="border-color: #e3f2fd;" rows="2" placeholder="Tulis feedback..." required></textarea>
                   </div>
-                  <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+                  <button type="submit" class="w-full bg-primary hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors">
                     Kirim Feedback
                   </button>
                 </form>
