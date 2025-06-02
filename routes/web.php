@@ -50,9 +50,19 @@ Route::middleware('auth')->group(function () {
 
     // HR sections
     Route::get('/admin', [HrDashboardController::class, 'hr_index'])->name('hr.admin');
+       Route::get('/', [CrudController::class, 'adminIndex'])->name('index');
     Route::get('/leader', [HrDashboardController::class, 'leader_index'])->name('hr.leader');
     Route::get('/manajemen', [HrDashboardController::class, 'manajemen_index'])->name('hr.manajemen');
     Route::post('/karyawan/update_sisa_cuti', [HrDashboardController::class, 'updateSisaCuti'])->name('karyawan.update_sisa_cuti');
+
+     Route::prefix('admin')->name('admin.')->group(function () { 
+        Route::get('/', [CrudController::class, 'adminIndex'])->name('index');
+        Route::get('/create', [CrudController::class, 'showCreateForm'])->name('create');
+        Route::post('/store', [CrudController::class, 'createAdmin'])->name('store');
+        Route::get('/{id}/edit', [CrudController::class, 'adminEdit'])->name('edit');
+        Route::put('/{id}', [CrudController::class, 'adminUpdate'])->name('update');
+        Route::delete('/{id}', [CrudController::class, 'adminDestroy'])->name('destroy');
+    });
 
     // Profile edit
     Route::get('/edit_profil/{id}', [DashboardController::class, 'edit'])->name('profil.edit');

@@ -661,7 +661,7 @@
       <ul class="dropdown-menu mobile-dropdown-menu animate__animated animate__fadeIn" aria-labelledby="mobileMenu">
         <li><h6 class="dropdown-header">Divisi Karyawan</h6></li>
         <li><a class="dropdown-item" href="{{ route('hr.manajemen') }}"><i class="bi bi-people-fill me-1"></i> Manajemen</a></li>
-        <li><a class="dropdown-item" href="{{ route('hr.admin') }}"><i class="bi bi-person-circle me-1"></i> Administrasi</a></li>
+        <li><a class="dropdown-item" href="{{ route('admin.index') }}"><i class="bi bi-person-circle me-1"></i> Administrasi</a></li>
         <li><a class="dropdown-item" href="{{ route('leader.index') }}"><i class="bi bi-people-fill me-1"></i> Leader</a></li>
         <li><a class="dropdown-item" href="{{ route('operator.index') }}"><i class="bi bi-people-fill me-1"></i> Operator Gudang</a></li>
         <li><hr class="dropdown-divider"></li>
@@ -734,7 +734,7 @@
     <a href="{{ route('hr.manajemen') }}" class="btn btn-outline-primary">
       <i class="bi bi-people-fill me-1"></i> Manajemen
     </a>
-    <a href="{{ route('hr.admin') }}" class="btn btn-outline-primary">
+    <a href="{{ route('admin.index') }}" class="btn btn-outline-primary">
       <i class="bi bi-person-circle me-1"></i> Administrasi
     </a>
     <a href="{{ route('leader.index') }}" class="btn btn-outline-primary">

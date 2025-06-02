@@ -199,7 +199,7 @@
                             </button>
                             @if(Auth::user() && Auth::user()->role === 'Admin')
                                 <button class="btn btn-warning btn-sm btn-edit" data-bs-toggle="modal" data-bs-target="#editModal{{ $user->id }}" title="Edit Profil Leader">Edit</button>
-                                <form action="{{ route('leader.destroy', $user->id) }}" method="POST" class="delete-form" style="display:inline;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus Leader {{ $user->name }}?')">
+                                <form action="{{ route('leader.destroy', $user->id) }}" method="POST" class="delete-form" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger btn-sm">Hapus</button>

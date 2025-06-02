@@ -83,7 +83,26 @@ class CrudController extends Controller
 
     public function adminIndex(Request $request)
     {
-        return $this->usersByRole($request, 'Admin');
+        $adminCount = $this->hitungAdmin(); // Panggil method hitungAdmin
+        $users = User::where('role', 'Admin')
+            ->when($request->get('search'), fn($q) =>
+                $q->where(function ($q2) use ($request) {
+                    $search = $request->get('search');
+                    $q2->where('name', 'like', "%{$search}%")
+                        ->orWhere('divisi', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
+                })
+            )
+            ->orderBy('name')
+            ->get();
+
+        return view('index.admin', compact('users', 'adminCount'));
+    }
+
+    // Tambahkan method hitungAdmin
+    public function hitungAdmin()
+    {
+        return User::where('role', 'Admin')->count();
     }
 
     // === GENERAL EDIT METHODS ===

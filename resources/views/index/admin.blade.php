@@ -84,6 +84,17 @@
       /* sticky footer */
       margin-top: auto;
     }
+     .navbar-collapse-two-leaders {
+            display: flex !important;
+            flex-basis: auto;
+            margin-right: 0px;
+        }
+
+        .navbar-collapse-default {
+            display: flex !important;
+            flex-basis: auto;
+            margin-right: -15px;
+        }
   </style>
 </head>
 <body>
@@ -98,7 +109,7 @@
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
         <span class="navbar-toggler-icon"></span>
       </button>
-  <div class="collapse navbar-collapse justify-content-end" id="navMenu">
+    <div class="collapse navbar-collapse justify-content-end @if($adminCount == 2) navbar-collapse-two-leaders @else navbar-collapse-default @endif" id="navMenu">
   <ul class="navbar-nav">
     <li class="nav-item"><a class="nav-link" href="{{ url('dashboard') }}">Home</a></li>
     <li class="nav-item"><a class="nav-link" href="{{ url('manajemen') }}">Manajer</a></li>
