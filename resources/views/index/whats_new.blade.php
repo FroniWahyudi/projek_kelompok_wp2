@@ -114,20 +114,31 @@
       border-color: #d0d0d0;
     }
     
-    .back-text {
-      display: inline-block;
-      padding: 10px 0;
-      font-weight: 500;
-      color: #007bff;
-      text-decoration: none;
-      transition: color 0.2s ease;
-      background-color: transparent;
-      font-size: 1rem;
-    }
+   .back-text {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    display: inline-block;
+    padding: 9px 10px;
+    font-weight: 500;
+    color: #007bff;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    background-color: rgba(255, 255, 255, 0.95);
+    border: 1px solid #dee2e6;
+    border-radius: 25px;
+    font-size: 0.95rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+}
     
     .back-text:hover {
       color: #0056b3;
-      text-decoration: underline;
+      background-color: rgba(255, 255, 255, 1);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      text-decoration: none;
     }
     
     .divider {
@@ -170,12 +181,20 @@
         align-items: flex-start;
         gap: 15px;
       }
+      
+      .back-text {
+        top: 15px;
+        left: 15px;
+        padding: 10px 16px;
+        font-size: 0.9rem;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container-fluid">
-   
+    <!-- Tombol kembali floating -->
+    <a href="/dashboard" class="back-text">&larr; Kembali ke Dashboard</a>
     
     <div class="card">
       <div class="card-img-container">
@@ -188,20 +207,10 @@
         <div class="divider"></div>
         
         <p class="card-text">
-          <span id="short-text">{!! $shortDesc !!}{{ $isLong ? '...' : '' }}</span>
-          @if ($isLong)
-            <span id="full-text" style="display:none;">{!! $fullDesc !!}</span>
-          @endif
+          {!! $fullDesc !!}
         </p>
         
-        <div class="action-container">
-            @if ($isLong)
-            <a href="javascript:void(0);" id="read-more">Baca selengkapnya</a>
-          @elseif (!empty($item['link']))
-            <a href="{{ $item['link'] }}">Baca selengkapnya</a>
-          @endif
-        </div>
-         <a href="/dashboard" class="back-text">&larr; Kembali ke Dashboard</a>
+
       </div>
     </div>
     
@@ -210,23 +219,5 @@
      
     </div>
   </div>
-
-  @if ($isLong)
-  <script>
-    document.getElementById('read-more').addEventListener('click', function() {
-      const shortText = document.getElementById('short-text');
-      const fullText = document.getElementById('full-text');
-      if (fullText.style.display === 'none') {
-        shortText.style.display = 'none';
-        fullText.style.display = 'block';
-        this.textContent = 'Lihat lebih sedikit';
-      } else {
-        shortText.style.display = 'inline';
-        fullText.style.display = 'none';
-        this.textContent = 'Baca selengkapnya';
-      }
-    });
-  </script>
-  @endif
 </body>
 </html>

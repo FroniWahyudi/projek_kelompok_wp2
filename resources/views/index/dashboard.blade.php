@@ -56,14 +56,15 @@
     }
     
     .navbar-custom .logo-brand img {
-      height: 64px;
+      height: 54px;
       object-fit: contain;
       transition: all 0.3s ease;
     }
     
     .navbar-custom.scrolled .logo-brand img {
-      height: 70px;
+      height: 60px;
     }
+  
     
     /* === SIDEBAR STYLING === */
     .sidebar {
@@ -877,7 +878,7 @@
             <div class="card-body">
               <a href="{{ route('whats_new', ['id' => $item['id']]) }}">
                 <h5 class="card-title">{{ htmlspecialchars($item['title']) }}</h5>
-                <p class="card-text">{{ Str::limit($item['description'], 120) }}</p>
+                <p class="card-text">{!! Str::limit($item['description'], 120) !!}</p>
                 <div class="card-date">
                   <i class="bi bi-calendar me-1"></i> {{ htmlspecialchars($item['date']) }}
                 </div>
