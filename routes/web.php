@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\HrDashboardController;
+use App\Http\Controllers\DivisiKaryawanController;
 use App\Http\Controllers\CrudController;
 use App\Http\Controllers\ResiController;
 use App\Http\Controllers\CutiController;
@@ -50,16 +50,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/whats-new/{id}', [NewsController::class, 'show'])->name('whats_new');
 
     // HR sections
-    Route::get('/manajemen', [HrDashboardController::class, 'manajemen_index'])->name('hr.manajemen');
+    Route::get('/manajemen', [DivisiKaryawanController::class, 'manajemen_index'])->name('hr.manajemen');
     
     // Admin CRUD Routes
     Route::prefix('admin')->name('admin.')->group(function () { 
-        Route::get('/', [CrudController::class, 'adminIndex'])->name('index');
-        Route::get('/create', [CrudController::class, 'showCreateForm'])->name('create');
-        Route::post('/store', [CrudController::class, 'createAdmin'])->name('store');
-        Route::get('/{id}/edit', [CrudController::class, 'adminEdit'])->name('edit');
-        Route::put('/{id}', [CrudController::class, 'adminUpdate'])->name('update');
-        Route::delete('/{id}', [CrudController::class, 'adminDestroy'])->name('destroy');
+        Route::get('/', [DivisiKaryawanController::class, 'adminIndex'])->name('index');
+        Route::get('/create', [DivisiKaryawanController::class, 'showCreateForm'])->name('create');
+        Route::post('/store', [DivisiKaryawanController::class, 'createAdmin'])->name('store');
+        Route::get('/{id}/edit', [DivisiKaryawanController::class, 'adminEdit'])->name('edit');
+        Route::put('/{id}', [DivisiKaryawanController::class, 'adminUpdate'])->name('update');
+        Route::delete('/{id}', [DivisiKaryawanController::class, 'adminDestroy'])->name('destroy');
     });
 
     // Profile edit
@@ -80,21 +80,21 @@ Route::middleware('auth')->group(function () {
 
     // Operator CRUD Routes
     Route::prefix('operator')->name('operator.')->group(function () {
-        Route::get('/', [CrudController::class, 'usersIndex'])->name('index');
-        Route::get('/create', [CrudController::class, 'showCreateForm'])->name('create');
-        Route::post('/', [CrudController::class, 'createOperatorBaru'])->name('store');
-        Route::get('/{id}/edit', [CrudController::class, 'usersEdit'])->name('edit');
-        Route::put('/{id}', [CrudController::class, 'usersUpdate'])->name('update');
-        Route::delete('/{id}', [CrudController::class, 'usersDestroy'])->name('destroy');
+        Route::get('/', [DivisiKaryawanController::class, 'usersIndex'])->name('index');
+        Route::get('/create', [DivisiKaryawanController::class, 'showCreateForm'])->name('create');
+        Route::post('/', [DivisiKaryawanController::class, 'createOperator'])->name('store');
+        Route::get('/{id}/edit', [DivisiKaryawanController::class, 'usersEdit'])->name('edit');
+        Route::put('/{id}', [DivisiKaryawanController::class, 'usersUpdate'])->name('update');
+        Route::delete('/{id}', [DivisiKaryawanController::class, 'usersDestroy'])->name('destroy');
     });
     // Leader Routes
     Route::prefix('leader')->name('leader.')->group(function () {
-        Route::get('/', [CrudController::class, 'leaderIndex'])->name('index');
-        Route::get('/create', [CrudController::class, 'showCreateForm'])->name('create');
-        Route::post('/store', [CrudController::class, 'createLeader'])->name('store');
-        Route::get('/{id}/edit', [CrudController::class, 'leaderEdit'])->name('edit');
-        Route::put('/{id}', [CrudController::class, 'leaderUpdate'])->name('update');
-        Route::delete('/{id}', [CrudController::class, 'leaderDestroy'])->name('destroy');
+        Route::get('/', [DivisiKaryawanController::class, 'leaderIndex'])->name('index');
+        Route::get('/create', [DivisiKaryawanController::class, 'showCreateForm'])->name('create');
+        Route::post('/store', [DivisiKaryawanController::class, 'createLeader'])->name('store');
+        Route::get('/{id}/edit', [DivisiKaryawanController::class, 'leaderEdit'])->name('edit');
+        Route::put('/{id}', [DivisiKaryawanController::class, 'leaderUpdate'])->name('update');
+        Route::delete('/{id}', [DivisiKaryawanController::class, 'leaderDestroy'])->name('destroy');
     });
 
     // Slips routes
