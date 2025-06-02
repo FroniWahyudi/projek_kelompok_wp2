@@ -120,7 +120,10 @@
     left: 20px;
     z-index: 1000;
     display: inline-block;
-    padding: 9px 10px;
+    padding-top: 4px;
+    padding-bottom: 7px;
+    padding-left: 1px;
+    padding-right: 16px;
     font-weight: 500;
     color: #007bff;
     text-decoration: none;
