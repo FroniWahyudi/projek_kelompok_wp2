@@ -19,6 +19,7 @@
             --secondary-text: #4a4a4a;
             --tertiary-text: #555;
             --minimal-action: #6c757d;
+            --home-button-border: #dee2e6; /* Added for home button styling */
         }
         
         body {
@@ -149,10 +150,10 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         
-       .sisa-cuti-card {
-    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-    border: 1px solid #003366;
-}
+        .sisa-cuti-card {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            border: 1px solid #003366;
+        }
         
         .sisa-cuti-icon {
             font-size: 2.5rem;
@@ -231,12 +232,98 @@
                 justify-content: flex-end;
             }
         }
+        
         .mp-4 i {
             width: 10px;
         }
+        
         .breadcrumb-house-icon {
-            font-size: 2rem; /* Atur ukuran sesuai kebutuhan */
+            font-size: 2rem;
             vertical-align: middle;
+        }
+        
+        /* Home Button Styling */
+        .home-button {
+            background-color: var(--card-bg);
+            color: var(--primary-action);
+            padding: 12px 15px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border: 2px solid var(--home-button-border);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 100px;
+            justify-content: center;
+            animation: slideInUp 0.6s ease-out;
+        }
+        
+        .home-button:hover {
+            background-color: var(--primary-action);
+            color: var(--card-bg);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 123, 255, 0.25);
+            text-decoration: none;
+        }
+        
+        .home-button i {
+            font-size: 16px;
+            transition: transform 0.3s ease;
+        }
+        
+        .home-button:hover i {
+            transform: scale(1.1);
+        }
+        
+        /* Override for Breadcrumb Home Button */
+        .breadcrumb .home-button {
+            position: static; /* Keep in breadcrumb flow */
+            min-width: auto; /* Adjust width to fit content */
+            padding: 8px 12px; /* Smaller padding for breadcrumb */
+            font-size: 1rem; /* Match breadcrumb font size */
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Softer shadow */
+        }
+        
+        /* Animation Keyframes for Home Button */
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Responsive Design for Home Button */
+        @media (max-width: 768px) {
+            .home-button {
+                padding: 10px 16px;
+                font-size: 13px;
+                min-width: 90px;
+            }
+            .breadcrumb .home-button {
+                padding: 6px 10px;
+                font-size: 0.9rem;
+                min-width: auto;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .home-button {
+                padding: 8px 12px;
+                font-size: 12px;
+                min-width: 80px;
+            }
+            .breadcrumb .home-button {
+                padding: 5px 8px;
+                font-size: 0.85rem;
+            }
         }
     </style>
 </head>
@@ -246,7 +333,7 @@
         <nav aria-label="breadcrumb" class="mb-4">
             <ol class="breadcrumb align-items-center" style="font-size: 1.25rem;">
                 <li class="breadcrumb-item d-flex align-items-center">
-                    <a href="{{ url('dashboard') }}" class="flex items-center text-blue-600 hover:text-blue-800 transition-colors" style="text-decoration: none;">
+                    <a href="{{ url('dashboard') }}" class="home-button">
                         <i class="fas fa-home mr-2"></i> Home
                     </a>
                 </li>
@@ -465,7 +552,6 @@
                                                     <i class="bi bi-x-circle"></i>
                                                 </button>
                                             </form>
-                                            <!-- Tombol hapus disembunyikan saat status 'Menunggu' -->
                                         </td>
                                     @endif
                                     @if(in_array(auth()->user()->role, ['Manajer']) && ($r->status === 'Disetujui' || $r->status === 'Ditolak'))
@@ -578,7 +664,7 @@
             const yesBtn = document.getElementById('confirmModalYes');
             let formToSubmit = null;
 
-            // Handler untuk tombol hapus (khusus jika ada form-hapus, meski tidak digunakan di sini)
+            // Handler untuk tombol hapus
             document.querySelectorAll('form.form-hapus button[type="submit"]').forEach(btn => {
                 btn.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -610,26 +696,25 @@
             });
 
             // Responsive table labels
-                if (window.innerWidth <= 768) {
-                    const headers = document.querySelectorAll('thead th');
-                    const headerTexts = Array.from(headers).map(th => th.textContent.trim());
-                    document.querySelectorAll('tbody td').forEach((td, index) => {
-                        const colIndex = index % headerTexts.length;
-                        td.setAttribute('data-label', headerTexts[colIndex]);
-                    });
-                }
+            if (window.innerWidth <= 768) {
+                const headers = document.querySelectorAll('thead th');
+                const headerTexts = Array.from(headers).map(th => th.textContent.trim());
+                document.querySelectorAll('tbody td').forEach((td, index) => {
+                    const colIndex = index % headerTexts.length;
+                    td.setAttribute('data-label', headerTexts[colIndex]);
+                });
+            }
+        });
+    </script>
+    
+    <!-- Auto show modal if there are errors -->
+    @if($errors->any())
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var cutiModal = new bootstrap.Modal(document.getElementById('cutiModal'));
+                cutiModal.show();
             });
         </script>
-    
-        <!-- Auto show modal if there are errors -->
-        @if($errors->any())
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    var cutiModal = new bootstrap.Modal(document.getElementById('cutiModal'));
-                    cutiModal.show();
-                });
-            </script>
-        @endif
-    </script>
+    @endif
 </body>
 </html>
