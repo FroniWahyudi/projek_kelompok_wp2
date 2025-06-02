@@ -845,8 +845,8 @@
             </div>
             <div class="card-body">
               <a href="{{ route('whats_new', ['id' => $item['id']]) }}">
-                <h5 class="card-title">{{ htmlspecialchars($item['title']) }}</h5>
-                <p class="card-text">{{ Str::limit($item['description'], 120) }}</p>
+                <h5 class="card-title">{{ $item['title'] }}</h5>
+                <p class="card-text">{!! Str::limit($item['description'], 120) !!}</p>
                 <div class="card-date">
                   <i class="bi bi-calendar me-1"></i> {{ htmlspecialchars($item['date']) }}
                 </div>

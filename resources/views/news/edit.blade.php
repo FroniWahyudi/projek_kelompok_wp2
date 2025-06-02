@@ -110,6 +110,20 @@
     .form-section {
       margin-bottom: 1.5rem;
     }
+
+    /* Custom styling untuk CKEditor */
+    .ck-editor__editable {
+      min-height: 200px;
+    }
+    
+    .ck-editor__editable:not(.ck-editor__nested-editable) {
+      border-color: #e3f2fd !important;
+    }
+    
+    .ck-editor__editable:not(.ck-editor__nested-editable).ck-focused {
+      border-color: #007bff !important;
+      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.1) !important;
+    }
   </style>
 </head>
 <body>
@@ -171,8 +185,14 @@
           
           <div class="form-section">
             <label for="description" class="form-label">Deskripsi</label>
-            <textarea class="form-control" id="description" name="description" rows="7" required
-            placeholder="Tulis deskripsi lengkap berita">@if($edit === true){{ old('description', $news->description) }}@endif</textarea>
+            <div id="editor-container">
+              <!-- Toolbar container -->
+              <div id="toolbar-container" style="border: 1px solid #e3f2fd; border-bottom: none; border-radius: 5px 5px 0 0; background: #f8f9fa;"></div>
+              <!-- Editor container -->
+              <div id="editor" style="border: 1px solid #e3f2fd; border-top: none; border-radius: 0 0 5px 5px; min-height: 200px; padding: 15px;">@if($edit === true){!! old('description', $news->description) !!}@endif</div>
+            </div>
+            <!-- Hidden textarea untuk menampung data dari CKEditor -->
+            <textarea name="description" id="description" style="display: none;" required></textarea>
           </div>
           
           <div class="form-footer">
@@ -194,10 +214,104 @@
 
 <!-- Bootstrap JS with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- CKEditor 5 CDN - Build with Alignment -->
+<script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/decoupled-document/ckeditor.js"></script>
+
 <script>
+  let editorInstance;
+
+  // Initialize CKEditor
+  DecoupledEditor
+    .create(document.querySelector('#editor'), {
+      toolbar: [
+        'heading',
+        '|',
+        'bold',
+        'italic',
+        'underline',
+        '|',
+        'alignment',
+        '|',
+        'link',
+        'bulletedList',
+        'numberedList',
+        '|',
+        'outdent',
+        'indent',
+        '|',
+        'insertImage',
+        'insertTable',
+        'blockQuote',
+        'mediaEmbed',
+        '|',
+        'undo',
+        'redo',
+        '|',
+        'fontColor',
+        'fontBackgroundColor',
+        'fontSize',
+        'fontFamily'
+      ],
+      alignment: {
+        options: ['left', 'center', 'right', 'justify']
+      },
+      language: 'id',
+      image: {
+        toolbar: [
+          'imageTextAlternative',
+          'imageStyle:inline',
+          'imageStyle:block',
+          'imageStyle:side',
+          '|',
+          'toggleImageCaption',
+          'imageResize'
+        ]
+      },
+      table: {
+        contentToolbar: [
+          'tableColumn',
+          'tableRow',
+          'mergeTableCells',
+          'tableCellProperties',
+          'tableProperties'
+        ]
+      },
+      licenseKey: '',
+      placeholder: 'Tulis deskripsi lengkap berita di sini...',
+      // Konfigurasi upload gambar (opsional)
+      ckfinder: {
+        uploadUrl: '/path/to/your/upload/script'
+      }
+    })
+    .then(editor => {
+      editorInstance = editor;
+      
+      // Insert toolbar into the page
+      document.querySelector('#toolbar-container').appendChild(editor.ui.view.toolbar.element);
+      
+      // Sync CKEditor content dengan textarea tersembunyi
+      editor.model.document.on('change:data', () => {
+        document.querySelector('#description').value = editor.getData();
+      });
+      
+      // Set initial value untuk textarea tersembunyi
+      document.querySelector('#description').value = editor.getData();
+    })
+    .catch(error => {
+      console.error('Error initializing CKEditor:', error);
+    });
+
   // Reset photo input functionality
   document.getElementById('resetPhotoBtn').addEventListener('click', function() {
     document.getElementById('photoInput').value = '';
+  });
+
+  // Form submission handler untuk memastikan data CKEditor tersimpan
+  document.querySelector('form').addEventListener('submit', function(e) {
+    if (editorInstance) {
+      document.querySelector('#description').value = editorInstance.getData();
+    }
   });
 </script>
 </body>
