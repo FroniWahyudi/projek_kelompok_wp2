@@ -933,7 +933,7 @@
               <i class="bi bi-calendar-check"></i> Joined {{ \Carbon\Carbon::parse($user['joined_at'])->format('j F Y') }}
             </div>
             
-            <a href="edit_profil/{{ $user['id'] }}" class="edit-profile-btn">
+            <a href="edit_profil/{{ $user['id'] }}" class="edit-profile-btn" style="text-decoration: none;">
               <i class="bi bi-pencil-square me-1"></i> Edit Profile
             </a>
           </div>
