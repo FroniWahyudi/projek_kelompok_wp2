@@ -56,13 +56,13 @@
     }
     
     .navbar-custom .logo-brand img {
-      height: 54px;
+      height: 60px;
       object-fit: contain;
       transition: all 0.3s ease;
     }
     
     .navbar-custom.scrolled .logo-brand img {
-      height: 60px;
+      height: 54px;
     }
   
     
