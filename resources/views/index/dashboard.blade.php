@@ -62,7 +62,7 @@
     }
     
     .navbar-custom.scrolled .logo-brand img {
-      height: 70px;
+      height: 60px;
     }
     
     /* === SIDEBAR STYLING === */
@@ -619,7 +619,7 @@
     ::-webkit-scrollbar-thumb:hover {
       background: #aaa;
     }
-  .notification-dot {
+  .notification-dot-manajer {
     display: inline-block;
     width: 15px;
     height: 15px;
@@ -632,13 +632,13 @@
     left: 197px;
 }
 
-.notification-dot-cuti {
+.notification-dot-operator {
     width: 15px;
     height: 15px;
     background-color: red;
     border-radius: 50%;
     position: absolute;
-    top: 469px;
+    top: 362px;
     z-index: 100;
     left: 200px;
 }
@@ -679,7 +679,7 @@
           <a class="dropdown-item" href="{{ route('cuti.index') }}">
             <i class="bi bi-check-square me-1"></i> Daftar Pengajuan Cuti
             @if(app('App\Http\Controllers\CutiController')->hasPendingRequests())
-              <span class="notification-dot"></span>
+              <span class="notification-dot-manajer"></span>
             @endif
           </a>
         </li>
@@ -768,7 +768,7 @@
 
     @if(auth()->user()->role === 'Manajer')
      @if(app('App\Http\Controllers\CutiController')->hasPendingRequests())
-          <span class="notification-dot"></span>
+          <span class="notification-dot-manajer"></span>
         @endif
       <a class="btn btn-outline-dark position-relative" href="{{ route('cuti.index') }}">
         <i class="bi bi-check-square me-1"></i> Daftar Cuti
@@ -777,7 +777,7 @@
 
 @if(auth()->user()->role === 'Operator' || auth()->user()->role === 'Admin' || auth()->user()->role === 'Leader')
 @if(app('App\Http\Controllers\CutiController')->hasNonPendingRequests())
-    <span id="cutiNotificationDot" class="notification-dot-cuti"></span>
+    <span id="cutiNotificationDot" class="notification-dot-operator"></span>
 @endif
 
 <a href="{{ route('cuti.index') }}" 

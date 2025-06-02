@@ -122,7 +122,7 @@
         }
         
         .modal-header {
-            background-color: var(--primary-text);
+            background-color: #007bff;
             color: white;
             border-bottom: none;
         }
@@ -292,7 +292,7 @@
                         {{ session('success') }}
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-success" data-bs-dismiss="modal">OK</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
                     </div>
                 </div>
             </div>
