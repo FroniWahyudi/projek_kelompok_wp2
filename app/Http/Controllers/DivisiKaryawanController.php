@@ -25,6 +25,20 @@ class DivisiKaryawanController extends Controller
         return view('index.modal_create_user', compact('role'));
     }
 
+        // === HELPER METHODS ===
+
+    // Helper method untuk mendapatkan route redirect berdasarkan role
+    private function getRedirectRoute($role)
+    {
+        return match($role) {
+            'Admin' => 'admin.index',
+            'Manager' => 'manager.index',
+            'Leader' => 'leader.index',
+            'Operator' => 'operator.index',
+            default => 'dashboard'
+        };
+    }
+    
   // === GENERAL CREATE METHODS ===
   public function createUser(Request $request, $role = null)
     {

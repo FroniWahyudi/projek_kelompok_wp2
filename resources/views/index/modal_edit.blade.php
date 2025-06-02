@@ -100,7 +100,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
     </div>
 
-    <form id="formEditUser{{ $user->id }}" method="POST" action="{{ route('operator.update', $user->id) }}" enctype="multipart/form-data">
+    <form id="formEditUser{{ $user->id }}" method="POST" action="{{ route(strtolower($user->role). '.update', $user->id) }}" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 

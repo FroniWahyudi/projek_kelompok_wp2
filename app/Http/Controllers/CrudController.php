@@ -232,19 +232,7 @@ class CrudController extends Controller
     }
 
 
-    // === HELPER METHODS ===
 
-    // Helper method untuk mendapatkan route redirect berdasarkan role
-    private function getRedirectRoute($role)
-    {
-        return match($role) {
-            'Admin' => 'admin.index',
-            'Manager' => 'manager.index',
-            'Leader' => 'leader.index',
-            'Operator' => 'operator.index',
-            default => 'dashboard'
-        };
-    }
 
     // Method untuk mendapatkan semua users (untuk keperluan admin)
     public function getAllUsers(Request $request)
