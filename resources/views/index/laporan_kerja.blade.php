@@ -126,7 +126,7 @@
       color: var(--tertiary-text);
     }
 
-    .table-hover tbody tr:hover {
+    .table-hover  tbody tr:hover {
       background-color: rgba(0, 123, 255, 0.05);
     }
 
@@ -506,8 +506,10 @@
     });
 
     const resiData = <?= json_encode($resis, JSON_UNESCAPED_UNICODE) ?>;
+    const userRole = "{{ auth()->user()->role }}"; // Mendapatkan role pengguna
 
     console.log("[DEBUG] resiData:", resiData);
+    console.log("[DEBUG] userRole:", userRole);
 
     function buildDropdown() {
       $("#dropdownMenu").empty();
@@ -544,6 +546,8 @@
 
       if (d.items && d.items.length > 0) {
         d.items.forEach((it, i) => {
+          const isDisabled = userRole !== 'Leader' || d.status === 'Selesai' ? 'disabled' : '';
+          const isChecked = d.status === 'Selesai' ? 'checked' : '';
           tbody.append(`
             <tr>
               <td data-label="No">${i + 1}</td>
@@ -551,7 +555,7 @@
               <td data-label="Qty">${it.qty ?? '-'}</td>
               <td data-label="Checklist" class="text-center">
                 <input type="checkbox" class="form-check-input checklist" data-index="${i}" 
-                  ${d.status === 'Selesai' ? 'checked disabled' : ''}>
+                  ${isChecked} ${isDisabled}>
               </td>
             </tr>
           `);
@@ -591,7 +595,8 @@
       $("#totalCount").text(all);
       $("#percentDone").text(pct + "%");
       $("#progressBar").css("width", pct + "%");
-      $("#markAll").prop("disabled", done !== all);
+      const isSelesai = $("#infoStatus").text() === "Selesai";
+      $("#markAll").prop("disabled", isSelesai || userRole !== 'Leader');
       //$("#printResi").prop("disabled", done !== all);
     }
 
@@ -633,7 +638,6 @@
           <hr style="border-top: 2px solid #003366;">
         </div>
         <div style="margin-bottom: 30px;">
-         
           <p><strong>Tujuan:</strong> ${tujuan}</p>
           <p><strong>Tanggal:</strong> ${tanggal}</p>
           <p><strong>Status:</strong> ${status}</p>
@@ -721,6 +725,10 @@
       });
 
       $("#markAll").on("click", function() {
+        if (userRole !== 'Leader') {
+          alert("Hanya Leader yang dapat menandai semua item sebagai selesai.");
+          return;
+        }
         const kode = $("#infoKode").text();
         if (kode !== "-") {
           $.post('{{ route("resi.update_status") }}', {
@@ -799,7 +807,14 @@
           });
       });
 
-      $(document).on("change", ".checklist", updateProgress);
+      $(document).on("change", ".checklist", function() {
+        if (userRole === 'Leader') {
+          updateProgress();
+        } else {
+          this.checked = !this.checked;
+          alert("Hanya Leader yang dapat mencentang item.");
+        }
+      });
 
       // Responsive table labels
       if (window.innerWidth <= 768) {
