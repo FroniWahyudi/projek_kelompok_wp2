@@ -354,7 +354,7 @@
                         <tbody>
                             @forelse ($requests as $request)
                                 <tr>
-                                    <td data-label="User ID">{{ $request->user_id81 }}</td>
+                                    <td data-label="User ID">{{ $request->user->id }}</td>
                                     <td data-label="Email">{{ $request->user->email }}</td>
                                     <td data-label="Request Note">{{ $request->keterangan }}</td>
                                     <td data-label="Aksi" class="action-buttons">

@@ -648,6 +648,7 @@
     top: 362px;
     left: 196px;
     z-index: 10;
+    display: none;
 }
 
 
