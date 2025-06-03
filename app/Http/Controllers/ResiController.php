@@ -13,26 +13,27 @@ class ResiController extends Controller
     /**
      * Tampilkan daftar semua resi.
      */
-   public function index()
+public function index()
 {
     $resi = Resi::with('items.checklist')->get();
     $resis = $resi->mapWithKeys(function ($r) {
-            return [
-                'resi' . $r->id => [
-                    'kode'    => $r->kode,
-                    'tujuan'  => $r->tujuan,
-                    'tanggal' => \Carbon\Carbon::parse($r->tanggal)->format('d M Y'),
-                    'status'  => $r->status,
-                    'items'   => $r->items->map(fn($it) => [
-                        'item'      => $it->nama_item,
-                        'qty'       => $it->qty,
-                        'checklist' => $it->checklist->map(fn($c) => [
-                            'checked' => $c->is_checked,
-                        ])->toArray(),
-                    ])->values(),
-                ]
-            ];
-        })->all();
+        return [
+            'resi' . $r->id => [
+                'id'      => $r->id, // Tambahkan ID
+                'kode'    => $r->kode,
+                'tujuan'  => $r->tujuan,
+                'tanggal' => \Carbon\Carbon::parse($r->tanggal)->format('d M Y'),
+                'status'  => $r->status,
+                'items'   => $r->items->map(fn($it) => [
+                    'item'      => $it->nama_item,
+                    'qty'       => $it->qty,
+                    'checklist' => $it->checklist->map(fn($c) => [
+                        'checked' => $c->is_checked,
+                    ])->toArray(),
+                ])->values(),
+            ]
+        ];
+    })->all();
     return view('index.laporan_kerja', compact('resis'));
 }
 
@@ -111,14 +112,26 @@ class ResiController extends Controller
     /**
      * Hapus resi dari database.
      */
-    public function destroy(Resi $resi)
-    {
+  /**
+ * Hapus resi dari database.
+ */
+public function destroy($id)
+{
+    try {
+        $resi = Resi::findOrFail($id);
         $resi->delete();
 
-        Session::flash('success', 'Resi berhasil dihapus.');
-        // <<< SESUAI: kembali ke laporan.index setelah delete
-        return redirect()->route('laporan.index');
+        return response()->json([
+            'success' => true,
+            'message' => 'Resi berhasil dihapus.'
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Gagal menghapus resi: ' . $e->getMessage()
+        ], 500);
     }
+}
 
     /**
      * (Metode AJAX) Update hanya status resi berdasarkan kode.

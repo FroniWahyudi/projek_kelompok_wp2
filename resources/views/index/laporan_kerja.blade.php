@@ -435,6 +435,11 @@
             <p class="mb-1"><strong>Tujuan:</strong> <span id="infoTujuan">-</span></p>
             <p class="mb-1"><strong>Tanggal:</strong> <span id="infoTanggal">-</span></p>
             <p class="mb-0"><strong>Status:</strong> <span id="infoStatus" class="badge badge-warning">-</span></p>
+            @if(auth()->user() && auth()->user()->role === 'Admin')
+              <button id="deleteResi" class="btn btn-danger btn-sm mt-3" style="display:none;">
+                <i class="bi bi-trash"></i> Hapus Resi
+              </button>
+            @endif
           </div>
         </div>
 
@@ -573,6 +578,15 @@
       }
 
       $("#printResi").prop("disabled", true);
+
+      // Tampilkan tombol hapus hanya untuk Admin
+      if (userRole === 'Admin') {
+        if (d.kode) {
+          $("#deleteResi").show().data('id', d.id);
+        } else {
+          $("#deleteResi").hide();
+        }
+      }
 
       if (d.status === 'Selesai') {
         const total = d.items.length;
@@ -824,6 +838,60 @@
           td.setAttribute('data-label', headers[colIndex]);
         });
       }
+
+      // Event listener untuk tombol hapus dengan event delegation
+      $(document).on("click", "#deleteResi", function() {
+        console.log("Tombol hapus diklik"); // Logging untuk debugging
+        const id = $(this).data('id');
+        if (!id) {
+            console.error("ID resi tidak ditemukan");
+            alert("ID resi tidak ditemukan.");
+            return;
+        }
+
+        if (!confirm("Yakin ingin menghapus resi ini?")) return;
+
+        $.ajax({
+            url: '/resi/' + id,
+            type: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response) {
+                if (response.success) {
+                    showSuccess("Berhasil!", response.message);
+                    const key = Object.keys(resiData).find(k => resiData[k].id == id);
+                    if (key) {
+                        delete resiData[key];
+                        buildDropdown();
+                        const firstKey = Object.keys(resiData)[0];
+                        if (firstKey) {
+                            renderResi(firstKey);
+                        } else {
+                            $("#resiTableBody").html(`
+                                <tr>
+                                    <td colspan="4" class="empty-state">
+                                        <i class="bi bi-inbox empty-state-icon"></i>
+                                        <h5>Belum ada resi</h5>
+                                        <p class="text-muted">Tidak ada resi untuk ditampilkan</p>
+                                    </td>
+                                </tr>
+                            `);
+                            $("#infoKode, #infoTujuan, #infoTanggal").text("-");
+                            $("#infoStatus").text("-").removeClass("badge-success badge-warning");
+                            $("#deleteResi").hide();
+                        }
+                    }
+                } else {
+                    alert("Gagal menghapus resi: " + response.message);
+                }
+            },
+            error: function(xhr) {
+                console.error("Gagal menghapus resi:", xhr.responseText);
+                alert("Gagal menghapus resi: " + (xhr.responseJSON?.message || xhr.statusText));
+            }
+        });
+      });
     });
   </script>
 

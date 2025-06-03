@@ -74,9 +74,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/laporan_kerja', [ResiController::class, 'index'])->name('laporan.index');
     Route::get('/resi', [ResiController::class, 'index']);
     Route::post('/resi/update-status', [ResiController::class, 'updateStatus'])->name('resi.update_status');
-    Route::resource('resi', ResiController::class)->except(['index', 'create', 'store']);
+    Route::resource('resi', ResiController::class)->except(['index']);
     Route::get('/buat-resi', [ResiController::class, 'create'])->name('resi.buat');
     Route::post('/buat-resi', [ResiController::class, 'store'])->name('resi.store');
+    Route::delete('/resi/{id}', [ResiController::class, 'destroy'])->name('resi.destroy');
 
     // Operator CRUD Routes
     Route::prefix('operator')->name('operator.')->group(function () {
