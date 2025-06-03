@@ -220,7 +220,7 @@
                         {{ $op->role }}
                         <span class="badge
                             @if(strtolower($op->level) === 'junior') bg-success 
-                            @elseif(strtolower($op->level) === 'mid-level') bg-primary 
+                            @elseif(strtolower($op->level) === 'intermediate') bg-primary 
                             @elseif(strtolower($op->level) === 'senior') bg-warning text-dark 
                             @else bg-info text-dark 
                             @endif ms-2">
