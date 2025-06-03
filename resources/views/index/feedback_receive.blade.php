@@ -11,6 +11,45 @@
     .gradient-bg {
       background: #f0f4f8;
     }
+    /* Home Button Styling */
+    .home-button {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 1050;
+      background-color: #ffffff;
+      color: #007bff;
+      padding: 12px 15px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      border: 2px solid #dee2e6;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 100px;
+      justify-content: center;
+    }
+
+    .home-button:hover {
+      background-color: #007bff;
+      color: #ffffff;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 123, 255, 0.25);
+      text-decoration: none;
+    }
+
+    .home-button i {
+      font-size: 16px;
+      transition: transform 0.3s ease;
+    }
+
+    .home-button:hover i {
+      transform: scale(1.1);
+    }
     .hover-scale {
       transition: transform 0.2s ease;
     }
@@ -35,18 +74,70 @@
       background-color: #f0f4f8 !important;
       color: #003366 !important;
     }
+    /* Page Header */
+    .page-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding: 30px 0;
+    }
+
+    .page-header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #003366;
+      margin: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      background-color: #ffffff;
+      padding: 20px 40px;
+      border-radius: 15px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+      border: 1px solid #e3f2fd;
+    }
+
+    .page-header h1 i {
+      color: #007bff;
+      font-size: 2.2rem;
+    }
+
+    @media (max-width: 768px) {
+      .page-header h1 {
+        font-size: 1.8rem;
+        padding: 15px 25px;
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page-header {
+        margin-bottom: 25px;
+        padding: 15px 0;
+      }
+      
+      .page-header h1 {
+        font-size: 1.5rem;
+        padding: 12px 20px;
+      }
+    }
   </style>
 </head>
 <body class="gradient-bg min-vh-100">
+  <!-- Fixed Home Button -->
+  <a href="dashboard" class="home-button">
+    <i class="fas fa-home"></i>
+    <span>Home</span>
+  </a>
+
   <div class="container py-4 py-md-5">
-    <a href="dashboard" class="mt-3 mt-md-0 btn btn-primary hover-scale" style="margin-bottom:10px;">
-      <i class="fas fa-home mr-2"></i> Home
-    </a>
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-4">
-      <div>
-        <h1 class="h2 fw-bold" style="color: #003366;">Feedback</h1>
-        <p style="color: #4a4a4a;">Daftar feedback yang diberikan kepada {{ auth()->user()->name }}</p>
-      </div>
+    <!-- Page Header -->
+    <div class="page-header">
+      <h1>
+        <i class="bi bi-chat-square-text"></i>
+        <span>Feedback {{ auth()->user()->name }}</span>
+      </h1>
     </div>
 
     <div class="feedback-card rounded-3 shadow">
