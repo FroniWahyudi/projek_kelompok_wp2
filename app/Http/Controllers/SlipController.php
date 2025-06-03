@@ -163,6 +163,15 @@ class SlipController extends Controller
         $nextId = Slip::count() + 1;
         $mode = 'edit';
 
+        // Format period for edit view
+        if ($slip->period) {
+            try {
+                $slip->period = \Carbon\Carbon::parse($slip->period)->format('Y-m');
+            } catch (\Exception $e) {
+                $slip->period = '';
+            }
+        }
+
         return view('index.slip_edit', compact('slip', 'years', 'users', 'nextId', 'mode'));
     }
 

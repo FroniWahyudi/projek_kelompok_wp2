@@ -561,7 +561,11 @@
                     <div class="header-section">
                         <h1 class="page-title">
                             <i class="bi bi-file-earmark-text"></i>
-                            {{ $title ?? 'Pengelolaan Slip Gaji' }}
+                            @if(auth()->user()->role === 'Admin')
+                                {{ $title ?? 'Pengelolaan Slip Gaji' }}
+                            @else
+                                Slip Gaji {{ auth()->user()->name }}
+                            @endif
                         </h1>
                         @if(auth()->user()->role === 'Admin' || auth()->user()->role === 'Manager')
                             <a href="{{ route('slip_create') }}" class="create-button">
@@ -710,6 +714,22 @@
         </div>
     </div>
 
+    <!-- Notification Toast -->
+    @if(session('success'))
+    <div id="notif-success" class="position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+        <div class="toast align-items-center border-0 show" role="alert" aria-live="assertive" aria-atomic="true"
+             style="background-color: #007bff; color: #fff;">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    {{ session('success') }}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+    @endif
+
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
@@ -752,6 +772,14 @@
                     }
                 });
             });
+
+            // Hide notification after 3.5 seconds
+            const notif = document.getElementById('notif-success');
+            if (notif) {
+                setTimeout(() => {
+                    notif.style.display = 'none';
+                }, 3500);
+            }
         });
     </script>
 </body>

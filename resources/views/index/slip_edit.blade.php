@@ -214,6 +214,8 @@
             <div class="col-md-12 p-0">
                 <div class="main-content">
                     <div id="edit-payslip-view">
+                        
+
                         <form method="POST" action="{{ route('slips.update', $slip->id) }}">
                             @csrf
                             @method('PUT')
@@ -276,17 +278,14 @@
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
                                                         <label class="form-label">Periode</label>
-                                                        <input type="month" id="payslip-period" name="period" class="form-control" value="{{ $slip->period }}">
+                                                        <input type="month" id="payslip-period" name="period" class="form-control" value="{{ $slip->period instanceof \Carbon\Carbon ? $slip->period->format('Y-m') : $slip->period }}">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-12">
                                                     <div class="mb-3">
                                                         <label class="form-label">Pilih Karyawan</label>
-                                                        <select name="user_id" id="employee-select" class="form-select" disabled>
-                                                            @foreach($users as $user)
-                                                                <option value="{{ $user->id }}" {{ $slip->user_id == $user->id ? 'selected' : '' }}>{{ $user->name }}</option>
-                                                            @endforeach
-                                                        </select>
+                                                        <input type="hidden" name="user_id" id="employee-id" value="{{ $slip->user_id }}">
+                                                        <input type="text" class="form-control" id="employee-name" value="{{ $users->firstWhere('id', $slip->user_id)?->name }}" readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -509,9 +508,10 @@
                     preview.period.textContent = '-';
                 }
 
-                const sel = employeeSelect.selectedOptions[0];
-                preview.name.textContent = sel ? sel.textContent : "-";
-                preview.id.textContent = sel ? sel.value : "-";
+                const employeeNameInput = document.getElementById('employee-name');
+const employeeIdInput = document.getElementById('employee-id');
+preview.name.textContent = employeeNameInput ? employeeNameInput.value : "-";
+preview.id.textContent = employeeIdInput ? employeeIdInput.value : "-";
 
                 // Update tabel pendapatan di pratinjau
                 preview.earningsBody.innerHTML = "";
@@ -625,5 +625,30 @@
             calculateTotals();
         });
     </script>
+
+    @if(session('success'))
+<div id="notif-success" class="position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+    <div class="toast align-items-center text-bg-success border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                <i class="bi bi-check-circle-fill me-2"></i>
+                {{ session('success') }}
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+@endif
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const notif = document.getElementById('notif-success');
+    if (notif) {
+        setTimeout(() => {
+            notif.style.display = 'none';
+        }, 3500);
+    }
+});
+</script>
 </body>
 </html>

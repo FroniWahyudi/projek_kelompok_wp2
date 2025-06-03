@@ -436,7 +436,22 @@ body {
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  @if(session('success'))
+<div id="notif-success" class="position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+    <div class="toast align-items-center border-0 show" role="alert" aria-live="assertive" aria-atomic="true"
+         style="background-color: #007bff; color: #fff;">
+        <div class="d-flex">
+            <div class="toast-body">
+                <i class="bi bi-check-circle-fill me-2"></i>
+                {{ session('success') }}
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+@endif
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       const photoUpload = document.getElementById('photo-upload');
@@ -485,7 +500,32 @@ body {
           password.focus();
         }
       });
+
+      // Reset avatar preview saat tombol reset diklik
+      const originalAvatar = avatarPreview ? avatarPreview.src : null;
+
+      if (form && avatarPreview) {
+        form.addEventListener('reset', function() {
+          setTimeout(() => {
+            if (originalAvatar) avatarPreview.src = originalAvatar;
+            if (fileName) {
+              fileName.textContent = '';
+              fileName.style.display = 'none';
+            }
+            if (photoUpload) photoUpload.value = '';
+          }, 10); // beri jeda agar input lain juga ter-reset
+        });
+      }
     });
+    
+    document.addEventListener('DOMContentLoaded', function() {
+    const notif = document.getElementById('notif-success');
+    if (notif) {
+        setTimeout(() => {
+            notif.style.display = 'none';
+        }, 3500);
+    }
+});
   </script>
 </body>
 </html>
