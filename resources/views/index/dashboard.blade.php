@@ -107,8 +107,8 @@
       border-radius: 8px;
       transition: all 0.2s ease;
       font-size: 1rem;
-      position: relative;
-      overflow: hidden;
+      position: relative; /* Ensure this exists for absolute positioning of dot */
+      overflow: visible; /* Changed from hidden to visible to show the notification dot */
       width: 194px;
     }
     
@@ -622,27 +622,26 @@
     }
   .notification-dot {
     display: inline-block;
-    width: 15px;
-    height: 15px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
     background-color: red;
     margin-left: 5px;
-    position: absolute;
-    top: 416px;
-    z-index: 100;
-    left: 197px;
+    vertical-align: middle;
 }
 
 .notification-dot-cuti {
+    position: absolute;
+    top: -5px;
+    right: -5px;
     width: 15px;
     height: 15px;
     background-color: red;
     border-radius: 50%;
-    position: absolute;
-    top: 364px;
+    display: inline-block;
     z-index: 100;
-    left: 200px;
 }
+
 #resetNotification {
     position: absolute;
     top: 362px;
@@ -804,14 +803,13 @@
     @endif
 
 @if(auth()->user()->role === 'Operator' || auth()->user()->role === 'Admin' || auth()->user()->role === 'Leader')
-@if(app('App\Http\Controllers\CutiController')->hasNonPendingRequests())
-    <span id="cutiNotificationDot" class="notification-dot-cuti"></span>
-@endif
-
 <a href="{{ route('cuti.index') }}" 
-   class="btn btn-outline-dark"
+   class="btn btn-outline-dark position-relative"
    id="cutiButton">
     <i class="bi bi-check-square me-1"></i> Pengajuan Cuti
+    @if(app('App\Http\Controllers\CutiController')->hasNonPendingRequests())
+        <span id="cutiNotificationDot" class="notification-dot-cuti"></span>
+    @endif
 </a>
    @if(auth()->user()->role === 'Operator' || auth()->user()->role === 'Admin' || auth()->user()->role === 'Leader')
    <span id="slipNotificationDot" class="notification-dot-slip"></span>
