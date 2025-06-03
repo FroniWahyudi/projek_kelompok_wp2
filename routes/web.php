@@ -141,9 +141,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/check-reset-requests', [PasswordResetController::class, 'checkRequests'])->name('check.reset.requests');
 
     // General user management by role (must be last to avoid conflicts)
-    Route::get('/{role}', [CrudController::class, 'usersByRole'])->name('users.by.role');
-    Route::get('/{role}/{id}/edit', [CrudController::class, 'editUser'])->name('users.edit');
-    Route::put('/{role}/{id}', [CrudController::class, 'updateUser'])->name('users.update');
-    Route::delete('/{role}/{id}', [CrudController::class, 'destroyUser'])->name('users.destroy');
-    Route::post('/users', [CrudController::class, 'createUser'])->name('users.store');
+    Route::get('/{role}', [DivisiKaryawanController::class, 'usersByRole'])->name('users.by.role');
+    Route::get('/{role}/{id}/edit', [DivisiKaryawanController::class, 'editUser'])->name('users.edit');
+    Route::put('/{role}/{id}', [DivisiKaryawanController::class, 'updateUser'])->name('users.update');
+    Route::delete('/{role}/{id}', [DivisiKaryawanController::class, 'destroyUser'])->name('users.destroy');
+    Route::post('/users', [DivisiKaryawanController::class, 'createUser'])->name('users.store');
 });
