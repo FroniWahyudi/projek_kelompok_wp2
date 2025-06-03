@@ -95,6 +95,9 @@
             flex-basis: auto;
             margin-right: -15px;
         }
+        .gx-4 {
+    margin-top: 21px;
+}
   </style>
 </head>
 <body>
@@ -123,7 +126,7 @@
   </nav>
 
   <!-- Content -->
-  <main class="container py-5">
+  <main class="container">
     <div class="row gx-4">
       @foreach ($users as $user)
         <div class="col-md-6 d-flex mb-4">

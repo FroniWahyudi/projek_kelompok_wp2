@@ -104,6 +104,57 @@
             left: -6px;
             top: 1px;
         }
+
+        /* Float Notification Styles - HANYA UNTUK SUCCESS DAN ERROR */
+        #success-message, #error-message {
+            position: fixed !important;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            min-width: 300px;
+            max-width: 400px;
+            border-radius: 10px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            transform: translateX(400px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            margin: 0 !important;
+        }
+
+        #success-message.show, #error-message.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        #success-message {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            border: 1px solid #c3e6cb;
+            border-left: 4px solid #28a745;
+            color: #155724;
+        }
+
+        #error-message {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            border: 1px solid #f5c6cb;
+            border-left: 4px solid #dc3545;
+            color: #721c24;
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            #success-message, #error-message {
+                top: 10px;
+                right: 10px;
+                left: 10px;
+                min-width: auto;
+                max-width: none;
+                transform: translateY(-100px);
+            }
+
+            #success-message.show, #error-message.show {
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
 <body>
@@ -133,6 +184,7 @@
                 <!-- Error messages -->
                 @if ($errors->any())
                     <div id="error-message" class="alert alert-danger">
+                        <strong>Terjadi kesalahan:</strong>
                         <ul id="error-list" class="mb-0 ps-3">
                             @foreach ($errors->all() as $error)
                                 <li>{{ $error }}</li>
@@ -182,6 +234,34 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // Auto show float notifications on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            const successMessage = document.getElementById('success-message');
+            const errorMessage = document.getElementById('error-message');
+            
+            if (successMessage) {
+                setTimeout(() => {
+                    successMessage.classList.add('show');
+                }, 100);
+                
+                // Auto hide after 5 seconds
+                setTimeout(() => {
+                    successMessage.classList.remove('show');
+                }, 5000);
+            }
+            
+            if (errorMessage) {
+                setTimeout(() => {
+                    errorMessage.classList.add('show');
+                }, 100);
+                
+                // Auto hide after 7 seconds (longer for errors)
+                setTimeout(() => {
+                    errorMessage.classList.remove('show');
+                }, 7000);
+            }
+        });
+
         function validateForm() {
             const email = document.getElementById('email').value;
             const keterangan = document.getElementById('keterangan').value;
@@ -190,8 +270,15 @@
             let isValid = true;
 
             // Clear previous error states
-            document.getElementById('error-message').classList.add('d-none');
-            document.getElementById('error-list').innerHTML = '';
+            const errorMessage = document.getElementById('error-message');
+            if (errorMessage) {
+                errorMessage.classList.add('d-none');
+                errorMessage.classList.remove('show');
+            }
+            const errorList = document.getElementById('error-list');
+            if (errorList) {
+                errorList.innerHTML = '';
+            }
             emailInput.classList.remove('is-invalid', 'shake');
             keteranganInput.classList.remove('is-invalid', 'shake');
 
@@ -216,7 +303,18 @@
             }
 
             if (!isValid) {
-                document.getElementById('error-message').classList.remove('d-none');
+                const errorMessage = document.getElementById('error-message');
+                if (errorMessage) {
+                    errorMessage.classList.remove('d-none');
+                    setTimeout(() => {
+                        errorMessage.classList.add('show');
+                    }, 100);
+                    
+                    // Auto hide after 7 seconds
+                    setTimeout(() => {
+                        errorMessage.classList.remove('show');
+                    }, 7000);
+                }
                 return false;
             }
 
@@ -225,9 +323,11 @@
 
         function addError(message) {
             const errorList = document.getElementById('error-list');
-            const li = document.createElement('li');
-            li.textContent = message;
-            errorList.appendChild(li);
+            if (errorList) {
+                const li = document.createElement('li');
+                li.textContent = message;
+                errorList.appendChild(li);
+            }
         }
 
         function goToLogin() {
