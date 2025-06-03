@@ -622,13 +622,16 @@
     }
   .notification-dot {
     display: inline-block;
-    width: 8px;
-    height: 8px;
+    width: 15px;
+    height: 15px;
     border-radius: 50%;
     background-color: red;
     margin-left: 5px;
-    vertical-align: middle;
-}
+    position: absolute;
+    top: 416px;
+    z-index: 100;
+    left: 197px;
+  }
 
 .notification-dot-cuti {
     position: absolute;
