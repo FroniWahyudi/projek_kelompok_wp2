@@ -9,103 +9,133 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
         body {
-            background-color: #f5f7fb;
+            background-color: #f0f4f8;
             font-family: 'Segoe UI', Tahoma, sans-serif;
+            color: #4a4a4a;
         }
         .main-content {
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             padding: 25px;
             min-height: 90vh;
         }
         .page-title {
-            font-size: 24px;
-            font-weight: 600;
-            color: #212529;
+            font-size: 26px;
+            font-weight: 700;
+            color: #003366;
             margin-bottom: 20px;
+            letter-spacing: -0.5px;
         }
         .card {
             border: none;
-            border-radius: 10px;
-            box-shadow: 0 1px 10px rgba(0, 0, 0, 0.05);
-            margin-bottom: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            margin-bottom: 25px;
+            overflow: hidden;
         }
         .card-header {
-            background: #f8f9fa;
-            border-bottom: 1px solid #e9ecef;
-            padding: 15px;
+            background: linear-gradient(120deg, #e3f2fd, #e1f5fe);
+            border: none;
+            padding: 18px 20px;
+            font-weight: 700;
+            font-size: 18px;
+            color: #003366;
+            border-radius: 12px 12px 0 0 !important;
             font-weight: 600;
         }
         .table th {
-            font-weight: 600;
-            color: #495057;
+            font-weight: 700;
+            color: #003366;
             background-color: #f8f9fa;
+            padding: 12px 15px;
         }
         .form-label {
-            font-weight: 500;
-            color: #495057;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 8px;
+            font-size: 15px;
         }
         .tab-content {
-            padding: 20px 0;
+            padding: 25px 0;
+        }
+        .nav-tabs {
+            border: none;
+            padding: 0;
         }
         .nav-tabs .nav-link {
-            color: #495057;
+            color: #555;
             border: none;
-            padding: 10px 15px;
-            font-weight: 500;
+            padding: 12px 20px;
+            font-weight: 600;
+            font-size: 15px;
+            border-radius: 8px 8px 0 0;
+            margin-right: 5px;
+            background: #f8f9fa;
+            transition: all 0.3s;
+        }
+        .nav-tabs .nav-link:hover {
+            background: #e9ecef;
+            color: #007bff;
         }
         .nav-tabs .nav-link.active {
-            color: #3a86ff;
-            border-bottom: 2px solid #3a86ff;
+            color: #007bff;
+            background: #ffffff;
+            border-bottom: 3px solid #007bff;
+            position: relative;
+            z-index: 1;
         }
         .preview-container {
             max-width: 800px;
             margin: 30px auto;
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-            padding: 30px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 35px;
+            border: 1px solid #e1e8ed;
         }
         .preview-header {
-            border-bottom: 2px solid #dee2e6;
-            padding-bottom: 15px;
-            margin-bottom: 20px;
+            border-bottom: 2px solid #e1e8ed;
+            padding-bottom: 20px;
+            margin-bottom: 25px;
         }
         .company-logo {
             font-size: 24px;
             font-weight: bold;
-            color: #3a86ff;
+            color: #003366;
         }
         .slip-title {
-            font-size: 22px;
-            font-weight: 600;
-            color: #212529;
+            font-size: 24px;
+            font-weight: 700;
+            color: #003366;
+            letter-spacing: -0.5px;
         }
         .period-badge {
             background: #e9ecef;
-            padding: 5px 15px;
+            padding: 8px 20px;
             border-radius: 20px;
-            font-size: 14px;
-            color: #495057;
+            font-size: 15px;
+            color: #555;
+            font-weight: 600;
         }
         .section-title {
-            font-size: 16px;
-            font-weight: 600;
+            font-size: 17px;
+            font-weight: 700;
             margin-bottom: 15px;
-            color: #495057;
-            border-bottom: 1px solid #e9ecef;
-            padding-bottom: 5px;
+            color: #003366;
+            border-bottom: 1px solid #e1e8ed;
+            padding-bottom: 10px;
         }
         .info-row {
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
         .info-label {
-            font-weight: 500;
-            color: #6c757d;
+            font-weight: 600;
+            color: #555;
         }
         .info-value {
-            font-weight: 500;
+            font-weight: 600;
+            color: #003366;
         }
         .total-row {
             font-weight: 700;
@@ -113,25 +143,68 @@
         }
         .income {
             color: #198754;
+            font-weight: 600;
         }
         .deduction {
             color: #dc3545;
+            font-weight: 600;
         }
         .net-salary {
-            font-size: 18px;
-            font-weight: 700;
-            background: #e9ecef;
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 20px;
+            font-size: 20px;
+            font-weight: 800;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 25px;
+            border-left: 4px solid #007bff;
         }
         .btn-primary {
-            background-color: #3a86ff;
-            border-color: #3a86ff;
+            background-color: #007bff;
+            border-color: #007bff;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s;
         }
         .btn-primary:hover {
-            background-color: #2a6ecc;
-            border-color: #2a6ecc;
+            background-color: #0069d9;
+            border-color: #0062cc;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.25);
+        }
+        .form-control, .form-select {
+            border: 1px solid #d1d9e6;
+            border-radius: 8px;
+            padding: 10px 15px;
+            font-size: 15px;
+            transition: all 0.3s;
+            background-color: #f8fafc;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.15);
+            background-color: #fff;
+        }
+        .add-item-btn {
+            border-radius: 8px;
+            padding: 8px 15px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .delete-row-btn {
+            border-radius: 8px;
+            padding: 5px 10px;
+            font-size: 14px;
+        }
+        .table-bordered {
+            border: 1px solid #e1e8ed;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .table-bordered th, .table-bordered td {
+            padding: 12px 15px;
+            vertical-align: middle;
         }
     </style>
 </head>
@@ -197,7 +270,7 @@
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
                                                         <label class="form-label">ID Slip Gaji</label>
-                                                        <p>{{ $slip->id }}</p>
+                                                        <p>{{ $slip->slip_number }}</p>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
@@ -209,7 +282,7 @@
                                                 <div class="col-md-12">
                                                     <div class="mb-3">
                                                         <label class="form-label">Pilih Karyawan</label>
-                                                        <select name="user_id" id="employee-select" class="form-select">
+                                                        <select name="user_id" id="employee-select" class="form-select" disabled>
                                                             @foreach($users as $user)
                                                                 <option value="{{ $user->id }}" {{ $slip->user_id == $user->id ? 'selected' : '' }}>{{ $user->name }}</option>
                                                             @endforeach
