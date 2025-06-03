@@ -709,7 +709,7 @@
     <a class="dropdown-item position-relative" href="{{ route('slips.index') }}">
       <i class="bi bi-receipt me-1"></i> Slip Gaji
     
-        <span id="slipNotificationDotMobile" class="notification-dot-slip active"></span>
+        <span id="slipNotificationDotMobile" class="notification-dot-slip"></span>
    
     </a>
   </li>
@@ -813,7 +813,7 @@
     <i class="bi bi-check-square me-1"></i> Pengajuan Cuti
 </a>
    @if(auth()->user()->role === 'Operator' || auth()->user()->role === 'Admin' || auth()->user()->role === 'Leader')
-   <span id="slipNotificationDot" class="notification-dot-slip active"></span>
+   <span id="slipNotificationDot" class="notification-dot-slip"></span>
   <a href="{{ route('slips.index') }}" class="btn btn-outline-dark position-relative" id="slipButton">
     <i class="bi bi-receipt me-1"></i> Slip Gaji
     @if($hasUnreadSlip)

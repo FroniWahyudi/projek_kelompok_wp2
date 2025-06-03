@@ -328,10 +328,10 @@
             }
         }
         .modal-body {
-    position: relative;
+    justify-content: center;
     flex: 1 1 auto;
     padding: var(--bs-modal-padding);
-    left: 106px;
+    
 }
 .modal-content {
     position: relative;
@@ -397,7 +397,7 @@
                         <h5 class="modal-title"><i class="bi bi-check-circle-fill me-2"></i>Berhasil</h5>
                  
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body text-center">
                         {{ session('success') }}
                     </div>
                     <div class="modal-footer">
@@ -616,7 +616,7 @@
                             <h5 class="modal-title"><i class="bi bi-calendar-plus me-2"></i>Form Pengajuan Cuti</h5>
                    
                         </div>
-                        <div class="modal-body">
+                        <div class="modal-body-pengajuan" style="position: relative; left: 10px; top: 10px; width: 400px;">
                             <div class="mb-3">
                                 <label for="tgl_mulai" class="form-label">Tanggal Mulai</label>
                                 <input type="date" id="tgl_mulai" name="tgl_mulai"
@@ -662,7 +662,7 @@
                         <h5 class="modal-title" id="confirmModalLabel"><i class="bi bi-question-circle-fill me-2"></i>Konfirmasi</h5>
                        
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body text-center">
                         <p id="confirmModalMessage">Pesan konfirmasi di sini</p>
                     </div>
                     <div class="modal-footer">
