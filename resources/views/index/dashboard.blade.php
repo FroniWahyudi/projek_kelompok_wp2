@@ -622,15 +622,15 @@
     }
   .notification-dot {
     display: inline-block;
+    top: -5px;
+    right: -5px;
     width: 15px;
     height: 15px;
     border-radius: 50%;
     background-color: red;
     margin-left: 5px;
     position: absolute;
-    top: 416px;
     z-index: 100;
-    left: 197px;
   }
 
 .notification-dot-cuti {
@@ -641,15 +641,19 @@
     height: 15px;
     background-color: red;
     border-radius: 50%;
-    display: inline-block;
+    display: none;
     z-index: 100;
+}
+.notification-dot-cuti.active {
+  display: inline-block;
+  animation: pulse 1.5s infinite;
 }
 
 #resetNotification {
     position: absolute;
-    top: 362px;
-    left: 196px;
-    z-index: 10;
+    top: -5px;
+    right: -5px;
+    z-index: 100;
     display: none;
 }
 
@@ -778,8 +782,8 @@
 
     <h6 class="fw-bold">Menu Lainnya</h6>
     @if(auth()->user()->role === 'Admin')
-    <span id="resetNotification" class="badge bg-danger rounded-pill">!</span>
       <a class="btn btn-outline-dark" href="{{ route('reset.password.form') }}">
+      <span id="resetNotification" class="badge bg-danger rounded-pill">!</span>
       <i class="bi bi-key me-1"></i> Reset Password
       </a>
     @endif
@@ -797,10 +801,10 @@
     @endif
 
     @if(auth()->user()->role === 'Manajer')
-     @if(app('App\Http\Controllers\CutiController')->hasPendingRequests())
+      <a class="btn btn-outline-dark position-relative" href="{{ route('cuti.index') }}">
+        @if(app('App\Http\Controllers\CutiController')->hasPendingRequests())
           <span class="notification-dot"></span>
         @endif
-      <a class="btn btn-outline-dark position-relative" href="{{ route('cuti.index') }}">
         <i class="bi bi-check-square me-1"></i> Daftar Cuti
       </a>
     @endif
@@ -810,9 +814,11 @@
    class="btn btn-outline-dark position-relative"
    id="cutiButton">
     <i class="bi bi-check-square me-1"></i> Pengajuan Cuti
+    <span id="cutiNotificationDot" class="notification-dot-cuti
     @if(app('App\Http\Controllers\CutiController')->hasNonPendingRequests())
-        <span id="cutiNotificationDot" class="notification-dot-cuti"></span>
+    active
     @endif
+    "></span>
 </a>
   <a href="{{ route('slips.index') }}" class="btn btn-outline-dark position-relative" id="slipButton">
     <i class="bi bi-receipt me-1"></i> Slip Gaji
@@ -1056,6 +1062,7 @@
     
     if (cutiButton) {
         cutiButton.addEventListener('click', function() {
+          console.log("Cuti button clicked");
             fetch("{{ route('cuti.markAsRead') }}", {
                 method: 'POST',
                 headers: {
@@ -1066,12 +1073,21 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success && notificationDot) {
-                    notificationDot.style.display = 'none';
+                    NotificationDot.classList.remove('active');
                 }
-            });
+            })
+            .catch(error => console.error('Error marking cuti as read:', error));
         });
     }
 });
+
+$('#cutiButton').on('click', function(e) {
+      e.preventDefault();
+      var self = this;
+      setTimeout(function() {
+          window.location.href = self.href;
+      }, 50);
+  });
 
 document.addEventListener('DOMContentLoaded', function() {
     const slipButton = document.querySelector('a[href="<?php echo route('slips.index'); ?>"]');
