@@ -175,7 +175,7 @@
       border: 1px solid var(--gradient-start);
       overflow: hidden;
       transition: all 0.3s ease;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
 
     .employee-card:hover {
