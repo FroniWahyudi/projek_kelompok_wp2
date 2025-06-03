@@ -134,6 +134,7 @@
       background-color: var(--primary-action);
       color: white;
       border-bottom: none;
+     
     }
 
     .modal-footer {
@@ -501,6 +502,26 @@
         <p id="textDesc">Operasi berhasil.</p>
       </div>
     </div>
+
+    <!-- Modal Konfirmasi Hapus -->
+    <div class="modal fade" id="modalConfirmDelete" tabindex="-1" aria-labelledby="modalConfirmDeleteLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+          <div class="modal-header bg-primary text-white" style="justify-content:center;">
+            <h5 class="modal-title" id="modalConfirmDeleteLabel"><i class="bi bi-exclamation-triangle me-2" ></i>Konfirmasi Hapus Resi</h5>
+
+          </div>
+          <div class="modal-body text-center">
+            <i class="bi bi-trash display-4 text-danger mb-3"></i>
+            <p class="mb-0 fs-5">Apakah Anda yakin ingin menghapus resi ini?<br><span class="fw-bold text-danger" id="deleteResiKode"></span></p>
+          </div>
+          <div class="modal-footer justify-content-center">
+            <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Batal</button>
+            <button type="button" class="btn btn-danger px-4" id="btnConfirmDeleteResi"><i class="bi bi-trash me-1"></i> Hapus</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -851,55 +872,58 @@
 
       // Event listener untuk tombol hapus dengan event delegation
       $(document).on("click", "#deleteResi", function() {
-        console.log("Tombol hapus diklik"); // Logging untuk debugging
-        const id = $(this).data('id');
-        if (!id) {
-            console.error("ID resi tidak ditemukan");
-            alert("ID resi tidak ditemukan.");
-            return;
-        }
+        resiIdToDelete = $(this).data('id');
+        // Ambil kode resi untuk ditampilkan di modal
+        const kode = $("#infoKode").text();
+        resiKodeToDelete = kode;
+        $("#deleteResiKode").text(kode);
+        const modal = new bootstrap.Modal(document.getElementById('modalConfirmDelete'));
+        modal.show();
+      });
 
-        if (!confirm("Yakin ingin menghapus resi ini?")) return;
-
+      $(document).on("click", "#btnConfirmDeleteResi", function() {
+        if (!resiIdToDelete) return;
         $.ajax({
-            url: '/resi/' + id,
-            type: 'DELETE',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function(response) {
-                if (response.success) {
-                    showSuccess("Berhasil!", response.message);
-                    const key = Object.keys(resiData).find(k => resiData[k].id == id);
-                    if (key) {
-                        delete resiData[key];
-                        buildDropdown();
-                        const firstKey = Object.keys(resiData)[0];
-                        if (firstKey) {
-                            renderResi(firstKey);
-                        } else {
-                            $("#resiTableBody").html(`
-                                <tr>
-                                    <td colspan="4" class="empty-state">
-                                        <i class="bi bi-inbox empty-state-icon"></i>
-                                        <h5>Belum ada resi</h5>
-                                        <p class="text-muted">Tidak ada resi untuk ditampilkan</p>
-                                    </td>
-                                </tr>
-                            `);
-                            $("#infoKode, #infoTujuan, #infoTanggal").text("-");
-                            $("#infoStatus").text("-").removeClass("badge-success badge-warning");
-                            $("#deleteResi").hide();
-                        }
-                    }
+          url: '/resi/' + resiIdToDelete,
+          type: 'DELETE',
+          headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          },
+          success: function(response) {
+            $('#modalConfirmDelete').modal('hide');
+            if (response.success) {
+              showSuccess("Berhasil!", response.message);
+              const key = Object.keys(resiData).find(k => resiData[k].id == resiIdToDelete);
+              if (key) {
+                delete resiData[key];
+                buildDropdown();
+                const firstKey = Object.keys(resiData)[0];
+                if (firstKey) {
+                  renderResi(firstKey);
                 } else {
-                    alert("Gagal menghapus resi: " + response.message);
+                  $("#resiTableBody").html(`
+                    <tr>
+                      <td colspan="4" class="empty-state">
+                        <i class="bi bi-inbox empty-state-icon"></i>
+                        <h5>Belum ada resi</h5>
+                        <p class="text-muted">Tidak ada resi untuk ditampilkan</p>
+                      </td>
+                    </tr>
+                  `);
+                  $("#infoKode, #infoTujuan, #infoTanggal").text("-");
+                  $("#infoStatus").text("-").removeClass("badge-success badge-warning");
+                  $("#deleteResi").hide();
                 }
-            },
-            error: function(xhr) {
-                console.error("Gagal menghapus resi:", xhr.responseText);
-                alert("Gagal menghapus resi: " + (xhr.responseJSON?.message || xhr.statusText));
+              }
+            } else {
+              alert("Gagal menghapus resi: " + response.message);
             }
+          },
+          error: function(xhr) {
+            $('#modalConfirmDelete').modal('hide');
+            console.error("Gagal menghapus resi:", xhr.responseText);
+            alert("Gagal menghapus resi: " + (xhr.responseJSON?.message || xhr.statusText));
+          }
         });
       });
     });
