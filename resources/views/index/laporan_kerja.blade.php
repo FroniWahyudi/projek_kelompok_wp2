@@ -825,9 +825,18 @@
       });
 
       $(document).on("change", ".checklist", function() {
-        const id = $(this).data("item-id"); // Pastikan input checklist punya data-item-id
+        const id = $(this).data("item-id");
         const isChecked = $(this).is(":checked") ? 1 : 0;
         $.post('/resi-item/' + id + '/checklist', { is_checked: isChecked, _token: $('meta[name="csrf-token"]').attr('content') });
+
+        // Update data di resiData agar tampilan konsisten tanpa reload
+        const kode = $("#infoKode").text();
+        const key = Object.keys(resiData).find(k => resiData[k] && resiData[k].kode === kode);
+        if (key) {
+          const item = resiData[key].items.find(it => it.id == id);
+          if (item) item.is_checked = isChecked;
+        }
+
         updateProgress();
       });
 
