@@ -7,6 +7,10 @@ class ResiItem extends Model
     protected $table = 'resi_item';
     protected $fillable = ['resi_id','nama_item','qty'];
 
+    protected $casts = [
+        'is_checked' => 'boolean',
+    ];
+
     public function resi()
     {
         return $this->belongsTo(Resi::class);

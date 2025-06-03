@@ -15,21 +15,20 @@ class ResiController extends Controller
      */
 public function index()
 {
-    $resi = Resi::with('items.checklist')->get();
+    $resi = Resi::with('items')->get();
     $resis = $resi->mapWithKeys(function ($r) {
         return [
             'resi' . $r->id => [
-                'id'      => $r->id, // Tambahkan ID
+                'id'      => $r->id,
                 'kode'    => $r->kode,
                 'tujuan'  => $r->tujuan,
                 'tanggal' => \Carbon\Carbon::parse($r->tanggal)->format('d M Y'),
                 'status'  => $r->status,
                 'items'   => $r->items->map(fn($it) => [
+                    'id'        => $it->id,
                     'item'      => $it->nama_item,
                     'qty'       => $it->qty,
-                    'checklist' => $it->checklist->map(fn($c) => [
-                        'checked' => $c->is_checked,
-                    ])->toArray(),
+                    'is_checked'=> $it->is_checked,
                 ])->values(),
             ]
         ];
@@ -148,5 +147,16 @@ public function destroy($id)
         $resi->save();
 
         return response()->json(['message' => 'Status berhasil diperbarui.']);
+    }
+
+    /**
+     * (Metode AJAX) Update checklist item resi.
+     */
+    public function updateChecklist(Request $request, $id)
+    {
+        $item = ResiItem::findOrFail($id);
+        $item->is_checked = $request->input('is_checked') ? 1 : 0;
+        $item->save();
+        return response()->json(['success' => true]);
     }
 }

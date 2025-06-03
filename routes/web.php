@@ -79,6 +79,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/buat-resi', [ResiController::class, 'store'])->name('resi.store');
     Route::delete('/resi/{id}', [ResiController::class, 'destroy'])->name('resi.destroy');
 
+    // Resi Item Checklist
+    Route::post('/resi-item/{id}/checklist', [ResiController::class, 'updateChecklist'])->name('resi-item.checklist');
+
     // Operator CRUD Routes
     Route::prefix('operator')->name('operator.')->group(function () {
         Route::get('/', [DivisiKaryawanController::class, 'usersIndex'])->name('index');

@@ -559,8 +559,11 @@
               <td data-label="Item">${it.nama ?? it.item ?? '-'}</td>
               <td data-label="Qty">${it.qty ?? '-'}</td>
               <td data-label="Checklist" class="text-center">
-                <input type="checkbox" class="form-check-input checklist" data-index="${i}" 
-                  ${isChecked} ${isDisabled}>
+                <input type="checkbox" class="form-check-input checklist"
+                  data-item-id="${it.id ?? ''}"
+                  ${it.is_checked ? 'checked' : ''}
+                  ${isDisabled}
+                >
               </td>
             </tr>
           `);
@@ -610,8 +613,8 @@
       $("#percentDone").text(pct + "%");
       $("#progressBar").css("width", pct + "%");
       const isSelesai = $("#infoStatus").text() === "Selesai";
-      $("#markAll").prop("disabled", isSelesai || userRole !== 'Leader');
-      //$("#printResi").prop("disabled", done !== all);
+      // Tombol hanya aktif jika user Leader, belum selesai, dan progress 100%
+      $("#markAll").prop("disabled", isSelesai || userRole !== 'Leader' || pct < 100);
     }
 
     function showSuccess(title, desc, delay = 1800) {
@@ -822,12 +825,10 @@
       });
 
       $(document).on("change", ".checklist", function() {
-        if (userRole === 'Leader') {
-          updateProgress();
-        } else {
-          this.checked = !this.checked;
-          alert("Hanya Leader yang dapat mencentang item.");
-        }
+        const id = $(this).data("item-id"); // Pastikan input checklist punya data-item-id
+        const isChecked = $(this).is(":checked") ? 1 : 0;
+        $.post('/resi-item/' + id + '/checklist', { is_checked: isChecked, _token: $('meta[name="csrf-token"]').attr('content') });
+        updateProgress();
       });
 
       // Responsive table labels
