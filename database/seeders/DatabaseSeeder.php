@@ -681,7 +681,8 @@ class DatabaseSeeder extends Seeder
     'date' => '2025-06-29',
     'title' => 'Pengumuman Libur Nasional Idul Adha',
     'image_url' => 'img/libur_idul_adha.png',
-    'description' => 'Sehubungan dengan Hari Raya Idul Adha 1446 H, seluruh aktivitas operasional gudang akan diliburkan pada tanggal 8-9 Juli 2025. Mohon seluruh operator memastikan proses sortir dan pengiriman barang selesai sebelum tanggal tersebut. Operasional akan kembali berjalan normal pada 10 Juli 2025.',
+'description' => '<p>Sehubungan dengan Hari Raya Idul Adha 1446 H, seluruh aktivitas operasional gudang akan diliburkan pada tanggal <strong>8-9 Juli 2025</strong>. Kami mengimbau kepada seluruh operator untuk memastikan bahwa proses sortir, pengepakan, dan pengiriman barang telah diselesaikan sebelum tanggal tersebut. Koordinasikan dengan supervisor masing-masing untuk memastikan tidak ada barang tertunda di area inbound maupun outbound. Pastikan juga seluruh peralatan kerja telah diamankan dan area kerja dalam kondisi rapi sebelum libur dimulai.</p>
+<p>Operasional gudang akan kembali berjalan normal pada <strong>10 Juli 2025</strong>. Diharapkan seluruh karyawan dapat hadir tepat waktu sesuai jadwal shift yang berlaku. Jika terdapat kebutuhan mendesak selama masa libur, silakan hubungi tim HR atau supervisor melalui kontak darurat yang telah disediakan. Selamat merayakan Idul Adha bersama keluarga, semoga kita semua diberikan kesehatan dan keselamatan.</p>',
     'link' => 'Null'
 ]);
 

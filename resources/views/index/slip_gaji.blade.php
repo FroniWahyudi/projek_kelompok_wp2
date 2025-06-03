@@ -654,8 +654,8 @@
                                                 </td>
                                                 <td class="text-center">
                                                     <div class="d-flex justify-content-center flex-wrap">
-                                                        <a href="{{ route('slips.show', $slip->id) }}" class="btn btn-sm btn-outline-info btn-action" data-bs-toggle="tooltip" title="Lihat Detail">
-                                                            <i class="bi bi-eye"></i>
+                                                        <a href="{{ route('slips.show', $slip->id) }}" class="btn btn-sm btn-outline-info btn-action" data-bs-toggle="tooltip">
+                                                         Lihat Detail
                                                         </a>
                                                         @if(auth()->user()->role != 'Operator')
                                                             <a href="{{ route('slips.edit', $slip->id) }}" class="btn btn-sm btn-outline-primary btn-action" data-bs-toggle="tooltip" title="Edit">
