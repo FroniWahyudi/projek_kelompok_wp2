@@ -656,10 +656,10 @@
 
 .notification-dot-slip {
     position: absolute;
-    top: 469px;
-    right: 27px;
-    width: 14px;
-    height: 14px;
+    top: -5px;
+    right: -5px;
+    width: 15px;
+    height: 15px;
     background-color: red;
     border-radius: 50%;
     display: none;
@@ -814,14 +814,14 @@
         <span id="cutiNotificationDot" class="notification-dot-cuti"></span>
     @endif
 </a>
-   @if(auth()->user()->role === 'Operator' || auth()->user()->role === 'Admin' || auth()->user()->role === 'Leader')
-   <span id="slipNotificationDot" class="notification-dot-slip"></span>
   <a href="{{ route('slips.index') }}" class="btn btn-outline-dark position-relative" id="slipButton">
     <i class="bi bi-receipt me-1"></i> Slip Gaji
+    @if(auth()->user()->role === 'Operator' || auth()->user()->role === 'Admin' || auth()->user()->role === 'Leader')
+   <span id="slipNotificationDot" class="notification-dot-slip"></span>
+   @endif
     @if($hasUnreadSlip)
     @endif
   </a>
-@endif
 @endif
 
     <a href="feedback" class="btn btn-outline-dark">
