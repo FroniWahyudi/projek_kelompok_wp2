@@ -167,15 +167,21 @@
           
           <div class="form-section">
             <label class="form-label">Foto</label>
-            @if($edit === true)
-            <div class="mb-3">
-              <label class="form-label text-muted">Foto Saat Ini</label>
-              <img src="{{ asset($news->image_url) }}" alt="Current Photo" class="img-thumbnail d-block mb-2" style="max-width: 200px;">
+            <!-- Preview Foto (lama/baru) di atas input file -->
+            <div id="previewContainer"
+                 class="mb-3{{ !($edit === true && $news->image_url) ? ' d-none' : '' }}">
+              <label class="form-label text-muted">Preview Foto</label>
+              <img
+                id="previewPhoto"
+                src="{{ ($edit === true && $news->image_url) ? asset($news->image_url) : '#' }}"
+                data-old="{{ ($edit === true && $news->image_url) ? asset($news->image_url) : '#' }}"
+                alt="Preview"
+                class="img-thumbnail d-block"
+                style="max-width: 200px;"
+              >
             </div>
-            @endif
-            
             <div class="input-group">
-              <input type="file" name="photo" class="form-control" id="photoInput">
+              <input type="file" name="photo" class="form-control" id="photoInput" accept="image/*">
               <button class="btn btn-outline-secondary" type="button" id="resetPhotoBtn">
                 <i class="bi bi-x-circle"></i> Reset
               </button>
@@ -302,9 +308,42 @@
       console.error('Error initializing CKEditor:', error);
     });
 
-  // Reset photo input functionality
+  // Preview photo sebelum upload & reset ke foto lama jika reset
+  const photoInput = document.getElementById('photoInput');
+  const previewPhoto = document.getElementById('previewPhoto');
+  const previewContainer = document.getElementById('previewContainer');
+  const oldSrc = previewPhoto.getAttribute('data-old');
+
+  photoInput.addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        previewPhoto.src = e.target.result;
+        previewContainer.style.display = 'block';
+      }
+      reader.readAsDataURL(file);
+    } else {
+      // Jika tidak ada file baru, kembalikan ke foto lama
+      if (oldSrc && oldSrc !== '#') {
+        previewPhoto.src = oldSrc;
+        previewContainer.style.display = 'block';
+      } else {
+        previewPhoto.src = '#';
+        previewContainer.style.display = 'none';
+      }
+    }
+  });
+
   document.getElementById('resetPhotoBtn').addEventListener('click', function() {
-    document.getElementById('photoInput').value = '';
+    photoInput.value = '';
+    if (oldSrc && oldSrc !== '#') {
+      previewPhoto.src = oldSrc;
+      previewContainer.style.display = 'block';
+    } else {
+      previewPhoto.src = '#';
+      previewContainer.style.display = 'none';
+    }
   });
 
   // Form submission handler untuk memastikan data CKEditor tersimpan

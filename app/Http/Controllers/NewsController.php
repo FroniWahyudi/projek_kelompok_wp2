@@ -62,9 +62,16 @@ class NewsController extends Controller
         ]);
 
         if ($request->hasFile('photo')) {
+            // Hapus foto lama jika ada
+            if ($news->image_url && file_exists(public_path($news->image_url))) {
+                @unlink(public_path($news->image_url));
+            }
             $file = $request->file('photo');
             $path = $file->store('photos', 'public');
             $validated['image_url'] = '/storage/' . $path;
+        } else {
+            // Jangan ubah image_url jika tidak upload foto baru
+            unset($validated['image_url']);
         }
 
         $news->fill($validated);
