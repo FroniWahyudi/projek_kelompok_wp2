@@ -347,6 +347,32 @@
       background-color: rgba(0, 123, 255, 0.05);
     }
 
+    /* Custom notification for Admin checklist action */
+    #adminChecklistNotif {
+      display: none;
+      position: fixed;
+      top: 30px;
+      right: 30px;
+      left: auto;
+      transform: translateX(120%);
+      background: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeeba;
+      border-radius: 8px;
+      padding: 14px 32px;
+      font-size: 1.1rem;
+      font-weight: 500;
+      z-index: 11000;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      opacity: 0;
+      transition: transform 0.4s cubic-bezier(.4,0,.2,1), opacity 0.4s cubic-bezier(.4,0,.2,1);
+    }
+    #adminChecklistNotif.active {
+      display: block;
+      transform: translateX(0);
+      opacity: 1;
+    }
+
     @media (max-width: 768px) {
       .home-button {
         padding: 6px 10px;
@@ -396,6 +422,7 @@
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
 <body>
+  <div id="adminChecklistNotif">Hanya leader yang diizinkan.</div>
   <div class="container py-4">
     <!-- Home Button -->
     <a href="{{ url('dashboard') }}" class="home-button d-print-none">
@@ -572,7 +599,7 @@
 
       if (d.items && d.items.length > 0) {
         d.items.forEach((it, i) => {
-          const isDisabled = userRole !== 'Leader' || d.status === 'Selesai' ? 'disabled' : '';
+          const isDisabled = d.status === 'Selesai' ? 'disabled' : '';
           const isChecked = d.status === 'Selesai' ? 'checked' : '';
           tbody.append(`
             <tr>
@@ -750,6 +777,16 @@
         });
     }
 
+    function showAdminChecklistNotif() {
+      const notif = $("#adminChecklistNotif");
+      notif.addClass("active");
+      notif.show();
+      setTimeout(() => {
+        notif.removeClass("active");
+        setTimeout(() => notif.hide(), 400);
+      }, 1800);
+    }
+
     $(function() {
       buildDropdown();
       const firstKey = Object.keys(resiData)[0];
@@ -785,7 +822,10 @@
       });
 
       $("#printResi").on("click", function() {
-        downloadPDF();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setTimeout(function() {
+          downloadPDF();
+        }, 400); // wait for scroll animation
       });
 
       let itemIndex = 1;
@@ -846,6 +886,12 @@
       });
 
       $(document).on("change", ".checklist", function() {
+        if (userRole === 'Admin') {
+          showAdminChecklistNotif();
+          // Undo the checkbox change
+          $(this).prop('checked', !$(this).is(":checked"));
+          return;
+        }
         const id = $(this).data("item-id");
         const isChecked = $(this).is(":checked") ? 1 : 0;
         $.post('/resi-item/' + id + '/checklist', { is_checked: isChecked, _token: $('meta[name="csrf-token"]').attr('content') });

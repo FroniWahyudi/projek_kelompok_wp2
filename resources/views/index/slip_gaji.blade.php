@@ -657,7 +657,7 @@
                                                         <a href="{{ route('slips.show', $slip->id) }}" class="btn btn-sm btn-outline-info btn-action" data-bs-toggle="tooltip">
                                                          Lihat Detail
                                                         </a>
-                                                        @if(auth()->user()->role != 'Operator')
+                                                        @if(auth()->user()->role === 'Admin')
                                                             <a href="{{ route('slips.edit', $slip->id) }}" class="btn btn-sm btn-outline-primary btn-action" data-bs-toggle="tooltip" title="Edit">
                                                                 <i class="bi bi-pencil"></i>
                                                             </a>

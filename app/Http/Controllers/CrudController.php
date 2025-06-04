@@ -428,20 +428,21 @@ class CrudController extends Controller
 
     public function feedbackIndex()
     {
-        if (auth()->user()->role !== 'Operator') {
-            $pegawai = User::where('role', '=', 'Operator')
-                ->orderBy('name')
-                ->get();
-            return view('index.feedback_pegawai', compact('pegawai'));
-        } else {
+        if (auth()->user()->role === 'Operator') {
             $this->feedbackmarkAsRead();
             $feedback = Feedback::where('user_id', auth()->id())->orderBy('id', 'desc')->get();
 
             $username = User::whereIn('id', Feedback::pluck('disetujui_oleh'))
                 ->orderBy('name')
                 ->get();
-            return view('index.feedback_receive', compact('feedback', 'username'));
-        }
+            return view('index.feedback_receive', compact('feedback', 'username'));            
+        } 
+                
+        $pegawai = User::where('role', '=', 'Operator')
+            ->orderBy('name')
+            ->get();
+        return view('index.feedback_pegawai', compact('pegawai'));
+    
     }
 
     public function feedbackStore(Request $request)

@@ -20,7 +20,7 @@ class SlipController extends Controller
         $query->select('id', 'name', 'id_karyawan', 'department', 'photo_url');
     }]);
 
-    if ($user->role == 'Operator') {
+    if ($user->role == 'Operator' || $user->role == 'Leader') {
         $query->where('user_id', $user->id);
         
         // Mark as read when operator visits slip page
@@ -63,7 +63,7 @@ class SlipController extends Controller
         $slips = Slip::with(['user' => function ($query) {
             $query->select('id', 'name', 'id_karyawan', 'department', 'photo_url');
         }])->orderByDesc('period')->get();
-        $users = User::where('role', '!=', 'Manajer')
+        $users = User::whereNotIn('role', ['Manajer', 'Admin'])
             ->select('id', 'name', 'id_karyawan', 'department', 'photo_url')
             ->get();
         $departments = User::select('department')
@@ -166,7 +166,7 @@ class SlipController extends Controller
         // Format period for edit view
         if ($slip->period) {
             try {
-                $slip->period = \Carbon\Carbon::parse($slip->period)->format('Y-m');
+                $slip->period = Carbon::parse($slip->period)->format('Y-m');
             } catch (\Exception $e) {
                 $slip->period = '';
             }

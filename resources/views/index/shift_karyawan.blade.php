@@ -521,6 +521,13 @@
             </button>
         </div>
 
+        <!-- Search Bar -->
+        <div class="row mb-3 justify-content-center">
+            <div class="col-md-6 col-12">
+                <input type="text" id="searchInput" class="form-control" placeholder="Cari nama, departemen, atau shift...">
+            </div>
+        </div>
+
         <!-- Data Table -->
         <div class="card animate__animated animate__fadeIn">
             <div class="card-body">
@@ -636,6 +643,43 @@
                     btn.classList.add('active');
                 }
             });
+            // After filtering by shift, also apply search filter
+            applySearchFilter();
+        }
+
+        // Search filter function
+        function applySearchFilter() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            document.querySelectorAll('#shiftTable tbody tr').forEach(row => {
+                // Always check if row matches the current shift filter
+                const shiftType = row.dataset.shift;
+                let isShiftVisible = true;
+                // Check which filter button is active
+                const activeBtn = document.querySelector('.filter-btn.active');
+                if (activeBtn && !activeBtn.textContent.includes('Semua')) {
+                    const filterType = activeBtn.textContent.trim().replace(/\s+/g, '');
+                    isShiftVisible = (shiftType === filterType);
+                }
+                if (!isShiftVisible) {
+                    row.style.display = 'none';
+                    return;
+                }
+                if (!query) {
+                    row.style.display = '';
+                    return;
+                }
+                const cells = row.querySelectorAll('td');
+                let match = false;
+                // Nama (2), Departemen (3), Shift (5)
+                if (
+                    cells[2] && cells[2].textContent.toLowerCase().includes(query) ||
+                    cells[3] && cells[3].textContent.toLowerCase().includes(query) ||
+                    cells[5] && cells[5].textContent.toLowerCase().includes(query)
+                ) {
+                    match = true;
+                }
+                row.style.display = match ? '' : 'none';
+            });
         }
 
         // Cetak data shifts PHP ke JavaScript
@@ -674,6 +718,11 @@
                 document.getElementById('shiftModal')
             ).show();
         }
+
+        // Event listener for search input
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('searchInput').addEventListener('input', applySearchFilter);
+        });
     </script>
 </body>
 </html>
