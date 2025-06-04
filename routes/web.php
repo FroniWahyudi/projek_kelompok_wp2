@@ -133,10 +133,11 @@ Route::middleware('auth')->group(function () {
     Route::resource('shifts', ShiftController::class)->except(['create', 'show', 'edit']);
 
     // Feedback routes
-    Route::get('/feedback', [CrudController::class, 'feedbackIndex'])->name('feedback.index');
     Route::post('/feedback', [CrudController::class, 'feedbackStore'])->name('feedback.store');
-    Route::get('/feedback/{id}/edit', [CrudController::class, 'feedbackEdit'])->name('feedback.edit');
-    Route::put('/feedback/{id}', [CrudController::class, 'feedbackUpdate'])->name('feedback.update');
+    Route::get('/feedback', function() {
+        abort(404);
+    });
+    Route::get('/feedback-pegawai', [CrudController::class, 'feedbackIndex'])->name('feedback.index');
 
     // Reset Password routes
     Route::get('/reset-password', [PasswordResetController::class, 'showResetForm'])->name('reset.password.form');

@@ -421,9 +421,7 @@ class CrudController extends Controller
                 ->get();
             return view('index.feedback_pegawai', compact('pegawai'));
         } else {
-            $feedback = Feedback::where('user_id', '=', auth()->id())
-                ->orderBy('tanggal_pengajuan', 'desc')
-                ->get();
+            $feedback = Feedback::where('user_id', auth()->id())->orderBy('id', 'desc')->get();
 
             $username = User::whereIn('id', Feedback::pluck('disetujui_oleh'))
                 ->orderBy('name')
@@ -436,17 +434,17 @@ class CrudController extends Controller
     {   
         $request->validate([
             'user_id' => 'required|exists:users,id',
-            'feedback_text' => 'required|string|max:1000',
+            'feedback_rating' => 'required|string|max:1000',
         ]);
 
         Feedback::create([
             'user_id' => $request->user_id,
-            'feedback_text' => $request->feedback_text,
-            'tanggal_pengajuan' => Carbon::now()->toDateString(),
+            'feedback_text' => $request->feedback_rating,
+            'tanggal_pengajuan' => \Carbon\Carbon::now()->toDateString(),
             'disetujui_oleh' => auth()->id()
         ]);
 
-        return response()->json(['message' => 'Feedback berhasil dikirim.']);
+      return redirect()->route('feedback.index')->with('success', 'Feedback berhasil disimpan');
     }
 
 

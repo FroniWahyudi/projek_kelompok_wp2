@@ -59,7 +59,7 @@
 @endif
         @endif
         <li>
-          <a class="dropdown-item" href="feedback">
+          <a class="dropdown-item" href="{{ route('feedback.index') }}">
             <i class="bi bi-chat-dots me-1"></i>
             @if(auth()->user()->role === 'Operator')
               Evaluasi Kinerja
@@ -166,7 +166,7 @@
   </a>
 @endif
 
-    <a href="feedback" class="btn btn-outline-dark">
+    <a href="{{ route('feedback.index') }}" class="btn btn-outline-dark">
       <i class="bi bi-chat-dots me-1"></i>
       @if(auth()->user()->role === 'Operator')
         Evaluasi Kinerja

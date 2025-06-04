@@ -17,6 +17,10 @@ class ShiftController extends Controller
         }])->orderBy('date')->get();
         $users = User::select('id', 'name', 'photo_url')->get(); // untuk dropdown pilihan user (karyawan)
 
+        $shifts = $shifts->sortByDesc(function($shift) {
+            return $shift->user_id === auth()->id() ? 1 : 0;
+        })->values();
+
         return view('index.shift_karyawan', compact('shifts', 'users'));
     }
 
