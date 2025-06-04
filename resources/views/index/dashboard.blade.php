@@ -167,6 +167,11 @@
 @endif
 
     <a href="{{ route('feedback.index') }}" class="btn btn-outline-dark">
+            <span class="notification-dot-feedback
+      @if(app('App\Http\Controllers\CrudController')->feedbackhasUnread())
+        active
+      @endif
+      "></span>
       <i class="bi bi-chat-dots me-1"></i>
       @if(auth()->user()->role === 'Operator')
         Evaluasi Kinerja

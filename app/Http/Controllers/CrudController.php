@@ -413,8 +413,22 @@ class CrudController extends Controller
 
     // === Feedback ===
 
+    public function feedbackmarkAsRead()
+    {
+        $user = auth()->user();
+
+        // Hanya untuk non-Manajer
+        if ($user->role === 'Operator') {
+            // Update semua cuti non-pending menjadi status 'dilihat'
+            Feedback::where('user_id', $user->id)
+                ->where('is_read', false)
+                ->update(['is_read' => true]);
+        }
+    }
+
     public function feedbackIndex()
     {
+        $this->feedbackmarkAsRead();
         if (auth()->user()->role !== 'Operator') {
             $pegawai = User::where('role', '=', 'Operator')
                 ->orderBy('name')
@@ -447,5 +461,12 @@ class CrudController extends Controller
       return redirect()->route('feedback.index')->with('success', 'Feedback berhasil disimpan');
     }
 
+    public function feedbackhasUnread()
+    {
+        $user = auth()->user();
+        $query = Feedback::where('user_id', $user->id)
+            ->where('is_read', false);
+        return $query->exists();
+    }
 
 }

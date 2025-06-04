@@ -662,3 +662,19 @@
   display: inline-block;
   animation: pulse 1.5s infinite;
 }
+
+.notification-dot-feedback {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 15px;
+    height: 15px;
+    background-color: red;
+    border-radius: 50%;
+    display: none;
+    z-index: 100;
+}
+.notification-dot-feedback.active {
+  display: inline-block;
+  animation: pulse 1.5s infinite;
+}

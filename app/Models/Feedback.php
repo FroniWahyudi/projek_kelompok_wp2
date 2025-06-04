@@ -14,6 +14,7 @@ class Feedback extends Model
         'feedback_text',
         'tanggal_pengajuan',
         'disetujui_oleh',
+        'is_read',
     ];
     public function user()
     {

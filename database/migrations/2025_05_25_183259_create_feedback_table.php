@@ -22,6 +22,7 @@ return new class extends Migration
                   ->nullable()
                   ->constrained('users')
                   ->onDelete('set null');
+            $table->boolean('is_read')->default(false);
             $table->timestamps();
         });
     }
