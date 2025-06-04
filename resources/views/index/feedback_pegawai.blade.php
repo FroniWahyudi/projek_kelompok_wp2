@@ -319,19 +319,24 @@
       align-items: center;
       gap: 10px;
       opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.3s ease;
+      transform: translateY(-20px);
+      transition: all 0.3s ease;
     }
 
     .notification.show {
       opacity: 1;
-      visibility: visible;
+      transform: translateY(0);
     }
 
     .notification .close-btn {
       cursor: pointer;
       font-size: 1.2rem;
       color: var(--notification-text);
+      margin-left: 10px;
+    }
+
+    .notification i {
+      font-size: 1.2rem;
     }
 
     /* Grid Layout */
@@ -518,7 +523,7 @@
   <!-- Notification -->
   <div id="notification" class="notification">
     <i class="bi bi-check-circle"></i>
-    <span>Feedback berhasil dikirim!</span>
+    <span id="notif-text">Feedback berhasil dikirim!</span>
     <span class="close-btn">&times;</span>
   </div>
 
@@ -648,86 +653,85 @@
 
     document.addEventListener('DOMContentLoaded', function() {
   document.querySelectorAll('.feedback-form').forEach(form => {
-    form.addEventListener('submit', function(e) {
+    form.addEventListener('submit', async function(e) {
       e.preventDefault();
-      
       const button = this.querySelector('.submit-button');
       const icon = button.querySelector('i');
       const text = button.querySelector('span');
       const select = this.querySelector('.feedback-select');
-      
+      const employeeName = this.dataset.employeeName;
       if (!select.value) {
         select.focus();
         select.style.borderColor = '#dc3545';
-        setTimeout(() => {
-          select.style.borderColor = '';
-        }, 3000);
+        setTimeout(() => { select.style.borderColor = ''; }, 3000);
         return;
       }
-      
       button.disabled = true;
       icon.className = 'bi bi-arrow-repeat animate-spin';
       text.textContent = 'Mengirim...';
-      
-      // Create form data and send it
       const formData = new FormData(this);
-      fetch(this.action, {
+      try {
+        const response = await fetch(this.action, {
           method: 'POST',
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json'
+          },
           body: formData
-          // Tidak perlu headers jika sudah ada @csrf
-      })
-      .then(response => {
-          if (!response.ok) {
-              throw new Error('Network response was not ok');
-          }
-          return response.json();
-      })
-      .then(data => {
-          button.disabled = false;
-          icon.className = 'bi bi-check-circle';
+        });
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        // Don't require data.success, just try to parse JSON if available
+        try { await response.json(); } catch (e) {}
+        button.disabled = false;
+        icon.className = 'bi bi-check-circle';
+        text.textContent = 'Terkirim!';
+        const notification = document.getElementById('notification');
+        const notifText = document.getElementById('notif-text');
+        notifText.textContent = `Feedback untuk ${employeeName} berhasil dikirim!`;
+        notification.style.display = 'flex';
+        notification.classList.add('show');
+        setTimeout(() => {
+          notification.classList.remove('show');
+          setTimeout(() => { notification.style.display = 'none'; }, 300);
+        }, 5000);
+        select.value = '';
+        setTimeout(() => {
+          icon.className = 'bi bi-send';
           text.textContent = 'Kirim Penilaian';
-
-          // Tampilkan notifikasi float
-          const notif = document.getElementById('notification');
-          notif.style.display = 'flex';
-          notif.classList.add('show');
-          document.getElementById('notif-text').textContent = 'Feedback berhasil dikirim!';
-          setTimeout(() => {
-              notif.classList.remove('show');
-              notif.style.display = 'none';
-          }, 3000);
-          
-          select.value = '';
-          
-          setTimeout(() => {
-              icon.className = 'bi bi-send';
-              text.textContent = 'Kirim Penilaian';
-          }, 2000);
-      })
-      .catch(error => {
-          console.error('Error:', error);
-          button.disabled = false;
-          icon.className = 'bi bi-x-circle';
-          text.textContent = 'Gagal! Coba lagi';
-          
-          setTimeout(() => {
-              icon.className = 'bi bi-send';
-              text.textContent = 'Kirim Penilaian';
-          }, 2000);
-      });
+        }, 2000);
+      } catch (error) {
+        console.error('Error:', error);
+        button.disabled = false;
+        icon.className = 'bi bi-x-circle';
+        text.textContent = 'Gagal! Coba lagi';
+        const notification = document.getElementById('notification');
+        const notifText = document.getElementById('notif-text');
+        notifText.textContent = 'Gagal mengirim feedback. Silakan coba lagi.';
+        notification.style.display = 'flex';
+        notification.classList.add('show');
+        setTimeout(() => {
+          notification.classList.remove('show');
+          setTimeout(() => { notification.style.display = 'none'; }, 300);
+        }, 5000);
+        setTimeout(() => {
+          icon.className = 'bi bi-send';
+          text.textContent = 'Kirim Penilaian';
+        }, 2000);
+      }
     });
   });
+  // Close notification manually
+  const notifCloseBtn = document.querySelector('.notification .close-btn');
+  if (notifCloseBtn) {
+    notifCloseBtn.addEventListener('click', function() {
+      const notification = document.getElementById('notification');
+      notification.classList.remove('show');
+      setTimeout(() => { notification.style.display = 'none'; }, 300);
+    });
+  }
 });
-
-    // Close notification manually
-    const notifCloseBtn = document.querySelector('.notification .close-btn');
-    if (notifCloseBtn) {
-      notifCloseBtn.addEventListener('click', function() {
-        const notif = document.getElementById('notification');
-        notif.classList.remove('show');
-        notif.style.display = 'none';
-      });
-    }
   </script>
 </body>
 </html>

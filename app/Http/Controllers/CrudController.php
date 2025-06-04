@@ -428,13 +428,13 @@ class CrudController extends Controller
 
     public function feedbackIndex()
     {
-        $this->feedbackmarkAsRead();
         if (auth()->user()->role !== 'Operator') {
             $pegawai = User::where('role', '=', 'Operator')
                 ->orderBy('name')
                 ->get();
             return view('index.feedback_pegawai', compact('pegawai'));
         } else {
+            $this->feedbackmarkAsRead();
             $feedback = Feedback::where('user_id', auth()->id())->orderBy('id', 'desc')->get();
 
             $username = User::whereIn('id', Feedback::pluck('disetujui_oleh'))
@@ -458,7 +458,7 @@ class CrudController extends Controller
             'disetujui_oleh' => auth()->id()
         ]);
 
-      return redirect()->route('feedback.index')->with('success', 'Feedback berhasil disimpan');
+        return redirect()->route('feedback.index')->with('success', 'Feedback berhasil disimpan');
     }
 
     public function feedbackhasUnread()
