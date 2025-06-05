@@ -600,7 +600,8 @@
       if (d.items && d.items.length > 0) {
         d.items.forEach((it, i) => {
           const isDisabled = d.status === 'Selesai' ? 'disabled' : '';
-          const isChecked = d.status === 'Selesai' ? 'checked' : '';
+          // Always checked if status is 'Selesai', otherwise use it.is_checked
+          const isChecked = d.status === 'Selesai' || it.is_checked ? 'checked' : '';
           tbody.append(`
             <tr>
               <td data-label="No">${i + 1}</td>
@@ -609,7 +610,7 @@
               <td data-label="Checklist" class="text-center">
                 <input type="checkbox" class="form-check-input checklist"
                   data-item-id="${it.id ?? ''}"
-                  ${it.is_checked ? 'checked' : ''}
+                  ${isChecked}
                   ${isDisabled}
                 >
               </td>
