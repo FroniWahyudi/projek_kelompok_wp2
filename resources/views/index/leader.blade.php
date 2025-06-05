@@ -355,7 +355,7 @@
                                         <li>-</li>
                                     @endif
                                 </ul>
-                                <h6><strong>Keadhlian</strong></h6>
+                                <h6><strong>Keahlian</strong></h6>
                                 <div class="mb-3">
                                     @if($user->skills)
                                         @foreach(explode(', ', $user->skills) as $s)
