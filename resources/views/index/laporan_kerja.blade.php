@@ -887,7 +887,7 @@
       });
 
       $(document).on("change", ".checklist", function() {
-        if (userRole === 'Admin') {
+        if (userRole === 'Admin' || userRole === 'Manajer') {
           showAdminChecklistNotif();
           // Undo the checkbox change
           $(this).prop('checked', !$(this).is(":checked"));
