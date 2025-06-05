@@ -41,9 +41,9 @@ class CutiController extends Controller
 
         $request->validate([
             'tgl_mulai'   => [
-            'required',
-            'date',
-            "after_or_equal:{$minDate}"
+                'required',
+                'date',
+                "after_or_equal:{$minDate}"
             ],
             'tgl_selesai' => 'required|date|after_or_equal:tgl_mulai',
             'alasan'      => 'required|string',
@@ -56,6 +56,20 @@ class CutiController extends Controller
         $end   = Carbon::parse($request->tgl_selesai);
         $lama  = $start->diffInDays($end) + 1;
         $tahun = $start->year;
+
+        // CEK OVERLAP CUTI
+        $overlap = CutiRequest::where('user_id', $user->id)
+            ->where(function($q) use ($start, $end) {
+                $q->where(function($q2) use ($start, $end) {
+                    $q2->where('tanggal_mulai', '<=', $end)
+                       ->where('tanggal_selesai', '>=', $start);
+                });
+            })
+            ->exists();
+
+        if ($overlap) {
+            return back()->with('error', 'Anda sudah mengajukan cuti di tanggal/range tersebut.')->withInput();
+        }
 
         // Ambil atau buat record sisa_cuti
         $sisa = SisaCuti::firstOrCreate(
