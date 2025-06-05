@@ -166,6 +166,12 @@
                 </div>
                 <h2 class="text-primary">Reset Password</h2>
                 <p class="text-secondary mb-0">Masukkan email Anda untuk mengajukan reset password</p>
+                <!-- Keterangan tambahan -->
+                <div class="alert alert-info mt-3 mb-0" role="alert" style="font-size: 1rem;">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Setelah pengajuan, <b>password Anda akan direset oleh admin menjadi <code>admin123</code></b>.<br>
+                    Silakan tunggu proses reset yang akan dilakukan oleh admin.
+                </div>
             </div>
             
             <div class="card-body">

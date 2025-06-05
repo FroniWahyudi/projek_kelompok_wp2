@@ -7,6 +7,7 @@
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     body {
       background-color: #f0f4f8; /* Peringkat 1: Latar belakang utama */
@@ -124,9 +125,96 @@
       border-color: #007bff !important;
       box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.1) !important;
     }
+
+    /* Tombol Home floating */
+    .home-button {
+      position: fixed;
+      top: 24px;
+      left: 24px;
+      z-index: 1050;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background-color: #fff;
+      color: #007bff;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      border: 2px solid #dee2e6;
+      transition: all 0.3s ease;
+      animation: slideInUp 0.6s ease-out;
+    }
+
+    .home-button:hover {
+      background-color: #007bff;
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 123, 255, 0.25);
+      text-decoration: none;
+    }
+    .home-button i {
+      font-size: 16px;
+      transition: transform 0.3s ease;
+    }
+    .home-button:hover i {
+      transform: scale(1.1);
+    }
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    @media (max-width: 768px) {
+      .home-button {
+        padding: 6px 10px;
+        font-size: 0.9rem;
+        top: 12px;
+        left: 12px;
+      }
+    }
+    @media (max-width: 576px) {
+      .home-button {
+        padding: 5px 8px;
+        font-size: 0.85rem;
+        top: 8px;
+        left: 8px;
+      }
+    }
   </style>
 </head>
 <body>
+
+<!-- Tombol Home floating -->
+<a href="{{ url('dashboard') }}" class="home-button d-print-none" style="
+  position: fixed;
+  top: 24px;
+  left: 24px;
+  z-index: 1050;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background-color: #fff;
+  color: #007bff;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  border: 2px solid #dee2e6;
+  transition: all 0.3s ease;
+  animation: slideInUp 0.6s ease-out;
+">
+  <i class="fas fa-home"></i> Home
+</a>
 
 <div class="container">
   <div class="card-container">
