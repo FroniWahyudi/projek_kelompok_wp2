@@ -61,14 +61,16 @@ class PasswordResetController extends Controller
     public function resetPasswordManual(Request $request)
     {   
         $request->validate([
-            'id' => 'required|exists:users,id',
-            'password' => 'required|string|min:8|confirmed',
+            'password' => 'nullable|string|min:8|confirmed',
         ]);
-
         $user = User::findOrFail($request->id);
-
+        
         if ($request->filled('email')) {
             $user->email = $request->email;        
+        }
+        if (!$request->filled('password')) {
+            $user->save();
+            return redirect()->back()->with('success', 'Email berhasil dirubah');
         }
 
         
