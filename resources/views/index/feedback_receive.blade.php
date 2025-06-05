@@ -169,7 +169,9 @@
                       {{ $filtered['role'] }}
                     </span>
                   </td>
-                  <td class="px-3 py-4 text-sm" style="color: #4a4a4a;">{{ $data['created_at'] }}</td>
+                  <td class="px-3 py-4 text-sm" style="color: #4a4a4a;">
+                    {{ \Illuminate\Support\Str::of($data['created_at'])->before(' ') }}
+                  </td>
                   <td class="px-3 py-4 text-sm" style="color: #003366;">{{ $data['feedback_text'] }}</td>
                 </tr>
             @endforeach
