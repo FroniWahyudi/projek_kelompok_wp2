@@ -1,3 +1,6 @@
+@php
+use Illuminate\Support\Facades\Auth;
+@endphp
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -272,18 +275,22 @@
                         </div>
                         <h6 class="mt-4"><strong>Informasi Pribadi</strong></h6>
                         <div class="row g-3 mb-4">
+                            @if(auth()->user()->role !== 'Operator')
                             <div class="col-sm-6">
                                 <p class="mb-1"><strong>Alamat:</strong></p>
                                 <p class="mb-0">{{ $op->alamat }}</p>
                             </div>
+                            @endif
                             <div class="col-sm-6">
                                 <p class="mb-1"><strong>Joined:</strong></p>
                                 <p class="mb-0">{{ $op->joined_at ? \Carbon\Carbon::parse($op->joined_at)->format('d M Y') : '-' }}</p>
                             </div>
+                            @if(auth()->user()->role !== 'Operator')
                             <div class="col-sm-6">
                                 <p class="mb-1"><strong>Pendidikan:</strong></p>
                                 <p class="mb-0">{{ $op->education ?? '-' }}</p>
                             </div>
+                            @endif
                             <div class="col-sm-6">
                                 <p class="mb-1"><strong>Departemen:</strong></p>
                                 <p class="mb-0">{{ $op->department ?? '-' }}</p>
@@ -292,6 +299,7 @@
                                 <p class="mb-1"><strong>Divisi:</strong></p>
                                 <p class="mb-0">{{ $op->divisi ?? '-' }}</p>
                             </div>
+                            @if(auth()->user()->role !== 'Operator')
                             <div class="col-sm-6">
                                 <p class="mb-1"><strong>Keahlian:</strong></p>
                                 <p class="mb-0">
@@ -304,12 +312,14 @@
                                     @endif
                                 </p>
                             </div>
+                            @endif
                         </div>
                         <div class="row g-4 mb-4">
                             <div class="col-lg-6">
                                 <h6><strong>Bio</strong></h6>
                                 <p class="mb-0">{{ $op->bio ?? '-' }}</p>
                             </div>
+                            @if(auth()->user()->role !== 'Operator')
                             <div class="col-lg-6">
                                 <h6><strong>Pencapaian</strong></h6>
                                 <ul class="mb-0">
@@ -322,6 +332,7 @@
                                     @endif
                                 </ul>
                             </div>
+                            @endif
                         </div>
                         <h6 class="mt-3"><strong>Deskripsi Pekerjaan</strong></h6>
                         <ul class="mb-4">
