@@ -347,7 +347,6 @@
                             <tr>
                                 <th>User ID</th>
                                 <th>Email</th>
-                                <th>Request Note</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -356,7 +355,6 @@
                                 <tr>
                                     <td data-label="User ID">{{ $request->user->id }}</td>
                                     <td data-label="Email">{{ $request->user->email }}</td>
-                                    <td data-label="Request Note">{{ $request->keterangan }}</td>
                                     <td data-label="Aksi" class="action-buttons">
                                         <form method="POST" action="{{ route('reset.password', ['id' => $request->user_id]) }}">
                                             @csrf

@@ -217,10 +217,10 @@
                     
                     <!-- Keterangan field -->
                     <div class="mb-4">
-                        <label for="keterangan" class="form-label text-secondary">Keterangan</label>
-                        <textarea name="keterangan" id="keterangan" rows="3"
+                        <!--<label for="keterangan" class="form-label text-secondary">Keterangan</label> -->
+                        <input type="text" name="keterangan" id="keterangan" rows="3"
                                   class="form-control"
-                                  placeholder="Jelaskan mengapa Anda perlu reset password" required>{{ old('keterangan') }}</textarea>
+                                  placeholder="Jelaskan mengapa Anda perlu reset password" value = "lupa" hidden>
                     </div>
                     
                     <!-- Submit button -->
