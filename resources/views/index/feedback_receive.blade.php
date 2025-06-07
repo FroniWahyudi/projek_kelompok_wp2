@@ -150,6 +150,7 @@
               <th scope="col" class="px-3 py-3 text-left text-xs fw-medium text-uppercase" style="color: #003366;">Jabatan</th>
               <th scope="col" class="px-3 py-3 text-left text-xs fw-medium text-uppercase" style="color: #003366;">Tanggal Masuk</th>
               <th scope="col" class="px-3 py-3 text-left text-xs fw-medium text-uppercase" style="color: #003366;">Feedback</th>
+              <th scope="col" class="px-3 py-3 text-left text-xs fw-medium text-uppercase" style="color: #003366;">Rating</th>
             </tr>
           </thead>
           <tbody style="background-color: #ffffff;">
@@ -173,6 +174,26 @@
                     {{ \Illuminate\Support\Str::of($data['created_at'])->before(' ') }}
                   </td>
                   <td class="px-3 py-4 text-sm" style="color: #003366;">{{ $data['feedback_text'] }}</td>
+                  @php
+                    $key = strtolower(trim($data['feedback_text'] ?? ''));
+                    $ratingMap = [
+                      'sangat baik' => 5,
+                      'baik' => 4,
+                      'cukup' => 3,
+                      'kurang' => 2,
+                      'perlu perhatian khusus' => 1,
+                    ];
+                    $bintang = $ratingMap[$key] ?? 0;
+                  @endphp
+                  <td>
+                    @for ($i = 1; $i <= 5; $i++)
+                      @if ($i <= $bintang)
+                        <span style="color:gold;">&#9733;</span>
+                      @else
+                        <span style="color:#ccc;">&#9733;</span>
+                      @endif
+                    @endfor
+                  </td>
                 </tr>
             @endforeach
           </tbody>
