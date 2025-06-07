@@ -316,9 +316,9 @@
                 `;
             } else if (selectedRole === 'Leader') {
                 levelSelect.innerHTML += `
+                    <option value="junior">Junior</option>
+                    <option value="intermediate">Intermediate</option>
                     <option value="senior">Senior</option>
-                    <option value="lead">Lead</option>
-                    <option value="supervisor">Supervisor</option>
                 `;
             } else if (selectedRole === 'Operator') {
                 levelSelect.innerHTML += `

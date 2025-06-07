@@ -403,7 +403,12 @@ body {
                       <div class="input-group">
                         <span class="input-group-text"><i class="fas fa-lock"></i></span>
                         <input type="text" name="id" value="{{ old('id', $user->id ?? 'user') }}" hidden>
-                        <input type="password" class="form-control" id="password" name="password" placeholder="Masukkan password baru (kosongkan jika tidak ingin mengubah)">
+                        <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" placeholder="Masukkan password baru (kosongkan jika tidak ingin mengubah)" minlength="8">
+                        @error('password')
+                          <div class="invalid-feedback">
+                            {{ $message }}
+                          </div>
+                        @enderror
                       </div>
                       <small class="text-muted">Minimal 8 karakter</small>
                     </div>

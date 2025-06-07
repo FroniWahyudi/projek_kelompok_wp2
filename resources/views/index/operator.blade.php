@@ -299,7 +299,6 @@ use Illuminate\Support\Facades\Auth;
                                 <p class="mb-1"><strong>Divisi:</strong></p>
                                 <p class="mb-0">{{ $op->divisi ?? '-' }}</p>
                             </div>
-                            @if(auth()->user()->role !== 'Operator')
                             <div class="col-sm-6">
                                 <p class="mb-1"><strong>Keahlian:</strong></p>
                                 <p class="mb-0">
@@ -312,7 +311,6 @@ use Illuminate\Support\Facades\Auth;
                                     @endif
                                 </p>
                             </div>
-                            @endif
                         </div>
                         <div class="row g-4 mb-4">
                             <div class="col-lg-6">

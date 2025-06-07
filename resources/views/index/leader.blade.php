@@ -295,7 +295,14 @@
                                 <h5>{{ $user->name }}</h5>
                                 <div class="role">
                                     {{ $user->role }}
-                                    <span class="badge-level">{{ $user->level }}</span>
+                                    <span class="badge
+                                        @if(strtolower($user->level) === 'junior') bg-success 
+                                        @elseif(strtolower($user->level) === 'intermediate') bg-primary 
+                                        @elseif(strtolower($user->level) === 'senior') bg-warning text-dark 
+                                        @else bg-info text-dark 
+                                        @endif ms-2">
+                                        {{ $user->level }}
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -331,19 +338,40 @@
                                     <div>
                                         <h6 class="mb-0">{{ $user->name }}</h6>
                                         <small class="text-primary">{{ $user->role }}</small>
-                                        <span class="badge bg-info text-dark ms-2">{{ $user->level }}</span><br>
+                                        <span class="badge
+                                            @if(strtolower($user->level) === 'junior') bg-success 
+                                            @elseif(strtolower($user->level) === 'intermediate') bg-primary 
+                                            @elseif(strtolower($user->level) === 'senior') bg-warning text-dark 
+                                            @else bg-info text-dark 
+                                            @endif ms-2">
+                                            {{ $user->level }}
+                                        </span><br>
                                         <small class="text-muted"><i class="bi bi-envelope me-1"></i> {{ $user->email }}</small>
                                         <small class="text-muted ms-3"><i class="bi bi-telephone me-1"></i> {{ $user->phone }}</small>
                                     </div>
                                 </div>
                                 <h6><strong>Informasi Pribadi</strong></h6>
-                                <div class="row mb-3">
+                                <div class="row g-3 mb-4">
+                                    @if(auth()->user()->role !== 'Operator')
                                     <div class="col-sm-6"><strong>Alamat:</strong><br>{{ $user->alamat ?? '-' }}</div>
+                                    @endif
                                     <div class="col-sm-6"><strong>Joined:</strong><br>{{ $user->joined_at ? \Carbon\Carbon::parse($user->joined_at)->format('d M Y') : '-' }}</div>
-                                </div>
-                                <div class="row mb-4">
+                                    @if(auth()->user()->role !== 'Operator')
                                     <div class="col-sm-6"><strong>Pendidikan:</strong><br>{{ $user->education ?? '-' }}</div>
+                                    @endif
                                     <div class="col-sm-6"><strong>Departemen:</strong><br>{{ $user->department ?? '-' }}</div>
+                                    <div class="col-sm-6">
+                                        <p class="mb-1"><strong>Keahlian:</strong></p>
+                                        <p class="mb-0">
+                                            @if($user->skills)
+                                                @foreach(explode(', ', $user->skills) as $s)
+                                                    <span class="badge bg-secondary me-1 mb-1">{{ $s }}</span>
+                                                @endforeach
+                                            @else
+                                                -
+                                            @endif
+                                        </p>
+                                    </div>
                                 </div>
                                 <h6><strong>Deskripsi Pekerjaan</strong></h6>
                                 <ul>
@@ -355,16 +383,7 @@
                                         <li>-</li>
                                     @endif
                                 </ul>
-                                <h6><strong>Keahlian</strong></h6>
-                                <div class="mb-3">
-                                    @if($user->skills)
-                                        @foreach(explode(', ', $user->skills) as $s)
-                                            <span class="badge bg-success me-2">{{ $s }}</span>
-                                        @endforeach
-                                    @else
-                                        <span>-</span>
-                                    @endif
-                                </div>
+                                @if(auth()->user()->role !== 'Operator')
                                 <h6><strong>Pencapaian</strong></h6>
                                 <ul>
                                     @if($user->achievements)
@@ -375,6 +394,7 @@
                                         <li>-</li>
                                     @endif
                                 </ul>
+                                @endif
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Tutup</button>
