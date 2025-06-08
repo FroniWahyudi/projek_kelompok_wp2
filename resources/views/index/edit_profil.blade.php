@@ -221,16 +221,6 @@
           card.style.boxShadow = '';
         });
       });
-      
-      const form = document.querySelector('form');
-      form.addEventListener('submit', function(e) {
-        const password = document.getElementById('password');
-        if (password.value && password.value.length < 8) {
-          e.preventDefault();
-          alert('Password harus minimal 8 karakter');
-          password.focus();
-        }
-      });
 
       // Reset avatar preview saat tombol reset diklik
       const originalAvatar = avatarPreview ? avatarPreview.src : null;

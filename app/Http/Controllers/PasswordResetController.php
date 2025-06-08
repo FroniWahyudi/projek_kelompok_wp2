@@ -70,14 +70,14 @@ class PasswordResetController extends Controller
         }
         if (!$request->filled('password')) {
             $user->save();
-            return redirect()->back()->with('success', 'Email berhasil dirubah');
+            return redirect()->route('profil.edit', $user->id)->with('success', 'Email berhasil diperbarui.');
         }
 
         
         $user->password = bcrypt($request->password);
         $user->save();
 
-        return redirect()->back()->with('success', 'Password berhasil direset');
+        return redirect()->route('profil.edit', $user->id)->with('success', 'Password berhasil diperbarui.');
     }
 
   public function checkRequests()
