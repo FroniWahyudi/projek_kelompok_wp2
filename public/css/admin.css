@@ -1,0 +1,85 @@
+html, body { height: 100%; margin: 0; }
+    body { display: flex; flex-direction: column; font-family: 'Poppins', sans-serif; font-size:.9rem; color:#6c757d; background:#f8f9fa; }
+    main { flex: 1; }
+    .navbar-custom {
+      background-color: #fff;
+      border-bottom: 1px solid #dee2e6;
+      padding: .5rem 1rem;
+    }
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-weight: 600;
+      color: #495057;
+      text-decoration: none;
+    }
+    .navbar-brand .dot {
+      width: 10px;
+      height: 10px;
+      background-color: #00c8c8;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .navbar-nav .nav-link {
+      color: #6c757d;
+      font-weight: 500;
+      margin-left: 1.5rem;
+      font-size: .9rem;
+    }
+    .navbar-nav .nav-link:hover,
+    .navbar-nav .nav-link.active {
+      color: #0d6efd !important;
+    }
+    .profile-card {
+      background: #fff;
+      border-radius: .5rem;
+      box-shadow: 0 .25rem .5rem rgba(0,0,0,.1);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform .2s;
+      height: 100%;
+    }
+    .profile-card:hover { transform: translateY(-5px); }
+    .avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #dee2e6;
+    }
+    .profile-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    .profile-header h5 { margin: 0; font-weight: 600; color: #495057; }
+    .profile-header .role { font-size: .85rem; color: #00c8c8; font-weight: 500; }
+    .badge-level { background: #e0f7f7; color: #0d6efd; font-size: .65rem; padding: .25em .5em; margin-left: .5em; }
+    .btn-detail { font-size: .85rem; padding: .25rem .5rem; width: 100px; }
+    footer#my-footer {
+      background: #fff;
+      border-top: 1px solid #dee2e6;
+      padding: 1rem 0;
+      text-align: center;
+      font-size: .8rem;
+      color: #868e96;
+      /* sticky footer */
+      margin-top: auto;
+    }
+     .navbar-collapse-two-leaders {
+            display: flex !important;
+            flex-basis: auto;
+            margin-right: 0px;
+        }
+
+        .navbar-collapse-default {
+            display: flex !important;
+            flex-basis: auto;
+            margin-right: -15px;
+        }
+        .gx-4 {
+    margin-top: 21px;
+}

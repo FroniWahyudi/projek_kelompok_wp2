@@ -112,3 +112,7 @@
         padding: 12px 20px;
       }
     }
+    /* Atur vertical-align pada semua td */
+td {
+  vertical-align: middle !important;
+}

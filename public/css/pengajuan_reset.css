@@ -1,0 +1,148 @@
+        body {
+            background-color: #f0f4f8;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .card-container {
+            max-width: 500px;
+            width: 100%;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, #e3f2fd 0%, #e1f5fe 100%);
+            color: #003366;
+            padding: 30px;
+            text-align: center;
+            border-bottom: none;
+        }
+        
+        .card-body {
+            padding: 30px;
+            background-color: #ffffff;
+        }
+        
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        
+        .btn-primary:hover {
+            background-color: #0069d9;
+            border-color: #0062cc;
+        }
+        
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+        }
+        
+        .text-primary {
+            color: #003366 !important;
+        }
+        
+        .text-secondary {
+            color: #4a4a4a !important;
+        }
+        
+        .back-btn {
+            color: #007bff;
+            text-decoration: none;
+        }
+        
+        .back-btn:hover {
+            color: #0056b3;
+        }
+        
+        .icon-container {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: #007bff;
+        }
+        
+        .footer-note {
+            color: #555;
+            font-size: 0.9rem;
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+        
+        .shake {
+            animation: shake 0.5s;
+        }
+        
+        .input-icon {
+            position: absolute;
+            z-index: 2;
+            display: block;
+            width: 2.375rem;
+            height: 2.375rem;
+            line-height: 2.375rem;
+            text-align: center;
+            pointer-events: none;
+            color: #6c757d;
+            left: -6px;
+            top: 1px;
+        }
+
+        /* Float Notification Styles - HANYA UNTUK SUCCESS DAN ERROR */
+        #success-message, #error-message {
+            position: fixed !important;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            min-width: 300px;
+            max-width: 400px;
+            border-radius: 10px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            transform: translateX(400px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            margin: 0 !important;
+        }
+
+        #success-message.show, #error-message.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        #success-message {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            border: 1px solid #c3e6cb;
+            border-left: 4px solid #28a745;
+            color: #155724;
+        }
+
+        #error-message {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            border: 1px solid #f5c6cb;
+            border-left: 4px solid #dc3545;
+            color: #721c24;
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            #success-message, #error-message {
+                top: 10px;
+                right: 10px;
+                left: 10px;
+                min-width: auto;
+                max-width: none;
+                transform: translateY(-100px);
+            }
+
+            #success-message.show, #error-message.show {
+                transform: translateY(0);
+            }
+        }

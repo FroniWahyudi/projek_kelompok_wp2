@@ -16,6 +16,10 @@ use Illuminate\Support\Facades\Auth;
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    <!-- Css Custom -->
+    <link rel="stylesheet" href="{{ asset('css/modal_edit.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/modal_create.css') }}">
+
     <style>
         html, body { height: 100%; margin: 0; }
         body {
