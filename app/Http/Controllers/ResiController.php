@@ -7,6 +7,7 @@ use App\Models\ResiItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class ResiController extends Controller
 {
@@ -15,7 +16,7 @@ class ResiController extends Controller
      */
 public function index()
 {
-    $resi = Resi::with('items')->get();
+    $resi = Resi::with(['items', 'items.checkedBy'])->get();
     $resis = $resi->mapWithKeys(function ($r) {
         return [
             'resi' . $r->id => [
@@ -28,14 +29,14 @@ public function index()
                     'id'        => $it->id,
                     'item'      => $it->nama_item,
                     'qty'       => $it->qty,
-                    'is_checked'=> $it->is_checked,
+                    'is_checked' => $it->is_checked,
+                    'checked_by' => $it->checkedBy ? $it->checkedBy->name : null,
                 ])->values(),
             ]
         ];
     })->all();
     return view('index.laporan_kerja', compact('resis'));
 }
-
     /**
      * Tampilkan form untuk membuat resi baru.
      */
@@ -149,15 +150,29 @@ public function destroy($id)
         return response()->json(['message' => 'Status berhasil diperbarui.']);
     }
 
-    /**
-     * (Metode AJAX) Update checklist item resi.
+     /**
+     * (Metode AJAX) Update checklist item resi dan catat pengguna yang melakukan checklist.
      */
     public function updateChecklist(Request $request, $id)
     {
-        $item = ResiItem::findOrFail($id);
-        $item->is_checked = $request->input('is_checked') ? 1 : 0;
-        $item->save();
-        return response()->json(['success' => true]);
+        // Pastikan pengguna adalah Leader atau Operator dengan job_descriptions "Inventory checker"
+        if (Auth::user()->role === 'Leader' || (Auth::user()->role === 'Operator' && str_contains(Auth::user()->job_descriptions, 'Inventory checker'))) {
+            $item = ResiItem::findOrFail($id);
+            $item->is_checked = $request->input('is_checked') ? 1 : 0;
+            $item->checked_by = $request->input('is_checked') ? Auth::id() : null;
+            $item->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Checklist berhasil diperbarui.',
+                'checked_by' => $item->checkedBy ? $item->checkedBy->name : null
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Akses ditolak. Anda tidak memiliki izin untuk mengubah checklist.'
+        ], 403);
     }
 
     /**

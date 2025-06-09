@@ -10,12 +10,12 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-      <!-- Css Custom -->
-    <link rel="stylesheet" href="{{ asset('css/laporan_kerja.css') }}">
+  <!-- Css Custom -->
+  <link rel="stylesheet" href="{{ asset('css/laporan_kerja.css') }}">
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
 <body>
-  <div id="adminChecklistNotif">Hanya leader yang diizinkan.</div>
+  <div id="adminChecklistNotif">Hanya Leader atau Operator dengan tugas Inventory checker yang diizinkan.</div>
   <div class="container py-4">
     <!-- Home Button -->
     <a href="{{ url('dashboard') }}" class="home-button d-print-none">
@@ -36,6 +36,18 @@
         </a>
       @endif
     </div>
+
+    <!-- [TAMBAHKAN KODE DI SINI: Tombol Resi hari ini] -->
+    <!-- @auth
+        @if(auth()->user()->role === 'Leader' || (auth()->user()->role === 'Operator' && str_contains(auth()->user()->job_descriptions, 'Inventory checker')))
+          <div class="mb-4 d-print-none">
+            <a href="{{ route('laporan.index') }}" class="btn btn-outline-dark">
+              <i class="bi bi-journal-text me-1"></i> Resi hari ini
+            </a>
+          </div>
+        @endif
+    @endauth -->
+    <!-- [END TAMBAHKAN KODE] -->
 
     <div class="row gx-4">
       <!-- Left Column -->
@@ -103,6 +115,9 @@
                     <th>Item</th>
                     <th>Qty</th>
                     <th class="text-center">Checklist</th>
+                    <!-- [TAMBAHKAN KODE DI SINI: Kolom Dicek Oleh] -->
+                    <th class="text-center">Dicek Oleh</th>
+                    <!-- [END TAMBAHKAN KODE] -->
                   </tr>
                 </thead>
                 <tbody id="resiTableBody"></tbody>
@@ -128,8 +143,7 @@
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow">
           <div class="modal-header bg-primary text-white" style="justify-content:center;">
-            <h5 class="modal-title" id="modalConfirmDeleteLabel"><i class="bi bi-exclamation-triangle me-2" ></i>Konfirmasi Hapus Resi</h5>
-
+            <h5 class="modal-title" id="modalConfirmDeleteLabel"><i class="bi bi-exclamation-triangle me-2"></i>Konfirmasi Hapus Resi</h5>
           </div>
           <div class="modal-body text-center">
             <i class="bi bi-trash display-4 text-danger mb-3"></i>
@@ -144,18 +158,25 @@
     </div>
   </div>
 
-  <script>
+<script>
     $.ajaxSetup({
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
     });
 
-    const resiData = <?= json_encode($resis, JSON_UNESCAPED_UNICODE) ?>;
-    const userRole = "{{ auth()->user()->role }}"; // Mendapatkan role pengguna
+   const resiData = <?= json_encode($resis, JSON_UNESCAPED_UNICODE) ?>;
+    const userRole = "{{ auth()->user()->role }}";
+    // Perbaikan di sini: Gunakan Blade untuk mengkonversi ke boolean JS
+    const userHasInventoryChecker = <?= 
+        str_contains(auth()->user()->job_descriptions ?? '', 'Inventory checker') 
+        ? 'true' 
+        : 'false' 
+    ?>;
 
     console.log("[DEBUG] resiData:", resiData);
     console.log("[DEBUG] userRole:", userRole);
+    console.log("[DEBUG] userHasInventoryChecker:", userHasInventoryChecker);
 
     function buildDropdown() {
       $("#dropdownMenu").empty();
@@ -193,7 +214,6 @@
       if (d.items && d.items.length > 0) {
         d.items.forEach((it, i) => {
           const isDisabled = d.status === 'Selesai' ? 'disabled' : '';
-          // Always checked if status is 'Selesai', otherwise use it.is_checked
           const isChecked = d.status === 'Selesai' || it.is_checked ? 'checked' : '';
           tbody.append(`
             <tr>
@@ -207,13 +227,16 @@
                   ${isDisabled}
                 >
               </td>
+              <!-- [TAMBAHKAN KODE DI SINI: Kolom Dicek Oleh] -->
+              <td data-label="Dicek Oleh" class="text-center" id="checked-by-${it.id ?? ''}">${it.checked_by ?? '-'}</td>
+              <!-- [END TAMBAHKAN KODE] -->
             </tr>
           `);
         });
       } else {
         tbody.append(`
           <tr>
-            <td colspan="4" class="empty-state">
+            <td colspan="5" class="empty-state">
               <i class="bi bi-inbox empty-state-icon"></i>
               <h5>Belum ada item</h5>
               <p class="text-muted">Tidak ada item untuk ditampilkan</p>
@@ -224,7 +247,6 @@
 
       $("#printResi").prop("disabled", true);
 
-      // Tampilkan tombol hapus hanya untuk Admin
       if (userRole === 'Admin') {
         if (d.kode) {
           $("#deleteResi").show().data('id', d.id);
@@ -255,7 +277,6 @@
       $("#percentDone").text(pct + "%");
       $("#progressBar").css("width", pct + "%");
       const isSelesai = $("#infoStatus").text() === "Selesai";
-      // Tombol hanya aktif jika user Leader, belum selesai, dan progress 100%
       $("#markAll").prop("disabled", isSelesai || userRole !== 'Leader' || pct < 100);
     }
 
@@ -314,6 +335,7 @@
             <th style="border: 1px solid #ddd; padding: 12px; text-align: left;">No</th>
             <th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Item</th>
             <th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Qty</th>
+            <th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Dicek Oleh</th>
           </tr>
         </thead>
         <tbody>
@@ -323,7 +345,8 @@
         return {
           no: $(this).find('td:eq(0)').text(),
           item: $(this).find('td:eq(1)').text(),
-          qty: $(this).find('td:eq(2)').text()
+          qty: $(this).find('td:eq(2)').text(),
+          checked_by: $(this).find('td:eq(4)').text()
         };
       }).get();
 
@@ -333,6 +356,7 @@
             <td style="border: 1px solid #ddd; padding: 12px;">${item.no}</td>
             <td style="border: 1px solid #ddd; padding: 12px;">${item.item}</td>
             <td style="border: 1px solid #ddd; padding: 12px;">${item.qty}</td>
+            <td style="border: 1px solid #ddd; padding: 12px;">${item.checked_by}</td>
           </tr>
         `;
       });
@@ -419,7 +443,7 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
         setTimeout(function() {
           downloadPDF();
-        }, 400); // wait for scroll animation
+        }, 400);
       });
 
       let itemIndex = 1;
@@ -479,41 +503,59 @@
           });
       });
 
+      // [PERBAIKAN DI SINI: Event Handler untuk Checklist]
       $(document).on("change", ".checklist", function() {
-        if (userRole === 'Admin' || userRole === 'Manajer') {
+        // Gunakan variabel userHasInventoryChecker yang sudah didefinisikan
+        if (userRole === 'Admin' || userRole === 'Manajer' || (userRole === 'Operator' && !userHasInventoryChecker)) {
           showAdminChecklistNotif();
-          // Undo the checkbox change
           $(this).prop('checked', !$(this).is(":checked"));
           return;
         }
         const id = $(this).data("item-id");
-        const isChecked = $(this).is(":checked") ? 1 : 0;
-        $.post('/resi-item/' + id + '/checklist', { is_checked: isChecked, _token: $('meta[name="csrf-token"]').attr('content') });
-
-        // Update data di resiData agar tampilan konsisten tanpa reload
-        const kode = $("#infoKode").text();
-        const key = Object.keys(resiData).find(k => resiData[k] && resiData[k].kode === kode);
-        if (key) {
-          const item = resiData[key].items.find(it => it.id == id);
-          if (item) item.is_checked = isChecked;
-        }
-
-        updateProgress();
+        const isChecked = $(this).is(":checked");
+        $.post('{{ route("resi.checklist", ":id") }}'.replace(':id', id), {
+          is_checked: isChecked,
+          _token: $('meta[name="csrf-token"]').attr('content')
+        })
+          .done(response => {
+            if (response.success) {
+              // Update data di resiData
+              const kode = $("#infoKode").text();
+              const key = Object.keys(resiData).find(k => resiData[k].kode === kode);
+              if (key) {
+                const item = resiData[key].items.find(it => it.id == id);
+                if (item) {
+                  item.is_checked = isChecked;
+                  item.checked_by = response.checked_by;
+                }
+              }
+              // Update kolom Dicek Oleh
+              $(`#checked-by-${id}`).text(response.checked_by || '-');
+              updateProgress();
+              showSuccess("Berhasil!", "Checklist diperbarui.");
+            } else {
+              alert(response.message);
+              $(this).prop('checked', !isChecked); // Undo change
+            }
+          })
+          .fail(xhr => {
+            alert("Gagal memperbarui checklist: " + (xhr.responseJSON?.message || xhr.statusText));
+            $(this).prop('checked', !isChecked); // Undo change
+          });
       });
+      // [END PERBAIKAN]
 
       // Responsive table labels
       if (window.innerWidth <= 768) {
-        const headers = ['No', 'Item', 'Qty', 'Checklist'];
+        const headers = ['No', 'Item', 'Qty', 'Checklist', 'Dicek Oleh'];
         document.querySelectorAll('#resiTableBody td').forEach((td, index) => {
           const colIndex = index % headers.length;
           td.setAttribute('data-label', headers[colIndex]);
         });
       }
 
-      // Event listener untuk tombol hapus dengan event delegation
       $(document).on("click", "#deleteResi", function() {
         resiIdToDelete = $(this).data('id');
-        // Ambil kode resi untuk ditampilkan di modal
         const kode = $("#infoKode").text();
         resiKodeToDelete = kode;
         $("#deleteResiKode").text(kode);
@@ -543,7 +585,7 @@
                 } else {
                   $("#resiTableBody").html(`
                     <tr>
-                      <td colspan="4" class="empty-state">
+                      <td colspan="5" class="empty-state">
                         <i class="bi bi-inbox empty-state-icon"></i>
                         <h5>Belum ada resi</h5>
                         <p class="text-muted">Tidak ada resi untuk ditampilkan</p>
