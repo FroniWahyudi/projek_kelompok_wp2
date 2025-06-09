@@ -49,7 +49,6 @@ class ShiftController extends Controller
         $weekYear = Carbon::parse($request->date)->year . '-' . Carbon::parse($request->date)->isoWeek;
 
         $existing = Shift::where('user_id', $request->user_id)
-            ->where('week_year', $weekYear)
             ->where('id', '!=', $shift->id)
             ->exists();
 
@@ -61,7 +60,6 @@ class ShiftController extends Controller
             'user_id'   => $request->user_id,
             'date'      => $request->date,
             'type'      => $request->type,
-            'week_year' => $weekYear,
         ]);
 
         return redirect()->route('shifts.index')->with('success', 'Shift berhasil diperbarui!');
