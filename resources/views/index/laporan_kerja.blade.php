@@ -532,7 +532,6 @@
               // Update kolom Dicek Oleh
               $(`#checked-by-${id}`).text(response.checked_by || '-');
               updateProgress();
-              showSuccess("Berhasil!", "Checklist diperbarui.");
             } else {
               alert(response.message);
               $(this).prop('checked', !isChecked); // Undo change

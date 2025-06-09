@@ -130,13 +130,13 @@
       </a>
     @endif
 
-@auth
+
     @if(auth()->user()->role === 'Leader' || (auth()->user()->role === 'Operator' && str_contains(auth()->user()->job_descriptions, 'Inventory checker')))
       <a href="{{ route('laporan.index') }}" class="btn btn-outline-dark">
         <i class="bi bi-journal-text me-1"></i> Resi hari ini
       </a>
     @endif
-@endauth
+
 
     @if(auth()->user()->role === 'Manajer')
       <a class="btn btn-outline-dark position-relative" href="{{ route('cuti.index') }}">
