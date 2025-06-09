@@ -21,9 +21,9 @@ class DatabaseSeeder extends Seeder
 
 $userData = [
     [
-        'name'             => 'Fadhillah Rudihartono',
+        'name'             => 'Fadhillah Rudi Hartono',
         'role'             => 'Admin',
-        'email'            => 'fadhillahrudihartono@nagahytam.co.id',
+        'email'            => 'fadhillahrudi@nagahytam.co.id',
         'phone'            => '+62 812-3456-7890',
         'password'         => '12345',
         'photo_url'        => 'img/nami.jpeg',

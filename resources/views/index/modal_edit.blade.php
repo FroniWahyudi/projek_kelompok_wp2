@@ -1,5 +1,5 @@
 
-
+<link rel="stylesheet" href="{{ asset('css/modal_edit.css') }}">
 <div class="modal-content">
     <div class="modal-header">
         <h5 class="modal-title">Edit User: {{ is_object($user) && isset($user->name) ? $user->name : '' }}</h5>

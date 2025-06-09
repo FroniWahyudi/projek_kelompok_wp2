@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Carbon;
 use App\Models\SisaCuti;
 use App\Models\User;
+use App\Models\Shift;
 
 use Illuminate\Http\Request;
 
@@ -129,6 +130,13 @@ class DivisiKaryawanController extends Controller
                 'tahun' => now()->year
             ]);
         }
+
+        $shift = [
+            'user_id' => $user->id,
+            'date' => now()->format('Y-m-d'),
+            'type' => 'Pagi', // Default shift
+        ];
+        Shift::create($shift);
 
         // Redirect berdasarkan role
         $redirectRoute = $this->getRedirectRoute($user->role);

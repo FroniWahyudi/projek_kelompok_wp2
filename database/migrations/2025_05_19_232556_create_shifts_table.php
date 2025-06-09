@@ -16,10 +16,8 @@ return new class extends Migration
     $table->foreignId('user_id')->constrained()->onDelete('cascade');
     $table->date('date');
     $table->enum('type', ['Pagi', 'Sore', 'Overtime']);
-    $table->string('week_year'); // 🆕 Tambah minggu ke berapa
     $table->timestamps();
 
-    $table->unique(['user_id', 'week_year']); // ✅ Batasi 1 shift per minggu
 });
 
 

@@ -1,4 +1,4 @@
-
+<link rel="stylesheet" href="{{ asset('css/modal_create.css') }}">
 <div class="modal-content">
     <div class="modal-header">
         <h5 class="modal-title">Tambah Pengguna Baru</h5>
