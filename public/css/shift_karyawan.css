@@ -458,7 +458,7 @@
             animation-duration: 0.8s;
         }
 
-        .card, .filter-group, .home-button {
+        .card, .filter-group, .home-button, .form-control {
             animation: slideInUp 0.6s ease-out;
         }
 
