@@ -78,6 +78,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/buat-resi', [ResiController::class, 'create'])->name('resi.buat');
     Route::post('/buat-resi', [ResiController::class, 'store'])->name('resi.store');
     Route::delete('/resi/{id}', [ResiController::class, 'destroy'])->name('resi.destroy');
+    Route::get('/inventory/check', [ResiController::class, 'checkInventory'])->name('inventory.check')->middleware('auth');
 
     // Resi Item Checklist
     Route::post('/resi-item/{id}/checklist', [ResiController::class, 'updateChecklist'])->name('resi-item.checklist');

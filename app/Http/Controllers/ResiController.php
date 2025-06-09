@@ -159,4 +159,21 @@ public function destroy($id)
         $item->save();
         return response()->json(['success' => true]);
     }
+
+    /**
+ * Tampilkan halaman untuk cek inventaris.
+ */
+    /**
+ * Arahkan ke laporan index untuk Leader atau Operator dengan job_descriptions "Inventory checker".
+ */
+public function checkInventory(Request $request)
+{
+    // Pastikan pengguna adalah Leader atau Operator dengan job_descriptions "Inventory checker"
+    if (auth()->user()->role === 'Leader' || (auth()->user()->role === 'Operator' && str_contains(auth()->user()->job_descriptions, 'Inventory checker'))) {
+        return redirect()->route('laporan.index');
+    }
+
+    // Jika tidak memenuhi syarat, redirect dengan pesan error
+    return redirect()->route('laporan.index')->with('error', 'Akses ditolak. Anda tidak memiliki izin untuk mengakses halaman ini.');
+}
 }
