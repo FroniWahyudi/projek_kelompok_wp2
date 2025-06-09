@@ -21,9 +21,9 @@ class DatabaseSeeder extends Seeder
 
 $userData = [
     [
-        'name'             => 'Alice Putri',
+        'name'             => 'Fadhillah Rudihartono',
         'role'             => 'Admin',
-        'email'            => 'alice.putri@nagahytam.co.id',
+        'email'            => 'fadhillahrudihartono@nagahytam.co.id',
         'phone'            => '+62 812-3456-7890',
         'password'         => '12345',
         'photo_url'        => 'img/nami.jpeg',
@@ -55,9 +55,9 @@ $userData = [
         'achievements'     => 'Tim terbaik Q4 2021'
     ],
     [
-        'name'             => 'Sanji',
+        'name'             => 'Froni Wahyudi',
         'role'             => 'Leader',
-        'email'            => 'sanji@nagahytam.co.id',
+        'email'            => 'froniwahyudi@nagahytam.co.id',
         'phone'            => '+62 813-9876-5432',
         'password'         => '12345',
         'photo_url'        => 'img/sanji.jpeg',
@@ -72,9 +72,9 @@ $userData = [
         'achievements'     => 'Pengurangan downtime 15%'
     ],
     [
-        'name'             => 'Sutoyo Sama',
+        'name'             => 'Ahmad Fadillah Martin',
         'role'             => 'Manajer',
-        'email'            => 'sutoyo@nagahytam.co.id',
+        'email'            => 'ahmadfadillahmartin@nagahytam.co.id',
         'phone'            => '+62 812-1234-5678',
         'password'         => 'sutoyo123',
         'photo_url'        => 'img/sutoyo.jpg',
@@ -142,9 +142,9 @@ $userData = [
         'divisi'           => 'inbound'
     ],
     [
-        'name'             => 'Agus Santoso',
+        'name'             => 'Muhammad Rifqi',
         'role'             => 'Operator',
-        'email'            => 'agus.santoso@nagahytam.co.id',
+        'email'            => 'muhammadrifqi@nagahytam.co.id',
         'phone'            => '+62 813-9876-5432',
         'password'         => 'karyawan123',
         'photo_url'        => 'img/profil_operator.jpg',
