@@ -158,8 +158,9 @@ public function destroy($id)
         // Pastikan pengguna adalah Leader atau Operator dengan job_descriptions "Inventory checker"
         if (Auth::user()->role === 'Leader' || (Auth::user()->role === 'Operator' && str_contains(Auth::user()->job_descriptions, 'Inventory checker'))) {
             $item = ResiItem::findOrFail($id);
-            $item->is_checked = $request->input('is_checked') ? 1 : 0;
-            $item->checked_by = $request->input('is_checked') ? Auth::id() : null;
+            $isChecked = filter_var($request->input('is_checked'), FILTER_VALIDATE_BOOLEAN);
+            $item->is_checked = $isChecked ? 1 : 0;
+            $item->checked_by = $isChecked ? Auth::id() : null;
             $item->save();
 
             return response()->json([
