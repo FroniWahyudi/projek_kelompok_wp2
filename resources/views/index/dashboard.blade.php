@@ -275,10 +275,17 @@
 
   <!-- Mobile Bottom Navbar -->
   <nav class="mobile-bottom-nav">
-    <a href="{{ route('slips.index') }}" class="nav-link">
-      <i class="fas fa-file-invoice-dollar"></i>
-      <span>Slip Gaji</span>
+@if (auth()->user()->role === 'Leader')
+    <a href="{{ route('laporan.index') }}" class="nav-link">
+        <i class="bi bi-journal-text me-1"></i>
+        <span>Resi Harian</span>
     </a>
+@else
+    <a href="{{ route('slips.index') }}" class="nav-link">
+        <i class="fas fa-file-invoice-dollar"></i>
+        <span>Slip Gaji</span>
+    </a>
+@endif
     <a href="{{ route('dashboard') }}" class="nav-link active">
       <i class="fas fa-home"></i>
       <span>Home</span>
