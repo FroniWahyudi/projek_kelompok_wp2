@@ -108,6 +108,8 @@ class DivisiKaryawanController extends Controller
             $file = $request->file('photo');
             $path = $file->store('photos', 'public');
             $data['photo_url'] = '/storage/' . $path;
+        } else {
+            $data['photo_url'] = 'img/profil_operator.jpg';
         }
 
         // Generate id_karyawan
@@ -122,7 +124,7 @@ class DivisiKaryawanController extends Controller
         $user = User::create($data);
 
         // Buat entri sisa cuti default untuk user baru (khusus untuk role yang memerlukan cuti)
-        if (in_array($user->role, ['Manager', 'Leader', 'Operator'])) {
+        if (in_array($user->role, ['Admin', 'Leader', 'Operator'])) {
             SisaCuti::create([
                 'user_id' => $user->id,
                 'total_cuti' => 12,
