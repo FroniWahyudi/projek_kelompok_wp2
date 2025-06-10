@@ -519,6 +519,23 @@
     .delay-2 { animation-delay: 0.2s; }
     .delay-3 { animation-delay: 0.3s; }
     .delay-4 { animation-delay: 0.4s; }
+
+     .animate-slide-down {
+        animation: slideDown 0.5s ease forwards;
+      }
+
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-30px); /* dari atas */
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0); /* ke posisi semula */
+        }
+      }
+
+
     
     /* === RESPONSIVE STYLES === */
     @media (max-width: 992px) {
@@ -582,12 +599,23 @@
       }
       
       .navbar-custom .logo-brand img {
-        height: 40px;
+        height: 50px;
+        margin-right: 88px;
       }
+      
+    .navbar-custom.scrolled .logo-brand img {
+      height: 40px;
+    }
       
       .profile-img-sm {
         width: 40px;
         height: 40px;
+        position: absolute;
+        right: 10px;
+      }
+      .dropdown button{
+        position: relative;
+       z-index: 100;
       }
     }
     

@@ -185,6 +185,24 @@
             color: var(--minimal-action);
             margin-bottom: 1rem;
         }
+        .modal-body {
+            justify-content: center;
+            flex: 1 1 auto;
+            padding: var(--bs-modal-padding);
+        }
+        .modal-content {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            width: 85%;
+            color: var(--bs-modal-color);
+            pointer-events: auto;
+            background-color: var(--bs-modal-bg);
+            background-clip: padding-box;
+            border: var(--bs-modal-border-width) solid var(--bs-modal-border-color);
+            border-radius: var(--bs-modal-border-radius);
+            outline: 0;
+        }
         
         @media (max-width: 768px) {
             .table-responsive {
@@ -315,24 +333,16 @@
                 padding: 5px 8px;
                 font-size: 0.85rem;
             }
+            .modal-content {
+                width: 90%;
+                margin: 0 auto;
+            }
+            .modal-content .form-control {
+                width: 85%;
+            }
+            .form-label {
+                margin-left: 10px;
+            }
         }
-        .modal-body {
-    justify-content: center;
-    flex: 1 1 auto;
-    padding: var(--bs-modal-padding);
-    
-}
-.modal-content {
-    position: relative;
-    display: flex
-;
-    flex-direction: column;
-    width: 85%;
-    color: var(--bs-modal-color);
-    pointer-events: auto;
-    background-color: var(--bs-modal-bg);
-    background-clip: padding-box;
-    border: var(--bs-modal-border-width) solid var(--bs-modal-border-color);
-    border-radius: var(--bs-modal-border-radius);
-    outline: 0;
-}
+
+

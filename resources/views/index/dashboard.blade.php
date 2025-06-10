@@ -19,7 +19,7 @@
       <button class="btn btn-outline-secondary mobile-menu-btn" type="button" id="mobileMenu" data-bs-toggle="dropdown">
         <i class="bi bi-list"></i> Menu
       </button>
-      <ul class="dropdown-menu mobile-dropdown-menu animate__animated animate__fadeIn nyoba" aria-labelledby="mobileMenu">
+      <ul class="dropdown-menu mobile-dropdown-menu animate__animated animate-slide-down nyoba" aria-labelledby="mobileMenu">
         <li><h6 class="dropdown-header">Divisi Karyawan</h6></li>
         <li><a class="dropdown-item" href="{{ route('hr.manajemen') }}"><i class="bi bi-people-fill me-1"></i> Manajemen</a></li>
         <li><a class="dropdown-item" href="{{ route('admin.index') }}"><i class="bi bi-person-circle me-1"></i> Administrasi</a></li>
@@ -516,6 +516,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 })
                 .catch(error => console.error('Gagal memeriksa notifikasi slip:', error));
         }
+
+
+         document.querySelectorAll('.mobile-nav a').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.querySelectorAll('.mobile-nav a').forEach(item => {
+          item.classList.remove('text-blue-500', 'scale-110');
+        });
+        link.classList.add('text-blue-500', 'scale-110');
+      });
+    });
     </script>
 </body>
 </html>
