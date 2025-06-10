@@ -8,10 +8,12 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <!-- eksternal css -->
   <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
 </head>
 <body>
+   
   <!-- Navbar -->
   <nav class="navbar-custom">
     <!-- Mobile Menu Button -->
@@ -293,6 +295,24 @@
     </div>
   </div>
 
+  <!-- Mobile Bottom Navbar -->
+<nav class="mobile-bottom-nav">
+  <a href="{{ route('slips.index') }}" class="nav-link">
+    <i class="fas fa-file-invoice-dollar"></i>
+    <span>Slip Gaji</span>
+  </a>
+  <a href="{{ route('dashboard') }}" class="nav-link active">
+    <i class="fas fa-home"></i>
+    <span>Home</span>
+  </a>
+  <a href="{{ url('edit_profil/' . $user['id']) }}" class="nav-link">
+    <img src="{{ htmlspecialchars($user['photo_url'] ?? '/default.jpg') }}" 
+         class="profile-img-mobile" 
+         alt="Profile Image">
+    <span>Profil</span>
+  </a>
+</nav>
+
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -518,15 +538,35 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
 
-         document.querySelectorAll('.mobile-nav a').forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        document.querySelectorAll('.mobile-nav a').forEach(item => {
-          item.classList.remove('text-blue-500', 'scale-110');
-        });
-        link.classList.add('text-blue-500', 'scale-110');
+            // Ensure mobile bottom navbar visibility is controlled
+    function toggleMobileNav() {
+      const mobileNav = document.querySelector('.mobile-bottom-nav');
+      if (window.innerWidth > 500) {
+        mobileNav.style.display = 'none';
+      } else {
+        mobileNav.style.display = 'flex';
+      }
+    }
+
+    // Run on load and resize
+    window.addEventListener('load', toggleMobileNav);
+    window.addEventListener('resize', toggleMobileNav);
+
+    // Navbar link active state
+  document.querySelectorAll('.mobile-bottom-nav .nav-link').forEach(link => {
+  link.addEventListener('click', (e) => {
+    const href = link.getAttribute('href');
+    if (href && !href.startsWith('#')) {
+      window.location.href = href; // Izinkan navigasi jika bukan anchor
+    } else {
+      e.preventDefault();
+      document.querySelectorAll('.mobile-bottom-nav .nav-link').forEach(item => {
+        item.classList.remove('active');
       });
-    });
+      link.classList.add('active');
+    }
+  });
+});
     </script>
 </body>
 </html>

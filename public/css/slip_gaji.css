@@ -427,6 +427,66 @@
             }
         }
 
+
+
+                /* === MOBILE BOTTOM NAVBAR STYLING === */
+            .mobile-bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            z-index: 1030;
+            display: flex !important; /* Ensure flex display for mobile */
+            justify-content: space-around;
+            align-items: center;
+            padding: 0.75rem 0;
+            max-width: 500px;
+            margin: 0 auto;
+            border-top: 1px solid #e0e0e0;
+            }
+
+            /* Styling untuk tautan di dalam mobile-bottom-nav */
+            .mobile-bottom-nav .nav-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--dark-color);
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            padding: 0.5rem;
+            }
+
+            /* Efek hover dan active pada tautan */
+            .mobile-bottom-nav .nav-link:hover,
+            .mobile-bottom-nav .nav-link.active {
+            color: var(--primary-color);
+            transform: scale(1.1);
+            }
+
+            /* Styling ikon di dalam tautan */
+            .mobile-bottom-nav .nav-link i {
+            font-size: 1.25rem;
+            margin-bottom: 0.25rem;
+            }
+
+            /* Styling teks di dalam tautan */
+            .mobile-bottom-nav .nav-link span {
+            font-weight: 500;
+            }
+             .profile-img-mobile {
+          width: 50px;
+          height: 50px;
+          object-fit: cover;
+          border-radius: 50%;
+          border: 5px solid white;
+          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+      .mobile-bottom-nav {
+        display: none !important;
+      }
+
         /* Responsive Design */
         @media (max-width: 1024px) {
             .main-content {
@@ -496,7 +556,7 @@
         }
 
         @media (max-width: 640px) {
-            .home-button span {
+            .home-button {
                 display: none;
             }
 
@@ -529,4 +589,15 @@
             .no-data i {
                 font-size: 56px;
             }
+
+             .nav-link {
+        transition: all 0.3s ease;
+      }
+      .nav-link:hover, .nav-link.active {
+        color: #0d6efd !important;
+        transform: scale(1.1);
+      }
+        .mobile-bottom-nav {
+        display: flex !important; 
+      }
         }

@@ -13,18 +13,21 @@ use Carbon\Carbon;
 
 class SlipController extends Controller
 {
-    public function index(Request $request)
+ public function index(Request $request)
 {
     $user = Auth::user();
+    if (!$user) {
+        // Redirect atau tangani jika pengguna tidak login
+        return redirect()->route('login')->with('error', 'Please login first.');
+    }
+
     $query = Slip::with(['user' => function ($query) {
         $query->select('id', 'name', 'id_karyawan', 'department', 'photo_url');
     }]);
 
     if ($user->role == 'Operator' || $user->role == 'Leader') {
         $query->where('user_id', $user->id);
-        
-        // Mark as read when operator visits slip page
-        $this->markUserSlipsAsRead($user->id); // Changed to new method
+        $this->markUserSlipsAsRead($user->id);
     }
 
     if ($month = $request->month) {
@@ -35,24 +38,18 @@ class SlipController extends Controller
         $query->whereYear('period', $year);
     }
 
-    // Ganti get() dengan paginate() dan urutkan berdasarkan id secara langsung di query
-    $slips = $query->orderByDesc('period')->orderByDesc('id')->paginate(10); // 10 item per halaman, sesuaikan jika perlu
-
-    $years = Slip::selectRaw('YEAR(period) as year')
-        ->distinct()
-        ->orderByDesc('year')
-        ->pluck('year');
+    $slips = $query->orderByDesc('period')->orderByDesc('id')->paginate(10);
+    $years = Slip::selectRaw('YEAR(period) as year')->distinct()->orderByDesc('year')->pluck('year');
     $users = User::all(['id', 'name', 'id_karyawan']);
     $nextId = Slip::count() + 1;
     $mode = 'index';
 
-    // Check for latest period notification (after marking as read)
     $hasLatestPeriodSlip = false;
     if ($user->role == 'Operator') {
         $hasLatestPeriodSlip = $this->checkLatestPeriodSlip($request)->original['has_unread_slip'];
     }
 
-    return view('index.slip_gaji', compact('slips', 'years', 'users', 'nextId', 'mode', 'hasLatestPeriodSlip'));
+    return view('index.slip_gaji', compact('slips', 'years', 'users', 'nextId', 'mode', 'hasLatestPeriodSlip', 'user'));
 }
     public function create()
     {
