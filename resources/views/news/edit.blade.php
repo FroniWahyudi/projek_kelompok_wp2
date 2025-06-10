@@ -82,12 +82,12 @@
             <label class="form-label">Foto</label>
             <!-- Preview Foto (lama/baru) di atas input file -->
             <div id="previewContainer"
-                 class="mb-3{{ !($edit === true && $news->image_url) ? ' d-none' : '' }}">
+                 class="mb-3">
               <label class="form-label text-muted">Preview Foto</label>
               <img
                 id="previewPhoto"
-                src="{{ ($edit === true && $news->image_url) ? asset($news->image_url) : '#' }}"
-                data-old="{{ ($edit === true && $news->image_url) ? asset($news->image_url) : '#' }}"
+                src="{{ ($edit === true && $news->image_url) ? asset($news->image_url) : ($edit === false ? asset('img/berita_default.jpg') : '#') }}"
+                data-old="{{ ($edit === true && $news->image_url) ? asset($news->image_url) : ($edit === false ? asset('img/berita_default.jpg') : '#') }}"
                 alt="Preview"
                 class="img-thumbnail d-block"
                 style="max-width: 200px;"
