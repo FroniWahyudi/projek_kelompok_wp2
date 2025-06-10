@@ -239,6 +239,20 @@
         </div>
       @endforeach
     </div>
+    @if(session('success'))
+    <div id="notif-success" class="position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+        <div class="toast align-items-center border-0 show" role="alert" aria-live="assertive" aria-atomic="true"
+            style="background-color: #007bff; color: #fff;">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    {{ session('success') }}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+    @endif
   </main>
 
   <!-- Profile Modal -->
@@ -516,6 +530,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 })
                 .catch(error => console.error('Gagal memeriksa notifikasi slip:', error));
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+        const notif = document.getElementById('notif-success');
+        if (notif) {
+            setTimeout(() => {
+                notif.style.display = 'none';
+            }, 3500);
+        }
+        });
     </script>
 </body>
 </html>
