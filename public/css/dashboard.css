@@ -443,6 +443,7 @@
       box-shadow: 0 5px 15px rgba(0,0,0,0.1);
       border: none;
       padding: 0.5rem;
+      margin-top: 40px !important;
     }
     
     .mobile-dropdown-menu .dropdown-header {
@@ -521,14 +522,14 @@
     
     /* === RESPONSIVE STYLES === */
     @media (max-width: 992px) {
-      .sidebar {
+      /* .sidebar {
         transform: translateX(-100%);
         width: 280px;
       }
       
       .sidebar.active {
         transform: translateX(0);
-      }
+      } */
       
       main {
         margin-left: 0;
@@ -536,6 +537,12 @@
       
       .navbar-custom .logo-brand img {
         height: 70px;
+      }
+      .dropdown {
+        display: none;
+      }
+      .sidebar {
+        display: block;
       }
     }
     
@@ -560,6 +567,12 @@
       
       .page-header .btn {
         margin-top: 1rem;
+      }
+      .sidebar {
+        display: none;
+      }
+      .dropdown {
+        display: block;
       }
     }
     
