@@ -23,7 +23,7 @@
 
     <div class="container-fluid">
         <div class="row justify-content-center">
-            <div class="col-lg-11 col-xl-10">
+            <div class="col-lg-11 col-xl-10 slip-mobile">
                 <div class="main-content">
                     <!-- Header Section -->
                     <div class="header-section">

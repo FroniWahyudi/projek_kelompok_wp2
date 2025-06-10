@@ -561,8 +561,9 @@
             }
 
             .main-content {
-                margin: 70px 8px 8px 8px;
-                padding: 16px;
+             margin-top: 0;
+            width: 100%;
+            margin-left: 0;     
             }
 
             .header-section {
@@ -590,14 +591,19 @@
                 font-size: 56px;
             }
 
-             .nav-link {
-        transition: all 0.3s ease;
-      }
-      .nav-link:hover, .nav-link.active {
-        color: #0d6efd !important;
-        transform: scale(1.1);
-      }
-        .mobile-bottom-nav {
-        display: flex !important; 
-      }
+                    .nav-link {
+                transition: all 0.3s ease;
+            }
+            .nav-link:hover, .nav-link.active {
+                color: #0d6efd !important;
+                transform: scale(1.1);
+            }
+                .mobile-bottom-nav {
+                display: flex !important; 
+            }
+
+            .slip-mobile {
+                padding-right: 0;
+                padding-left: 0;
+            }
         }
