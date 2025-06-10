@@ -16,7 +16,7 @@
   <nav class="navbar-custom">
     <div class="dropdown d-lg-none nav-item">
       <button class="btn btn-outline-secondary mobile-menu-btn" type="button" id="mobileMenu" data-bs-toggle="dropdown">
-        <i class="bi bi-list"></i> Menu
+        <i class="bi bi-list"></i> <span class="text-menu"> Menu</span>
       </button>
       <ul class="dropdown-menu mobile-dropdown-menu animate__animated animate-slide-down nyoba" aria-labelledby="mobileMenu">
         <li><h6 class="dropdown-header">Divisi Karyawan</h6></li>

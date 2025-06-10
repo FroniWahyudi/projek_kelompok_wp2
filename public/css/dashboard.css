@@ -754,6 +754,9 @@
         .mobile-bottom-nav {
         display: flex !important; 
       }
+      .text-menu {
+        display: none;
+      }
     }
 
     /* === UTILITY CLASSES === */
