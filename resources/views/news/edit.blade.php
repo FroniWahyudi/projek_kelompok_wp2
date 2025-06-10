@@ -7,188 +7,9 @@
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    body {
-      background-color: #f0f4f8; /* Peringkat 1: Latar belakang utama */
-      color: #003366; /* Peringkat 5: Teks utama */
-      padding-top: 2rem;
-      padding-bottom: 2rem;
-    }
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="{{ asset('css/news_edit.css') }}">
     
-    .card-container {
-      max-width: 800px;
-      margin: 0 auto;
-    }
-    
-    .form-card {
-      background-color: #ffffff; /* Peringkat 2: Latar kartu */
-      border: none;
-      border-radius: 10px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-      padding: 2rem;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .form-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 8px;
-      height: 100%;
-      background: linear-gradient(to bottom, #e3f2fd, #e1f5fe); /* Peringkat 4: Gradien sisi kiri */
-    }
-    
-    .form-title {
-      color: #003366; /* Peringkat 5: Teks utama */
-      font-weight: 600;
-      margin-bottom: 1.5rem;
-      border-bottom: 2px solid #e3f2fd;
-      padding-bottom: 0.75rem;
-    }
-    
-    .form-label {
-      color: #003366; /* Peringkat 5: Teks utama */
-      font-weight: 500;
-      margin-bottom: 0.5rem;
-    }
-    
-    .form-control, .form-control:focus {
-      border-color: #e3f2fd;
-      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.1);
-      color: #4a4a4a; /* Peringkat 6: Teks sekunder */
-    }
-    
-    .form-control:focus {
-      border-color: #007bff; /* Peringkat 3: Fokus input */
-    }
-    
-    .btn-primary {
-      background-color: #007bff; /* Peringkat 3: Tombol utama */
-      border-color: #007bff;
-      font-weight: 500;
-      padding: 0.5rem 1.5rem;
-    }
-    
-    .btn-primary:hover {
-      background-color: #0069d9;
-      border-color: #0062cc;
-    }
-    
-    .btn-secondary {
-      background-color: #6c757d; /* Peringkat 7: Tombol sekunder */
-      border-color: #6c757d;
-      font-weight: 500;
-      padding: 0.5rem 1.5rem;
-    }
-    
-    .btn-secondary:hover {
-      background-color: #5a6268;
-      border-color: #545b62;
-    }
-    
-    .alert-danger {
-      border-left: 4px solid #dc3545;
-    }
-    
-    .img-thumbnail {
-      border: 1px solid #e3f2fd;
-      border-radius: 5px;
-      max-width: 100%;
-    }
-    
-    .form-footer {
-      display: flex;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-      margin-top: 1.5rem;
-      padding-top: 1rem;
-      border-top: 1px solid #f0f4f8;
-    }
-    
-    .form-section {
-      margin-bottom: 1.5rem;
-    }
-
-    /* Custom styling untuk CKEditor */
-    .ck-editor__editable {
-      min-height: 200px;
-    }
-    
-    .ck-editor__editable:not(.ck-editor__nested-editable) {
-      border-color: #e3f2fd !important;
-    }
-    
-    .ck-editor__editable:not(.ck-editor__nested-editable).ck-focused {
-      border-color: #007bff !important;
-      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.1) !important;
-    }
-
-    /* Tombol Home floating */
-    .home-button {
-      position: fixed;
-      top: 24px;
-      left: 24px;
-      z-index: 1050;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 12px;
-      background-color: #fff;
-      color: #007bff;
-      border-radius: 50px;
-      font-size: 1rem;
-      font-weight: 600;
-      text-decoration: none;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-      border: 2px solid #dee2e6;
-      transition: all 0.3s ease;
-      animation: slideInUp 0.6s ease-out;
-    }
-
-    .home-button:hover {
-      background-color: #007bff;
-      color: #fff;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0, 123, 255, 0.25);
-      text-decoration: none;
-    }
-    .home-button i {
-      font-size: 16px;
-      transition: transform 0.3s ease;
-    }
-    .home-button:hover i {
-      transform: scale(1.1);
-    }
-    @keyframes slideInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    @media (max-width: 768px) {
-      .home-button {
-        padding: 6px 10px;
-        font-size: 0.9rem;
-        top: 12px;
-        left: 12px;
-      }
-    }
-    @media (max-width: 576px) {
-      .home-button {
-        padding: 5px 8px;
-        font-size: 0.85rem;
-        top: 8px;
-        left: 8px;
-      }
-    }
-  </style>
 </head>
 <body>
 
@@ -221,7 +42,11 @@
     <div class="form-card">
       <h2 class="form-title">
         <i class="bi bi-newspaper me-2"></i>
-        Edit News
+        @if ($edit === true)
+        Edit Berita
+        @else
+        Buat Berita Baru
+        @endif
       </h2>
       
       @if ($errors->any())

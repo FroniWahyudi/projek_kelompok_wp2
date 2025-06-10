@@ -61,7 +61,6 @@
                     <table class="table table-striped align-middle mb-0" id="shiftTable">
                         <thead class="table-light">
                             <tr>
-                                <th>#</th>
                                 <th>Foto</th>
                                 <th>Nama</th>
                                 <th>Departemen</th>
@@ -75,7 +74,6 @@
                         <tbody>
                             @foreach ($shifts as $index => $shift)
                                 <tr data-shift="{{ $shift->type }}">
-                                    <td>{{ $index + 1 }}</td>
                                     <td>
                                         @if ($shift->user->photo_url)
                                             <img src="{{ asset($shift->user->photo_url) }}" class="user-avatar" alt="{{ $shift->user->name }}">
