@@ -128,7 +128,7 @@
                       <label for="password" class="form-label">Password Lama</label>
                       <div class="input-group">
                         <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                        <input type="password" class="form-control @error('old_password') is-invalid @enderror" id="old_password" name="old_password" placeholder="Masukkan password lama" required>
+                        <input type="password" class="form-control @error('old_password') is-invalid @enderror" id="old_password" name="old_password" placeholder="Masukkan password lama">
                         @error('old_password')
                           <div class="invalid-feedback">
                             {{ $message }}
