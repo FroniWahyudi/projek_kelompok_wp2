@@ -125,10 +125,21 @@
                       </div>
                     </div>
                     <div class="col-md-6 mb-3">
-                      <label for="password" class="form-label">Password</label>
+                      <label for="password" class="form-label">Password Lama</label>
                       <div class="input-group">
                         <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                        <input type="text" name="id" value="{{ old('id', $user->id ?? 'user') }}" hidden>
+                        <input type="password" class="form-control @error('old_password') is-invalid @enderror" id="old_password" name="old_password" placeholder="Masukkan password lama" required>
+                        @error('old_password')
+                          <div class="invalid-feedback">
+                            {{ $message }}
+                          </div>
+                        @enderror
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="password" class="form-label">Password Baru</label>
+                      <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
                         <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" placeholder="Masukkan password baru (kosongkan jika tidak ingin mengubah)" minlength="8">
                         @error('password')
                           <div class="invalid-feedback">
@@ -167,7 +178,7 @@
     </div>
   </div>
 
-  @if(session('success'))
+@if(session('success'))
 <div id="notif-success" class="position-fixed top-0 end-0 p-3" style="z-index: 1055;">
     <div class="toast align-items-center border-0 show" role="alert" aria-live="assertive" aria-atomic="true"
          style="background-color: #007bff; color: #fff;">
@@ -175,6 +186,20 @@
             <div class="toast-body">
                 <i class="bi bi-check-circle-fill me-2"></i>
                 {{ session('success') }}
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+@endif
+@if(session('error'))
+<div id="notif-error" class="position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+    <div class="toast align-items-center border-0 show" role="alert" aria-live="assertive" aria-atomic="true"
+         style="background-color: #dc3545; color: #fff;">
+        <div class="d-flex">
+            <div class="toast-body">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                {{ session('error') }}
             </div>
             <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
@@ -246,7 +271,16 @@
             notif.style.display = 'none';
         }, 3500);
     }
-});
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+    const notifError = document.getElementById('notif-error');
+    if (notifError) {
+        setTimeout(() => {
+            notifError.style.display = 'none';
+        }, 3500);
+    }
+    });
   </script>
 </body>
 </html>

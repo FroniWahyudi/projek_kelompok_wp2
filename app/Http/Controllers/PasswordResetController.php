@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\PasswordResetRequest;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
 
 class PasswordResetController extends Controller
 {
@@ -61,7 +62,10 @@ class PasswordResetController extends Controller
     public function resetPasswordManual(Request $request)
     {   
         $request->validate([
+            'old_password' => 'required',
             'password' => 'nullable|string|min:8|confirmed',
+        ], [
+            'old_password.required' => 'Password lama wajib diisi.',
         ]);
         $user = User::findOrFail($request->id);
         
@@ -73,7 +77,10 @@ class PasswordResetController extends Controller
             return redirect()->route('profil.edit', $user->id)->with('success', 'Email berhasil diperbarui.');
         }
 
-        
+        if (!Hash::check($request->old_password, $user->password)) {
+            return redirect()->route('profil.edit', $user->id)->with('error', 'Password lama tidak sesuai.');
+        }
+
         $user->password = bcrypt($request->password);
         $user->save();
 
