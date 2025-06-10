@@ -12,9 +12,9 @@
         <div class="photo-upload-create">
             <label class="form-label">Photo <span class="text-danger">*</span></label>
             <div class="preview-wrapper-create text-center">
-                <img class="photo-preview-create" src="{{ asset('images/default-user.png') }}" alt="Preview Foto">
+                <img class="photo-preview-create" src="{{ asset('img/profil_operator.jpg') }}" alt="Preview Foto">
             </div>
-            <input type="file" name="photo" class="form-control form-control-sm photo-input-create @error('photo') is-invalid @enderror" accept="image/*" required>
+            <input type="file" name="photo" class="form-control form-control-sm photo-input-create @error('photo') is-invalid @enderror" accept="image/*">
             @error('photo')
                 <div class="text-danger">{{ $message }}</div>
             @enderror

@@ -35,12 +35,14 @@ class NewsController extends Controller
         $validated['date'] = now(); // Set current date
         $validated['link'] = ''; // Initialize link, can be set later if needed
 
-        if ($request->hasFile('photo')) {
-            $file = $request->file('photo');
-            $path = $file->store('photos', 'public');
-            $validated['image_url'] = '/storage/' . $path;
+        if (!$request->hasFile('photo')) {
+            $validated['image_url'] = 'img/berita_default.jpg'; // Set image_url to default if no photo is uploaded
+            News::create($validated);
+            return redirect()->route('dashboard')->with('success', 'News created successfully.');
         }
-
+        $file = $request->file('photo');
+        $path = $file->store('photos', 'public');
+        $validated['image_url'] = '/storage/' . $path;
         News::create($validated);
         return redirect()->route('dashboard')->with('success', 'News created successfully.');
     }

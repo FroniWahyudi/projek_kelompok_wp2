@@ -164,7 +164,6 @@
                     <table class="table table-hover mb-0">
                         <thead>
                             <tr>
-                                <th>#</th>
                                 <th>Nama</th>
                                 <th>Tgl Pengajuan</th>
                                 <th>Mulai</th>
@@ -190,7 +189,6 @@
                                     };
                                 @endphp
                                 <tr>
-                                    <td>{{ $i + 1 }}</td>
                                     <td>{{ $r->user->name }}</td>
                                     <td>{{ $r->tanggal_pengajuan->format('Y-m-d') }}</td>
                                     <td>{{ $r->tanggal_mulai->format('Y-m-d') }}</td>

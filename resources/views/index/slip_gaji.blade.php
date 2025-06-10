@@ -92,7 +92,6 @@
                             <table class="table table-hover mb-0">
                                 <thead>
                                     <tr>
-                                        <th class="text-center">ID Slip</th>
                                         <th>Nama Karyawan</th>
                                         <th>Periode</th>
                                         <th>Gaji Bersih</th>
@@ -103,9 +102,6 @@
                                     @if($slips->count() > 0)
                                         @foreach($slips as $slip)
                                             <tr>
-                                                <td class="text-center">
-                                                    <span class="slip-id">#{{ $slip->id }}</span>
-                                                </td>
                                                 <td>
                                                     <div class="employee-info">
                                                         <div class="avatar-sm">
