@@ -1055,6 +1055,10 @@
       object-fit: cover;
     }
 
+    .mobile-bottom-nav {
+        display: none !important;
+      }
+
     @media (max-width: 576px) {
       .home-button {
         padding: 6px 10px;
