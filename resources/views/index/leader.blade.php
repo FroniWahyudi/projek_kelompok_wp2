@@ -4,11 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Divisi HR & Leader - Naga Hytam Sejahtera Abadi</title>
-    @vite([
-        'resources/js/app.js',
-        'resources/sass/app.scss',
-        'resources/css/app.css'
-    ])
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
@@ -20,25 +15,27 @@
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-custom">
-        <div class="container-fluid px-lg-5">
-            <a class="navbar-brand" href="{{ url('dashboard') }}">
-                <span class="dot"></span>
-                <span>Divisi Leader</span>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-end @if($leaderCount == 2) navbar-collapse-two-leaders @else navbar-collapse-default @endif" id="navMenu">
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" href="{{ url('dashboard') }}">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url('manajemen') }}">Manajer</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url('admin') }}">Admin</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="{{ url('leader') }}">Leader</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url('operator') }}">Operator</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <div class="container-fluid px-lg-5">
+      <a class="navbar-brand" href="#">
+        <span class="dot"></span>
+        <span>Divisi Manajemen</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+              data-bs-target="#mainNav" aria-controls="mainNav"
+              aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="mainNav">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="{{ url('dashboard') }}">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url('manajemen') }}">Manajer</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url('admin') }}">Admin</a></li>
+          <li class="nav-item"><a class="nav-link active" href="{{ url('leader') }}">Leader</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url('operator') }}">Operator</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
 
     <!-- Content -->
     <main class="container py-5">

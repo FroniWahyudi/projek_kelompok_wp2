@@ -7,11 +7,6 @@ use Illuminate\Support\Facades\Auth;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Manajemen Dashboard - Naga Hytam Sejahtera Abadi</title>
-    @vite([
-        'resources/js/app.js',
-        'resources/sass/app.scss',
-        'resources/css/app.css'
-    ])
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
@@ -30,7 +25,7 @@ use Illuminate\Support\Facades\Auth;
             color: #6c757d;
             background: #f8f9fa;
         }
-        main { flex: 1; padding-top: 70px; }
+        main { flex: 1; padding-top: 90px; }
         .navbar-custom {
             background: #fff;
             border-bottom: 1px solid #dee2e6;
@@ -99,7 +94,7 @@ use Illuminate\Support\Facades\Auth;
             text-align: center;
         }
         .form-control { display: block; width: 373px; margin-left: 37px; }
-        .main-container { margin-top: 25px; }
+        .main-container { margin-top: 35px; }
         .navbar-expand-lg .navbar-collapse { margin-right: 21px; }
         button.active { background-color: #0d6efd; color: white; }
         #operator-list { min-height: 400px; transition: all 0.3s ease; margin-top: 0; }
@@ -152,42 +147,88 @@ use Illuminate\Support\Facades\Auth;
         .ms-2 { margin-left: 0rem !important;}
         .navbar-nav .nav-link:hover,
         .navbar-nav .nav-link.active { color: #0d6efd !important; }
+
+        /* --- MOBILE RESPONSIVE FIXES --- */
+        @media (max-width: 991.98px) {
+            .navbar-custom { padding: .5rem .5rem; }
+            .navbar-brand span { font-size: 1rem; }
+            .form-control { width: 100% !important; margin-left: 0 !important; }
+            .d-flex.ms-3 { margin-left: 0 !important; width: 100%; }
+            .search-bar-mobile { margin-bottom: 1rem !important; }
+            .filter-btn-group { margin-bottom: 1.5rem !important; gap: 0.5rem !important; display: flex; flex-wrap: wrap; }
+            .navbar-nav .nav-link { margin-left: 0.5rem; font-size: 1rem; }
+            .navbar-collapse { background: #fff; padding: 1rem 0; }
+            main, .main-container { padding-top: 110px !important; margin-top: 0 !important; } /* More space for mobile navbar */
+        }
+        @media (max-width: 767.98px) {
+            main.container, .main-container { padding: 0 0.5rem !important; padding-top: 120px !important; }
+            .mb-3, .filter-btn-group { flex-direction: column !important; gap: 0.5rem !important; margin-bottom: 1.5rem !important; }
+            .manager-card {
+                flex-direction: column;
+                align-items: flex-start;
+                min-height: unset;
+                padding: 1rem;
+            }
+            .profile-photo { width: 80px; height: 80px; }
+            .fab { width: 48px; height: 48px; font-size: 1.2rem; bottom: 15px; right: 15px; }
+            .main-container { margin-top: 0 !important; }
+        }
+        @media (max-width: 575.98px) {
+            .navbar-brand span { font-size: 0.95rem; }
+            .manager-info h5 { font-size: 1rem; }
+            .profile-photo { width: 60px; height: 60px; }
+            .modal-dialog { max-width: 98vw !important; margin: 0.5rem auto; }
+        }
     </style>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body>
 @unless(request()->has('ajax'))
     <nav class="navbar navbar-expand-lg navbar-custom">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="{{ url('dashboard') }}">
-                <span class="dot"></span>Divisi Operator
-            </a>
-            <div class="d-flex ms-3">
-                <input
-                    class="form-control me-2"
-                    type="search"
-                    placeholder="Cari nama operator..."
-                    aria-label="Cari"
-                    id="searchInput"
-                    value="{{ request('search') }}"
-                />
-            </div>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-end" id="navMenu">
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" href="{{ url('dashboard') }}">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url('manajemen') }}">Manajer</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url('admin') }}">Admin</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url('leader') }}">Leader</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="{{ url('operator') }}">Operator</a></li>
-                </ul>
-            </div>
+    <div class="container-fluid px-lg-5">
+      <a class="navbar-brand" href="{{ route('dashboard') }}">
+        <span class="dot"></span>
+        <span>Divisi Manajemen</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+              data-bs-target="#mainNav" aria-controls="mainNav"
+              aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="mainNav">
+        <div class="d-flex ms-3 w-100 d-none d-lg-block" style="max-width:400px;">
+            <input
+                class="form-control me-2"
+                type="search"
+                placeholder="Cari nama operator..."
+                aria-label="Cari"
+                id="searchInputDesktop"
+                value="{{ request('search') }}"
+            />
         </div>
-    </nav>
+        <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
+          <li class="nav-item"><a class="nav-link" href="{{ url('dashboard') }}">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url('manajemen') }}">Manajer</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url('admin') }}">Admin</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url('leader') }}">Leader</a></li>
+          <li class="nav-item"><a class="nav-link active" href="{{ url('operator') }}">Operator</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
     <main class="container py-5 main-container">
-        <div class="mb-3">
+        <!-- Mobile search bar above filter buttons -->
+        <div class="d-block d-lg-none search-bar-mobile">
+            <input
+                class="form-control"
+                type="search"
+                placeholder="Cari nama operator..."
+                aria-label="Cari"
+                id="searchInputMobile"
+                value="{{ request('search') }}"
+            />
+        </div>
+        <div class="mb-3 filter-btn-group">
             <button id="btnAll" class="btn btn-outline-secondary">Semua</button>
             <button id="btnFilterInbound" class="btn btn-outline-primary">Inbound</button>
             <button id="btnFilterOutbound" class="btn btn-outline-success">Outbound</button>
@@ -417,11 +458,13 @@ use Illuminate\Support\Facades\Auth;
 
         // Function untuk menginisialisasi semua event listeners
         function initializeEventListeners() {
-            const input = document.getElementById('searchInput');
+            const inputDesktop = document.getElementById('searchInputDesktop');
+            const inputMobile = document.getElementById('searchInputMobile');
             const list = document.getElementById('operator-list');
-            if (!input || !list) return;
+            if (!inputDesktop && !inputMobile || !list) return;
 
-            let timeout = null;
+            let timeoutDesktop = null;
+            let timeoutMobile = null;
 
             const buttons = {
                 all: document.getElementById('btnAll'),
@@ -445,11 +488,11 @@ use Illuminate\Support\Facades\Auth;
                 });
             }
 
-            // Search functionality
-            input.addEventListener('input', () => {
-                clearTimeout(timeout);
-                timeout = setTimeout(() => {
-                    fetch(`{{ url('operator') }}?search=${encodeURIComponent(input.value)}&ajax=1`)
+            // Search functionality for both desktop and mobile
+            function searchHandler(inputElement, timeoutVar) {
+                clearTimeout(timeoutVar.value);
+                timeoutVar.value = setTimeout(() => {
+                    fetch(`{{ url('operator') }}?search=${encodeURIComponent(inputElement.value)}&ajax=1`)
                         .then(res => res.text())
                         .then(html => {
                             list.innerHTML = html;
@@ -459,7 +502,16 @@ use Illuminate\Support\Facades\Auth;
                         })
                         .catch(err => console.error('Search error:', err));
                 }, 300);
-            });
+            }
+
+            if (inputDesktop) {
+                const timeoutVar = { value: null };
+                inputDesktop.addEventListener('input', () => searchHandler(inputDesktop, timeoutVar));
+            }
+            if (inputMobile) {
+                const timeoutVar = { value: null };
+                inputMobile.addEventListener('input', () => searchHandler(inputMobile, timeoutVar));
+            }
 
             // Filter buttons
             if (buttons.all) {
