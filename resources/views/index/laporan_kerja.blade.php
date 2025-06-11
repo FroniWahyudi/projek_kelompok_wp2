@@ -37,7 +37,7 @@
       @endif
     </div>
 
-    <div class="row gx-4">
+    <div class="row gx-4 card-list">
       <!-- Left Column -->
       <div class="col-lg-4 mb-4">
         <div class="dropdown mb-4 d-print-none">
@@ -94,7 +94,7 @@
           <div class="card-header">
             <h5 class="mb-0">Checklist Item</h5>
           </div>
-          <div class="card-body p-0">
+          <div class="card-body p-0 card-item">
             <!-- Tabel untuk layar besar -->
             <div class="table-responsive d-none d-sm-block">
               <table class="table table-hover mb-0">
@@ -149,7 +149,32 @@
     </div>
   </div>
 
-<script>
+  <!-- Tambahkan navigasi bawah -->
+  <nav class="mobile-bottom-nav">
+    @if (auth()->user()->role === 'Leader')
+      <a href="{{ route('laporan.index') }}" class="nav-link">
+        <i class="bi bi-journal-text me-1"></i>
+        <span>Resi Harian</span>
+      </a>
+    @else
+      <a href="{{ route('slips.index') }}" class="nav-link">
+        <i class="fas fa-file-invoice-dollar"></i>
+        <span>Slip Gaji</span>
+      </a>
+    @endif
+    <a href="{{ route('dashboard') }}" class="nav-link active">
+      <i class="fas fa-home"></i>
+      <span>Home</span>
+    </a>
+    <a href="#" class="nav-link profile-link" id="profileLink">
+      <img src="{{ auth()->user()->photo_url ?? '/default.jpg' }}" 
+           class="profile-img-mobile" 
+           alt="Profile Image">
+      <span>Profil</span>
+    </a>
+  </nav>
+
+  <script>
     $.ajaxSetup({
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -287,21 +312,21 @@
       }
     }
 
-   function updateProgress() {
-  const kode = $("#infoKode").text();
-  const key = Object.keys(resiData).find(k => resiData[k].kode === kode);
-  if (!key) return;
-  const items = resiData[key].items;
-  const all = items.length;
-  const done = items.filter(it => it.is_checked).length;
-  const pct = all ? Math.round((done / all) * 100) : 0;
-  $("#doneCount").text(done);
-  $("#totalCount").text(all);
-  $("#percentDone").text(pct + "%");
-  $("#progressBar").css("width", pct + "%");
-  const isSelesai = $("#infoStatus").text() === "Selesai";
-  $("#markAll").prop("disabled", isSelesai || userRole !== 'Leader' || pct < 100);
-}
+    function updateProgress() {
+      const kode = $("#infoKode").text();
+      const key = Object.keys(resiData).find(k => resiData[k].kode === kode);
+      if (!key) return;
+      const items = resiData[key].items;
+      const all = items.length;
+      const done = items.filter(it => it.is_checked).length;
+      const pct = all ? Math.round((done / all) * 100) : 0;
+      $("#doneCount").text(done);
+      $("#totalCount").text(all);
+      $("#percentDone").text(pct + "%");
+      $("#progressBar").css("width", pct + "%");
+      const isSelesai = $("#infoStatus").text() === "Selesai";
+      $("#markAll").prop("disabled", isSelesai || userRole !== 'Leader' || pct < 100);
+    }
 
     function showSuccess(title, desc, delay = 1800) {
       $("#spinner").show();
@@ -469,46 +494,46 @@
         }, 400);
       });
 
-    $(document).on("change", ".checklist", function() {
-  if (userRole === 'Admin' || userRole === 'Manajer' || (userRole === 'Operator' && !userHasInventoryChecker)) {
-    showAdminChecklistNotif();
-    $(this).prop('checked', !$(this).is(":checked"));
-    return;
-  }
-  const id = $(this).data("item-id");
-  const isChecked = $(this).is(":checked");
-  $.post('{{ route("resi.checklist", ":id") }}'.replace(':id', id), {
-    is_checked: isChecked,
-    _token: $('meta[name="csrf-token"]').attr('content')
-  })
-    .done(response => {
-      if (response.success) {
-        // Update resiData
-        const kode = $("#infoKode").text();
-        const key = Object.keys(resiData).find(k => resiData[k].kode === kode);
-        if (key) {
-          const item = resiData[key].items.find(it => it.id == id);
-          if (item) {
-            item.is_checked = isChecked;
-            item.checked_by = response.checked_by;
-          }
+      $(document).on("change", ".checklist", function() {
+        if (userRole === 'Admin' || userRole === 'Manajer' || (userRole === 'Operator' && !userHasInventoryChecker)) {
+          showAdminChecklistNotif();
+          $(this).prop('checked', !$(this).is(":checked"));
+          return;
         }
-        // Sinkronisasi kedua checklist
-        $(`.checklist[data-item-id="${id}"]`).prop('checked', isChecked);
-        // Update field "Dicek Oleh"
-        $(`#checked-by-${id}`).text(response.checked_by || '-');
-        $(`#checked-by-accordion-${id}`).text(response.checked_by || '-');
-        updateProgress();
-      } else {
-        alert(response.message);
-        $(this).prop('checked', !isChecked);
-      }
-    })
-    .fail(xhr => {
-      alert("Gagal memperbarui checklist: " + (xhr.responseJSON?.message || xhr.statusText));
-      $(this).prop('checked', !isChecked);
-    });
-});
+        const id = $(this).data("item-id");
+        const isChecked = $(this).is(":checked");
+        $.post('{{ route("resi.checklist", ":id") }}'.replace(':id', id), {
+          is_checked: isChecked,
+          _token: $('meta[name="csrf-token"]').attr('content')
+        })
+          .done(response => {
+            if (response.success) {
+              // Update resiData
+              const kode = $("#infoKode").text();
+              const key = Object.keys(resiData).find(k => resiData[k].kode === kode);
+              if (key) {
+                const item = resiData[key].items.find(it => it.id == id);
+                if (item) {
+                  item.is_checked = isChecked;
+                  item.checked_by = response.checked_by;
+                }
+              }
+              // Sinkronisasi kedua checklist
+              $(`.checklist[data-item-id="${id}"]`).prop('checked', isChecked);
+              // Update field "Dicek Oleh"
+              $(`#checked-by-${id}`).text(response.checked_by || '-');
+              $(`#checked-by-accordion-${id}`).text(response.checked_by || '-');
+              updateProgress();
+            } else {
+              alert(response.message);
+              $(this).prop('checked', !isChecked);
+            }
+          })
+          .fail(xhr => {
+            alert("Gagal memperbarui checklist: " + (xhr.responseJSON?.message || xhr.statusText));
+            $(this).prop('checked', !isChecked);
+          });
+      });
 
       $(document).on("click", "#deleteResi", function() {
         resiIdToDelete = $(this).data('id');
@@ -571,6 +596,34 @@
           }
         });
       });
+
+      // Tambahkan JavaScript untuk mobile-bottom-nav
+      $(document).ready(function() {
+        $('#profileLink').on('click', function(e) {
+          e.preventDefault();
+          showProfileSlideUpModal();
+        });
+
+        $('#profileSlideUpModal').on('click', function(e) {
+          if (e.target === this) {
+            hideProfileSlideUpModal();
+          }
+        });
+
+        $('#profileSlideUpModal .modal-option').on('click', function() {
+          hideProfileSlideUpModal();
+        });
+      });
+
+      function showProfileSlideUpModal() {
+        const modal = document.getElementById('profileSlideUpModal');
+        modal.classList.add('active');
+      }
+
+      function hideProfileSlideUpModal() {
+        const modal = document.getElementById('profileSlideUpModal');
+        modal.classList.remove('active');
+      }
     });
   </script>
 
@@ -590,6 +643,9 @@
       --tertiary-text: #555;
       --minimal-action: #6c757d;
       --home-button-border: #dee2e6;
+      --primary-color: #3498db;
+      --secondary-color: #2c3e50;
+      --dark-color: #2c3e50;
     }
 
     body {
@@ -941,10 +997,86 @@
       opacity: 1;
     }
 
+    /* Tambahkan CSS untuk mobile-bottom-nav */
+    .mobile-bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: white;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+      z-index: 1030;
+      display: flex !important;
+      justify-content: space-around;
+      align-items: center;
+      padding: 0.75rem 0;
+      max-width: 500px;
+      margin: 0 auto;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .mobile-bottom-nav .nav-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: var(--dark-color);
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
+      padding: 0.5rem;
+    }
+
+    .mobile-bottom-nav .nav-link:hover,
+    .mobile-bottom-nav .nav-link.active {
+      color: var(--primary-color);
+      transform: scale(1.1);
+    }
+
+    .mobile-bottom-nav .nav-link i {
+      font-size: 1.25rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .mobile-bottom-nav .nav-link span {
+      font-weight: 500;
+    }
+
+    .nav-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: #333;
+    }
+
+    .profile-img-mobile {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
     @media (max-width: 576px) {
       .home-button {
         padding: 6px 10px;
         font-size: 0.9rem;
+      }
+      .mobile-bottom-nav {
+        display: flex !important;
+        margin-left: 10px;
+      }
+      .profile-img-mobile {
+        width: 40px;
+        height: 40px;
+        object-fit: cover;
+        border-radius: 50%;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+      .nav-link {
+        transition: all 0.3s ease;
+      }
+      .nav-link:hover, .nav-link.active {
+        color: #0d6efd !important;
+        transform: scale(1.1);
       }
     }
 
@@ -955,6 +1087,16 @@
       }
       .accordion-body {
         padding: 0.75rem 1rem;
+      }
+      .card-item {
+        margin-bottom: 8%;
+      }
+       .mobile-bottom-nav {
+        display: flex !important;
+        margin-left: -10px !important;
+      }
+      .py-4 {
+        padding-bottom: 7.5rem !important;
       }
     }
 </style>
