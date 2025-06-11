@@ -16,6 +16,36 @@ use Illuminate\Support\Facades\Auth;
     <link rel="stylesheet" href="{{ asset('css/modal_create.css') }}">
     <link rel="stylesheet" href="{{ asset('css/operator.css') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <style>
+        @media (max-width: 576px) {
+          .modal-dialog {
+            max-width: 100vw !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            display: flex;
+            align-items: stretch;
+          }
+          .modal-content {
+            border-radius: 0 !important;
+            height: 100vh !important;
+            min-height: 100vh !important;
+            width: 100vw !important;
+            display: flex;
+            flex-direction: column;
+          }
+          .modal-header, .modal-footer {
+            flex-shrink: 0;
+          }
+          .modal-body {
+            flex: 1 1 auto;
+            overflow-y: auto !important;
+            max-height: none !important;
+            padding: 1rem;
+          }
+        }
+    </style>
 </head>
 <body>
 @unless(request()->has('ajax'))
@@ -127,107 +157,75 @@ use Illuminate\Support\Facades\Auth;
         </div>
         <!-- Modal Detail -->
         <div class="modal fade" id="detailModal{{ $op->id }}" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">{{ $op->name }} — Detail Profil</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="d-flex align-items-center mb-4">
-                            <img src="{{ $op->photo_url ? asset($op->photo_url) : asset('images/default-user.png') }}" class="profile-photo me-3" alt="">
-                            <div>
-                                <h6 class="mb-1">{{ $op->name }}</h6>
-                                <small class="role">
-                                    {{ $op->role }}
-                                    <span class="badge
-                                        @if(strtolower($op->level) === 'junior') bg-success 
-                                        @elseif(strtolower($op->level) === 'mid-level') bg-primary 
-                                        @elseif(strtolower($op->level) === 'senior') bg-warning text-dark 
-                                        @else bg-info text-dark 
-                                        @endif ms-2">
-                                        {{ $op->level }}
-                                    </span>
-                                </small>
-                                <p class="mt-2 mb-1"><i class="bi bi-envelope me-1"></i> {{ $op->email }}</p>
-                                <p class="mb-0"><i class="bi bi-telephone me-1"></i> {{ $op->phone }}</p>
-                            </div>
-                        </div>
-                        <h6 class="mt-4"><strong>Informasi Pribadi</strong></h6>
-                        <div class="row g-3 mb-4">
-                            @if(auth()->user()->role !== 'Operator')
-                            <div class="col-sm-6">
-                                <p class="mb-1"><strong>Alamat:</strong></p>
-                                <p class="mb-0">{{ $op->alamat }}</p>
-                            </div>
-                            @endif
-                            <div class="col-sm-6">
-                                <p class="mb-1"><strong>Joined:</strong></p>
-                                <p class="mb-0">{{ $op->joined_at ? \Carbon\Carbon::parse($op->joined_at)->format('d M Y') : '-' }}</p>
-                            </div>
-                            @if(auth()->user()->role !== 'Operator')
-                            <div class="col-sm-6">
-                                <p class="mb-1"><strong>Pendidikan:</strong></p>
-                                <p class="mb-0">{{ $op->education ?? '-' }}</p>
-                            </div>
-                            @endif
-                            <div class="col-sm-6">
-                                <p class="mb-1"><strong>Departemen:</strong></p>
-                                <p class="mb-0">{{ $op->department ?? '-' }}</p>
-                            </div>
-                            <div class="col-sm-6">
-                                <p class="mb-1"><strong>Divisi:</strong></p>
-                                <p class="mb-0">{{ $op->divisi ?? '-' }}</p>
-                            </div>
-                            <div class="col-sm-6">
-                                <p class="mb-1"><strong>Keahlian:</strong></p>
-                                <p class="mb-0">
-                                    @if($op->skills)
-                                        @foreach(explode(', ', $op->skills) as $s)
-                                            <span class="badge bg-secondary me-1 mb-1">{{ $s }}</span>
-                                        @endforeach
-                                    @else
-                                        -
-                                    @endif
-                                </p>
-                            </div>
-                        </div>
-                        <div class="row g-4 mb-4">
-                            <div class="col-lg-6">
-                                <h6><strong>Bio</strong></h6>
-                                <p class="mb-0">{{ $op->bio ?? '-' }}</p>
-                            </div>
-                            @if(auth()->user()->role !== 'Operator')
-                            <div class="col-lg-6">
-                                <h6><strong>Pencapaian</strong></h6>
-                                <ul class="mb-0">
-                                    @if($op->achievements)
-                                        @foreach(explode(', ', $op->achievements) as $a)
-                                            <li>{{ $a }}</li>
-                                        @endforeach
-                                    @else
-                                        <li>-</li>
-                                    @endif
-                                </ul>
-                            </div>
-                            @endif
-                        </div>
-                        <h6 class="mt-3"><strong>Deskripsi Pekerjaan</strong></h6>
-                        <ul class="mb-4">
-                            @if($op->job_descriptions)
-                                @foreach(explode(', ', $op->job_descriptions) as $jd)
-                                    <li>{{ $jd }}</li>
-                                @endforeach
-                            @else
-                                <li>-</li>
-                            @endif
-                        </ul>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Tutup</button>
-                    </div>
+          <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">{{ $op->name }} — Detail Profil</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body">
+                <div class="d-flex align-items-center mb-4">
+                  <img src="{{ asset($op->photo_url) }}" class="profile-photo me-3" alt="">
+                  <div>
+                    <h6 class="mb-0">{{ $op->name }}</h6>
+                    <small class="text-primary">{{ $op->role }}</small>
+                    <span class="badge
+                        @if(strtolower($op->level) === 'junior') bg-success 
+                        @elseif(strtolower($op->level) === 'intermediate') bg-primary 
+                        @elseif(strtolower($op->level) === 'senior') bg-warning text-dark 
+                        @else bg-info text-dark 
+                        @endif ms-2">
+                        {{ $op->level }}
+                    </span><br>
+                    <small class="text-muted"><i class="bi bi-envelope me-1"></i> {{ $op->email }}</small>
+                    <small class="text-muted ms-3"><i class="bi bi-telephone me-1"></i> {{ $op->phone }}</small>
+                  </div>
                 </div>
+
+                <h6><strong>Informasi Pribadi</strong></h6>
+                <div class="row g-3 mb-4">
+                  @if(auth()->user()->role !== 'Operator')
+                  <div class="col-sm-6"><strong>Alamat:</strong><br>{{ $op->alamat }}</div>
+                  @endif
+                  <div class="col-sm-6"><strong>Joined:</strong><br>{{ \Carbon\Carbon::parse($op->joined_at)->format('d M Y') }}</div>
+                  @if(auth()->user()->role !== 'Operator')
+                  <div class="col-sm-6"><strong>Pendidikan:</strong><br>{{ $op->education }}</div>
+                  @endif
+                  <div class="col-sm-6"><strong>Departemen:</strong><br>{{ $op->department }}</div>
+                  <div class="col-sm-6">
+                      <p class="mb-1"><strong>Keahlian:</strong></p>
+                      <p class="mb-0">
+                          @if($op->skills)
+                              @foreach(explode(', ', $op->skills) as $s)
+                                  <span class="badge bg-secondary me-1 mb-1">{{ $s }}</span>
+                              @endforeach
+                          @else
+                              -
+                          @endif
+                      </p>
+                  </div>
+                </div>
+
+                <h6><strong>Deskripsi Pekerjaan</strong></h6>
+                <ul>
+                  @foreach(explode(', ', $op->job_descriptions) as $jd)
+                    <li>{{ $jd }}</li>
+                  @endforeach
+                </ul>
+                @if(auth()->user()->role !== 'Operator')
+                <h6><strong>Pencapaian</strong></h6>
+                <ul>
+                  @foreach(explode(', ', $op->achievements) as $a)
+                    <li>{{ $a }}</li>
+                  @endforeach
+                </ul>
+                @endif
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Tutup</button>
+              </div>
             </div>
+          </div>
         </div>
         <!-- Modal Edit -->
         @if(Auth::user() && Auth::user()->role === 'Admin')

@@ -1,13 +1,6 @@
 html, body { height: 100%; margin: 0; }
-        body {
-            display: flex;
-            flex-direction: column;
-            font-family: 'Poppins', sans-serif;
-            font-size: .9rem;
-            color: #6c757d;
-            background: #f8f9fa;
-        }
-        main { flex: 1; padding-top: 90px; }
+        body { display: flex; flex-direction: column; font-family: 'Poppins', sans-serif; font-size:.9rem; color:#6c757d; background:#f8f9fa; }
+        main { flex: 1; }
         .navbar-custom {
             background: #fff;
             border-bottom: 1px solid #dee2e6;
