@@ -287,17 +287,21 @@
       }
     }
 
-    function updateProgress() {
-      const all = $(".checklist").length / 2; // Karena ada dua set checklist
-      const done = $(".checklist:checked").length / 2;
-      const pct = all ? Math.round(done / all * 100) : 0;
-      $("#doneCount").text(done);
-      $("#totalCount").text(all);
-      $("#percentDone").text(pct + "%");
-      $("#progressBar").css("width", pct + "%");
-      const isSelesai = $("#infoStatus").text() === "Selesai";
-      $("#markAll").prop("disabled", isSelesai || userRole !== 'Leader' || pct < 100);
-    }
+   function updateProgress() {
+  const kode = $("#infoKode").text();
+  const key = Object.keys(resiData).find(k => resiData[k].kode === kode);
+  if (!key) return;
+  const items = resiData[key].items;
+  const all = items.length;
+  const done = items.filter(it => it.is_checked).length;
+  const pct = all ? Math.round((done / all) * 100) : 0;
+  $("#doneCount").text(done);
+  $("#totalCount").text(all);
+  $("#percentDone").text(pct + "%");
+  $("#progressBar").css("width", pct + "%");
+  const isSelesai = $("#infoStatus").text() === "Selesai";
+  $("#markAll").prop("disabled", isSelesai || userRole !== 'Leader' || pct < 100);
+}
 
     function showSuccess(title, desc, delay = 1800) {
       $("#spinner").show();
@@ -465,42 +469,46 @@
         }, 400);
       });
 
-      $(document).on("change", ".checklist", function() {
-        if (userRole === 'Admin' || userRole === 'Manajer' || (userRole === 'Operator' && !userHasInventoryChecker)) {
-          showAdminChecklistNotif();
-          $(this).prop('checked', !$(this).is(":checked"));
-          return;
+    $(document).on("change", ".checklist", function() {
+  if (userRole === 'Admin' || userRole === 'Manajer' || (userRole === 'Operator' && !userHasInventoryChecker)) {
+    showAdminChecklistNotif();
+    $(this).prop('checked', !$(this).is(":checked"));
+    return;
+  }
+  const id = $(this).data("item-id");
+  const isChecked = $(this).is(":checked");
+  $.post('{{ route("resi.checklist", ":id") }}'.replace(':id', id), {
+    is_checked: isChecked,
+    _token: $('meta[name="csrf-token"]').attr('content')
+  })
+    .done(response => {
+      if (response.success) {
+        // Update resiData
+        const kode = $("#infoKode").text();
+        const key = Object.keys(resiData).find(k => resiData[k].kode === kode);
+        if (key) {
+          const item = resiData[key].items.find(it => it.id == id);
+          if (item) {
+            item.is_checked = isChecked;
+            item.checked_by = response.checked_by;
+          }
         }
-        const id = $(this).data("item-id");
-        const isChecked = $(this).is(":checked");
-        $.post('{{ route("resi.checklist", ":id") }}'.replace(':id', id), {
-          is_checked: isChecked,
-          _token: $('meta[name="csrf-token"]').attr('content')
-        })
-          .done(response => {
-            if (response.success) {
-              const kode = $("#infoKode").text();
-              const key = Object.keys(resiData).find(k => resiData[k].kode === kode);
-              if (key) {
-                const item = resiData[key].items.find(it => it.id == id);
-                if (item) {
-                  item.is_checked = isChecked;
-                  item.checked_by = response.checked_by;
-                }
-              }
-              $(`#checked-by-${id}`).text(response.checked_by || '-');
-              $(`#checked-by-accordion-${id}`).text(response.checked_by || '-');
-              updateProgress();
-            } else {
-              alert(response.message);
-              $(this).prop('checked', !isChecked);
-            }
-          })
-          .fail(xhr => {
-            alert("Gagal memperbarui checklist: " + (xhr.responseJSON?.message || xhr.statusText));
-            $(this).prop('checked', !isChecked);
-          });
-      });
+        // Sinkronisasi kedua checklist
+        $(`.checklist[data-item-id="${id}"]`).prop('checked', isChecked);
+        // Update field "Dicek Oleh"
+        $(`#checked-by-${id}`).text(response.checked_by || '-');
+        $(`#checked-by-accordion-${id}`).text(response.checked_by || '-');
+        updateProgress();
+      } else {
+        alert(response.message);
+        $(this).prop('checked', !isChecked);
+      }
+    })
+    .fail(xhr => {
+      alert("Gagal memperbarui checklist: " + (xhr.responseJSON?.message || xhr.statusText));
+      $(this).prop('checked', !isChecked);
+    });
+});
 
       $(document).on("click", "#deleteResi", function() {
         resiIdToDelete = $(this).data('id');
