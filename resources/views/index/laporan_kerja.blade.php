@@ -37,19 +37,7 @@
       @endif
     </div>
 
-    <!-- [TAMBAHKAN KODE DI SINI: Tombol Resi hari ini] -->
-    <!-- @auth
-        @if(auth()->user()->role === 'Leader' || (auth()->user()->role === 'Operator' && str_contains(auth()->user()->job_descriptions, 'Inventory checker')))
-          <div class="mb-4 d-print-none">
-            <a href="{{ route('laporan.index') }}" class="btn btn-outline-dark">
-              <i class="bi bi-journal-text me-1"></i> Resi hari ini
-            </a>
-          </div>
-        @endif
-    @endauth -->
-    <!-- [END TAMBAHKAN KODE] -->
-
-    <div class="row gx-4">
+    <div class="row gx-4 card-list">
       <!-- Left Column -->
       <div class="col-lg-4 mb-4">
         <div class="dropdown mb-4 d-print-none">
@@ -106,8 +94,9 @@
           <div class="card-header">
             <h5 class="mb-0">Checklist Item</h5>
           </div>
-          <div class="card-body p-0">
-            <div class="table-responsive">
+          <div class="card-body p-0 card-item">
+            <!-- Tabel untuk layar besar -->
+            <div class="table-responsive d-none d-sm-block">
               <table class="table table-hover mb-0">
                 <thead>
                   <tr>
@@ -115,13 +104,15 @@
                     <th>Item</th>
                     <th>Qty</th>
                     <th class="text-center">Checklist</th>
-                    <!-- [TAMBAHKAN KODE DI SINI: Kolom Dicek Oleh] -->
                     <th class="text-center">Dicek Oleh</th>
-                    <!-- [END TAMBAHKAN KODE] -->
                   </tr>
                 </thead>
                 <tbody id="resiTableBody"></tbody>
               </table>
+            </div>
+            <!-- Accordion untuk layar kecil (300-400px) -->
+            <div class="d-sm-none">
+              <div class="accordion" id="accordionResi"></div>
             </div>
           </div>
         </div>
@@ -158,16 +149,40 @@
     </div>
   </div>
 
-<script>
+  <!-- Tambahkan navigasi bawah -->
+  <nav class="mobile-bottom-nav">
+    @if (auth()->user()->role === 'Leader')
+      <a href="{{ route('laporan.index') }}" class="nav-link">
+        <i class="bi bi-journal-text me-1"></i>
+        <span>Resi Harian</span>
+      </a>
+    @else
+      <a href="{{ route('slips.index') }}" class="nav-link">
+        <i class="fas fa-file-invoice-dollar"></i>
+        <span>Slip Gaji</span>
+      </a>
+    @endif
+    <a href="{{ route('dashboard') }}" class="nav-link active">
+      <i class="fas fa-home"></i>
+      <span>Home</span>
+    </a>
+    <a href="#" class="nav-link profile-link" id="profileLink">
+      <img src="{{ auth()->user()->photo_url ?? '/default.jpg' }}" 
+           class="profile-img-mobile" 
+           alt="Profile Image">
+      <span>Profil</span>
+    </a>
+  </nav>
+
+  <script>
     $.ajaxSetup({
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
     });
 
-   const resiData = <?= json_encode($resis, JSON_UNESCAPED_UNICODE) ?>;
+    const resiData = <?= json_encode($resis, JSON_UNESCAPED_UNICODE) ?>;
     const userRole = "{{ auth()->user()->role }}";
-    // Perbaikan di sini: Gunakan Blade untuk mengkonversi ke boolean JS
     const userHasInventoryChecker = <?= 
         str_contains(auth()->user()->job_descriptions ?? '', 'Inventory checker') 
         ? 'true' 
@@ -209,13 +224,16 @@
         .addClass(d.status === "Selesai" ? "badge badge-success" : "badge badge-warning");
       $("#printKode").text(d.kode);
 
-      const tbody = $("#resiTableBody").empty();
+      const tableBody = $("#resiTableBody").empty();
+      const accordionContainer = $("#accordionResi").empty();
 
       if (d.items && d.items.length > 0) {
         d.items.forEach((it, i) => {
           const isDisabled = d.status === 'Selesai' ? 'disabled' : '';
           const isChecked = d.status === 'Selesai' || it.is_checked ? 'checked' : '';
-          tbody.append(`
+
+          // Generate table row
+          tableBody.append(`
             <tr>
               <td data-label="No">${i + 1}</td>
               <td data-label="Item">${it.nama ?? it.item ?? '-'}</td>
@@ -227,14 +245,33 @@
                   ${isDisabled}
                 >
               </td>
-              <!-- [TAMBAHKAN KODE DI SINI: Kolom Dicek Oleh] -->
               <td data-label="Dicek Oleh" class="text-center" id="checked-by-${it.id ?? ''}">${it.checked_by ?? '-'}</td>
-              <!-- [END TAMBAHKAN KODE] -->
             </tr>
           `);
+
+          // Generate accordion item
+          const accordionItem = `
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading${i}">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${i}" aria-expanded="false" aria-controls="collapse${i}">
+                  ${it.nama ?? it.item ?? '-'}
+                </button>
+              </h2>
+              <div id="collapse${i}" class="accordion-collapse collapse" aria-labelledby="heading${i}" data-bs-parent="#accordionResi">
+                <div class="accordion-body">
+                  <p><strong>No:</strong> ${i + 1}</p>
+                  <p><strong>Qty:</strong> ${it.qty ?? '-'}</p>
+                  <p><strong>Checklist:</strong> <input type="checkbox" class="form-check-input checklist" data-item-id="${it.id ?? ''}" ${isChecked} ${isDisabled}></p>
+                  <p><strong>Dicek Oleh:</strong> <span id="checked-by-accordion-${it.id ?? ''}">${it.checked_by ?? '-'}</span></p>
+                </div>
+              </div>
+            </div>
+          `;
+          accordionContainer.append(accordionItem);
         });
       } else {
-        tbody.append(`
+        // Handle empty state for both
+        tableBody.append(`
           <tr>
             <td colspan="5" class="empty-state">
               <i class="bi bi-inbox empty-state-icon"></i>
@@ -242,6 +279,13 @@
               <p class="text-muted">Tidak ada item untuk ditampilkan</p>
             </td>
           </tr>
+        `);
+        accordionContainer.append(`
+          <div class="empty-state">
+            <i class="bi bi-inbox empty-state-icon"></i>
+            <h5>Belum ada item</h5>
+            <p class="text-muted">Tidak ada item untuk ditampilkan</p>
+          </div>
         `);
       }
 
@@ -269,9 +313,13 @@
     }
 
     function updateProgress() {
-      const all = $(".checklist").length;
-      const done = $(".checklist:checked").length;
-      const pct = all ? Math.round(done / all * 100) : 0;
+      const kode = $("#infoKode").text();
+      const key = Object.keys(resiData).find(k => resiData[k].kode === kode);
+      if (!key) return;
+      const items = resiData[key].items;
+      const all = items.length;
+      const done = items.filter(it => it.is_checked).length;
+      const pct = all ? Math.round((done / all) * 100) : 0;
       $("#doneCount").text(done);
       $("#totalCount").text(all);
       $("#percentDone").text(pct + "%");
@@ -446,66 +494,7 @@
         }, 400);
       });
 
-      let itemIndex = 1;
-      $("#addItem").on("click", () => {
-        const row = $(".item-row:first").clone();
-        row.find("input").each(function() {
-          const oldName = $(this).attr("name");
-          const newName = oldName.replace(/items\[\d+\]/, `items[${itemIndex}]`);
-          $(this).attr("name", newName).val("");
-        });
-        $("#itemsContainer").append(row);
-        itemIndex++;
-      });
-
-      $(document).on("click", ".remove-item", function() {
-        if ($("#itemsContainer .item-row").length > 1) {
-          $(this).closest(".item-row").remove();
-        }
-      });
-
-      $("#submitCreate").on("click", function() {
-        const raw = $("#createResiForm").serializeArray();
-        const data = raw.reduce((acc, { name, value }) => {
-          if (name.startsWith("items")) {
-            const m = name.match(/items\[(\d+)\]\[(\w+)\]/);
-            if (m) {
-              const idx = m[1], fld = m[2];
-              acc.items = acc.items || {};
-              acc.items[idx] = acc.items[idx] || {};
-              acc.items[idx][fld] = value;
-            }
-          } else {
-            acc[name] = value;
-          }
-          return acc;
-        }, { items: {} });
-
-        data.items = Object.values(data.items);
-
-        $.post('{{ route("resi.store") }}', data)
-          .done(newResi => {
-            $("#createResiModal").modal("hide");
-            showSuccess("Berhasil!", "Resi baru dibuat.");
-            const key = "resi" + newResi.id;
-            resiData[key] = {
-              kode: newResi.kode,
-              tujuan: newResi.tujuan,
-              tanggal: newResi.tanggal,
-              status: newResi.status,
-              items: newResi.items
-            };
-            buildDropdown();
-            renderResi(key);
-          })
-          .fail(xhr => {
-            alert("Gagal membuat resi: " + (xhr.responseJSON?.message || xhr.statusText));
-          });
-      });
-
-      // [PERBAIKAN DI SINI: Event Handler untuk Checklist]
       $(document).on("change", ".checklist", function() {
-        // Gunakan variabel userHasInventoryChecker yang sudah didefinisikan
         if (userRole === 'Admin' || userRole === 'Manajer' || (userRole === 'Operator' && !userHasInventoryChecker)) {
           showAdminChecklistNotif();
           $(this).prop('checked', !$(this).is(":checked"));
@@ -519,7 +508,7 @@
         })
           .done(response => {
             if (response.success) {
-              // Update data di resiData
+              // Update resiData
               const kode = $("#infoKode").text();
               const key = Object.keys(resiData).find(k => resiData[k].kode === kode);
               if (key) {
@@ -529,29 +518,22 @@
                   item.checked_by = response.checked_by;
                 }
               }
-              // Update kolom Dicek Oleh
+              // Sinkronisasi kedua checklist
+              $(`.checklist[data-item-id="${id}"]`).prop('checked', isChecked);
+              // Update field "Dicek Oleh"
               $(`#checked-by-${id}`).text(response.checked_by || '-');
+              $(`#checked-by-accordion-${id}`).text(response.checked_by || '-');
               updateProgress();
             } else {
               alert(response.message);
-              $(this).prop('checked', !isChecked); // Undo change
+              $(this).prop('checked', !isChecked);
             }
           })
           .fail(xhr => {
             alert("Gagal memperbarui checklist: " + (xhr.responseJSON?.message || xhr.statusText));
-            $(this).prop('checked', !isChecked); // Undo change
+            $(this).prop('checked', !isChecked);
           });
       });
-      // [END PERBAIKAN]
-
-      // Responsive table labels
-      if (window.innerWidth <= 768) {
-        const headers = ['No', 'Item', 'Qty', 'Checklist', 'Dicek Oleh'];
-        document.querySelectorAll('#resiTableBody td').forEach((td, index) => {
-          const colIndex = index % headers.length;
-          td.setAttribute('data-label', headers[colIndex]);
-        });
-      }
 
       $(document).on("click", "#deleteResi", function() {
         resiIdToDelete = $(this).data('id');
@@ -591,6 +573,13 @@
                       </td>
                     </tr>
                   `);
+                  $("#accordionResi").html(`
+                    <div class="empty-state">
+                      <i class="bi bi-inbox empty-state-icon"></i>
+                      <h5>Belum ada resi</h5>
+                      <p class="text-muted">Tidak ada resi untuk ditampilkan</p>
+                    </div>
+                  `);
                   $("#infoKode, #infoTujuan, #infoTanggal").text("-");
                   $("#infoStatus").text("-").removeClass("badge-success badge-warning");
                   $("#deleteResi").hide();
@@ -607,9 +596,507 @@
           }
         });
       });
+
+      // Tambahkan JavaScript untuk mobile-bottom-nav
+      $(document).ready(function() {
+        $('#profileLink').on('click', function(e) {
+          e.preventDefault();
+          showProfileSlideUpModal();
+        });
+
+        $('#profileSlideUpModal').on('click', function(e) {
+          if (e.target === this) {
+            hideProfileSlideUpModal();
+          }
+        });
+
+        $('#profileSlideUpModal .modal-option').on('click', function() {
+          hideProfileSlideUpModal();
+        });
+      });
+
+      function showProfileSlideUpModal() {
+        const modal = document.getElementById('profileSlideUpModal');
+        modal.classList.add('active');
+      }
+
+      function hideProfileSlideUpModal() {
+        const modal = document.getElementById('profileSlideUpModal');
+        modal.classList.remove('active');
+      }
     });
   </script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
+<style>
+    :root {
+      --primary-bg: #f0f4f8;
+      --card-bg: #ffffff;
+      --primary-action: #007bff;
+      --gradient-start: #e3f2fd;
+      --gradient-end: #e1f5fe;
+      --primary-text: #003366;
+      --secondary-text: #4a4a4a;
+      --tertiary-text: #555;
+      --minimal-action: #6c757d;
+      --home-button-border: #dee2e6;
+      --primary-color: #3498db;
+      --secondary-color: #2c3e50;
+      --dark-color: #2c3e50;
+    }
+
+    body {
+      background-color: var(--primary-bg);
+      color: var(--primary-text);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .navbar-brand {
+      font-weight: 600;
+      color: var(--primary-text);
+    }
+
+    .card {
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      background-color: var(--card-bg);
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    }
+
+    .card-header {
+      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+      border-bottom: none;
+      border-radius: 12px 12px 0 0 !important;
+      padding: 1.25rem;
+      font-weight: 600;
+      color: var(--primary-text);
+    }
+
+    .card-body {
+      color: var(--tertiary-text);
+    }
+
+    .card-body strong {
+      color: var(--primary-text);
+    }
+
+    .btn-primary {
+      background-color: var(--primary-action);
+      border-color: var(--primary-action);
+      padding: 0.5rem 1.25rem;
+      font-weight: 500;
+    }
+
+    .btn-primary:hover {
+      background-color: #0069d9;
+      border-color: #0062cc;
+    }
+
+    .btn-outline-primary {
+      color: var(--primary-action);
+      border-color: var(--primary-action);
+    }
+
+    .btn-outline-primary:hover {
+      background-color: var(--primary-action);
+      color: white;
+    }
+
+    .badge-status {
+      min-width: 80px;
+      padding: 0.5rem;
+      font-weight: 500;
+      font-size: 0.85rem;
+      border-radius: 50px;
+    }
+
+    .badge-warning {
+      background-color: #fff3cd;
+      color: #856404;
+    }
+
+    .badge-success {
+      background-color: #d4edda;
+      color: #155724;
+    }
+
+    .table {
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .table thead {
+      background-color: var(--primary-text);
+      color: white;
+    }
+
+    .table th {
+      font-weight: 500;
+      padding: 1rem;
+    }
+
+    .table td {
+      padding: 0.75rem 1rem;
+      vertical-align: middle;
+      color: var(--tertiary-text);
+    }
+
+    .table-hover tbody tr:hover {
+      background-color: rgba(0, 123, 255, 0.05);
+    }
+
+    .modal-header {
+      background-color: var(--primary-action);
+      color: white;
+      border-bottom: none;
+    }
+
+    .modal-footer {
+      border-top: none;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary-action);
+      box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+    }
+
+    .nav-button {
+      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .nav-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .action-buttons .btn {
+      padding: 0.375rem 0.75rem;
+      border-radius: 8px;
+    }
+
+    .empty-state {
+      padding: 3rem 0;
+      text-align: center;
+      color: var(--secondary-text);
+    }
+
+    .empty-state-icon {
+      font-size: 3rem;
+      color: var(--minimal-action);
+      margin-bottom: 1rem;
+    }
+
+    .home-button {
+      background-color: var(--card-bg);
+      color: var(--primary-action);
+      padding: 8px 12px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      border: 2px solid var(--home-button-border);
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      animation: slideInUp 0.6s ease-out;
+      position: fixed;
+      top: 24px;
+      left: 24px;
+      z-index: 1050;
+    }
+
+    .home-button:hover {
+      background-color: var(--primary-action);
+      color: var(--card-bg);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 123, 255, 0.25);
+      text-decoration: none;
+    }
+
+    .home-button i {
+      font-size: 16px;
+      transition: transform 0.3s ease;
+    }
+
+    .home-button:hover i {
+      transform: scale(1.1);
+    }
+
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    #resultOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.4);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    #resultOverlay .box {
+      background: var(--card-bg);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      text-align: center;
+      animation: fadeIn 0.25s ease;
+      max-width: 300px;
+      width: 80%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    #resultOverlay .spinner {
+      width: 40px;
+      height: 40px;
+      border: 5px solid #ccc;
+      border-top-color: var(--primary-action);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    #resultOverlay .checkmark {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 4px solid var(--primary-action);
+      position: relative;
+      display: none;
+      animation: scale-in 0.25s ease forwards;
+    }
+
+    #resultOverlay .checkmark::after {
+      content: '';
+      position: absolute;
+      left: 16px;
+      top: 8px;
+      width: 16px;
+      height: 32px;
+      border-right: 4px solid var(--primary-action);
+      border-bottom: 4px solid var(--primary-action);
+      transform: rotate(45deg);
+    }
+
+    #resultOverlay h3 {
+      margin: 0;
+      display: none;
+      color: var(--primary-text);
+    }
+
+    #resultOverlay p {
+      margin: 0;
+      display: none;
+      color: var(--tertiary-text);
+    }
+
+    @keyframes scale-in {
+      0% {
+        transform: scale(0);
+        opacity: 0;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-5px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .print-only {
+      display: none;
+    }
+
+    .progress {
+      height: 8px;
+      border-radius: 4px;
+      background-color: #e9ecef;
+    }
+
+    .progress-bar {
+      background-color: var(--primary-action);
+    }
+
+    .dropdown-menu {
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      width: 100%;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .dropdown-item:hover {
+      background-color: rgba(0, 123, 255, 0.05);
+    }
+
+    #adminChecklistNotif {
+      display: none;
+      position: fixed;
+      top: 30px;
+      right: 30px;
+      left: auto;
+      transform: translateX(120%);
+      background: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeeba;
+      border-radius: 8px;
+      padding: 14px 32px;
+      font-size: 1.1rem;
+      font-weight: 500;
+      z-index: 11000;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      opacity: 0;
+      transition: transform 0.4s cubic-bezier(.4,0,.2,1), opacity 0.4s cubic-bezier(.4,0,.2,1);
+    }
+    #adminChecklistNotif.active {
+      display: block;
+      transform: translateX(0);
+      opacity: 1;
+    }
+
+    /* Tambahkan CSS untuk mobile-bottom-nav */
+    .mobile-bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: white;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+      z-index: 1030;
+      display: flex !important;
+      justify-content: space-around;
+      align-items: center;
+      padding: 0.75rem 0;
+      max-width: 500px;
+      margin: 0 auto;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .mobile-bottom-nav .nav-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: var(--dark-color);
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
+      padding: 0.5rem;
+    }
+
+    .mobile-bottom-nav .nav-link:hover,
+    .mobile-bottom-nav .nav-link.active {
+      color: var(--primary-color);
+      transform: scale(1.1);
+    }
+
+    .mobile-bottom-nav .nav-link i {
+      font-size: 1.25rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .mobile-bottom-nav .nav-link span {
+      font-weight: 500;
+    }
+
+    .nav-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: #333;
+    }
+
+    .profile-img-mobile {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    @media (max-width: 576px) {
+      .home-button {
+        padding: 6px 10px;
+        font-size: 0.9rem;
+      }
+      .mobile-bottom-nav {
+        display: flex !important;
+        margin-left: 10px;
+      }
+      .profile-img-mobile {
+        width: 40px;
+        height: 40px;
+        object-fit: cover;
+        border-radius: 50%;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+      .nav-link {
+        transition: all 0.3s ease;
+      }
+      .nav-link:hover, .nav-link.active {
+        color: #0d6efd !important;
+        transform: scale(1.1);
+      }
+    }
+
+    @media (min-width: 300px) and (max-width: 400px) {
+      .accordion-button {
+        font-size: 0.9rem;
+        padding: 0.75rem 1rem;
+      }
+      .accordion-body {
+        padding: 0.75rem 1rem;
+      }
+      .card-item {
+        margin-bottom: 8%;
+      }
+       .mobile-bottom-nav {
+        display: flex !important;
+        margin-left: -10px !important;
+      }
+      .py-4 {
+        padding-bottom: 7.5rem !important;
+      }
+    }
+</style>
