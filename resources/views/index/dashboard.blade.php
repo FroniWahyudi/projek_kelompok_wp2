@@ -307,6 +307,7 @@
  <!-- Slide-up Modal -->
 <div id="profileSlideUpModal" class="profile-slide-modal">
   <div class="profile-slide-modal-content">
+    <a href="#" class="modal-option" data-bs-toggle="modal" data-bs-target="#profileModal">Detail Profil</a>
     <a href="{{ url('edit_profil/' . $user['id']) }}" class="modal-option">Pengaturan Profil</a>
     <a href="{{ route('logout') }}" class="modal-option" onclick="event.preventDefault(); confirmLogout();">Logout</a>
   </div>
