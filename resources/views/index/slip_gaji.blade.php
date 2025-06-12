@@ -195,27 +195,45 @@
         </div>
     </div>
     @endif
-
+@include('components.profile-modal')
  <!-- Mobile Bottom Navbar -->
 <nav class="mobile-bottom-nav">
-  <a href="#" class="nav-link active">
-    <i class="fas fa-file-invoice-dollar"></i>
-    <span>Slip Gaji</span>
-  </a>
-  <a href="{{ route('dashboard') }}" class="nav-link">
-    <i class="fas fa-home"></i>
-    <span>Home</span>
-  </a>
-  <a href="{{ isset($user) && isset($user['id']) ? url('edit_profil/' . $user['id']) : '#' }}" class="nav-link">
-    <img src="{{ isset($user['photo_url']) ? htmlspecialchars($user['photo_url'] ?? '/default.jpg') : '/default.jpg' }}"
-         class="profile-img-mobile"
-         alt="Profile Image">
-    <span>Profil</span>
-  </a>
-</nav>
+    @if (auth()->user()->role === 'Leader' || (auth()->user()->role === 'Operator' && str_contains(auth()->user()->job_descriptions, 'Inventory checker')))
+      <a href="{{ route('laporan.index') }}" class="nav-link">
+        <i class="bi bi-journal-text me-1"></i>
+        <span>Resi Harian</span>
+      </a>
+    @else
+      <a href="{{ route('slips.index') }}" class="nav-link active">
+        <i class="fas fa-file-invoice-dollar"></i>
+        <span>Slip Gaji</span>
+      </a>
+    @endif
+    <a href="{{ route('dashboard') }}" class="nav-link">
+      <i class="fas fa-home" style="margin-top: 12px;"></i>
+      <span style="margin-top: 3px;">Home</span>
+    </a>
+    <a href="#" class="nav-link profile-link" id="profileLink">
+      <img src="{{ auth()->user()->photo_url ?? '/default.jpg' }}" 
+           class="profile-img-mobile" 
+           alt="Profile Image">
+      <span>Profil</span>
+    </a>
+  </nav>
+
+  <!-- Modal Slide-Up untuk Profil -->
+  <div id="profileSlideUpModal" class="profile-slide-modal">
+    <div class="profile-slide-modal-content">
+      <a href="#" class="modal-option" data-bs-toggle="modal" data-bs-target="#profileModal">Detail Profil</a>
+      <a href="{{ url('edit_profil/' . auth()->user()->id) }}" class="modal-option">Pengaturan Profil</a>
+      <a href="{{ route('logout') }}" class="modal-option" onclick="event.preventDefault(); confirmLogout();">Logout</a>
+    </div>
+  </div>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+    
+
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize tooltips
             const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
@@ -263,6 +281,28 @@
                     notif.style.display = 'none';
                 }, 3500);
             }
+
+            // Show slide-up modal on profile link click
+            const profileLink = document.getElementById('profileLink');
+            const profileSlideUpModal = document.getElementById('profileSlideUpModal');
+            if (profileLink && profileSlideUpModal) {
+                profileLink.addEventListener('click', function(e) {
+                  e.preventDefault();
+                  profileSlideUpModal.classList.add('active');
+                });
+                // Close modal when clicking outside content
+                profileSlideUpModal.addEventListener('click', function(e) {
+                  if (e.target === this) {
+                    profileSlideUpModal.classList.remove('active');
+                  }
+                });
+                // Close modal when clicking an option
+                profileSlideUpModal.querySelectorAll('.modal-option').forEach(function(option) {
+                  option.addEventListener('click', function() {
+                    profileSlideUpModal.classList.remove('active');
+                  });
+                });
+              }
         });
 
 

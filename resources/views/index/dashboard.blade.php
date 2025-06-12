@@ -228,60 +228,11 @@
   </main>
 
   <!-- Profile Modal (Bootstrap) -->
-  <div class="modal fade profile-modal" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="profileModalLabel">Profile Details</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="profile-card">
-            <div class="profile-img-container">
-              <img src="{{ htmlspecialchars($user['photo_url']) }}" 
-                   class="profile-img" 
-                   alt="Profile Image">
-            </div>
-            
-            <h4 class="profile-name">{{ htmlspecialchars($user['name']) }}</h4>
-            <div class="profile-email">{{ htmlspecialchars($user['email']) }}</div>
-            
-            <div class="profile-contact">
-              <i class="bi bi-telephone"></i>
-              <span>{{ htmlspecialchars($user['phone']) }}</span>
-            </div>
-            
-            @if($user['bio'])
-              <div class="profile-bio">
-                {{ htmlspecialchars($user['bio']) }}
-              </div>
-            @endif
-            
-            <h6 class="profile-section-title">Deskripsi Pekerjaan</h6>
-            <div class="profile-job-desc">
-              <ul>
-                @foreach(explode(', ', $user['job_descriptions']) as $jd)
-                  <li>{{ $jd }}</li>
-                @endforeach
-              </ul>
-            </div>
-            
-            <div class="profile-join-date">
-              <i class="bi bi-calendar-check"></i> Joined {{ \Carbon\Carbon::parse($user['joined_at'])->format('j F Y') }}
-            </div>
-            
-            <a href="edit_profil/{{ $user['id'] }}" class="edit-profile-btn" style="text-decoration: none;">
-              <i class="bi bi-pencil-square me-1"></i> Edit Profile
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  @include('components.profile-modal')
 
   <!-- Mobile Bottom Navbar -->
   <nav class="mobile-bottom-nav">
-@if (auth()->user()->role === 'Leader')
+@if (auth()->user()->role === 'Leader' || (auth()->user()->role === 'Operator' && str_contains(auth()->user()->job_descriptions, 'Inventory checker')))
     <a href="{{ route('laporan.index') }}" class="nav-link">
         <i class="bi bi-journal-text me-1"></i>
         <span>Resi Harian</span>

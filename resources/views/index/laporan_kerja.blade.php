@@ -200,9 +200,11 @@
     </div>
   </div>
 
+  @include('components.profile-modal')
+
   <!-- Tambahkan navigasi bawah -->
   <nav class="mobile-bottom-nav">
-    @if (auth()->user()->role === 'Leader')
+    @if (auth()->user()->role === 'Leader' || (auth()->user()->role === 'Operator' && str_contains(auth()->user()->job_descriptions, 'Inventory checker')))
       <a href="{{ route('laporan.index') }}" class="nav-link active">
         <i class="bi bi-journal-text me-1"></i>
         <span>Resi Harian</span>
@@ -228,6 +230,7 @@
   <!-- Modal Slide-Up untuk Profil -->
   <div id="profileSlideUpModal" class="profile-slide-modal">
     <div class="profile-slide-modal-content">
+      <a href="#" class="modal-option" data-bs-toggle="modal" data-bs-target="#profileModal">Detail Profil</a>
       <a href="{{ url('edit_profil/' . auth()->user()->id) }}" class="modal-option">Pengaturan Profil</a>
       <a href="{{ route('logout') }}" class="modal-option" onclick="event.preventDefault(); confirmLogout();">Logout</a>
     </div>
