@@ -286,7 +286,7 @@
         <span>Slip Gaji</span>
     </a>
 @endif
-    <a href="{{ route('dashboard') }}" class="nav-link active">
+    <a href="#" class="nav-link active">
       <i class="fas fa-home"></i>
       <span>Home</span>
     </a>

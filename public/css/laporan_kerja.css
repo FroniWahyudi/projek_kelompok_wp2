@@ -426,9 +426,8 @@
       }
 
     @media (max-width: 576px) {
-      .home-button {
-        padding: 6px 10px;
-        font-size: 0.9rem;
+     .home-button {
+        display: none !important;
       }
       .mobile-bottom-nav {
         display: flex !important;
@@ -467,5 +466,10 @@
       }
       .py-4 {
         padding-bottom: 7.5rem !important;
+        padding-top: 0 !important;
+        margin-top: -28px;
+      }
+      .home-button {
+        display: none !important;
       }
     }

@@ -10,8 +10,59 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- Css Custom -->
   <link rel="stylesheet" href="{{ asset('css/laporan_kerja.css') }}">
+  <!-- CSS untuk Slide-Up Modal -->
+  <style>
+    .profile-slide-modal {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 2000;
+      height: 100%;
+      align-items: flex-end;
+    }
+
+    .profile-slide-modal-content {
+      background-color: white;
+      width: 100%;
+      padding: 20px;
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
+      transform: translateY(100%);
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .profile-slide-modal.active {
+      display: flex;
+    }
+
+    .profile-slide-modal.active .profile-slide-modal-content {
+      transform: translateY(0);
+    }
+
+    .modal-option {
+      display: block;
+      padding: 15px;
+      text-align: center;
+      font-size: 16px;
+      color: #333;
+      text-decoration: none;
+      border-bottom: 1px solid #eee;
+    }
+
+    .modal-option:last-child {
+      border-bottom: none;
+    }
+
+    .modal-option:hover {
+      background-color: #f5f5f5;
+    }
+  </style>
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
 <body>
@@ -152,7 +203,7 @@
   <!-- Tambahkan navigasi bawah -->
   <nav class="mobile-bottom-nav">
     @if (auth()->user()->role === 'Leader')
-      <a href="{{ route('laporan.index') }}" class="nav-link">
+      <a href="{{ route('laporan.index') }}" class="nav-link active">
         <i class="bi bi-journal-text me-1"></i>
         <span>Resi Harian</span>
       </a>
@@ -162,9 +213,9 @@
         <span>Slip Gaji</span>
       </a>
     @endif
-    <a href="{{ route('dashboard') }}" class="nav-link active">
-      <i class="fas fa-home"></i>
-      <span>Home</span>
+    <a href="{{ route('dashboard') }}" class="nav-link">
+      <i class="fas fa-home" style="margin-top: 12px;"></i>
+      <span style="margin-top: 3px;">Home</span>
     </a>
     <a href="#" class="nav-link profile-link" id="profileLink">
       <img src="{{ auth()->user()->photo_url ?? '/default.jpg' }}" 
@@ -173,6 +224,14 @@
       <span>Profil</span>
     </a>
   </nav>
+
+  <!-- Modal Slide-Up untuk Profil -->
+  <div id="profileSlideUpModal" class="profile-slide-modal">
+    <div class="profile-slide-modal-content">
+      <a href="{{ url('edit_profil/' . auth()->user()->id) }}" class="modal-option">Pengaturan Profil</a>
+      <a href="{{ route('logout') }}" class="modal-option" onclick="event.preventDefault(); confirmLogout();">Logout</a>
+    </div>
+  </div>
 
   <script>
     $.ajaxSetup({
@@ -597,34 +656,50 @@
         });
       });
 
-      // Tambahkan JavaScript untuk mobile-bottom-nav
-      $(document).ready(function() {
-        $('#profileLink').on('click', function(e) {
-          e.preventDefault();
-          showProfileSlideUpModal();
-        });
-
-        $('#profileSlideUpModal').on('click', function(e) {
-          if (e.target === this) {
-            hideProfileSlideUpModal();
-          }
-        });
-
-        $('#profileSlideUpModal .modal-option').on('click', function() {
-          hideProfileSlideUpModal();
-        });
+      // JavaScript untuk menangani Slide-Up Modal pada mobile-bottom-nav
+      $('#profileLink').on('click', function(e) {
+        e.preventDefault();
+        showProfileSlideUpModal();
       });
 
-      function showProfileSlideUpModal() {
-        const modal = document.getElementById('profileSlideUpModal');
-        modal.classList.add('active');
-      }
+      $('#profileSlideUpModal').on('click', function(e) {
+        if (e.target === this) {
+          hideProfileSlideUpModal();
+        }
+      });
 
-      function hideProfileSlideUpModal() {
-        const modal = document.getElementById('profileSlideUpModal');
-        modal.classList.remove('active');
-      }
+      $('#profileSlideUpModal .modal-option').on('click', function() {
+        hideProfileSlideUpModal();
+      });
     });
+
+    // Fungsi untuk menampilkan modal
+    function showProfileSlideUpModal() {
+      const modal = document.getElementById('profileSlideUpModal');
+      modal.classList.add('active');
+    }
+
+    // Fungsi untuk menyembunyikan modal
+    function hideProfileSlideUpModal() {
+      const modal = document.getElementById('profileSlideUpModal');
+      modal.classList.remove('active');
+    }
+
+   function confirmLogout() {
+      Swal.fire({
+        title: 'Apakah Anda yakin ingin logout?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, logout',
+        cancelButtonText: 'Batal'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = "{{ route('logout') }}";
+        }
+      });
+    }
   </script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>

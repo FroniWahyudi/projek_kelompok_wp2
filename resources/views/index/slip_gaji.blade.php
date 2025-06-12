@@ -198,11 +198,11 @@
 
  <!-- Mobile Bottom Navbar -->
 <nav class="mobile-bottom-nav">
-  <a href="{{ route('slips.index') }}" class="nav-link">
+  <a href="#" class="nav-link active">
     <i class="fas fa-file-invoice-dollar"></i>
     <span>Slip Gaji</span>
   </a>
-  <a href="{{ route('dashboard') }}" class="nav-link active">
+  <a href="{{ route('dashboard') }}" class="nav-link">
     <i class="fas fa-home"></i>
     <span>Home</span>
   </a>
