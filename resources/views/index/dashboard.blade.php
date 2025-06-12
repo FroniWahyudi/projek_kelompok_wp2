@@ -306,62 +306,6 @@
   </div>
 </div>
 
-  <style>
-    /* Slide-up Modal Styling */
-    .profile-slide-modal {
-      display: none;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background-color: rgba(0, 0, 0, 0.5);
-      z-index: 2000; /* Higher than mobile-bottom-nav and other elements */
-      height: 100%;
-      align-items: flex-end;
-    }
-
-    .profile-slide-modal-content {
-      background-color: white;
-      width: 100%;
-      padding: 20px;
-      border-top-left-radius: 15px;
-      border-top-right-radius: 15px;
-      transform: translateY(100%);
-      transition: transform 0.3s ease-in-out;
-    }
-
-    .profile-slide-modal.active {
-      display: flex;
-    }
-
-    .profile-slide-modal.active .profile-slide-modal-content {
-      transform: translateY(0);
-    }
-
-    .modal-option {
-      display: block;
-      padding: 15px;
-      text-align: center;
-      font-size: 16px;
-      color: #333;
-      text-decoration: none;
-      border-bottom: 1px solid #eee;
-    }
-
-    .modal-option:last-child {
-      border-bottom: none;
-    }
-
-    .modal-option:hover {
-      background-color: #f5f5f5;
-    }
-
-    /* Ensure mobile-bottom-nav stays below modal */
-    .mobile-bottom-nav {
-      z-index: 1000;
-    }
-  </style>
-
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
