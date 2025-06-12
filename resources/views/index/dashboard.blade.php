@@ -228,7 +228,7 @@
   </main>
 
   <!-- Profile Modal (Bootstrap) -->
-  <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
+  <div class="modal fade profile-modal" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
@@ -242,17 +242,21 @@
                    class="profile-img" 
                    alt="Profile Image">
             </div>
+            
             <h4 class="profile-name">{{ htmlspecialchars($user['name']) }}</h4>
             <div class="profile-email">{{ htmlspecialchars($user['email']) }}</div>
+            
             <div class="profile-contact">
               <i class="bi bi-telephone"></i>
               <span>{{ htmlspecialchars($user['phone']) }}</span>
             </div>
+            
             @if($user['bio'])
               <div class="profile-bio">
                 {{ htmlspecialchars($user['bio']) }}
               </div>
             @endif
+            
             <h6 class="profile-section-title">Deskripsi Pekerjaan</h6>
             <div class="profile-job-desc">
               <ul>
@@ -261,9 +265,11 @@
                 @endforeach
               </ul>
             </div>
+            
             <div class="profile-join-date">
               <i class="bi bi-calendar-check"></i> Joined {{ \Carbon\Carbon::parse($user['joined_at'])->format('j F Y') }}
             </div>
+            
             <a href="edit_profil/{{ $user['id'] }}" class="edit-profile-btn" style="text-decoration: none;">
               <i class="bi bi-pencil-square me-1"></i> Edit Profile
             </a>
