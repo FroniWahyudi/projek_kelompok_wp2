@@ -278,6 +278,7 @@
                                                             </td>
                                                             <td>
                                                                 <input type="number" name="deductions[0][amount]" class="form-control deduction-amount" value="50000" disabled>
+                                                                <input type="number" name="deductions[0][amount]" class="form-control deduction-amount" value="50000" hidden>
                                                             </td>
                                                             <td class="text-center">
                                                                 <button type="button" class="btn btn-sm btn-outline-danger delete-row-btn">
@@ -291,6 +292,7 @@
                                                             </td>
                                                             <td>
                                                                 <input type="number" name="deductions[1][amount]" class="form-control deduction-amount" value="100000" disabled>
+                                                                <input type="number" name="deductions[1][amount]" class="form-control deduction-amount" value="100000" hidden>
                                                             </td>
                                                             <td class="text-center">
                                                                 <button type="button" class="btn btn-sm btn-outline-danger delete-row-btn">
