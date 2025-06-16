@@ -277,7 +277,7 @@
                                                                 <input type="text" name="deductions[0][name]" class="form-control" value="BPJS Kesehatan (1%)">
                                                             </td>
                                                             <td>
-                                                                <input type="number" name="deductions[0][amount]" class="form-control deduction-amount" value="50000">
+                                                                <input type="number" name="deductions[0][amount]" class="form-control deduction-amount" value="50000" disabled>
                                                             </td>
                                                             <td class="text-center">
                                                                 <button type="button" class="btn btn-sm btn-outline-danger delete-row-btn">
@@ -290,7 +290,7 @@
                                                                 <input type="text" name="deductions[1][name]" class="form-control" value="BPJS Ketenagakerjaan (2%)">
                                                             </td>
                                                             <td>
-                                                                <input type="number" name="deductions[1][amount]" class="form-control deduction-amount" value="100000">
+                                                                <input type="number" name="deductions[1][amount]" class="form-control deduction-amount" value="100000" disabled>
                                                             </td>
                                                             <td class="text-center">
                                                                 <button type="button" class="btn btn-sm btn-outline-danger delete-row-btn">

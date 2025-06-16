@@ -793,7 +793,8 @@ News::create([
             ResiSeeder::class,
             ResiItemSeeder::class,
             ItemChecklistSeeder::class,
-            ShiftSeeder::class
+            ShiftSeeder::class,
+            SlipSeeder::class,
         ]);
     }
 }
