@@ -177,7 +177,7 @@
                                                                 <input type="text" name="earnings[0][name]" class="form-control" value="Gaji Pokok" required>
                                                             </td>
                                                             <td>
-                                                                <input type="number" name="earnings[0][amount]" class="form-control earning-amount" value="5000000" required>
+                                                                <input type="number" name="earnings[0][amount]" id="earnings[0][amount]" class="form-control earning-amount" value="5000000" required>
                                                             </td>
                                                             <td class="text-center">
                                                                 <button type="button" class="btn btn-sm btn-outline-danger delete-row-btn">
@@ -277,8 +277,8 @@
                                                                 <input type="text" name="deductions[0][name]" class="form-control" value="BPJS Kesehatan (1%)">
                                                             </td>
                                                             <td>
-                                                                <input type="number" name="deductions[0][amount]" class="form-control deduction-amount" value="50000" disabled>
-                                                                <input type="number" name="deductions[0][amount]" class="form-control deduction-amount" value="50000" hidden>
+                                                                <input type="number" name="deductions[0][amount]" id="deductions[0][amount]" class="form-control deduction-amount" value="50000" readonly>
+                        
                                                             </td>
                                                             <td class="text-center">
                                                                 <button type="button" class="btn btn-sm btn-outline-danger delete-row-btn">
@@ -291,8 +291,8 @@
                                                                 <input type="text" name="deductions[1][name]" class="form-control" value="BPJS Ketenagakerjaan (2%)">
                                                             </td>
                                                             <td>
-                                                                <input type="number" name="deductions[1][amount]" class="form-control deduction-amount" value="100000" disabled>
-                                                                <input type="number" name="deductions[1][amount]" class="form-control deduction-amount" value="100000" hidden>
+                                                                <input type="number" name="deductions[1][amount]" id="deductions[1][amount]" class="form-control deduction-amount" value="100000" readonly>
+                                                                
                                                             </td>
                                                             <td class="text-center">
                                                                 <button type="button" class="btn btn-sm btn-outline-danger delete-row-btn">
@@ -324,7 +324,7 @@
                                                         </tr>
                                                         <tr class="total-row">
                                                             <td class="fw-bold">Total Potongan</td>
-                                                            <td class="fw-bold" id="total-deductions">Rp 50.000</td>
+                                                            <td class="fw-bold" id="total-deductions" style="color: #a32c24;">Rp 50.000</td>
                                                             <td></td>
                                                         </tr>
                                                     </tfoot>
@@ -419,10 +419,25 @@
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+
+    const inputGajiPokok = document.getElementById('earnings[0][amount]');
+    const inputBPJSKesehatan = document.getElementById('deductions[0][amount]');
+    const inputBPJSKetenagakerjaan = document.getElementById("deductions[1][amount]" );
+
+    inputGajiPokok.addEventListener('input', function() {
+        inputBPJSKesehatan.value = Math.round(parseInt(inputGajiPokok.value) * 0.01) || 0;
+        inputBPJSKetenagakerjaan.value = Math.round(parseInt(inputGajiPokok.value) * 0.02) || 0;
+    });
+
+
 document.addEventListener('DOMContentLoaded', function() {
     // Fungsi untuk memformat angka ke dalam format mata uang
     function formatCurrency(number) {
         return 'Rp ' + number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    function formatCurrencydeduction(number) {
+        return 'Rp -' + number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
     // Elemen input/tab untuk preview
@@ -478,7 +493,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const netSalary = totalEarnings - totalDeductions;
 
         document.getElementById('total-earnings').textContent = formatCurrency(totalEarnings);
-        document.getElementById('total-deductions').textContent = formatCurrency(totalDeductions);
+        document.getElementById('total-deductions').textContent = formatCurrencydeduction(totalDeductions);
         document.getElementById('net-salary-amount').textContent = formatCurrency(netSalary);
 
         const [y, m] = (periodInput.value || "").split("-");
