@@ -28,8 +28,32 @@
             @method('PUT')
           @endif
           <div class="row">
+            <!-- Right side: Profile Card with Photo -->
+            <div class="col-lg-4 order-1 order-lg-2 mb-4 mb-lg-0">
+              <div class="profile-card h-100">
+                <div class="card-body text-center py-4">
+                  <div class="user-avatar-wrapper position-relative d-inline-block">
+                    <img src="{{ is_object($user) && isset($user->photo_url) ? asset($user->photo_url) : 'https://ui-avatars.com/api/?name=' . urlencode(is_object($user) && isset($user->name) ? $user->name : 'User') . '&background=4e73df&color=fff&size=120' }}" 
+                         alt="User Avatar" class="user-avatar mb-3" id="avatar-preview">
+                    <div class="file-upload">
+                      <label for="photo-upload" class="file-upload-btn">
+                        <i class="fas fa-camera me-1"></i> Ganti Foto
+                      </label>
+                      <input type="file" name="photo" id="photo-upload" class="file-upload-input" accept="image/*">
+                      <div class="file-upload-name" id="file-name"></div>
+                    </div>
+                  </div>
+                  <h4 class="user-name">{{ is_object($user) && isset($user->name) ? $user->name : 'Nama Pengguna' }}</h4>
+                  <p class="user-email">{{ is_object($user) && isset($user->email) ? $user->email : 'email@example.com' }}</p>
+                  <div class="about-section">
+                    <h5 class="about-title"><i class="fas fa-info-circle me-2"></i>Tentang Saya</h5>
+                    <p class="about-text">{{ is_object($user) && isset($user->bio) ? $user->bio : 'Tidak ada deskripsi' }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
             <!-- Left side: Personal Information Form -->
-            <div class="col-lg-8 mb-4 mb-lg-0">
+            <div class="col-lg-8 order-2 order-lg-1">
               <div class="profile-card h-100">
                 <div class="card-body py-4">
                   <h5 class="section-title"><i class="fas fa-id-card me-2"></i>Informasi Pribadi</h5>
@@ -73,31 +97,6 @@
                         <i class="fas fa-save me-1"></i> Simpan Perubahan
                       </button>
                     </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Right side: Profile Card with Photo -->
-            <div class="col-lg-4">
-              <div class="profile-card h-100">
-                <div class="card-body text-center py-4">
-                  <div class="user-avatar-wrapper position-relative d-inline-block">
-                    <img src="{{ is_object($user) && isset($user->photo_url) ? asset($user->photo_url) : 'https://ui-avatars.com/api/?name=' . urlencode(is_object($user) && isset($user->name) ? $user->name : 'User') . '&background=4e73df&color=fff&size=120' }}" 
-                         alt="User Avatar" class="user-avatar mb-3" id="avatar-preview">
-                    <div class="file-upload">
-                      <label for="photo-upload" class="file-upload-btn">
-                        <i class="fas fa-camera me-1"></i> Ganti Foto
-                      </label>
-                      <input type="file" name="photo" id="photo-upload" class="file-upload-input" accept="image/*">
-                      <div class="file-upload-name" id="file-name"></div>
-                    </div>
-                  </div>
-                  <h4 class="user-name">{{ is_object($user) && isset($user->name) ? $user->name : 'Nama Pengguna' }}</h4>
-                  <p class="user-email">{{ is_object($user) && isset($user->email) ? $user->email : 'email@example.com' }}</p>
-                  <div class="about-section">
-                    <h5 class="about-title"><i class="fas fa-info-circle me-2"></i>Tentang Saya</h5>
-                    <p class="about-text">{{ is_object($user) && isset($user->bio) ? $user->bio : 'Tidak ada deskripsi' }}</p>
                   </div>
                 </div>
               </div>
