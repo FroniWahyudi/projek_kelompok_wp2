@@ -196,9 +196,9 @@
                 let match = false;
                 // Nama (2), Departemen (3), Shift (5)
                 if (
+                    cells[1] && cells[1].textContent.toLowerCase().includes(query) ||
                     cells[2] && cells[2].textContent.toLowerCase().includes(query) ||
-                    cells[3] && cells[3].textContent.toLowerCase().includes(query) ||
-                    cells[5] && cells[5].textContent.toLowerCase().includes(query)
+                    cells[4] && cells[4].textContent.toLowerCase().includes(query)
                 ) {
                     match = true;
                 }
