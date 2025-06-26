@@ -258,7 +258,7 @@
     function buildDropdown() {
       $("#dropdownMenu").empty();
       Object.entries(resiData).forEach(([key, r]) => {
-        const badgeClass = r.status === 'Selesai' ? 'badge-success' : 'badge-warning';
+        const badgeClass = r.status === 'Selesai' ? 'bg-success' : 'bg-warning';
         $("#dropdownMenu").append(`
           <li>
             <a class="dropdown-item" href="#" data-key="${key}">
@@ -283,7 +283,7 @@
       $("#infoStatus")
         .text(d.status)
         .removeClass("badge badge-success badge-warning")
-        .addClass(d.status === "Selesai" ? "badge badge-success" : "badge badge-warning");
+        .addClass(d.status === "Selesai" ? "badge bg-success" : "badge bg-warning");
       $("#printKode").text(d.kode);
 
       const tableBody = $("#resiTableBody").empty();
