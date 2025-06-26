@@ -83,7 +83,7 @@
     <div class="row login-card bg-white">
       <div class="col-md-6 login-left">
         <img src={{ asset("img/ilustrasi_gudang.png") }} alt="Ilustrasi Gudang">
-        <h4>Sistem Manajemen Perusahaan</h4>
+        <h4>Sistem Manajemen Karyawan</h4>
         <p>Tingkatkan efisiensi dan produktivitas bisnis Anda</p>
       </div>
       <div class="col-md-6 p-5">
