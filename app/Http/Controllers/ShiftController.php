@@ -11,11 +11,17 @@ class ShiftController extends Controller
 {
     public function index()
     {
-        // Ambil semua shift beserta data user terkait, termasuk photo_url
+        // Ambil semua shift beserta data user terkait, kecuali user dengan role 'Manajer'
         $shifts = Shift::with(['user' => function ($query) {
-            $query->select('id', 'name', 'photo_url','department'); // Pastikan photo_url diambil
-        }])->orderBy('date')->get();
-        $users = User::select('id', 'name', 'photo_url')->get(); // untuk dropdown pilihan user (karyawan)
+            $query->select('id', 'name', 'photo_url', 'department')
+                  ->where('role', '!=', 'Manajer');
+        }])->whereHas('user', function ($query) {
+            $query->where('role', '!=', 'Manajer');
+        })->orderBy('date')->get();
+
+        $users = User::select('id', 'name', 'photo_url')
+            ->where('role', '!=', 'Manajer')
+            ->get();
 
         $shifts = $shifts->sortByDesc(function($shift) {
             return $shift->user_id === auth()->id() ? 1 : 0;
