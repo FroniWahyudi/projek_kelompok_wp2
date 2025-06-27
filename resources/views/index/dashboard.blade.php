@@ -111,8 +111,7 @@
       <a href="{{ route('laporan.index') }}" class="btn btn-outline-dark">
         <i class="bi bi-journal-text me-1"></i> Daftar Resi
       </a>
-    @endif
-    @if(auth()->user()->role === 'Leader' || (auth()->user()->role === 'Operator' && str_contains(auth()->user()->job_descriptions, 'Inventory checker')))
+    @elseif(auth()->user()->role === 'Leader' || (auth()->user()->role === 'Operator' && str_contains(auth()->user()->job_descriptions, 'Inventory checker')))
       <a href="{{ route('laporan.index') }}" class="btn btn-outline-dark">
         <i class="bi bi-journal-text me-1"></i> Resi Harian
       </a>
