@@ -67,7 +67,9 @@
 </head>
 <body>
   <div id="adminChecklistNotif">Hanya Leader atau Operator dengan tugas Inventory checker yang diizinkan.</div>
-  <div class="container py-4">
+  <div class="container py-4" style=" padding-bottom: 7.5rem !important;
+        padding-top: 0 !important;
+        margin-top: -28px;">
     <!-- Home Button -->
     <a href="{{ url('dashboard') }}" class="home-button d-print-none">
       <i class="fas fa-home"></i> Home
