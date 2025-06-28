@@ -530,27 +530,41 @@
       });
 
       $("#markAll").on("click", function() {
-        if (userRole !== 'Leader') {
-          alert("Hanya Leader yang dapat menandai semua item sebagai selesai.");
-          return;
-        }
-        const kode = $("#infoKode").text();
-        if (kode !== "-") {
-          $.post('{{ route("resi.update_status") }}', {
-            kode,
-            status: "Selesai"
-          })
-            .done(() => {
-              const currentKey = Object.keys(resiData).find(k => resiData[k].kode === kode);
-              resiData[currentKey].status = "Selesai";
-              showSuccess("Berhasil!", "Status diubah menjadi Selesai.");
-              buildDropdown();
-              renderResi(currentKey);
-            })
-            .fail(() => alert("Gagal memperbarui status."));
-        }
-      });
-
+    if (userRole !== 'Leader') {
+      alert("Hanya Leader yang dapat menandai semua item sebagai selesai.");
+      return;
+    }
+    const kode = $("#infoKode").text();
+    if (kode !== "-") {
+      $.post('{{ route("resi.update_status") }}', {
+        kode,
+        status: "Selesai"
+      })
+        .done(() => {
+          const currentKey = Object.keys(resiData).find(k => resiData[k].kode === kode);
+          resiData[currentKey].status = "Selesai";
+          
+          // Perbarui #infoStatus langsung
+          $("#infoStatus")
+            .text("Selesai")
+            .removeClass("badge badge-success badge-warning")
+            .addClass("badge bg-success");
+          
+          // Tampilkan notifikasi sukses
+          showSuccess("Berhasil!", "Status diubah menjadi Selesai.");
+          
+          // Auto refresh setelah jeda (misalnya 2 detik setelah notifikasi)
+          setTimeout(() => {
+            location.reload();
+          }, 2000); // 2000 ms = 2 detik
+          
+          buildDropdown();
+          renderResi(currentKey);
+        })
+        .fail(() => alert("Gagal memperbarui status."));
+    }
+  });
+  
       $("#printResi").on("click", function() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
         setTimeout(function() {
