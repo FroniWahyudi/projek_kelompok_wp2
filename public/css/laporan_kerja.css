@@ -181,7 +181,7 @@
       animation: slideInUp 0.6s ease-out;
       position: fixed;
       top: 24px;
-      left: 24px;
+      left: 7px;
       z-index: 1050;
     }
 

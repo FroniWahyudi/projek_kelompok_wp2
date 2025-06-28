@@ -12,12 +12,12 @@ class ResiItemSeeder extends Seeder
         // Ambil semua resi
         $resi = DB::table('resi')->get(['id','kode']);
 
-        $itemsByKode = [
+       $itemsByKode = [
             'SPXID12345678' => [
-                ['Sapu', 3,null],
-                ['Pel Lantai', 2,null],
-                ['Ember', 4,null],
-                ['Kemoceng', 5,null],
+                ['Sapu', 3, null],
+                ['Pel Lantai', 2, null],
+                ['Ember', 4, null],
+                ['Kemoceng', 5, null],
                 ['Sarung Tangan', 10, null],
             ],
             'SPXID23456789' => [
@@ -28,29 +28,27 @@ class ResiItemSeeder extends Seeder
                 ['Masker', 20, null],
             ],
             'SPXID34567890' => [
-                ['Paket Kardus', 10, 15],
-                ['Lakban', 5, 15],
-                ['Bubble Wrap', 3, 15],
-                ['Timbangan Kecil', 2, 7],
-                ['Plastik Sampah', 10, 2],
+                ['Paket Kardus', 10, 6],
+                ['Lakban', 5, 7],
+                ['Bubble Wrap', 3, 9],
+                ['Timbangan Kecil', 2, 15],
+                ['Plastik Sampah', 10, 6],
             ],
             'SPXID45678901' => [
-                ['Sapu', 1, 5],
-                ['Pel Lantai', 2, 6],
-                ['Kemoceng', 3, 7],
-                ['Ember', 4, 4],
-                ['Sarung Tangan', 15, 3],
+                ['Sapu', 1, 7],
+                ['Pel Lantai', 2, 9],
+                ['Kemoceng', 3, 15],
+                ['Ember', 4, 6],
+                ['Sarung Tangan', 15, 7],
             ],
             'SPXID56789012' => [
-                ['Hand Sanitizer', 12, 3],
-                ['Masker', 30, 4],
-                ['Tisu Basah', 20, 5],
-                ['Kemoceng', 5, 6],
-                ['Plastik Sampah', 15, 2],
-                ['Lakban', 4, 3],
+                ['Hand Sanitizer', 12, 9],
+                ['Masker', 30, 15],
+                ['Tisu Basah', 20, 6],
+                ['Kemoceng', 5, 7],
+                ['Plastik Sampah', 15, 9],
             ],
         ];
-
 
         foreach ($resi as $r) {
             foreach ($itemsByKode[$r->kode] as $itm) {
