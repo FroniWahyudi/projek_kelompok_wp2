@@ -16,7 +16,7 @@ class ResiSeeder extends Seeder
             ['kode'=>'SPXID12345678','tujuan'=>'Bangil First Mile Hub','tanggal'=>'2025-05-14','status'=>'Pending'],
             ['kode'=>'SPXID23456789','tujuan'=>'Surabaya Distribution Center','tanggal'=>'2025-05-14','status'=>'Pending'],
             ['kode'=>'SPXID34567890','tujuan'=>'Malang Sorting Center','tanggal'=>'2025-05-14','status'=>'Selesai'],
-            ['kode'=>'SPXID45678901','tujuan'=>'Pasuruan Hub','tanggal'=>'2025-05-14','status'=>'Pending'],
+            ['kode'=>'SPXID45678901','tujuan'=>'Pasuruan Hub','tanggal'=>'2025-05-14','status'=>'Selesai'],
             ['kode'=>'SPXID56789012','tujuan'=>'Sidoarjo Collection Point','tanggal'=>'2025-05-14','status'=>'Selesai'],
         ];
 

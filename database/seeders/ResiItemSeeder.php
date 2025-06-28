@@ -13,42 +13,44 @@ class ResiItemSeeder extends Seeder
         $resi = DB::table('resi')->get(['id','kode']);
 
         $itemsByKode = [
-            'SPXID12345678'=>[
-                ['Dokumen Pengiriman',1,null],
-                ['Label Resi',5,null],
-                ['Surat Jalan',2,null],
-                ['Manifest Pengiriman',1,null],
-                ['Tanda Terima',3,null],
+            'SPXID12345678' => [
+                ['Sapu', 3,null],
+                ['Pel Lantai', 2,null],
+                ['Ember', 4,null],
+                ['Kemoceng', 5,null],
+                ['Sarung Tangan', 10, null],
             ],
-            'SPXID23456789'=>[
-                ['Dokumen Pengiriman',1,null],
-                ['Label Resi',4,null],
-                ['Surat Jalan',1,null],
-                ['Manifest Pengiriman',1,null],
-                ['Tanda Terima',2,null],
+            'SPXID23456789' => [
+                ['Detergen', 6, null],
+                ['Sapu', 2, null],
+                ['Pel Lantai', 3, null],
+                ['Kemoceng', 4, null],
+                ['Masker', 20, null],
             ],
-            'SPXID34567890'=>[
-                ['Dokumen Pengiriman',2,15],
-                ['Label Resi',6,15],
-                ['Surat Jalan',2,15],
-                ['Manifest Pengiriman',1,15],
-                ['Tanda Terima',4,2],
+            'SPXID34567890' => [
+                ['Paket Kardus', 10, 15],
+                ['Lakban', 5, 15],
+                ['Bubble Wrap', 3, 15],
+                ['Timbangan Kecil', 2, 7],
+                ['Plastik Sampah', 10, 2],
             ],
-            'SPXID45678901'=>[
-                ['Dokumen Pengiriman',1,null],
-                ['Label Resi',3,null],
-                ['Surat Jalan',1,null],
-                ['Manifest Pengiriman',1,null],
-                ['Tanda Terima',2,null],
+            'SPXID45678901' => [
+                ['Sapu', 1, 5],
+                ['Pel Lantai', 2, 6],
+                ['Kemoceng', 3, 7],
+                ['Ember', 4, 4],
+                ['Sarung Tangan', 15, 3],
             ],
-            'SPXID56789012'=>[
-                ['Dokumen Pengiriman',1,2],
-                ['Label Resi',5,3],
-                ['Surat Jalan',2,15],
-                ['Manifest Pengiriman',1,6],
-                ['Tanda Terima',3,6],
+            'SPXID56789012' => [
+                ['Hand Sanitizer', 12, 3],
+                ['Masker', 30, 4],
+                ['Tisu Basah', 20, 5],
+                ['Kemoceng', 5, 6],
+                ['Plastik Sampah', 15, 2],
+                ['Lakban', 4, 3],
             ],
         ];
+
 
         foreach ($resi as $r) {
             foreach ($itemsByKode[$r->kode] as $itm) {
