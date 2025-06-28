@@ -556,7 +556,7 @@
           // Auto refresh setelah jeda (misalnya 2 detik setelah notifikasi)
           setTimeout(() => {
             location.reload();
-          }, 2000); // 2000 ms = 2 detik
+          }, 1000); // 2000 ms = 2 detik
           
           buildDropdown();
           renderResi(currentKey);
