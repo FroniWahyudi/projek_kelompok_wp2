@@ -678,21 +678,40 @@ $userData = [
             ]);
         }
 
-        // Data untuk News
-      News::create([
+       News::create([
     'date' => '2025-06-29',
-    'title' => 'Pengumuman Libur Nasional Idul Adha',
+    'title' => 'Pengumuman Libur Nasional Hari Raya Idul Adha 1446 H',
     'image_url' => 'img/libur_idul_adha.png',
-'description' => '<p>Sehubungan dengan Hari Raya Idul Adha 1446 H, seluruh aktivitas operasional gudang akan diliburkan pada tanggal <strong>8-9 Juli 2025</strong>. Kami mengimbau kepada seluruh operator untuk memastikan bahwa proses sortir, pengepakan, dan pengiriman barang telah diselesaikan sebelum tanggal tersebut. Koordinasikan dengan supervisor masing-masing untuk memastikan tidak ada barang tertunda di area inbound maupun outbound. Pastikan juga seluruh peralatan kerja telah diamankan dan area kerja dalam kondisi rapi sebelum libur dimulai.</p>
-<p>Operasional gudang akan kembali berjalan normal pada <strong>10 Juli 2025</strong>. Diharapkan seluruh karyawan dapat hadir tepat waktu sesuai jadwal shift yang berlaku. Jika terdapat kebutuhan mendesak selama masa libur, silakan hubungi tim HR atau supervisor melalui kontak darurat yang telah disediakan. Selamat merayakan Idul Adha bersama keluarga, semoga kita semua diberikan kesehatan dan keselamatan.</p>',
+    'description' => '<div class="announcement">
+        <h2>Pengumuman Libur Nasional Hari Raya Idul Adha 1446 H</h2>
+        <p><em>Tanggal: 29 Juni 2025</em></p>
+        <p>Sehubungan dengan perayaan Hari Raya Idul Adha 1446 H, kami informasikan bahwa seluruh aktivitas operasional gudang akan diliburkan pada tanggal <strong>8-9 Juli 2025</strong>. Seluruh operator diminta untuk:</p>
+        <ul>
+            <li>Menyelesaikan proses sortir, pengepakan, dan pengiriman barang sebelum tanggal tersebut.</li>
+            <li>Berkoordinasi dengan supervisor masing-masing untuk memastikan tidak ada barang tertunda di area inbound maupun outbound.</li>
+            <li>Memastikan seluruh peralatan kerja diamankan dan area kerja dalam kondisi rapi sebelum libur dimulai.</li>
+        </ul>
+        <p>Operasional gudang akan kembali berjalan normal pada <strong>10 Juli 2025</strong>. Seluruh karyawan diharapkan hadir tepat waktu sesuai jadwal shift yang berlaku. Untuk kebutuhan mendesak selama masa libur, silakan hubungi tim HR atau supervisor melalui kontak darurat yang telah disediakan.</p>
+        <p>Selamat merayakan Hari Raya Idul Adha 1446 H bersama keluarga. Semoga kita semua senantiasa diberikan kesehatan dan keselamatan.</p>
+    </div>',
     'link' => 'Null'
 ]);
 
 News::create([
     'date' => '2025-06-29',
-    'title' => 'Pemberitahuan Maintenance Gudang',
+    'title' => 'Pemberitahuan Pemeliharaan Sistem Gudang',
     'image_url' => 'img/maintenance_gudang.png',
-    'description' => 'Akan dilakukan maintenance sistem rak otomatis dan pengecekan alat berat pada 15 Juli 2025 mulai pukul 08.00 hingga 16.00 WIB. Selama proses maintenance, akses ke area penyimpanan utama dibatasi. Operator diharapkan mengikuti instruksi supervisor dan menjaga keselamatan kerja.',
+    'description' => '<div class="announcement">
+        <h2>Pemberitahuan Pemeliharaan Sistem Gudang</h2>
+        <p><em>Tanggal: 29 Juni 2025</em></p>
+        <p>Kami informasikan bahwa akan dilakukan pemeliharaan sistem rak otomatis dan pengecekan alat berat pada <strong>15 Juli 2025</strong> pukul <strong>08.00–16.00 WIB</strong>. Selama proses pemeliharaan, akses ke area penyimpanan utama akan dibatasi.</p>
+        <p>Seluruh operator diminta untuk:</p>
+        <ul>
+            <li>Mengikuti instruksi dari supervisor masing-masing.</li>
+            <li>Menjaga keselamatan kerja selama proses pemeliharaan berlangsung.</li>
+        </ul>
+        <p>Pastikan area kerja tetap aman dan teratur. Untuk informasi lebih lanjut, hubungi tim supervisor.</p>
+    </div>',
     'link' => 'Null'
 ]);
 
@@ -700,33 +719,56 @@ News::create([
     'date' => '2025-06-29',
     'title' => 'Panduan Pengelolaan Resi Harian untuk Operator Inventory',
     'image_url' => 'img/resi_harian.png',
-    'description' => '<p><strong>Panduan Pengelolaan Resi Harian untuk Operator Inventory</strong></p>
+    'description' => '<div class="announcement">
+        <h2>Panduan Pengelolaan Resi Harian untuk Operator Inventory</h2>
         <p><em>Tanggal: 29 Juni 2025</em></p>
-        <p>Mulai <b>1 Juli 2025</b>, operator inventory wajib menggunakan <i>fitur resi harian</i> di sistem manajemen gudang untuk mengelola resi harian. Fitur ini tersedia di menu utama aplikasi gudang.</p>
-        <p>Rincian fitur resi harian:</p>
+        <p>Mulai <strong>1 Juli 2025</strong>, seluruh operator inventory diwajibkan menggunakan <strong>fitur resi harian</strong> pada sistem manajemen gudang untuk mengelola resi harian. Fitur ini dapat diakses melalui menu utama aplikasi gudang.</p>
+        <p><strong>Rincian Fitur Resi Harian:</strong></p>
         <ul>
-            <li><b>Tujuan Pengiriman</b>: Lokasi gudang cabang tujuan.</li>
-            <li><b>Tanggal Penugasan</b>: Jadwal penugasan setiap resi.</li>
-            <li><b>Daftar Barang</b>: Rincian barang untuk pengiriman.</li>
+            <li><strong>Tujuan Pengiriman</strong>: Menampilkan lokasi gudang cabang tujuan.</li>
+            <li><strong>Tanggal Penugasan</strong>: Menampilkan jadwal penugasan setiap resi.</li>
+            <li><strong>Daftar Barang</strong>: Menampilkan rincian barang untuk pengiriman.</li>
         </ul>
-        <p>Operator diminta untuk login, periksa resi, dan laporkan kendala ke tim IT. Pelatihan akan diadakan pada <b>30 Juni 2025</b> pukul 09.00 WIB di ruang meeting lantai 2. Hubungi <i>support@gudang.co.id</i> untuk informasi lebih lanjut.</p>',
+        <p>Seluruh operator diminta untuk:</p>
+        <ol>
+            <li>Login ke sistem manajemen gudang.</li>
+            <li>Memeriksa resi harian yang telah ditugaskan.</li>
+            <li>Melaporkan kendala teknis kepada tim IT melalui <a href="mailto:support@gudang.co.id">support@gudang.co.id</a>.</li>
+        </ol>
+        <p>Pelatihan penggunaan fitur resi harian akan diadakan pada <strong>30 Juni 2025</strong> pukul <strong>09.00 WIB</strong> di ruang meeting lantai 2. Untuk informasi lebih lanjut, silakan hubungi tim IT melalui email di atas.</p>
+    </div>',
     'link' => 'Null'
 ]);
 
-
 News::create([
     'date' => '2025-06-29',
-    'title' => 'Pemberitahuan Pengecekan Alat Pemadam Kebakaran',
+    'title' => 'Pemberitahuan Pengecekan Alat Pemadam Kebakaran (APAR)',
     'image_url' => 'img/pengecekan_apar.png',
-    'description' => 'Akan dilakukan pengecekan dan pengisian ulang alat pemadam kebakaran (APAR) di seluruh area gudang pada 14 Juli 2025 pukul 09.00-11.00 WIB. Seluruh operator diharapkan tidak memindahkan APAR dari tempat semula dan memberikan akses kepada tim teknisi. Pastikan jalur evakuasi tetap bersih selama proses berlangsung.',
+    'description' => '<div class="announcement">
+        <h2>Pemberitahuan Pengecekan Alat Pemadam Kebakaran (APAR)</h2>
+        <p><em>Tanggal: 29 Juni 2025</em></p>
+        <p>Pengecekan dan pengisian ulang alat pemadam kebakaran (APAR) di seluruh area gudang akan dilaksanakan pada <strong>14 Juli 2025</strong> pukul <strong>09.00–11.00 WIB</strong>. Seluruh operator diminta untuk:</p>
+        <ul>
+            <li>Tidak memindahkan APAR dari tempat aslinya.</li>
+            <li>Memberikan akses penuh kepada tim teknisi selama proses pengecekan.</li>
+            <li>Memastikan jalur evakuasi tetap bersih dan tidak terhalang.</li>
+        </ul>
+        <p>Pastikan keselamatan kerja tetap terjaga selama proses ini berlangsung. Untuk pertanyaan, hubungi tim K3.</p>
+    </div>',
     'link' => 'Null'
 ]);
 
 News::create([
     'date' => '2025-06-29',
-    'title' => 'Pengumuman Update Data Shift Otomatis',
+    'title' => 'Pengumuman Pembaruan Data Shift Otomatis',
     'image_url' => 'img/update_shift_otomatis.png',
-    'description' => 'Mulai 1 Agustus 2025, seluruh data shift operator akan diperbarui secara otomatis melalui sistem. Operator dapat melihat jadwal dan riwayat shift masing-masing di menu Data Shift. Jika ada ketidaksesuaian jadwal, segera laporkan ke supervisor untuk penyesuaian.',
+    'description' => '<div class="announcement">
+        <h2>Pengumuman Pembaruan Data Shift Otomatis</h2>
+        <p><em>Tanggal: 29 Juni 2025</em></p>
+        <p>Mulai <strong>1 Agustus 2025</strong>, seluruh data shift operator akan diperbarui secara otomatis melalui sistem manajemen gudang. Operator dapat mengakses jadwal dan riwayat shift masing-masing melalui menu <strong>Data Shift</strong> pada aplikasi gudang.</p>
+        <p>Jika terdapat ketidaksesuaian jadwal, segera laporkan kepada supervisor untuk penyesuaian. Pastikan untuk memeriksa jadwal secara berkala agar operasional berjalan lancar.</p>
+        <p>Untuk pertanyaan lebih lanjut, silakan hubungi tim HR atau supervisor masing-masing.</p>
+    </div>',
     'link' => 'Null'
 ]);
 
@@ -734,7 +776,13 @@ News::create([
     'date' => '2025-06-29',
     'title' => 'Pengingat Penggunaan Alat Pelindung Diri (APD)',
     'image_url' => 'img/apd_gudang.png',
-    'description' => 'Demi keselamatan kerja, seluruh operator diwajibkan menggunakan APD lengkap (rompi, helm, dan sepatu safety) selama berada di area gudang. Pengawasan akan dilakukan secara berkala oleh tim K3. Pelanggaran akan dikenakan sanksi sesuai aturan perusahaan.',
+    'description' => '<div class="announcement">
+        <h2>Pengingat Penggunaan Alat Pelindung Diri (APD)</h2>
+        <p><em>Tanggal: 29 Juni 2025</em></p>
+        <p>Demi menjaga keselamatan kerja, seluruh operator diwajibkan menggunakan <strong>Alat Pelindung Diri (APD)</strong> lengkap, meliputi rompi, helm, dan sepatu safety, selama berada di area gudang.</p>
+        <p>Pengawasan kepatuhan penggunaan APD akan dilakukan secara berkala oleh tim K3. Pelanggaran terhadap aturan ini akan dikenakan sanksi sesuai kebijakan perusahaan.</p>
+        <p>Pastikan APD dalam kondisi baik sebelum digunakan. Untuk penggantian atau perbaikan APD, hubungi tim K3.</p>
+    </div>',
     'link' => 'Null'
 ]);
 
