@@ -163,6 +163,13 @@ function downloadPDF() {
     const tableSection = document.querySelector('#table-section');
     const originalFlexDirectionTable = tableSection ? tableSection.style.flexDirection : null;
 
+    // Ambil semua elemen .info-row di dalam employee-company-section
+    const infoRows = employeeCompanySection ? employeeCompanySection.querySelectorAll('.info-row') : [];
+    const originalFlexDirectionsInfo = [];
+    infoRows.forEach((row, index) => {
+        originalFlexDirectionsInfo[index] = row.style.flexDirection || '';
+    });
+
     // Paksa layout horizontal untuk PDF
     if (headerSection) {
         headerSection.style.flexDirection = 'row';
@@ -173,6 +180,9 @@ function downloadPDF() {
     if (tableSection) {
         tableSection.style.flexDirection = 'row';
     }
+    infoRows.forEach(row => {
+        row.style.flexDirection = 'row';
+    });
 
     // Daftar elemen yang ingin disembunyikan
     const elementsToHide = [
@@ -223,6 +233,9 @@ function downloadPDF() {
         if (tableSection && originalFlexDirectionTable !== null) {
             tableSection.style.flexDirection = originalFlexDirectionTable; // Kembalikan layout asli
         }
+        infoRows.forEach((row, index) => {
+            row.style.flexDirection = originalFlexDirectionsInfo[index]; // Kembalikan layout asli
+        });
     }).catch(err => {
         console.error('Gagal membuat PDF:', err);
         alert('Terjadi kesalahan saat membuat PDF. Silakan coba lagi.');
@@ -241,6 +254,9 @@ function downloadPDF() {
         if (tableSection && originalFlexDirectionTable !== null) {
             tableSection.style.flexDirection = originalFlexDirectionTable; // Kembalikan layout asli
         }
+        infoRows.forEach((row, index) => {
+            row.style.flexDirection = originalFlexDirectionsInfo[index]; // Kembalikan layout asli
+        });
     });
 }
 </script>
