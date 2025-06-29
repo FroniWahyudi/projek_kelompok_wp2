@@ -1,153 +1,223 @@
-  body {
-            background-color: #f0f4f8;
-            font-family: Arial, Helvetica, sans-serif;
-            margin: 0;
-        }
-        .main-content {
-            background: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
-            padding: 25px;
-            min-height: 90vh;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        .page-title {
-            font-size: 24px;
-            font-weight: 600;
-            color: #003366;
-            margin-bottom: 20px;
-        }
-        .preview-container {
-            max-width: 1539px;
-            max-height: 1000mm;
-            background: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            box-sizing: border-box;
-        }
-        .preview-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid #dee2e6;
-            padding-bottom: 3px;
-            margin-bottom: 15px;
-        }
-        .company-logo img {
-            width: 200px;
-            height: auto;
-            object-fit: contain;
-        }
-        .slip-title {
-            font-size: 20px;
-            font-weight: 600;
-            color: #003366;
-            text-transform: uppercase;
-            margin-bottom: 5px;
-        }
-        .period-badge {
-            background: #e3f2fd;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 14px;
-            color: #003366;
-        }
-        .section-title {
-            font-size: 15px;
-            font-weight: 600;
-            color: #003366;
-            border-bottom: 1px solid #e9ecef;
-            padding-bottom: 5px;
-            margin-bottom: 15px;
-        }
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 14px;
-        }
-        .info-label {
-            font-weight: 500;
-            color: #4a4a4a;
-            width: 40%;
-        }
-        .info-value {
-            font-weight: 500;
-            width: 60%;
-            text-align: left;
-        }
-        .table-container {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
-        }
-        .table-section {
-            width: 48%;
-        }
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 13px;
-        }
-        .table th, .table td {
-            padding: 6px 8px;
-            border: 1px solid #dee2e6;
-            text-align: left;
-        
-        }
-        .table th {
-            background-color: #e3f2fd;
-            font-weight: 600;
-        }
-        th {
-            background-color: #e3f2fd;
-            font-weight: 600;
-        }
-        .table .text-end {
-            text-align: right;
-        }
-        .total-row {
-            font-weight: 700;
-            background: #cce5ff;
-        }
-        .income {
-            color: #198754;
-        }
-        .deduction {
-            color: red;
-        }
-        .footer-actions {
-            display: flex;
-            justify-content: center;
-            margin-top: 15px;
-            gap: 10px;
-        }
-        .btn-secondary, .btn-print {
-            background-color: #007bff;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 14px;
-            display: inline-flex;
-            align-items: center;
-            cursor: pointer;
-            margin-bottom: 20px;
-        }
-        .btn-secondary:hover,
-        .btn-print:hover {
-            background-color: #0056b3;
-        }
-        .btn-secondary i,
-        .btn-print i {
-            margin-right: 5px;
-        }
-        .footer-notes {
-            text-align: center;
-            color: #4a4a4a;
-            font-size: 11px;
-            margin-top: 10px;
-        }
+body {
+    background-color: #f0f4f8;
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+}
+.main-content {
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+    padding: 25px;
+    min-height: 90vh;
+    max-width: 900px;
+    margin: 0 auto;
+}
+.page-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #003366;
+    margin-bottom: 20px;
+}
+.preview-container {
+    max-width: 1539px;
+    max-height: 1000mm;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    box-sizing: border-box;
+}
+.preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #dee2e6;
+    padding-bottom: 3px;
+    margin-bottom: 15px;
+}
+.company-logo img {
+    width: 200px;
+    height: auto;
+    object-fit: contain;
+}
+.slip-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #003366;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+.period-badge {
+    background: #e3f2fd;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+    color: #003366;
+}
+.section-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #003366;
+    border-bottom: 1px solid #e9ecef;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+}
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+.info-label {
+    font-weight: 500;
+    color: #4a4a4a;
+    width: 40%;
+}
+.info-value {
+    font-weight: 500;
+    width: 60%;
+    text-align: left;
+}
+.table-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+.table-section {
+    width: 48%;
+}
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+.table th, .table td {
+    padding: 6px 8px;
+    border: 1px solid #dee2e6;
+    text-align: left;
+}
+.table th {
+    background-color: #e3f2fd;
+    font-weight: 600;
+}
+th {
+    background-color: #e3f2fd;
+    font-weight: 600;
+}
+.table .text-end {
+    text-align: right;
+}
+.total-row {
+    font-weight: 700;
+    background: #cce5ff;
+}
+.income {
+    color: #198754;
+}
+.deduction {
+    color: red;
+}
+.footer-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+    gap: 10px;
+}
+.btn-secondary, .btn-print {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+.btn-secondary:hover,
+.btn-print:hover {
+    background-color: #0056b3;
+}
+.btn-secondary i,
+.btn-print i {
+    margin-right: 5px;
+}
+.footer-notes {
+    text-align: center;
+    color: #4a4a4a;
+    font-size: 11px;
+    margin-top: 10px;
+}
+
+/* Media Queries untuk tampilan mobile (300-400px) */
+@media screen and (max-width: 400px) {
+    .main-content {
+        padding: 15px;
+        margin: 10px;
+        min-height: auto;
+    }
+    .page-title {
+        font-size: 20px;
+        margin-bottom: 15px;
+    }
+    .preview-container {
+        padding: 15px;
+        box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+    }
+    .preview-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .company-logo img {
+        width: 150px;
+    }
+    .slip-title {
+        font-size: 18px;
+    }
+    .period-badge {
+        font-size: 12px;
+        padding: 4px 10px;
+    }
+    .mb-4[style*="display: flex"] {
+        flex-direction: column;
+        gap: 20px;
+    }
+    .info-row {
+        font-size: 12px;
+        flex-direction: column;
+        gap: 5px;
+    }
+    .info-label, .info-value {
+        width: 100%;
+        text-align: left;
+    }
+    .table-container {
+        flex-direction: column;
+        gap: 20px;
+    }
+    .table-section {
+        width: 100%;
+    }
+    .table {
+        font-size: 12px;
+    }
+    .table th, .table td {
+        padding: 4px 6px;
+    }
+    .footer-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .btn-secondary, .btn-print {
+        width: 100%;
+        padding: 8px;
+        font-size: 13px;
+    }
+    .footer-notes {
+        font-size: 10px;
+        padding: 0 10px;
+    }
+}

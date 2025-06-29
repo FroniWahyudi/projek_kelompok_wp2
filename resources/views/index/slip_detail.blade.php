@@ -6,7 +6,7 @@
     <title>Detail Slip Gaji - {{ $slip->id }}</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-      <!-- Css Custom -->
+    <!-- Css Custom -->
     <link rel="stylesheet" href="{{ asset('css/slip_detail.css') }}">
 </head>
 <body>
@@ -19,7 +19,7 @@
         </div>
 
         <div class="preview-container w-100">
-            <div class="preview-header">
+            <div class="preview-header" id="header-section">
                 <div class="company-logo">
                     <img src="{{ asset('img/logo_brand.png') }}" alt="Logo {{ config('app.name') }}">
                 </div>
@@ -28,7 +28,7 @@
                     <span class="period-badge">{{ $slip->period->formatLocalized('%B %Y') }}</span>
                 </div>
             </div>
-            <div class="mb-4" style="display: flex; gap: 32px; margin-bottom: 20px;">
+            <div class="mb-4" style="display: flex; gap: 32px; margin-bottom: 20px;" id="employee-company-section">
                 <!-- Informasi Karyawan (Kiri) -->
                 <div style="flex:1; background: linear-gradient(to bottom);">
                     <div class="section-title">Informasi Karyawan</div>
@@ -58,7 +58,7 @@
                     </div>
                 </div>
             </div>
-            <div class="table-container mb-4">
+            <div class="table-container mb-4" id="table-section">
                 <div class="table-section">
                     <div class="section-title">Pendapatan</div>
                     <table class="table">
@@ -127,13 +127,21 @@
         </div>
     </div>
     <script>
- const slipId = "{{ $slip->id }}";
+const slipId = "{{ $slip->id }}";
 const slipPeriod = "{{ $slip->period->format('Y-m') }}";
 function downloadPDF() {
     if (typeof html2pdf === 'undefined') {
         alert('Pustaka html2pdf gagal dimuat. Pastikan koneksi internet stabil atau coba lagi nanti.');
         return;
     }
+
+    // Auto scroll ke atas
+    window.scrollTo(0, 0);
+
+    // Atur zoom ke 100%
+    document.body.style.zoom = '100%';
+    document.body.style.transform = 'scale(1)';
+    document.body.style.transformOrigin = '0 0';
 
     // Pilih elemen parent yang lebih besar (misalnya .main-content)
     const element = document.querySelector('.main-content');
@@ -143,9 +151,32 @@ function downloadPDF() {
         return;
     }
 
+    // Ambil elemen header (logo dan tulisan SLIP GAJI)
+    const headerSection = document.querySelector('#header-section');
+    const originalFlexDirectionHeader = headerSection ? headerSection.style.flexDirection : null;
+
+    // Ambil elemen informasi karyawan dan perusahaan
+    const employeeCompanySection = document.querySelector('#employee-company-section');
+    const originalFlexDirectionEmployee = employeeCompanySection ? employeeCompanySection.style.flexDirection : null;
+
+    // Ambil elemen tabel pendapatan dan potongan
+    const tableSection = document.querySelector('#table-section');
+    const originalFlexDirectionTable = tableSection ? tableSection.style.flexDirection : null;
+
+    // Paksa layout horizontal untuk PDF
+    if (headerSection) {
+        headerSection.style.flexDirection = 'row';
+    }
+    if (employeeCompanySection) {
+        employeeCompanySection.style.flexDirection = 'row';
+    }
+    if (tableSection) {
+        tableSection.style.flexDirection = 'row';
+    }
+
     // Daftar elemen yang ingin disembunyikan
     const elementsToHide = [
-        document.querySelector('.d-flex.justify-content-between.align-items-center.mb-4'), // Tombol "Batal" dan "Simpan"
+        document.querySelector('.d-flex.justify-content-between.align-items-center.mb-4'), // Tombol "Kembali"
         document.querySelector('.nav-tabs'), // Tab navigasi
         document.querySelector('#info-content'), // Tab Informasi Dasar
         document.querySelector('#earnings-content'), // Tab Pendapatan
@@ -177,21 +208,39 @@ function downloadPDF() {
 
     // Buat PDF dengan elemen yang telah dimodifikasi
     html2pdf().set(opt).from(element).save().then(() => {
-        // Kembalikan tampilan elemen setelah PDF selesai dibuat
+        // Kembalikan tampilan elemen dan layout asli setelah PDF selesai dibuat
         elementsToHide.forEach((el, index) => {
             if (el && originalDisplayStyles[index] !== null) {
                 el.style.display = originalDisplayStyles[index] || ''; // Kembalikan display asli
             }
         });
+        if (headerSection && originalFlexDirectionHeader !== null) {
+            headerSection.style.flexDirection = originalFlexDirectionHeader; // Kembalikan layout asli
+        }
+        if (employeeCompanySection && originalFlexDirectionEmployee !== null) {
+            employeeCompanySection.style.flexDirection = originalFlexDirectionEmployee; // Kembalikan layout asli
+        }
+        if (tableSection && originalFlexDirectionTable !== null) {
+            tableSection.style.flexDirection = originalFlexDirectionTable; // Kembalikan layout asli
+        }
     }).catch(err => {
         console.error('Gagal membuat PDF:', err);
         alert('Terjadi kesalahan saat membuat PDF. Silakan coba lagi.');
-        // Kembalikan tampilan elemen meskipun terjadi error
+        // Kembalikan tampilan elemen dan layout meskipun terjadi error
         elementsToHide.forEach((el, index) => {
             if (el && originalDisplayStyles[index] !== null) {
                 el.style.display = originalDisplayStyles[index] || '';
             }
         });
+        if (headerSection && originalFlexDirectionHeader !== null) {
+            headerSection.style.flexDirection = originalFlexDirectionHeader; // Kembalikan layout asli
+        }
+        if (employeeCompanySection && originalFlexDirectionEmployee !== null) {
+            employeeCompanySection.style.flexDirection = originalFlexDirectionEmployee; // Kembalikan layout asli
+        }
+        if (tableSection && originalFlexDirectionTable !== null) {
+            tableSection.style.flexDirection = originalFlexDirectionTable; // Kembalikan layout asli
+        }
     });
 }
 </script>
