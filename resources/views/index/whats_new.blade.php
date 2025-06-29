@@ -13,7 +13,7 @@
 <body>
   <div class="container-fluid">
     <!-- Tombol kembali floating -->
-   <a href="{{ url('dashboard') }}" class="home-button d-print-none">
+    <a href="{{ url('dashboard') }}" class="home-button d-print-none">
       <i class="fas fa-home"></i> Home
     </a>
     
@@ -22,22 +22,15 @@
         <img src="{{ asset($item['image_url']) }}" class="card-img-top" alt="{{ $item['title'] }}">
       </div>
       <div class="card-body">
-        <h2 class="card-title">{{ $item['title'] }}</h2>
-        <p class="date-text">{{ $item['date'] }}</p>
+        <h2 class="card-title">{{ htmlspecialchars($item['title']) }}</h2>
+        <p class="date-text">{{ htmlspecialchars($item['date']) }}</p>
         
         <div class="divider"></div>
         
-        <p class="card-text">
-          {!! $fullDesc !!}
-        </p>
-        
-
+        <div class="card-text">
+          {!! $item['description'] !!}
+        </div>
       </div>
-    </div>
-    
-    <!-- Tombol Home di bawah konten -->
-    <div class="text-center mt-4">
-     
     </div>
   </div>
 </body>

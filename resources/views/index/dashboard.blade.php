@@ -170,46 +170,43 @@
         </a>
       @endif
     </div>
-    <div class="news-grid">
-      @foreach($newsItems as $idx => $item)
-        <div class="animate-fade-in delay-{{ ($idx % 4) + 1 }}">
-          <div class="card card-news">
-            <div class="position-relative">
-              <a href="{{ route('whats_new', ['id' => $item['id']]) }}">
-                <img src="{{ htmlspecialchars($item['image_url']) }}" 
-                     class="card-img-top" 
-                     alt="{{ htmlspecialchars($item['title']) }}">
-              </a>
-              @if(auth()->user()->role === 'Admin' || auth()->user()->role === 'Manajer')
-                <a href="{{ route('whats_new.edit', ['id' => $item['id']]) }}" 
-                   class="edit-btn" 
-                   title="Edit" style="height: 40px; width: 40px;">
-                  <i class="bi bi-pencil-square text-primary"></i>
-                </a>
-                <form action="{{ route('whats_new.delete', ['id' => $item['id']]) }}" 
-                      method="POST" 
-                      class="delete-form">
-                  @csrf
-                  @method('DELETE')
-                  <button type="submit" class="delete-btn" title="Delete">
-                    <i class="bi bi-trash text-danger"></i>
-                  </button>
-                </form>
-              @endif
-            </div>
-            <div class="card-body">
-              <a href="{{ route('whats_new', ['id' => $item['id']]) }}">
-                <h5 class="card-title">{{ htmlspecialchars($item['title']) }}</h5>
-                <p class="card-text">{!! Str::limit($item['description'], 120) !!}</p>
-                <div class="card-date">
-                  <i class="bi bi-calendar me-1"></i> {{ htmlspecialchars($item['date']) }}
-                </div>
-              </a>
-            </div>
-          </div>
+
+<div class="news-grid">
+  @foreach($newsItems as $idx => $item)
+    <div class="animate-fade-in delay-{{ ($idx % 4) + 1 }}">
+      <div class="card card-news">
+        <div class="position-relative">
+          <a href="{{ route('whats_new', ['id' => $item['id']]) }}">
+            <img src="{{ htmlspecialchars($item['image_url']) }}" class="card-img-top" alt="{{ htmlspecialchars($item['title']) }}">
+          </a>
+          @if(auth()->user()->role === 'Admin' || auth()->user()->role === 'Manajer')
+            <a href="{{ route('whats_new.edit', ['id' => $item['id']]) }}" class="edit-btn" title="Edit" style="height: 40px; width: 40px;">
+              <i class="bi bi-pencil-square text-primary"></i>
+            </a>
+            <form action="{{ route('whats_new.delete', ['id' => $item['id']]) }}" method="POST" class="delete-form">
+              @csrf
+              @method('DELETE')
+              <button type="submit" class="delete-btn" title="Delete">
+                <i class="bi bi-trash text-danger"></i>
+              </button>
+            </form>
+          @endif
         </div>
-      @endforeach
+        <div class="card-body">
+          <a href="{{ route('whats_new', ['id' => $item['id']]) }}">
+            <h5 class="card-title">{{ htmlspecialchars($item['title']) }}</h5>
+            <p class="card-text">{!! Str::limit(strip_tags($item['description']), 200, '...') !!}</p>
+            <div class="card-date">
+              <i class="bi bi-calendar me-1"></i> {{ htmlspecialchars($item['date']) }}
+            </div>
+          </a>
+        </div>
+      </div>
     </div>
+  @endforeach
+</div>
+
+
     @if(session('success'))
       <div id="notif-success" class="position-fixed top-0 end-0 p-3" style="z-index: 1055;">
         <div class="toast align-items-center border-0 show" role="alert" aria-live="assertive" aria-atomic="true"
