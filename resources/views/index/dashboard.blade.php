@@ -76,12 +76,13 @@
     <div class="logo-brand">
       <img src="img/logo_brand.png" alt="Logo Brand" class="transition">
     </div>
-    <div class="ms-auto nav-item d-none d-lg-block">
-      <a href="/logout" class="btn btn-outline-dark">
-        <i class="bi bi-box-arrow-right me-1"></i>
-        Logout
-      </a>
-    </div>
+   <div class="ms-auto nav-item d-none d-lg-block">
+  <a href="{{ route('logout') }}" class="btn btn-outline-dark" onclick="event.preventDefault(); confirmLogout();">
+    <i class="bi bi-box-arrow-right me-1"></i>
+    Logout
+  </a>
+</div>
+
   </nav>
 
   <!-- Sidebar -->
