@@ -698,9 +698,18 @@ News::create([
 
 News::create([
     'date' => '2025-06-29',
-    'title' => 'Sosialisasi SOP Baru Pengiriman',
-    'image_url' => 'img/sop_pengiriman.png',
-    'description' => 'Mulai 1 Juli 2025, berlaku SOP baru untuk proses pengiriman barang keluar gudang. Setiap operator wajib melakukan pengecekan barcode dan dokumentasi foto sebelum barang keluar. Pelatihan singkat akan diadakan pada 28 Juni 2025 di ruang meeting lantai 2.',
+    'title' => 'Panduan Pengelolaan Resi Harian untuk Operator Inventory',
+    'image_url' => 'img/resi_harian.png',
+    'description' => '<p><strong>Panduan Pengelolaan Resi Harian untuk Operator Inventory</strong></p>
+        <p><em>Tanggal: 29 Juni 2025</em></p>
+        <p>Mulai <b>1 Juli 2025</b>, operator inventory wajib menggunakan <i>fitur resi harian</i> di sistem manajemen gudang untuk mengelola resi harian. Fitur ini tersedia di menu utama aplikasi gudang.</p>
+        <p>Rincian fitur resi harian:</p>
+        <ul>
+            <li><b>Tujuan Pengiriman</b>: Lokasi gudang cabang tujuan.</li>
+            <li><b>Tanggal Penugasan</b>: Jadwal penugasan setiap resi.</li>
+            <li><b>Daftar Barang</b>: Rincian barang untuk pengiriman.</li>
+        </ul>
+        <p>Operator diminta untuk login, periksa resi, dan laporkan kendala ke tim IT. Pelatihan akan diadakan pada <b>30 Juni 2025</b> pukul 09.00 WIB di ruang meeting lantai 2. Hubungi <i>support@gudang.co.id</i> untuk informasi lebih lanjut.</p>',
     'link' => 'Null'
 ]);
 
