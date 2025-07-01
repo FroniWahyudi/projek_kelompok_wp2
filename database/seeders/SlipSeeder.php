@@ -74,21 +74,21 @@ class SlipSeeder extends Seeder
                 // Tax PPH 21 (5% of basic salary)
                 SlipDeduction::create([
                     'slip_id' => $slip->id,
-                    'name' => 'PPH 21',
+                    'name' => 'PPH 21 (5%)',
                     'amount' => $basicSalary * 0.05
                 ]);
 
                 // BPJS Kesehatan (1% of basic salary)
                 SlipDeduction::create([
                     'slip_id' => $slip->id,
-                    'name' => 'BPJS Kesehatan',
+                    'name' => 'BPJS Kesehatan (1%)',
                     'amount' => $basicSalary * 0.01
                 ]);
 
                 // BPJS Ketenagakerjaan (2% of basic salary)
                 SlipDeduction::create([
                     'slip_id' => $slip->id,
-                    'name' => 'BPJS Ketenagakerjaan',
+                    'name' => 'BPJS Ketenagakerjaan (2%)',
                     'amount' => $basicSalary * 0.02
                 ]);
 

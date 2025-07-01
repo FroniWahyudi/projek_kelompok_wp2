@@ -302,10 +302,10 @@
                                                         </tr>
                                                         <tr>
                                                             <td>
-                                                                <input type="text" name="deductions[2][name]" class="form-control" value="PPh 21">
+                                                                <input type="text" name="deductions[2][name]" class="form-control" value="PPh 21 (5%)">
                                                             </td>
                                                             <td>
-                                                                <input type="number" name="deductions[2][amount]" class="form-control deduction-amount" value="125000">
+                                                                <input type="number" name="deductions[2][amount]" id="deductions[2][amount]" class="form-control deduction-amount" value="125000" readonly>
                                                             </td>
                                                             <td class="text-center">
                                                                 <button type="button" class="btn btn-sm btn-outline-danger delete-row-btn">
@@ -423,10 +423,12 @@
     const inputGajiPokok = document.getElementById('earnings[0][amount]');
     const inputBPJSKesehatan = document.getElementById('deductions[0][amount]');
     const inputBPJSKetenagakerjaan = document.getElementById("deductions[1][amount]" );
+    const inputPPh21 = document.getElementById("deductions[2][amount]" );
 
     inputGajiPokok.addEventListener('input', function() {
         inputBPJSKesehatan.value = Math.round(parseInt(inputGajiPokok.value) * 0.01) || 0;
         inputBPJSKetenagakerjaan.value = Math.round(parseInt(inputGajiPokok.value) * 0.02) || 0;
+        inputPPh21.value = Math.round(parseInt(inputGajiPokok.value) * 0.05) || 0;
     });
 
 
