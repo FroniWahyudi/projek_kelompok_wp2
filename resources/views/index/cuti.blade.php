@@ -312,7 +312,7 @@
                                 #cutiModal .modal-body-pengajuan input,
                                 #cutiModal .modal-body-pengajuan textarea {
                                     width: 90% !important;
-                                    margin-left: 10px !important;
+                                    margin-left: 14px !important;
                                     min-width: 0;
                                 }
                                 #cutiModal .modal-body-pengajuan {
