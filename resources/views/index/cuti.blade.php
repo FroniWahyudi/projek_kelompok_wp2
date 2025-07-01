@@ -281,7 +281,8 @@
                                 <label for="tgl_mulai" class="form-label">Tanggal Mulai</label>
                                 <input type="date" id="tgl_mulai" name="tgl_mulai"
                                        class="form-control @error('tgl_mulai') is-invalid @enderror"
-                                       value="{{ old('tgl_mulai') }}" required>
+                                       value="{{ old('tgl_mulai') }}" required
+                                       style="max-width:100%; width: 350px;">
                                 @error('tgl_mulai')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -290,7 +291,8 @@
                                 <label for="tgl_selesai" class="form-label">Tanggal Selesai</label>
                                 <input type="date" id="tgl_selesai" name="tgl_selesai"
                                        class="form-control @error('tgl_selesai') is-invalid @enderror"
-                                       value="{{ old('tgl_selesai') }}" required>
+                                       value="{{ old('tgl_selesai') }}" required
+                                       style="max-width:100%; width: 350px;">
                                 @error('tgl_selesai')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -299,11 +301,26 @@
                                 <label for="alasan" class="form-label">Keterangan</label>
                                 <textarea id="alasan" name="alasan"
                                           class="form-control @error('alasan') is-invalid @enderror"
-                                          rows="3" required>{{ old('alasan') }}</textarea>
+                                          rows="3" required
+                                          style="max-width:100%; width: 350px;">{{ old('alasan') }}</textarea>
                                 @error('alasan')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+                            <style>
+                            @media (max-width: 500px) {
+                                #cutiModal .modal-body-pengajuan input,
+                                #cutiModal .modal-body-pengajuan textarea {
+                                    width: 90% !important;
+                                    margin-left: 10px !important;
+                                    min-width: 0;
+                                }
+                                #cutiModal .modal-body-pengajuan {
+                                    width: 100% !important;
+                                    left: 0 !important;
+                                }
+                            }
+                            </style>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
