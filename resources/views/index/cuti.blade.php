@@ -171,10 +171,17 @@
                                 <th>Durasi Cuti</th>
                                 <th>Keterangan</th>
                                 <th>Status</th>
-                                @if(
-                                    (in_array(auth()->user()->role, ['Manajer'])) ||
-                                    (!in_array(auth()->user()->role, ['Manajer']) && $cutiRequests->where('status', 'Menunggu')->count() > 0)
-                                )
+                                @php
+                                    $hasAction = false;
+                                    if (in_array(auth()->user()->role, ['Manajer'])) {
+                                        // Hanya tampilkan aksi jika ada status 'Menunggu'
+                                        $hasAction = $cutiRequests->where('status', 'Menunggu')->count() > 0;
+                                    } else {
+                                        // Untuk selain manajer, aksi jika ada status 'Menunggu', 'Disetujui', atau 'Ditolak'
+                                        $hasAction = $cutiRequests->whereIn('status', ['Menunggu', 'Disetujui', 'Ditolak'])->count() > 0;
+                                    }
+                                @endphp
+                                @if($hasAction)
                                     <th>Aksi</th>
                                 @endif
                             </tr>
@@ -236,7 +243,7 @@
                                             </form>
                                         </td>
                                     @endif
-                                    @if(in_array(auth()->user()->role, ['Manajer']) && ($r->status === 'Disetujui' || $r->status === 'Ditolak'))
+                                    @if(!in_array(auth()->user()->role, ['Manajer']) && ($r->status === 'Disetujui' || $r->status === 'Ditolak'))
                                         <td class="action-buttons">
                                             <form action="{{ route('cuti.destroy', $r->id) }}"
                                                   method="POST"
