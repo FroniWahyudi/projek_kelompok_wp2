@@ -308,7 +308,7 @@ body {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        text-align: right;
+        text-align: left;
         padding: 0.5rem 1rem;
         border-bottom: 1px solid #f0f0f0;
     }
@@ -322,7 +322,7 @@ body {
     }
 
     .action-buttons {
-        justify-content: flex-end;
+        justify-content: flex-start;
     }
 
     .home-button {
@@ -361,6 +361,174 @@ body {
 
     .form-label {
         margin-left: 10px;
+    }
+}
+
+/* Mobile-Friendly Styles for 300-400px Screens */
+@media (max-width: 400px) and (min-width: 300px) {
+    .container {
+        padding: 0.75rem;
+    }
+
+    header {
+        flex-direction: column;
+        align-items: center;
+        padding: 0.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    header .home-button {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+        min-width: 70px;
+        margin-bottom: 0.5rem;
+    }
+
+    header .nav-button {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+        width: 100%;
+        max-width: 150px;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+
+    .sisa-cuti-card {
+        padding: 1rem;
+        border-radius: 0.75rem;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        text-align: center;
+    }
+
+    .sisa-cuti-card .card-body {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .sisa-cuti-value {
+        font-size: 1.875rem;
+        font-weight: 700;
+        color: var(--primary-action);
+    }
+
+    .sisa-cuti-icon {
+        font-size: 1.5rem;
+        color: var(--primary-action);
+        background-color: rgba(59, 130, 246, 0.1);
+        padding: 0.5rem;
+        border-radius: 9999px;
+    }
+
+    .table {
+        border-radius: 0.75rem;
+    }
+
+    .table td {
+        font-size: 0.875rem;
+        padding: 0.5rem;
+        text-align: left;
+    }
+
+    .table td::before {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--primary-text);
+    }
+
+    .action-buttons {
+        justify-content: center;
+        margin-top: 0.5rem;
+    }
+
+    .action-buttons .btn {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.75rem;
+    }
+
+    .badge-status {
+        min-width: 60px;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+        text-align: center;
+    }
+
+    .modal-content {
+        width: 95%;
+        margin: 0 auto;
+        border-radius: 0.75rem;
+    }
+
+    .modal-header {
+        padding: 0.75rem;
+        font-size: 1rem;
+        text-align: center;
+    }
+
+    .modal-body {
+        padding: 0.75rem;
+        text-align: center;
+    }
+
+    .modal-body-pengajuan {
+        width: 100% !important;
+        left: 0 !important;
+        top: 0 !important;
+        text-align: left;
+    }
+
+    .modal-body-pengajuan input,
+    .modal-body-pengajuan textarea {
+        width: 100% !important;
+        margin-left: 0 !important;
+        font-size: 0.875rem;
+        padding: 0.5rem;
+        text-align: left;
+    }
+
+    .form-label {
+        font-size: 0.875rem;
+        margin-left: 0;
+        margin-bottom: 0.5rem;
+        text-align: left;
+    }
+
+    .modal-footer {
+        padding: 0.5rem;
+        text-align: center;
+    }
+
+    .modal-footer .btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+    }
+
+    .empty-state {
+        padding: 2rem 0;
+        text-align: center;
+    }
+
+    .empty-state-icon {
+        font-size: 2rem;
+        background-color: #f3f4f6;
+        padding: 0.75rem;
+        border-radius: 9999px;
+        margin-bottom: 1rem;
+    }
+
+    .empty-state h5 {
+        font-size: 1.125rem;
+        font-weight: 600;
+    }
+
+    .empty-state p {
+        font-size: 0.875rem;
+        color: #6b7280;
     }
 }
 
